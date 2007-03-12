@@ -182,7 +182,8 @@ public class CDynkinDiagram
 		diagramNodes += "   ";
 	    
 	    Integer label = new Integer(node.label);
-	    diagramLabels   += label.toString() + "   ";
+	    diagramLabels   += label.toString() + "  ";
+	    if(node.label < 10) diagramLabels += " ";
 	}
 	
 	return diagramNodes + "\n" + diagramLabels;
