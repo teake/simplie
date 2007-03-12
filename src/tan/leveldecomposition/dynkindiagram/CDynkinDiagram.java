@@ -161,8 +161,6 @@ public class CDynkinDiagram
 	
 	Refactor();
 	
-	Vector drawnNodes = new Vector();
-	
 	String diagramNodes	= new String();
 	String diagramLabels	= new String();
 	
