@@ -23,11 +23,25 @@ public class CHelper
     {
     }
     
-    public String MatrixToString(Matrix matrix, boolean asInteger)
+    public String MatrixToString(Matrix matrix, int decimalPlates)
     {
+	int decimalFactor   = Math.round((float) Math.pow(10,decimalPlates));
+	int biggestEntry    = 0;
 	String stringMatrix = new String("");
+	
 	if(matrix.getRowDimension() > 0 && matrix.getColumnDimension() > 0)
 	{
+	    // get the biggest entry first;
+	    for(int i = 0; i < matrix.getRowDimension(); i++)
+	    {
+		for(int j = 0; j < matrix.getColumnDimension(); j++)
+		{
+		    if(Math.abs(matrix.get(i,j)) > biggestEntry)
+			biggestEntry = (int) Math.abs(matrix.get(i,j));
+		}
+	    }
+	    int biggestSize = (int) Math.floor(Math.log10(biggestEntry));
+	    
 	    for(int i = 0; i < matrix.getRowDimension(); i++)
 	    {
 		for(int j = 0; j < matrix.getColumnDimension(); j++)
@@ -36,13 +50,33 @@ public class CHelper
 		    {
 			stringMatrix += " "; // for the spacing of the minus signs
 		    }
-		    if(asInteger)
+		    double entry = matrix.get(i,j);
+		    int entrySize = (int) Math.floor(Math.log10(entry));
+		    if(entrySize == -1) entrySize = 0;
+		    for(int k=0; k<biggestSize - entrySize; k++)
 		    {
-			stringMatrix += (int) matrix.get(i,j);
+			stringMatrix += " ";
+		    }
+		    
+		    if(decimalPlates == 0)
+		    {
+			stringMatrix += Math.round(entry);
 		    }
 		    else
 		    {
-			stringMatrix += matrix.get(i,j);
+			stringMatrix += (int) Math.floor(entry) + ".";
+			int decimals = (Math.round((float) entry * decimalFactor) % decimalFactor);
+			if(decimals == 0)
+			{
+			    for(int k=0;k<decimalPlates;k++)
+			    {
+				stringMatrix += "0";
+			    }
+			}
+			else
+			{
+			    stringMatrix += decimals;
+			}
 		    }
 		    stringMatrix += " ";
 		}
@@ -51,5 +85,4 @@ public class CHelper
 	}
 	return stringMatrix;
     }
-    
 }

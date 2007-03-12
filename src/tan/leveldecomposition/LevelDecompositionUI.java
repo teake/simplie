@@ -7,6 +7,7 @@
 package tan.leveldecomposition;
 
 import javax.swing.JTextField;
+import javax.swing.UIManager;
 import tan.leveldecomposition.dynkindiagram.CDynkinDiagram;
 import tan.leveldecomposition.helper.*;
 
@@ -22,6 +23,14 @@ public class LevelDecompositionUI extends javax.swing.JFrame
     /** Creates new form LevelDecompositionUI */
     public LevelDecompositionUI()
     {
+	UIManager uiManager = new UIManager();
+	try
+	{
+	    UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+	}
+	catch (Exception e)
+	{
+	}
 	initComponents();
 	dynkinDiagram	= new CDynkinDiagram();
 	helper		= new CHelper();
@@ -31,9 +40,10 @@ public class LevelDecompositionUI extends javax.swing.JFrame
     public void Update()
     {
 	taDynkinDiagram.setText(dynkinDiagram.GetDiagram());
-	taCartanMatrix.setText(helper.MatrixToString(dynkinDiagram.GetCartanMatrix(), true));
-	taCartanSubMatrix.setText(helper.MatrixToString(dynkinDiagram.GetCartanSubMatrix(), true));
-
+	taCartanMatrix.setText(helper.MatrixToString(dynkinDiagram.GetCartanMatrix(), 0));
+	taCartanSubMatrix.setText(helper.MatrixToString(dynkinDiagram.GetCartanSubMatrix(), 0));
+	taCartanSubInvMatrix.setText(helper.MatrixToString(dynkinDiagram.GetCartanSubMatrix().inverse().times(dynkinDiagram.GetSubRank()+1), 1));
+	
 	Integer lastLabel = new Integer(dynkinDiagram.GetLastLabel());
 	tfAddNodeConnectionTo.setText(lastLabel.toString());
 	tfRemoveNodeLabel.setText(lastLabel.toString());
@@ -51,6 +61,7 @@ public class LevelDecompositionUI extends javax.swing.JFrame
     // <editor-fold defaultstate="collapsed" desc=" Generated Code ">//GEN-BEGIN:initComponents
     private void initComponents()
     {
+        jPanel1 = new javax.swing.JPanel();
         PanelChangesNode = new javax.swing.JPanel();
         lAddNodeLabel = new javax.swing.JLabel();
         lAddNodeConnectionTo = new javax.swing.JLabel();
@@ -63,6 +74,17 @@ public class LevelDecompositionUI extends javax.swing.JFrame
         tfToggleNodeLabel = new javax.swing.JTextField();
         lRemoveNodeLabel = new javax.swing.JLabel();
         lToggleNodeLabel = new javax.swing.JLabel();
+        PanelDynkinDiagram = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        taDynkinDiagram = new javax.swing.JTextArea();
+        PanelCartanMatrix = new javax.swing.JPanel();
+        jTabbedPane1 = new javax.swing.JTabbedPane();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        taCartanMatrix = new javax.swing.JTextArea();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        taCartanSubMatrix = new javax.swing.JTextArea();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        taCartanSubInvMatrix = new javax.swing.JTextArea();
         PanelAddConnection = new javax.swing.JPanel();
         lAddConnectionFromLabel = new javax.swing.JLabel();
         lAddConnectionToLabel = new javax.swing.JLabel();
@@ -74,16 +96,9 @@ public class LevelDecompositionUI extends javax.swing.JFrame
         lRemoveConnectionToLabel = new javax.swing.JLabel();
         tfRemoveConnectionToLabel = new javax.swing.JTextField();
         bRemoveConnection = new javax.swing.JButton();
-        PanelDynkinDiagram = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        taDynkinDiagram = new javax.swing.JTextArea();
-        PanelCartanMatrix = new javax.swing.JPanel();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        taCartanMatrix = new javax.swing.JTextArea();
-        jScrollPane3 = new javax.swing.JScrollPane();
-        taCartanSubMatrix = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Level decomposition");
         PanelChangesNode.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Change nodes", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12)));
         lAddNodeLabel.setText("Add node:");
 
@@ -125,51 +140,126 @@ public class LevelDecompositionUI extends javax.swing.JFrame
         PanelChangesNodeLayout.setHorizontalGroup(
             PanelChangesNodeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(PanelChangesNodeLayout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(PanelChangesNodeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(PanelChangesNodeLayout.createSequentialGroup()
-                        .addGroup(PanelChangesNodeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lRemoveNodeLabel, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(lAddNodeConnectionTo, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(lAddNodeLabel, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(lToggleNodeLabel, javax.swing.GroupLayout.Alignment.TRAILING))
+                        .addGap(31, 31, 31)
+                        .addComponent(lAddNodeLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(PanelChangesNodeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(tfToggleNodeLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 89, Short.MAX_VALUE)
-                            .addComponent(tfAddNodeConnectionTo, javax.swing.GroupLayout.DEFAULT_SIZE, 89, Short.MAX_VALUE)
-                            .addComponent(tfAddNodeLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 89, Short.MAX_VALUE)
-                            .addComponent(tfRemoveNodeLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 89, Short.MAX_VALUE)))
-                    .addComponent(bAddNode, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 164, Short.MAX_VALUE)
-                    .addComponent(bRemoveNode, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 164, Short.MAX_VALUE)
-                    .addComponent(bToggleNode, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 164, Short.MAX_VALUE))
+                        .addComponent(tfAddNodeLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 94, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelChangesNodeLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(lAddNodeConnectionTo)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(tfAddNodeConnectionTo, javax.swing.GroupLayout.DEFAULT_SIZE, 94, Short.MAX_VALUE))
+                    .addGroup(PanelChangesNodeLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(bAddNode, javax.swing.GroupLayout.DEFAULT_SIZE, 169, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelChangesNodeLayout.createSequentialGroup()
+                        .addGap(11, 11, 11)
+                        .addComponent(lRemoveNodeLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(tfRemoveNodeLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 94, Short.MAX_VALUE))
+                    .addGroup(PanelChangesNodeLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(bRemoveNode, javax.swing.GroupLayout.DEFAULT_SIZE, 169, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelChangesNodeLayout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addComponent(lToggleNodeLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(tfToggleNodeLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 94, Short.MAX_VALUE))
+                    .addGroup(PanelChangesNodeLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(bToggleNode, javax.swing.GroupLayout.DEFAULT_SIZE, 169, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         PanelChangesNodeLayout.setVerticalGroup(
             PanelChangesNodeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(PanelChangesNodeLayout.createSequentialGroup()
-                .addGap(21, 21, 21)
                 .addGroup(PanelChangesNodeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lAddNodeLabel)
-                    .addComponent(tfAddNodeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(12, 12, 12)
+                    .addComponent(tfAddNodeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lAddNodeLabel))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(PanelChangesNodeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lAddNodeConnectionTo)
-                    .addComponent(tfAddNodeConnectionTo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(tfAddNodeConnectionTo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lAddNodeConnectionTo))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(bAddNode)
-                .addGap(27, 27, 27)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(PanelChangesNodeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lRemoveNodeLabel)
-                    .addComponent(tfRemoveNodeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(tfRemoveNodeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lRemoveNodeLabel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(bRemoveNode)
-                .addGap(27, 27, 27)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(PanelChangesNodeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lToggleNodeLabel)
-                    .addComponent(tfToggleNodeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(tfToggleNodeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lToggleNodeLabel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(bToggleNode)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(14, Short.MAX_VALUE))
+        );
+
+        PanelDynkinDiagram.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Dynkin Diagram", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12)));
+        taDynkinDiagram.setColumns(20);
+        taDynkinDiagram.setEditable(false);
+        taDynkinDiagram.setFont(new java.awt.Font("Courier New", 0, 13));
+        taDynkinDiagram.setRows(5);
+        jScrollPane1.setViewportView(taDynkinDiagram);
+
+        javax.swing.GroupLayout PanelDynkinDiagramLayout = new javax.swing.GroupLayout(PanelDynkinDiagram);
+        PanelDynkinDiagram.setLayout(PanelDynkinDiagramLayout);
+        PanelDynkinDiagramLayout.setHorizontalGroup(
+            PanelDynkinDiagramLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelDynkinDiagramLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 409, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        PanelDynkinDiagramLayout.setVerticalGroup(
+            PanelDynkinDiagramLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(PanelDynkinDiagramLayout.createSequentialGroup()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 134, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        PanelCartanMatrix.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Cartan Matrix", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12)));
+        taCartanMatrix.setColumns(20);
+        taCartanMatrix.setEditable(false);
+        taCartanMatrix.setFont(new java.awt.Font("Courier New", 0, 12));
+        taCartanMatrix.setRows(5);
+        jScrollPane2.setViewportView(taCartanMatrix);
+
+        jTabbedPane1.addTab("Cartan Matrix", jScrollPane2);
+
+        taCartanSubMatrix.setColumns(20);
+        taCartanSubMatrix.setEditable(false);
+        taCartanSubMatrix.setFont(new java.awt.Font("Courier New", 0, 12));
+        taCartanSubMatrix.setRows(5);
+        jScrollPane3.setViewportView(taCartanSubMatrix);
+
+        jTabbedPane1.addTab("Cartan Sub Matrix", jScrollPane3);
+
+        taCartanSubInvMatrix.setColumns(20);
+        taCartanSubInvMatrix.setFont(new java.awt.Font("Courier New", 0, 12));
+        taCartanSubInvMatrix.setRows(5);
+        jScrollPane4.setViewportView(taCartanSubInvMatrix);
+
+        jTabbedPane1.addTab("Cartan Sub Matrix inverse", jScrollPane4);
+
+        javax.swing.GroupLayout PanelCartanMatrixLayout = new javax.swing.GroupLayout(PanelCartanMatrix);
+        PanelCartanMatrix.setLayout(PanelCartanMatrixLayout);
+        PanelCartanMatrixLayout.setHorizontalGroup(
+            PanelCartanMatrixLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelCartanMatrixLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 409, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        PanelCartanMatrixLayout.setVerticalGroup(
+            PanelCartanMatrixLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(PanelCartanMatrixLayout.createSequentialGroup()
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 318, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         PanelAddConnection.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Change connections", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12)));
@@ -206,8 +296,8 @@ public class LevelDecompositionUI extends javax.swing.JFrame
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelAddConnectionLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(PanelAddConnectionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(bRemoveConnection, javax.swing.GroupLayout.DEFAULT_SIZE, 164, Short.MAX_VALUE)
-                    .addComponent(bAddConnection, javax.swing.GroupLayout.DEFAULT_SIZE, 164, Short.MAX_VALUE)
+                    .addComponent(bRemoveConnection, javax.swing.GroupLayout.DEFAULT_SIZE, 169, Short.MAX_VALUE)
+                    .addComponent(bAddConnection, javax.swing.GroupLayout.DEFAULT_SIZE, 169, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, PanelAddConnectionLayout.createSequentialGroup()
                         .addGroup(PanelAddConnectionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lRemoveConnectionFromLabel, javax.swing.GroupLayout.Alignment.TRAILING)
@@ -216,10 +306,10 @@ public class LevelDecompositionUI extends javax.swing.JFrame
                             .addComponent(lAddConnectionFromLabel, javax.swing.GroupLayout.Alignment.TRAILING))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(PanelAddConnectionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(tfRemoveConnectionFromLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 37, Short.MAX_VALUE)
-                            .addComponent(tfRemoveConnectionToLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 37, Short.MAX_VALUE)
-                            .addComponent(tfAddConnectionToLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 37, Short.MAX_VALUE)
-                            .addComponent(tfAddConnectionFromLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 37, Short.MAX_VALUE))))
+                            .addComponent(tfRemoveConnectionFromLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 42, Short.MAX_VALUE)
+                            .addComponent(tfRemoveConnectionToLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 42, Short.MAX_VALUE)
+                            .addComponent(tfAddConnectionToLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 42, Short.MAX_VALUE)
+                            .addComponent(tfAddConnectionFromLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 42, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         PanelAddConnectionLayout.setVerticalGroup(
@@ -248,114 +338,68 @@ public class LevelDecompositionUI extends javax.swing.JFrame
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        PanelDynkinDiagram.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Dynkin Diagram", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12)));
-        taDynkinDiagram.setColumns(20);
-        taDynkinDiagram.setEditable(false);
-        taDynkinDiagram.setFont(new java.awt.Font("Courier New", 0, 13));
-        taDynkinDiagram.setRows(5);
-        jScrollPane1.setViewportView(taDynkinDiagram);
-
-        javax.swing.GroupLayout PanelDynkinDiagramLayout = new javax.swing.GroupLayout(PanelDynkinDiagram);
-        PanelDynkinDiagram.setLayout(PanelDynkinDiagramLayout);
-        PanelDynkinDiagramLayout.setHorizontalGroup(
-            PanelDynkinDiagramLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(PanelDynkinDiagramLayout.createSequentialGroup()
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 466, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-        PanelDynkinDiagramLayout.setVerticalGroup(
-            PanelDynkinDiagramLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(PanelDynkinDiagramLayout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 254, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-
-        PanelCartanMatrix.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Cartan Matrix", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12)));
-        taCartanMatrix.setColumns(20);
-        taCartanMatrix.setEditable(false);
-        taCartanMatrix.setFont(new java.awt.Font("Courier New", 0, 13));
-        taCartanMatrix.setRows(5);
-        jScrollPane2.setViewportView(taCartanMatrix);
-
-        taCartanSubMatrix.setColumns(20);
-        taCartanSubMatrix.setEditable(false);
-        taCartanSubMatrix.setFont(new java.awt.Font("Courier New", 0, 13));
-        taCartanSubMatrix.setRows(5);
-        jScrollPane3.setViewportView(taCartanSubMatrix);
-
-        javax.swing.GroupLayout PanelCartanMatrixLayout = new javax.swing.GroupLayout(PanelCartanMatrix);
-        PanelCartanMatrix.setLayout(PanelCartanMatrixLayout);
-        PanelCartanMatrixLayout.setHorizontalGroup(
-            PanelCartanMatrixLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelCartanMatrixLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(PanelChangesNode, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(PanelAddConnection, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(PanelDynkinDiagram, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(PanelCartanMatrix, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
-
-        PanelCartanMatrixLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jScrollPane2, jScrollPane3});
-
-        PanelCartanMatrixLayout.setVerticalGroup(
-            PanelCartanMatrixLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelCartanMatrixLayout.createSequentialGroup()
-                .addGroup(PanelCartanMatrixLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 217, Short.MAX_VALUE)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 217, Short.MAX_VALUE))
-                .addContainerGap())
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(11, 11, 11)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(PanelDynkinDiagram, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(PanelCartanMatrix, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(PanelChangesNode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(PanelAddConnection, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(PanelAddConnection, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(PanelChangesNode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(PanelCartanMatrix, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(PanelDynkinDiagram, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(10, Short.MAX_VALUE))
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(PanelDynkinDiagram, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(PanelChangesNode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(PanelCartanMatrix, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(PanelAddConnection, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    
     private void bToggleNodeActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_bToggleNodeActionPerformed
     {//GEN-HEADEREND:event_bToggleNodeActionPerformed
 	dynkinDiagram.ToggleNode(Integer.parseInt(tfToggleNodeLabel.getText()));
 	Update();
     }//GEN-LAST:event_bToggleNodeActionPerformed
-
+    
     private void bRemoveNodeActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_bRemoveNodeActionPerformed
     {//GEN-HEADEREND:event_bRemoveNodeActionPerformed
 	dynkinDiagram.RemoveNode(Integer.parseInt(tfRemoveNodeLabel.getText()));
 	Update();
     }//GEN-LAST:event_bRemoveNodeActionPerformed
-
+    
     private void bRemoveConnectionActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_bRemoveConnectionActionPerformed
     {//GEN-HEADEREND:event_bRemoveConnectionActionPerformed
 	dynkinDiagram.ModifyConnection(Integer.parseInt(tfRemoveConnectionFromLabel.getText()),Integer.parseInt(tfRemoveConnectionToLabel.getText()),false);
 	Update();
     }//GEN-LAST:event_bRemoveConnectionActionPerformed
-
+    
     private void bAddConnectionActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_bAddConnectionActionPerformed
     {//GEN-HEADEREND:event_bAddConnectionActionPerformed
 	dynkinDiagram.ModifyConnection(Integer.parseInt(tfAddConnectionFromLabel.getText()),Integer.parseInt(tfAddConnectionToLabel.getText()),true);
@@ -392,9 +436,12 @@ public class LevelDecompositionUI extends javax.swing.JFrame
     private javax.swing.JButton bRemoveConnection;
     private javax.swing.JButton bRemoveNode;
     private javax.swing.JButton bToggleNode;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JLabel lAddConnectionFromLabel;
     private javax.swing.JLabel lAddConnectionToLabel;
     private javax.swing.JLabel lAddNodeConnectionTo;
@@ -404,6 +451,7 @@ public class LevelDecompositionUI extends javax.swing.JFrame
     private javax.swing.JLabel lRemoveNodeLabel;
     private javax.swing.JLabel lToggleNodeLabel;
     private javax.swing.JTextArea taCartanMatrix;
+    private javax.swing.JTextArea taCartanSubInvMatrix;
     private javax.swing.JTextArea taCartanSubMatrix;
     private javax.swing.JTextArea taDynkinDiagram;
     private javax.swing.JTextField tfAddConnectionFromLabel;

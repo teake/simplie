@@ -18,13 +18,15 @@ public class CDynkinNode implements Comparable<CDynkinNode>
     int	    id;
     int     label;
     boolean enabled;
+    int	    connections;
     
     /** Creates a new instance of CDynkinNode */
     public CDynkinNode(int id, int label)
     {
-	this.id      = id;
-	this.label   = label;
-	this.enabled = true;
+	this.id		    = id;
+	this.label	    = label;
+	this.enabled	    = true;
+	this.connections    = 0;
     }
     
     // compares labels

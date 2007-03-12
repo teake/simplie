@@ -161,6 +161,8 @@ public class CDynkinDiagram
 	
 	Refactor();
 	
+	Vector drawnNodes = new Vector();
+	
 	String diagramNodes	= new String();
 	String diagramLabels	= new String();
 	
@@ -176,18 +178,10 @@ public class CDynkinDiagram
 		diagramNodes += "x";
 	    }
 	    
-	    boolean hasConnection = false;
-	    for (Enumeration e2 = connections.elements(); e2.hasMoreElements();)
-	    {
-		CDynkinConnection connection = (CDynkinConnection) e2.nextElement();
-		if(connection.idNode1 == node.id)
-		{
-		    diagramNodes += " - ";
-		    hasConnection = true;
-		    break;
-		}
-	    }
-	    if(!hasConnection) diagramNodes += "   ";
+	    if(node.connections > 0)
+		diagramNodes += " - ";
+	    else
+		diagramNodes += "   ";
 	    
 	    Integer label = new Integer(node.label);
 	    diagramLabels   += label.toString() + "   ";
@@ -284,12 +278,20 @@ public class CDynkinDiagram
 	if(connections.contains(newConnection))
 	{
 	    if(!add)
+	    {
 		connections.remove(newConnection);
+		GetNodeById(fromId).connections--;
+		GetNodeById(toId).connections--;
+	    }
 	    return;
 	}
 	
 	if(add)
+	{
 	    connections.add(newConnection);
+	    GetNodeById(fromId).connections++;
+	    GetNodeById(toId).connections++;
+	}
     }
     
     
