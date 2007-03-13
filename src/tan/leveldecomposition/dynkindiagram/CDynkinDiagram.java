@@ -56,6 +56,26 @@ public class CDynkinDiagram
 	return -1;
     }
     
+    public Vector<Integer> GetNodeConnections(int id)
+    {
+	Vector<Integer> nodeConnections = new Vector<Integer>();
+	int connectionId;
+	for (Enumeration e = connections.elements(); e.hasMoreElements();)
+	{
+	    connectionId = -1;
+	    CDynkinConnection connection = (CDynkinConnection) e.nextElement();
+	    
+	    if(connection.idNode1 == id)
+		connectionId = connection.idNode2;
+	    if(connection.idNode2 == id)
+		connectionId = connection.idNode1;
+	    
+	    if(connectionId != -1 && !nodeConnections.contains(new Integer(connectionId)))
+		nodeConnections.add(new Integer(connectionId));
+	}
+	return nodeConnections;
+    }
+    
     public CDynkinNode GetNodeById(int id)
     {
 	for (Enumeration e = nodes.elements(); e.hasMoreElements();)
@@ -159,32 +179,54 @@ public class CDynkinDiagram
     {
 	// ONLY WORKS FOR THE A SERIES CURRENTLY!!! FIX IT FOR MORE GENERAL CONNECTIONS!!!
 	
-	Refactor();
-	
+	String diagram		= new String();
 	String diagramNodes	= new String();
 	String diagramLabels	= new String();
 	
-	for (Enumeration e = nodes.elements(); e.hasMoreElements();)
+	if(GetRank() == 0)
+	    return diagram;
+	
+	Refactor();
+	
+	Vector<Integer> drawnNodes  = new Vector<Integer>();
+	int	nextNode	    = -1;
+	boolean hasNewConnection    = false;
+	
+	for(int i = 1; i < GetRank() + 1; i++)
 	{
-	    CDynkinNode node = (CDynkinNode) e.nextElement();
-	    if(node.enabled)
+	    if(!drawnNodes.contains(new Integer(i)))
 	    {
-		diagramNodes += "o";
+		do
+		{
+		    int label		= hasNewConnection ? nextNode : i;
+		    CDynkinNode node	= GetNodeByLabel(label);
+		    hasNewConnection	= false;
+		    
+		    if(node.enabled)
+			diagramNodes += "o";
+		    else
+			diagramNodes += "x";
+		    diagramLabels += label;
+		    
+		    drawnNodes.add(new Integer(label));
+		    for (Enumeration e = GetNodeConnections(node.id).elements(); e.hasMoreElements();)
+		    {
+			nextNode = GetNodeLabelById((Integer) e.nextElement());
+			if(!drawnNodes.contains(nextNode))
+			{
+			    hasNewConnection = true;
+			    diagramNodes += " - ";
+			    break;
+			}
+		    }
+		    if(!hasNewConnection)
+			diagramNodes += "   ";
+		    diagramLabels += "   ";
+		    
+		} while (hasNewConnection);
 	    }
-	    else
-	    {
-		diagramNodes += "x";
-	    }
-	    
-	    if(node.connections > 0)
-		diagramNodes += " - ";
-	    else
-		diagramNodes += "   ";
-	    
-	    Integer label = new Integer(node.label);
-	    diagramLabels   += label.toString() + "  ";
-	    if(node.label < 10) diagramLabels += " ";
 	}
+	
 	
 	return diagramNodes + "\n" + diagramLabels;
     }
@@ -277,20 +319,12 @@ public class CDynkinDiagram
 	if(connections.contains(newConnection))
 	{
 	    if(!add)
-	    {
 		connections.remove(newConnection);
-		GetNodeById(fromId).connections--;
-		GetNodeById(toId).connections--;
-	    }
 	    return;
 	}
 	
 	if(add)
-	{
 	    connections.add(newConnection);
-	    GetNodeById(fromId).connections++;
-	    GetNodeById(toId).connections++;
-	}
     }
     
     
@@ -307,21 +341,6 @@ public class CDynkinDiagram
 	    CDynkinNode node = (CDynkinNode) e.nextElement();
 	    node.label = label++;
 	}
-	
     }
-    
-    /*
-    private int CompareConnections(CDynkinConnection connection1, CDynkinConnection connection2)
-    {
-	final int BEFORE = -1;
-	final int EQUAL = 0;
-	final int AFTER = 1;
-     
-	if(getNodeLabelById(connection1.idNode1) > getNodeLabelById(connection2.idNode1)) return AFTER;
-	if(getNodeLabelById(connection1.idNode1) < getNodeLabelById(connection2.idNode1)) return BEFORE;
-     
-	return EQUAL;
-    }
-     */
     
 }
