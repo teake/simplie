@@ -23,8 +23,12 @@ public class AlgebraSetup extends javax.swing.JPanel
     public AlgebraSetup()
     {
 	initComponents();
-	dynkinDiagram	= new CDynkinDiagram();
-	helper		= new CHelper();
+	this.helper		= new CHelper();
+    }
+    
+    public void Initialize(CDynkinDiagram dynkinDiagram)
+    {
+	this.dynkinDiagram	= dynkinDiagram;
 	Update();
     }
     
@@ -354,31 +358,31 @@ public class AlgebraSetup extends javax.swing.JPanel
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
-
+    
     private void bRemoveConnectionActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_bRemoveConnectionActionPerformed
     {//GEN-HEADEREND:event_bRemoveConnectionActionPerformed
 	dynkinDiagram.ModifyConnection(Integer.parseInt(tfRemoveConnectionFromLabel.getText()),Integer.parseInt(tfRemoveConnectionToLabel.getText()),false);
 	Update();
     }//GEN-LAST:event_bRemoveConnectionActionPerformed
-
+    
     private void bAddConnectionActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_bAddConnectionActionPerformed
     {//GEN-HEADEREND:event_bAddConnectionActionPerformed
 	dynkinDiagram.ModifyConnection(Integer.parseInt(tfAddConnectionFromLabel.getText()),Integer.parseInt(tfAddConnectionToLabel.getText()),true);
 	Update();
     }//GEN-LAST:event_bAddConnectionActionPerformed
-
+    
     private void bToggleNodeActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_bToggleNodeActionPerformed
     {//GEN-HEADEREND:event_bToggleNodeActionPerformed
 	dynkinDiagram.ToggleNode(Integer.parseInt(tfToggleNodeLabel.getText()));
 	Update();
     }//GEN-LAST:event_bToggleNodeActionPerformed
-
+    
     private void bRemoveNodeActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_bRemoveNodeActionPerformed
     {//GEN-HEADEREND:event_bRemoveNodeActionPerformed
 	dynkinDiagram.RemoveNode(Integer.parseInt(tfRemoveNodeLabel.getText()));
 	Update();
     }//GEN-LAST:event_bRemoveNodeActionPerformed
-
+    
     private void bAddNodeActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_bAddNodeActionPerformed
     {//GEN-HEADEREND:event_bAddNodeActionPerformed
 	dynkinDiagram.AddNode(Integer.parseInt(tfAddNodeLabel.getText()),Integer.parseInt(tfAddNodeConnectionTo.getText()));

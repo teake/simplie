@@ -26,5 +26,25 @@ public class CRepresentation
 	rootComponents	= m.clone();
 	rootLength	= alpha;
     }
+
+    public int[] GetLevels()
+    {
+	return levels.clone();
+    }
+
+    public int[] GetDynkinLabels()
+    {
+	return dynkinLabels.clone();
+    }
+
+    public int[] GetRootComponents()
+    {
+	return rootComponents.clone();
+    }
+    
+    public double GetRootLength()
+    {
+	return rootLength;
+    }
     
 }

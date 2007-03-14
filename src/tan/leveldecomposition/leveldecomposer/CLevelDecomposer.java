@@ -20,7 +20,7 @@ public class CLevelDecomposer
     int subRank;
     int coRank;
     /** The factor with which the inverse of the cartan sub matrix gets multiplied. */
-    int subFactor; 
+    int subFactor;
     
     /** Array of which nodes are enabled */
     boolean[] enabledNodes;
@@ -36,7 +36,7 @@ public class CLevelDecomposer
     }
     
     /** Sets it all up */
-    public void Setup(int rank, int subRank, Matrix cartanMatrix, Matrix cartanMatrixSubInverse, boolean[] enabledNodes)
+    public void Initialize(int rank, int subRank, Matrix cartanMatrix, Matrix cartanMatrixSubInverse, boolean[] enabledNodes)
     {
 	this.rank	= rank;
 	this.subRank	= subRank;
@@ -122,7 +122,7 @@ public class CLevelDecomposer
     }
     
     /** Returns the actual root labels time the subfactor */
-    private int[] CalculateRootLabels(int[] dynkinLabels, int[] levels)
+    private int[] CalculateRootComponents(int[] dynkinLabels, int[] levels)
     {
 	int[] rootLabels	= new int[subRank];
 	int[] levelComponents	= CalculateLevelComponents(levels);
@@ -158,7 +158,19 @@ public class CLevelDecomposer
     public Vector<CRepresentation> ScanLevel(int[] levels)
     {
 	Vector<CRepresentation> reps = new Vector<CRepresentation>();
-	// DO MORE STUFF
+	
+	/** Set up the Dynkin labels */
+	int[] dynkinLabels = new int[subRank];
+	for (int i = 0; i < subRank; i++)
+	{
+	    dynkinLabels[i] = 0;
+	}
+	
+	int[] rootComponents = CalculateRootComponents(dynkinLabels, levels);
+	int rootLength = CalculateRootLength(dynkinLabels, levels);
+	
+	CRepresentation rep = new CRepresentation(levels, dynkinLabels, rootComponents, rootLength);
+	reps.add(rep);
 	return reps;
     }
 }

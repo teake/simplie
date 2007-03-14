@@ -9,15 +9,21 @@ package tan.leveldecomposition.ui;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
 
+import tan.leveldecomposition.*;
+import tan.leveldecomposition.dynkindiagram.CDynkinDiagram;
+
 /**
  *
  * @author  Teake Nutma
  */
 public class Main extends javax.swing.JFrame
 {
+    CDynkinDiagram dynkinDiagram;
+    
     /** Creates new form LevelDecompositionUI */
     public Main()
     {
+	/** Try to set the Look and Feel to the system native look and feel */
 	UIManager uiManager = new UIManager();
 	try
 	{
@@ -27,6 +33,11 @@ public class Main extends javax.swing.JFrame
 	{
 	}
 	initComponents();
+	
+	dynkinDiagram = new CDynkinDiagram();
+	
+	algebraSetup.Initialize(dynkinDiagram);
+	levelDecomposition.Initialize(dynkinDiagram);
     }
     
 

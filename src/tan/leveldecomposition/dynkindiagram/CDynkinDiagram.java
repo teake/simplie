@@ -25,9 +25,24 @@ public class CDynkinDiagram
 	nodes	    = new Vector<CDynkinNode>();
 	connections = new Vector<CDynkinConnection>();
     }
+
+    /** Returns an array of booleans.
+	True if the corresponding node is enabled, false if disabled. */
+    public boolean[] GetEnabledNodes()
+    {
+	boolean[] enabledNodes = new boolean[GetRank()];
+	for (int i = 0; i < GetRank(); i++)
+	{
+	    if(GetNodeByLabel(i+1).enabled)
+		enabledNodes[i] = true;
+	    else
+		enabledNodes[i] = false;
+	}
+	return enabledNodes;
+    }
     
-    // returns the internal id of a node, given its label number.
-    // returns -1 if there's no node found.
+    /** Returns the internal id of a node, given its label number.
+	Returns -1 if there's no node found.  */
     public int GetNodeIdByLabel(int label)
     {
 	for (Enumeration e = nodes.elements(); e.hasMoreElements();)

@@ -6,19 +6,70 @@
 
 package tan.leveldecomposition.ui;
 
+import tan.leveldecomposition.dynkindiagram.*;
+import tan.leveldecomposition.leveldecomposer.*;
+import tan.leveldecomposition.helper.*;
+import java.util.*;
+
 /**
  *
  * @author  Teake Nutma
  */
 public class LevelDecomposition extends javax.swing.JPanel
 {
+    CDynkinDiagram	dynkinDiagram;
+    CLevelDecomposer	levelDecomposer;
+    CHelper		helper;
     
     /** Creates new form LevelDecomposition */
     public LevelDecomposition()
     {
 	initComponents();
+	levelDecomposer = new CLevelDecomposer();
+	helper		= new CHelper();
+	
 	autoScanMinLevel.SetLabel("Minimum level:");
 	autoScanMaxLevel.SetLabel("Maximum level:");
+	
+    }
+    
+    public void Initialize(CDynkinDiagram diagram)
+    {
+	dynkinDiagram = diagram;
+    }
+    
+    public void AutoScan(int minLevel, int maxLevel)
+    {
+	levelDecomposer.Initialize(
+		dynkinDiagram.GetRank(),
+		dynkinDiagram.GetSubRank(),
+		dynkinDiagram.GetCartanMatrix(),
+		dynkinDiagram.GetCartanSubMatrix().inverse(),
+		dynkinDiagram.GetEnabledNodes()
+		);
+	int[] levels = new int[dynkinDiagram.GetRank() - dynkinDiagram.GetSubRank()];
+	for (int i = 0; i < dynkinDiagram.GetRank() - dynkinDiagram.GetSubRank(); i++)
+	{
+	    levels[i] = maxLevel;
+	}
+	PopulateTable(levelDecomposer.ScanLevel(levels));
+    }
+    
+    private void PopulateTable(Vector<CRepresentation> reps)
+    {
+	Object[][] data = new Object[reps.size()][4];
+	int i = 0;
+	for (Enumeration e = reps.elements(); e.hasMoreElements();)
+	{
+	    CRepresentation rep = (CRepresentation) e.nextElement();
+	    data[i][0] = helper.IntArrayToString(rep.GetLevels());
+	    data[i][1] = helper.IntArrayToString(rep.GetDynkinLabels());
+	    data[i][2] = helper.IntArrayToString(rep.GetRootComponents());
+	    data[i][3] = rep.GetRootLength();
+	    i++;
+	}
+	
+	representationsTable.setModel(new javax.swing.table.DefaultTableModel(data,new String [] {"l", "p", "m", "root length"}	));
     }
     
     /** This method is called from within the constructor to
@@ -29,44 +80,41 @@ public class LevelDecomposition extends javax.swing.JPanel
     // <editor-fold defaultstate="collapsed" desc=" Generated Code ">//GEN-BEGIN:initComponents
     private void initComponents()
     {
-        jPanel1 = new javax.swing.JPanel();
+        SinglelLevelScanPanel = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
-        jPanel2 = new javax.swing.JPanel();
+        RepresentationPanel = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         representationsTable = new javax.swing.JTable();
-        jPanel3 = new javax.swing.JPanel();
+        AutoScanPanel = new javax.swing.JPanel();
         bAutoScan = new javax.swing.JButton();
         autoScanMinLevel = new tan.leveldecomposition.ui.LevelTextfield();
         autoScanMaxLevel = new tan.leveldecomposition.ui.LevelTextfield();
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Individual level scan", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12)));
+        SinglelLevelScanPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Single level scan", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12)));
         jButton1.setText("Scan");
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        javax.swing.GroupLayout SinglelLevelScanPanelLayout = new javax.swing.GroupLayout(SinglelLevelScanPanel);
+        SinglelLevelScanPanel.setLayout(SinglelLevelScanPanelLayout);
+        SinglelLevelScanPanelLayout.setHorizontalGroup(
+            SinglelLevelScanPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(SinglelLevelScanPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 215, Short.MAX_VALUE)
                 .addContainerGap())
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        SinglelLevelScanPanelLayout.setVerticalGroup(
+            SinglelLevelScanPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(SinglelLevelScanPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jButton1)
                 .addContainerGap(346, Short.MAX_VALUE))
         );
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Subalgebra Representations", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12)));
+        RepresentationPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Subalgebra Representations", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12)));
         representationsTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][]
             {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String []
             {
@@ -84,43 +132,51 @@ public class LevelDecomposition extends javax.swing.JPanel
                 return canEdit [columnIndex];
             }
         });
+        representationsTable.setRowSelectionAllowed(false);
         jScrollPane1.setViewportView(representationsTable);
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
+        javax.swing.GroupLayout RepresentationPanelLayout = new javax.swing.GroupLayout(RepresentationPanel);
+        RepresentationPanel.setLayout(RepresentationPanelLayout);
+        RepresentationPanelLayout.setHorizontalGroup(
+            RepresentationPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(RepresentationPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 389, Short.MAX_VALUE)
                 .addContainerGap())
         );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
+        RepresentationPanelLayout.setVerticalGroup(
+            RepresentationPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(RepresentationPanelLayout.createSequentialGroup()
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 527, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
-        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Automatic scan", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12)));
+        AutoScanPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Automatic scan", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12)));
         bAutoScan.setText("Scan");
+        bAutoScan.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                bAutoScanActionPerformed(evt);
+            }
+        });
 
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
+        javax.swing.GroupLayout AutoScanPanelLayout = new javax.swing.GroupLayout(AutoScanPanel);
+        AutoScanPanel.setLayout(AutoScanPanelLayout);
+        AutoScanPanelLayout.setHorizontalGroup(
+            AutoScanPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(AutoScanPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(AutoScanPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(AutoScanPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(autoScanMaxLevel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(autoScanMinLevel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(bAutoScan, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 215, Short.MAX_VALUE))
                 .addContainerGap())
         );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
+        AutoScanPanelLayout.setVerticalGroup(
+            AutoScanPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(AutoScanPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(autoScanMaxLevel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -137,10 +193,10 @@ public class LevelDecomposition extends javax.swing.JPanel
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(SinglelLevelScanPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(AutoScanPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(RepresentationPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -148,24 +204,29 @@ public class LevelDecomposition extends javax.swing.JPanel
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(RepresentationPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(AutoScanPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addComponent(SinglelLevelScanPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
     
+    private void bAutoScanActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_bAutoScanActionPerformed
+    {//GEN-HEADEREND:event_bAutoScanActionPerformed
+	AutoScan(autoScanMinLevel.GetValue(),autoScanMaxLevel.GetValue());
+    }//GEN-LAST:event_bAutoScanActionPerformed
+    
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel AutoScanPanel;
+    private javax.swing.JPanel RepresentationPanel;
+    private javax.swing.JPanel SinglelLevelScanPanel;
     private tan.leveldecomposition.ui.LevelTextfield autoScanMaxLevel;
     private tan.leveldecomposition.ui.LevelTextfield autoScanMinLevel;
     private javax.swing.JButton bAutoScan;
     private javax.swing.JButton jButton1;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable representationsTable;
     // End of variables declaration//GEN-END:variables

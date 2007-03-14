@@ -21,6 +21,17 @@ public class CHelper
     {
     }
     
+    public String IntArrayToString(int[] array)
+    {
+	String output = new String();
+	for (int i = 0; i < array.length; i++)
+	{
+	    Integer value = new Integer(array[i]);
+	    output += value.toString() + " ";
+	}
+	return output;
+    }
+    
     public String MatrixToString(Matrix matrix, int decimalPlates)
     {
 	int decimalFactor   = Math.round((float) Math.pow(10,decimalPlates));
