@@ -3,8 +3,6 @@
  *
  * Created on 9 maart 2007, 11:19
  *
- * To change this template, choose Tools | Template Manager
- * and open the template in the editor.
  */
 
 package tan.leveldecomposition.dynkindiagram;
