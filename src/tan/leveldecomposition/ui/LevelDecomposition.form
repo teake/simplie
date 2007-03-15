@@ -14,7 +14,7 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
+              <Group type="103" groupAlignment="0" max="-2" attributes="0">
                   <Component id="SinglelLevelScanPanel" max="32767" attributes="1"/>
                   <Component id="AutoScanPanel" alignment="0" max="32767" attributes="1"/>
               </Group>
@@ -30,7 +30,7 @@
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="1" attributes="0">
                   <Component id="RepresentationPanel" alignment="0" max="32767" attributes="0"/>
-                  <Group type="102" alignment="0" attributes="0">
+                  <Group type="102" alignment="1" attributes="0">
                       <Component id="AutoScanPanel" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="SinglelLevelScanPanel" max="32767" attributes="0"/>
@@ -150,14 +150,14 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" attributes="0">
+              <Group type="102" max="-2" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="autoScanMaxLevel" alignment="1" min="-2" max="-2" attributes="0"/>
                           <Component id="autoScanMinLevel" alignment="1" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <Component id="bAutoScan" alignment="1" pref="215" max="32767" attributes="0"/>
+                      <Component id="bAutoScan" alignment="1" min="-2" pref="215" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>

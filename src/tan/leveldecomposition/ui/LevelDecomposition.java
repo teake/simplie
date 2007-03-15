@@ -20,6 +20,7 @@ public class LevelDecomposition extends javax.swing.JPanel
     CDynkinDiagram	dynkinDiagram;
     CLevelDecomposer	levelDecomposer;
     CHelper		helper;
+    Vector<CRepresentation> reps;
     
     /** Creates new form LevelDecomposition */
     public LevelDecomposition()
@@ -40,6 +41,11 @@ public class LevelDecomposition extends javax.swing.JPanel
     
     public void AutoScan(int minLevel, int maxLevel)
     {
+	if(minLevel > maxLevel)
+	    return;
+	if(dynkinDiagram.GetRank() == dynkinDiagram.GetSubRank())
+	    return;
+	
 	levelDecomposer.Initialize(
 		dynkinDiagram.GetRank(),
 		dynkinDiagram.GetSubRank(),
@@ -47,12 +53,28 @@ public class LevelDecomposition extends javax.swing.JPanel
 		dynkinDiagram.GetCartanSubMatrix().inverse(),
 		dynkinDiagram.GetEnabledNodes()
 		);
+	
 	int[] levels = new int[dynkinDiagram.GetRank() - dynkinDiagram.GetSubRank()];
 	for (int i = 0; i < dynkinDiagram.GetRank() - dynkinDiagram.GetSubRank(); i++)
 	{
-	    levels[i] = maxLevel;
+	    levels[i] = minLevel;
 	}
-	PopulateTable(levelDecomposer.ScanLevel(levels));
+	reps = new Vector<CRepresentation>();
+	LoopLevels(levels.clone(),0,maxLevel, true);
+	PopulateTable(reps);
+    }
+    
+    private void LoopLevels(int[] levels, int beginIndex, int maxLevel, boolean scanFirst)
+    {
+	do
+	{
+	    if(scanFirst)
+		reps.addAll(levelDecomposer.ScanLevel(levels));
+	    if(beginIndex + 1 < levels.length)
+		LoopLevels(levels.clone(), beginIndex + 1, maxLevel, false);
+	    levels[beginIndex]++;
+	    scanFirst = true;
+	} while(levels[beginIndex] <= maxLevel);
     }
     
     private void PopulateTable(Vector<CRepresentation> reps)
@@ -167,11 +189,11 @@ public class LevelDecomposition extends javax.swing.JPanel
             AutoScanPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(AutoScanPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(AutoScanPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(AutoScanPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(AutoScanPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(autoScanMaxLevel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(autoScanMinLevel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(bAutoScan, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 215, Short.MAX_VALUE))
+                    .addComponent(bAutoScan, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
         AutoScanPanelLayout.setVerticalGroup(
@@ -192,7 +214,7 @@ public class LevelDecomposition extends javax.swing.JPanel
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(SinglelLevelScanPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(AutoScanPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -205,7 +227,7 @@ public class LevelDecomposition extends javax.swing.JPanel
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(RepresentationPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                    .addGroup(layout.createSequentialGroup()
                         .addComponent(AutoScanPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(SinglelLevelScanPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))

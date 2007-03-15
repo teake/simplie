@@ -14,14 +14,15 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="PanelChangesNode" max="32767" attributes="1"/>
-                  <Component id="PanelAddConnection" min="-2" max="-2" attributes="1"/>
+              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                  <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
+                  <Component id="PanelAddConnection" max="32767" attributes="1"/>
+                  <Component id="PanelChangesNode" alignment="0" max="32767" attributes="1"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="PanelDynkinDiagram" max="32767" attributes="2"/>
-                  <Component id="PanelCartanMatrix" alignment="0" max="32767" attributes="2"/>
+                  <Component id="PanelCartanMatrix" max="32767" attributes="2"/>
+                  <Component id="PanelDynkinDiagram" alignment="0" max="32767" attributes="2"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -30,14 +31,16 @@
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" attributes="0">
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="PanelChangesNode" min="-2" max="-2" attributes="1"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="PanelAddConnection" max="32767" attributes="1"/>
+                      <Component id="PanelAddConnection" min="-2" max="-2" attributes="1"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="jPanel1" max="32767" attributes="0"/>
                   </Group>
-                  <Group type="102" alignment="1" attributes="0">
+                  <Group type="102" alignment="0" attributes="0">
                       <Component id="PanelDynkinDiagram" min="-2" max="-2" attributes="1"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="PanelCartanMatrix" max="32767" attributes="2"/>
@@ -63,39 +66,39 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" alignment="0" attributes="0">
+              <Group type="102" alignment="0" max="-2" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
-                          <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
+                          <EmptySpace pref="21" max="32767" attributes="1"/>
                           <Component id="lAddNodeLabel" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="tfAddNodeLabel" pref="94" max="32767" attributes="0"/>
+                          <Component id="tfAddNodeLabel" min="-2" pref="94" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="1" attributes="0">
                           <Component id="lAddNodeConnectionTo" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="tfAddNodeConnectionTo" pref="94" max="32767" attributes="0"/>
+                          <EmptySpace max="32767" attributes="1"/>
+                          <Component id="tfAddNodeConnectionTo" min="-2" pref="94" max="-2" attributes="0"/>
                       </Group>
                       <Component id="bAddNode" alignment="1" min="-2" pref="74" max="-2" attributes="0"/>
-                      <Group type="102" alignment="1" attributes="0">
+                      <Group type="102" alignment="1" max="-2" attributes="0">
                           <Group type="103" groupAlignment="1" attributes="0">
                               <Component id="lToggleNodeLabel" alignment="1" min="-2" max="-2" attributes="0"/>
                               <Component id="lRemoveNodeLabel" alignment="1" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
                               <Component id="bRemoveNode" alignment="1" min="-2" max="-2" attributes="1"/>
                               <Group type="102" alignment="1" attributes="0">
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Component id="bToggleNode" min="-2" max="-2" attributes="1"/>
                               </Group>
-                              <Component id="tfToggleNodeLabel" alignment="0" pref="95" max="32767" attributes="0"/>
-                              <Component id="tfRemoveNodeLabel" alignment="0" pref="95" max="32767" attributes="0"/>
+                              <Component id="tfToggleNodeLabel" alignment="0" min="-2" pref="95" max="-2" attributes="0"/>
+                              <Component id="tfRemoveNodeLabel" alignment="0" min="-2" pref="95" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                   </Group>
-                  <EmptySpace max="-2" attributes="0"/>
+                  <EmptySpace max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -306,7 +309,7 @@
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="bRemoveConnection" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace pref="28" max="32767" attributes="0"/>
+                  <EmptySpace max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -382,7 +385,7 @@
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
-                  <Component id="TabbedPaneCartanMatrix" pref="265" max="32767" attributes="0"/>
+                  <Component id="TabbedPaneCartanMatrix" pref="276" max="32767" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
@@ -473,6 +476,21 @@
           </SubComponents>
         </Container>
       </SubComponents>
+    </Container>
+    <Container class="javax.swing.JPanel" name="jPanel1">
+
+      <Layout>
+        <DimensionLayout dim="0">
+          <Group type="103" groupAlignment="0" attributes="0">
+              <EmptySpace min="0" pref="201" max="32767" attributes="0"/>
+          </Group>
+        </DimensionLayout>
+        <DimensionLayout dim="1">
+          <Group type="103" groupAlignment="0" attributes="0">
+              <EmptySpace min="0" pref="22" max="32767" attributes="0"/>
+          </Group>
+        </DimensionLayout>
+      </Layout>
     </Container>
   </SubComponents>
 </Form>

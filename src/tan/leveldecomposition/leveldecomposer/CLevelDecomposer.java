@@ -30,6 +30,8 @@ public class CLevelDecomposer
     /** The inverse of the subalgebra matrix */
     int[][] S;
     
+    Vector<CRepresentation> reps;
+    
     /** Creates a new instance of CLevelDecomposer */
     public CLevelDecomposer()
     {
@@ -157,7 +159,7 @@ public class CLevelDecomposer
     /** Scans all the possible highest weight representations at a given level */
     public Vector<CRepresentation> ScanLevel(int[] levels)
     {
-	Vector<CRepresentation> reps = new Vector<CRepresentation>();
+	reps = new Vector<CRepresentation>();
 	
 	/** Set up the Dynkin labels */
 	int[] dynkinLabels = new int[subRank];
@@ -166,11 +168,56 @@ public class CLevelDecomposer
 	    dynkinLabels[i] = 0;
 	}
 	
-	int[] rootComponents = CalculateRootComponents(dynkinLabels, levels);
-	int rootLength = CalculateRootLength(dynkinLabels, levels);
+	/** Do the scan. */
+	LoopDynkinLabels(dynkinLabels, levels, 0, true);
 	
-	CRepresentation rep = new CRepresentation(levels, dynkinLabels, rootComponents, rootLength);
-	reps.add(rep);
 	return reps;
     }
+    
+    private void LoopDynkinLabels(int[] dynkinLabels, int[] levels, int beginIndex, boolean scanFirst)
+    {
+	do
+	{
+	    if(scanFirst)
+	    {
+		int rootLength = CalculateRootLength(dynkinLabels,levels);
+		if(CalculateRootLength(dynkinLabels,levels) <= 2 * subFactor)
+		{
+		    /** First check if all root components are integers and non-negative. */
+		    int[] rootComponents    = CalculateRootComponents(dynkinLabels, levels);
+		    boolean allPosIntegers  = true;
+		    for (int i = 0; i < rootComponents.length; i++)
+		    {
+			if(rootComponents[i] % subFactor != 0 || rootComponents[i] < 0)
+			{
+			    allPosIntegers = false;
+			    break;
+			}
+		    }
+		    /** If we found a valid representation, add it. */
+		    if(allPosIntegers)
+		    {
+			/** First divide all the root components by the subfactor. */
+			int[] properRootComponents = new int[subRank];
+			for (int i = 0; i < rootComponents.length; i++)
+			{
+			    properRootComponents[i] = rootComponents[i] / subFactor;
+			}
+			CRepresentation rep = new CRepresentation(levels, dynkinLabels, properRootComponents, rootLength / subFactor);
+			reps.add(rep);
+		    }
+		}
+		else
+		{
+		    /** The root length is bigger than 2, so abort this line. */
+		    break;
+		}
+	    }
+	    if(beginIndex + 1 < dynkinLabels.length)
+		LoopDynkinLabels(dynkinLabels.clone(), levels, beginIndex + 1, false);
+	    dynkinLabels[beginIndex]++;
+	    scanFirst = true;
+	} while( true );    
+    }
+    
 }
