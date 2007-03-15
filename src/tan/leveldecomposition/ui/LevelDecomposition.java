@@ -39,6 +39,7 @@ public class LevelDecomposition extends javax.swing.JPanel
 	dynkinDiagram = diagram;
     }
     
+    /** Automatically scan every possible level between minLevel and maxLevel */
     public void AutoScan(int minLevel, int maxLevel)
     {
 	if(minLevel > maxLevel)
@@ -64,6 +65,7 @@ public class LevelDecomposition extends javax.swing.JPanel
 	PopulateTable(reps);
     }
     
+    /** Iterates through all possible levels for which levels[i] <= maxLevel and scans them. */
     private void LoopLevels(int[] levels, int beginIndex, int maxLevel, boolean scanFirst)
     {
 	do
@@ -77,6 +79,7 @@ public class LevelDecomposition extends javax.swing.JPanel
 	} while(levels[beginIndex] <= maxLevel);
     }
     
+    /** Populates the table with data from the argument. */
     private void PopulateTable(Vector<CRepresentation> reps)
     {
 	Object[][] data = new Object[reps.size()][4];

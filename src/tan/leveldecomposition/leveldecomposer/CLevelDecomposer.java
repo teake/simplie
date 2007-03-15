@@ -19,7 +19,11 @@ public class CLevelDecomposer
     int rank;
     int subRank;
     int coRank;
-    /** The factor with which the inverse of the cartan sub matrix gets multiplied. */
+    /**
+     * The inverse of the Cartan matrix gets multiplied with this value in order to make all entries integers.
+     * Thus also the rootComponents and the rootLength get multiplied with it.
+     * Don't forget to divide these with this factor at the end of the day!
+     */
     int subFactor;
     
     /** Array of which nodes are enabled */
@@ -27,7 +31,7 @@ public class CLevelDecomposer
     
     /** The full cartan matrix */
     int[][] cartanMatrix;
-    /** The inverse of the subalgebra matrix */
+    /** The inverse of the Cartan matrix multiplied with the subFactor */
     int[][] S;
     
     Vector<CRepresentation> reps;
@@ -43,16 +47,17 @@ public class CLevelDecomposer
 	this.rank	= rank;
 	this.subRank	= subRank;
 	this.coRank	= rank - subRank;
-	this.subFactor	= subRank + 1;	// Everythings gets multiplied with this factor in order to get integer values.
-	// Make sure we divide with this factor at the end of the day!
+	this.subFactor	= subRank + 1;
 	
 	this.enabledNodes = enabledNodes;
 	
 	this.cartanMatrix   = new int[rank][rank];
 	this.S		    = new int[subRank][subRank];
 	
-	// Copy both matrices into integer arrays.
-	// NOTE: All values of (cartanMatrixSubInverse * subFactor) of course have to be integers.
+	/**
+	 * Copy both matrices into integer arrays.
+	 * NOTE: All values of (cartanMatrixSubInverse * subFactor) of course have to be integers.
+	 */
 	for(int i=0; i<rank; i++)
 	{
 	    for(int j=0; j<rank; j++)
@@ -60,15 +65,13 @@ public class CLevelDecomposer
 		this.cartanMatrix[i][j] = (int) Math.round(cartanMatrix.get(i,j));
 	    }
 	}
-	cartanMatrixSubInverse.times(subFactor);
 	for(int i=0; i<subRank; i++)
 	{
 	    for(int j=0; j<subRank; j++)
 	    {
-		this.S[i][j] = (int) Math.round(cartanMatrixSubInverse.get(i,j));
+		this.S[i][j] = (int) Math.round( subFactor * cartanMatrixSubInverse.get(i,j) );
 	    }
 	}
-	
     }
     
     /** Translates an index of the submatrix into an index of the full matrix */
@@ -123,7 +126,7 @@ public class CLevelDecomposer
 	return rootLength;
     }
     
-    /** Returns the actual root labels time the subfactor */
+    /** Returns the actual root labels times the subfactor. */
     private int[] CalculateRootComponents(int[] dynkinLabels, int[] levels)
     {
 	int[] rootLabels	= new int[subRank];
@@ -141,6 +144,7 @@ public class CLevelDecomposer
 	return rootLabels;
     }
     
+    /** Calculates the contraction of the levels with the Cartan matrix. */
     private int[] CalculateLevelComponents(int[] levels)
     {
 	int[] levelComponents = new int[subRank];
@@ -181,6 +185,7 @@ public class CLevelDecomposer
 	    if(scanFirst)
 	    {
 		int rootLength = CalculateRootLength(dynkinLabels,levels);
+		/** Only continue if the root length is not bigger than 2. */
 		if(CalculateRootLength(dynkinLabels,levels) <= 2 * subFactor)
 		{
 		    /** First check if all root components are integers and non-negative. */
@@ -217,7 +222,7 @@ public class CLevelDecomposer
 		LoopDynkinLabels(dynkinLabels.clone(), levels, beginIndex + 1, false);
 	    dynkinLabels[beginIndex]++;
 	    scanFirst = true;
-	} while( true );    
+	} while( true );
     }
     
 }
