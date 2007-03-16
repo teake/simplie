@@ -8,6 +8,8 @@ package tan.leveldecomposition.ui;
 
 import javax.swing.JTextField;
 import javax.swing.UIManager;
+import javax.swing.PopupFactory;
+import javax.swing.Popup;
 
 import tan.leveldecomposition.*;
 import tan.leveldecomposition.dynkindiagram.CDynkinDiagram;
@@ -38,6 +40,7 @@ public class Main extends javax.swing.JFrame
 	
 	algebraSetup.Initialize(dynkinDiagram);
 	levelDecomposition.Initialize(dynkinDiagram);
+
     }
     
 
@@ -50,6 +53,11 @@ public class Main extends javax.swing.JFrame
     // <editor-fold defaultstate="collapsed" desc=" Generated Code ">//GEN-BEGIN:initComponents
     private void initComponents()
     {
+        aboutPopup = new javax.swing.JFrame();
+        closeButton = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
         TabbedPane = new javax.swing.JTabbedPane();
         algebraSetup = new tan.leveldecomposition.ui.AlgebraSetup();
         levelDecomposition = new tan.leveldecomposition.ui.LevelDecomposition();
@@ -61,6 +69,58 @@ public class Main extends javax.swing.JFrame
         MenuItemExit = new javax.swing.JMenuItem();
         MenuHelp = new javax.swing.JMenu();
         MenuItemAbout = new javax.swing.JMenuItem();
+
+        aboutPopup.setTitle("About");
+        aboutPopup.setMinimumSize(new java.awt.Dimension(220, 180));
+        aboutPopup.setResizable(false);
+        closeButton.setText("Close");
+        closeButton.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                closeButtonActionPerformed(evt);
+            }
+        });
+
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setText("Level Decomposition");
+
+        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel2.setText("Written by Teake Nutma");
+
+        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel3.setText("t.a.nutma@rug.nl");
+
+        javax.swing.GroupLayout aboutPopupLayout = new javax.swing.GroupLayout(aboutPopup.getContentPane());
+        aboutPopup.getContentPane().setLayout(aboutPopupLayout);
+        aboutPopupLayout.setHorizontalGroup(
+            aboutPopupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(aboutPopupLayout.createSequentialGroup()
+                .addGroup(aboutPopupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(aboutPopupLayout.createSequentialGroup()
+                        .addGap(77, 77, 77)
+                        .addComponent(closeButton))
+                    .addGroup(aboutPopupLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(aboutPopupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE))))
+                .addContainerGap())
+        );
+        aboutPopupLayout.setVerticalGroup(
+            aboutPopupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, aboutPopupLayout.createSequentialGroup()
+                .addContainerGap(42, Short.MAX_VALUE)
+                .addComponent(jLabel1)
+                .addGap(27, 27, 27)
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel3)
+                .addGap(29, 29, 29)
+                .addComponent(closeButton)
+                .addContainerGap())
+        );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Level decomposition");
@@ -100,6 +160,14 @@ public class Main extends javax.swing.JFrame
 
         MenuHelp.setText("Help");
         MenuItemAbout.setText("About");
+        MenuItemAbout.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                MenuItemAboutActionPerformed(evt);
+            }
+        });
+
         MenuHelp.add(MenuItemAbout);
 
         MenuBar.add(MenuHelp);
@@ -118,6 +186,16 @@ public class Main extends javax.swing.JFrame
         );
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void closeButtonActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_closeButtonActionPerformed
+    {//GEN-HEADEREND:event_closeButtonActionPerformed
+	aboutPopup.setVisible(false);
+    }//GEN-LAST:event_closeButtonActionPerformed
+
+    private void MenuItemAboutActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_MenuItemAboutActionPerformed
+    {//GEN-HEADEREND:event_MenuItemAboutActionPerformed
+	aboutPopup.setVisible(true);
+    }//GEN-LAST:event_MenuItemAboutActionPerformed
 
     private void MenuItemExitActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_MenuItemExitActionPerformed
     {//GEN-HEADEREND:event_MenuItemExitActionPerformed
@@ -152,7 +230,12 @@ public class Main extends javax.swing.JFrame
     private javax.swing.JMenuItem MenuItemOpen;
     private javax.swing.JMenuItem MenuItemSave;
     private javax.swing.JTabbedPane TabbedPane;
+    private javax.swing.JFrame aboutPopup;
     private tan.leveldecomposition.ui.AlgebraSetup algebraSetup;
+    private javax.swing.JButton closeButton;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JSeparator jSeparator1;
     private tan.leveldecomposition.ui.LevelDecomposition levelDecomposition;
     // End of variables declaration//GEN-END:variables

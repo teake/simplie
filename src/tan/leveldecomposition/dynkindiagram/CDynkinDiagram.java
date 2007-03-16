@@ -16,8 +16,8 @@ import Jama.Matrix;
  */
 public class CDynkinDiagram
 {
-    Vector<CDynkinNode>		nodes;
-    Vector<CDynkinConnection>	connections;
+    private Vector<CDynkinNode>		nodes;
+    private Vector<CDynkinConnection>	connections;
     
     /** Creates a new instance of CDynkinDiagram */
     public CDynkinDiagram()
@@ -43,7 +43,7 @@ public class CDynkinDiagram
     
     /** Returns the internal id of a node, given its label number.
 	Returns -1 if there's no node found.  */
-    public int GetNodeIdByLabel(int label)
+    private int GetNodeIdByLabel(int label)
     {
 	for (Enumeration e = nodes.elements(); e.hasMoreElements();)
 	{
@@ -56,7 +56,9 @@ public class CDynkinDiagram
 	return -1;
     }
     
-    public int GetNodeLabelById(int id)
+    /** Returns the external label of a node, given its internal id.
+	Returns -1 if there's no node found.  */
+    private int GetNodeLabelById(int id)
     {
 	for (Enumeration e = nodes.elements(); e.hasMoreElements();)
 	{
@@ -69,7 +71,8 @@ public class CDynkinDiagram
 	return -1;
     }
     
-    public Vector<Integer> GetNodeConnections(int id)
+    /** Returns a vector containing ids of nodes with a connection to this node. */
+    private Vector<Integer> GetNodeConnections(int id)
     {
 	Vector<Integer> nodeConnections = new Vector<Integer>();
 	int connectionId;
@@ -89,7 +92,11 @@ public class CDynkinDiagram
 	return nodeConnections;
     }
     
-    public CDynkinNode GetNodeById(int id)
+    /** 
+     * Fetches a node by its internal id.
+     * Returns null if the node is not found.
+     */
+    private CDynkinNode GetNodeById(int id)
     {
 	for (Enumeration e = nodes.elements(); e.hasMoreElements();)
 	{
@@ -102,7 +109,11 @@ public class CDynkinDiagram
 	return null;
     }
     
-    public CDynkinNode GetNodeByLabel(int label)
+    /** 
+     * Fetches a node by its external label.
+     * Returns null if the node is not found.
+     */
+    private CDynkinNode GetNodeByLabel(int label)
     {
 	for (Enumeration e = nodes.elements(); e.hasMoreElements();)
 	{
@@ -115,11 +126,13 @@ public class CDynkinDiagram
 	return null;
     }
     
+    /** Returns the rank of the whole algebra */
     public int GetRank()
     {
 	return nodes.size();
     }
     
+    /** Returns the rank of the subalgebra. */
     public int GetSubRank()
     {
 	int subRank = 0;
@@ -134,6 +147,7 @@ public class CDynkinDiagram
 	return subRank;
     }
     
+    /** Returns the Cartan matrix of the whole algebra. */
     public Matrix GetCartanMatrix()
     {
 	Refactor();
@@ -157,6 +171,7 @@ public class CDynkinDiagram
 	return cartanMatrix;
     }
     
+    /** Returns the Cartan matrix of the subalgebra */
     public Matrix GetCartanSubMatrix()
     {
 	int subRank = GetSubRank();
@@ -167,7 +182,7 @@ public class CDynkinDiagram
 	Matrix cartanSubMatrix	= new Matrix(subRank,subRank);
 	Matrix cartanMatrix	= GetCartanMatrix();
 	
-	// copy the Cartan matrix elements into the submatrix
+	/** Copy the Cartan matrix elements into the submatrix. */
 	for(int i = 0; i < rank; i++)
 	{
 	    if(GetNodeByLabel(i+1).enabled)
@@ -188,6 +203,7 @@ public class CDynkinDiagram
 	return cartanSubMatrix;
     }
     
+    /** Returns a plain string visually representing the Dynkin diagram. */
     public String GetDiagram()
     {
 	// ONLY WORKS FOR THE A SERIES CURRENTLY!!! FIX IT FOR MORE GENERAL CONNECTIONS!!!
@@ -244,6 +260,7 @@ public class CDynkinDiagram
 	return diagramNodes + "\n" + diagramLabels;
     }
     
+    /** Returns the last label that was added. */
     public int GetLastLabel()
     {
 	int lastLabel = 0;
@@ -340,14 +357,13 @@ public class CDynkinDiagram
 	    connections.add(newConnection);
     }
     
-    
+    /** Reshapes the internal structure. */
     private void Refactor()
     {
-	// sort the nodes according to their label
+	/** sort the nodes according to their label */
 	Collections.sort(nodes);
-	//Collections.sort(connections, CompareConnections());
 	
-	// reset all the labels
+	/** Reset all the labels */
 	int label = 1;
 	for (Enumeration e = nodes.elements(); e.hasMoreElements();)
 	{
