@@ -135,7 +135,7 @@ public class CLevelDecomposer
 	return rootLength;
     }
     
-    /** Returns the actual root labels times the subfactor. */
+    /** Returns the root components times the subfactor. */
     private int[] CalculateRootComponents(int[] dynkinLabels, int[] levels)
     {
 	int[] rootLabels	= new int[subRank];

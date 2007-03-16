@@ -10,8 +10,8 @@
     <offline-allowed/>
     <shortcut online="true"/>
   </information>
-  <resources>
-    <j2se href="http://java.sun.com/products/autodl/j2se" version="1.4+"/>
+  <resources locale="" os="">
+    <j2se href="http://java.sun.com/products/autodl/j2se" version="1.6+"/>
   </resources>
   <resources>
     <jar download="eager" href="dist/LevelDecomposition.jar" main="false"/>

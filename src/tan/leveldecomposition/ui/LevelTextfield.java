@@ -12,11 +12,13 @@ package tan.leveldecomposition.ui;
  */
 public class LevelTextfield extends javax.swing.JPanel
 {
+    private LevelTextfield linkedTo;
     
     /** Creates new form LevelTextfield */
     public LevelTextfield()
     {
 	initComponents();
+	linkedTo = null;
     }
     
     public void SetLabel(String label)
@@ -26,6 +28,17 @@ public class LevelTextfield extends javax.swing.JPanel
     public int GetValue()
     {
 	return Integer.parseInt(tfLevel.getText());
+    }
+    
+    public void SetValue(int value)
+    {
+	Integer val = new Integer(value);
+	tfLevel.setText(val.toString());
+    }
+    
+    public void LinkTo(LevelTextfield linkTo)
+    {
+	linkedTo = linkTo;
     }
     
     /** This method is called from within the constructor to
@@ -91,14 +104,16 @@ public class LevelTextfield extends javax.swing.JPanel
 
     private void buttonPlusActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_buttonPlusActionPerformed
     {//GEN-HEADEREND:event_buttonPlusActionPerformed
-	Integer value = Integer.parseInt(tfLevel.getText()) + 1;
-	tfLevel.setText(value.toString());
+	SetValue(GetValue()+1);
+	if(linkedTo != null)
+	    linkedTo.SetValue(linkedTo.GetValue()+1);
     }//GEN-LAST:event_buttonPlusActionPerformed
 
     private void buttonMinusActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_buttonMinusActionPerformed
     {//GEN-HEADEREND:event_buttonMinusActionPerformed
-	Integer value = Integer.parseInt(tfLevel.getText()) - 1;
-	tfLevel.setText(value.toString());
+	SetValue(GetValue()-1);
+	if(linkedTo != null)
+	    linkedTo.SetValue(linkedTo.GetValue()-1);
     }//GEN-LAST:event_buttonMinusActionPerformed
     
     

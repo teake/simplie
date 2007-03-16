@@ -16,10 +16,10 @@ public class CRepresentation
     int[] levels;
     int[] dynkinLabels;
     int[] rootComponents;
-    double rootLength;
+    int rootLength;
     
     /** Creates a new instance of CRepresentation */
-    public CRepresentation(int[] l, int[] p, int[] m, double alpha)
+    public CRepresentation(int[] l, int[] p, int[] m, int alpha)
     {
 	levels		= l.clone();
 	dynkinLabels	= p.clone();
@@ -42,7 +42,7 @@ public class CRepresentation
 	return rootComponents.clone();
     }
     
-    public double GetRootLength()
+    public int GetRootLength()
     {
 	return rootLength;
     }
