@@ -165,6 +165,25 @@ public class CLevelDecomposer
     {
 	reps = new Vector<CRepresentation>();
 	
+	/** Are the levels all positive or all negative? */
+	int levelSign = 0;
+	boolean positive = false;
+	boolean negative = false;
+	for (int i = 0; i < levels.length; i++)
+	{
+	    if(levels[i] < 0)
+		negative = true;
+	    if(levels[i] > 0)
+		positive = true;
+	}
+	if(positive && negative)
+	    /** This cannot be, thanks to the triangular decomposition. */
+	    return reps;
+	if(positive)
+	    levelSign = 1;
+	if(negative)
+	    levelSign = -1;
+	
 	/** Set up the Dynkin labels */
 	int[] dynkinLabels = new int[subRank];
 	for (int i = 0; i < subRank; i++)
@@ -173,12 +192,12 @@ public class CLevelDecomposer
 	}
 	
 	/** Do the scan. */
-	LoopDynkinLabels(dynkinLabels, levels, 0, true);
+	LoopDynkinLabels(dynkinLabels, levels, 0, true, levelSign);
 	
 	return reps;
     }
     
-    private void LoopDynkinLabels(int[] dynkinLabels, int[] levels, int beginIndex, boolean scanFirst)
+    private void LoopDynkinLabels(int[] dynkinLabels, int[] levels, int beginIndex, boolean scanFirst, int levelSign)
     {
 	do
 	{
@@ -190,17 +209,17 @@ public class CLevelDecomposer
 		{
 		    /** First check if all root components are integers and non-negative. */
 		    int[] rootComponents    = CalculateRootComponents(dynkinLabels, levels);
-		    boolean allPosIntegers  = true;
+		    boolean allGoodIntegers  = true;
 		    for (int i = 0; i < rootComponents.length; i++)
 		    {
-			if(rootComponents[i] % subFactor != 0 || rootComponents[i] < 0)
+			if(rootComponents[i] % subFactor != 0 || rootComponents[i] * levelSign < 0)
 			{
-			    allPosIntegers = false;
+			    allGoodIntegers = false;
 			    break;
 			}
 		    }
 		    /** If we found a valid representation, add it. */
-		    if(allPosIntegers)
+		    if(allGoodIntegers)
 		    {
 			/** First divide all the root components by the subfactor. */
 			int[] properRootComponents = new int[subRank];
@@ -219,7 +238,7 @@ public class CLevelDecomposer
 		}
 	    }
 	    if(beginIndex + 1 < dynkinLabels.length)
-		LoopDynkinLabels(dynkinLabels.clone(), levels, beginIndex + 1, false);
+		LoopDynkinLabels(dynkinLabels.clone(), levels, beginIndex + 1, false, levelSign);
 	    dynkinLabels[beginIndex]++;
 	    scanFirst = true;
 	} while( true );
