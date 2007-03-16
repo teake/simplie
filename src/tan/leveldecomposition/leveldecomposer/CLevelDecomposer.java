@@ -29,6 +29,8 @@ public class CLevelDecomposer
     /** Array of which nodes are enabled */
     boolean[] enabledNodes;
     
+    int signConvention = 1;
+    
     /** The full cartan matrix */
     int[][] cartanMatrix;
     /** The inverse of the Cartan matrix multiplied with the subFactor */
@@ -72,6 +74,13 @@ public class CLevelDecomposer
 		this.S[i][j] = (int) Math.round( subFactor * cartanMatrixSubInverse.get(i,j) );
 	    }
 	}
+    }
+    
+    public void SetSignConvention(int sign)
+    {
+	if(!(sign == 1 || sign == -1))
+	    return;
+	signConvention = sign;
     }
     
     /** Translates an index of the submatrix into an index of the full matrix */
@@ -137,7 +146,7 @@ public class CLevelDecomposer
 	    rootLabels[i] = 0;
 	    for(int j=0; j < subRank; j++)
 	    {
-		rootLabels[i] += S[i][j] * ( dynkinLabels[j] - levelComponents[j] );
+		rootLabels[i] += S[i][j] * ( signConvention * dynkinLabels[j] - levelComponents[j] );
 	    }
 	}
 	
