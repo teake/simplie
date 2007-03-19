@@ -9,6 +9,7 @@ package tan.leveldecomposition.dynkindiagram;
 
 import java.util.*;
 import Jama.Matrix;
+import java.io.*;
 
 /**
  * Singleton class
@@ -17,7 +18,7 @@ import Jama.Matrix;
  */
 public class DynkinDiagram
 {
-    private static DynkinDiagram _instance = new DynkinDiagram();    
+    private static DynkinDiagram _instance = new DynkinDiagram();
     private static Vector<CDynkinNode>		nodes;
     private static Vector<CDynkinConnection>	connections;
     
@@ -40,6 +41,28 @@ public class DynkinDiagram
     {
 	nodes.clear();
 	connections.clear();
+    }
+    /** Returns the rank of the whole algebra */
+    public static int GetRank()
+    {
+	if(nodes == null)
+	    System.out.println("blablabla");
+	return nodes.size();
+    }
+    
+    /** Returns the rank of the subalgebra. */
+    public static int GetSubRank()
+    {
+	int subRank = 0;
+	for (Enumeration e = nodes.elements(); e.hasMoreElements();)
+	{
+	    CDynkinNode node = (CDynkinNode) e.nextElement();
+	    if(node.enabled)
+	    {
+		subRank++;
+	    }
+	}
+	return subRank;
     }
     
     /**
@@ -93,27 +116,6 @@ public class DynkinDiagram
 	return -1;
     }
     
-    /** Returns a vector containing ids of nodes with a connection to this node. */
-    private static Vector<Integer> GetNodeConnections(int id)
-    {
-	Vector<Integer> nodeConnections = new Vector<Integer>();
-	int connectionId;
-	for (Enumeration e = connections.elements(); e.hasMoreElements();)
-	{
-	    connectionId = -1;
-	    CDynkinConnection connection = (CDynkinConnection) e.nextElement();
-	    
-	    if(connection.idNode1 == id)
-		connectionId = connection.idNode2;
-	    if(connection.idNode2 == id)
-		connectionId = connection.idNode1;
-	    
-	    if(connectionId != -1 && !nodeConnections.contains(new Integer(connectionId)))
-		nodeConnections.add(new Integer(connectionId));
-	}
-	return nodeConnections;
-    }
-    
     /**
      * Fetches a node by its internal id.
      * Returns null if the node is not found.
@@ -148,27 +150,25 @@ public class DynkinDiagram
 	return null;
     }
     
-    /** Returns the rank of the whole algebra */
-    public static int GetRank()
+    /** Returns a vector containing ids of nodes with a connection to this node. */
+    private static Vector<Integer> GetNodeConnections(int id)
     {
-	if(nodes == null)
-	    System.out.println("blablabla");
-	return nodes.size();
-    }
-    
-    /** Returns the rank of the subalgebra. */
-    public static int GetSubRank()
-    {
-	int subRank = 0;
-	for (Enumeration e = nodes.elements(); e.hasMoreElements();)
+	Vector<Integer> nodeConnections = new Vector<Integer>();
+	int connectionId;
+	for (Enumeration e = connections.elements(); e.hasMoreElements();)
 	{
-	    CDynkinNode node = (CDynkinNode) e.nextElement();
-	    if(node.enabled)
-	    {
-		subRank++;
-	    }
+	    connectionId = -1;
+	    CDynkinConnection connection = (CDynkinConnection) e.nextElement();
+	    
+	    if(connection.idNode1 == id)
+		connectionId = connection.idNode2;
+	    if(connection.idNode2 == id)
+		connectionId = connection.idNode1;
+	    
+	    if(connectionId != -1 && !nodeConnections.contains(new Integer(connectionId)))
+		nodeConnections.add(new Integer(connectionId));
 	}
-	return subRank;
+	return nodeConnections;
     }
     
     /** Returns the Cartan matrix of the whole algebra. */
@@ -394,6 +394,58 @@ public class DynkinDiagram
 	    CDynkinNode node = (CDynkinNode) e.nextElement();
 	    node.label = label++;
 	}
+    }
+    
+    /**
+     * Saves the dynkindiagram to file.
+     * Returns true upon succes, false on failure.
+     */
+    public static boolean SaveTo(String filename)
+    {
+	filename.trim();
+	FileOutputStream fos	= null;
+	ObjectOutputStream out	= null;
+	try
+	{
+	    fos = new FileOutputStream(filename);
+	    out = new ObjectOutputStream(fos);
+	    out.writeObject(nodes);
+	    out.writeObject(connections);
+	    out.close();
+	}
+	catch(IOException ex)
+	{
+	    return false;
+	}
+	return true;
+    }
+    
+    /**
+     * Loads the dynkindiagram from a file.
+     * Returns true on succes, false on failure.
+     */
+    public static boolean LoadFrom(String filename)
+    {
+	filename.trim();
+	FileInputStream fis	= null;
+	ObjectInputStream in	= null;
+	try
+	{
+	    fis = new FileInputStream(filename);
+	    in = new ObjectInputStream(fis);
+	    nodes	= (Vector<CDynkinNode>) in.readObject();
+	    connections = (Vector<CDynkinConnection>) in.readObject();
+	    in.close();
+	}
+	catch(IOException ex)
+	{
+	    return false;
+	}
+	catch(ClassNotFoundException ex)
+	{
+	    return false;
+	}
+	return true;
     }
     
 }

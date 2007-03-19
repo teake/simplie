@@ -148,7 +148,6 @@ public class LevelDecomposition extends javax.swing.JPanel
     {
         signButtonGroup = new javax.swing.ButtonGroup();
         SinglelLevelScanPanel = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
         RepresentationPanel = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         representationsTable = new javax.swing.JTable();
@@ -162,24 +161,15 @@ public class LevelDecomposition extends javax.swing.JPanel
         signButtonPos = new javax.swing.JRadioButton();
         signButtonNeg = new javax.swing.JRadioButton();
 
-        SinglelLevelScanPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Single level scan", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12)));
-        jButton1.setText("Scan");
-
         javax.swing.GroupLayout SinglelLevelScanPanelLayout = new javax.swing.GroupLayout(SinglelLevelScanPanel);
         SinglelLevelScanPanel.setLayout(SinglelLevelScanPanelLayout);
         SinglelLevelScanPanelLayout.setHorizontalGroup(
             SinglelLevelScanPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(SinglelLevelScanPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 215, Short.MAX_VALUE)
-                .addContainerGap())
+            .addGap(0, 247, Short.MAX_VALUE)
         );
         SinglelLevelScanPanelLayout.setVerticalGroup(
             SinglelLevelScanPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(SinglelLevelScanPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jButton1)
-                .addContainerGap(245, Short.MAX_VALUE))
+            .addGap(0, 306, Short.MAX_VALUE)
         );
 
         RepresentationPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Subalgebra Representations", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12)));
@@ -395,7 +385,6 @@ public class LevelDecomposition extends javax.swing.JPanel
     private tan.leveldecomposition.ui.LevelTextfield autoScanMinLevel;
     private javax.swing.JButton bAutoScan;
     private javax.swing.JCheckBox cbLocked;
-    private javax.swing.JButton jButton1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable representationsTable;
     private javax.swing.JPanel settingsPanel;

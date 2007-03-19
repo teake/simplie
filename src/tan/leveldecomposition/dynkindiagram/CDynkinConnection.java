@@ -7,11 +7,13 @@
 
 package tan.leveldecomposition.dynkindiagram;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Teake Nutma
  */
-public class CDynkinConnection
+public class CDynkinConnection implements Serializable
 {
     // always have idNode1 < idNode2
     int idNode1;

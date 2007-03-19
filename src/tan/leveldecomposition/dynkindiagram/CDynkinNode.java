@@ -8,12 +8,13 @@
 package tan.leveldecomposition.dynkindiagram;
 
 import java.util.*;
+import java.io.Serializable;
 
 /**
  *
  * @author Teake Nutma
  */
-public class CDynkinNode implements Comparable<CDynkinNode>
+public class CDynkinNode implements Serializable, Comparable<CDynkinNode>
 {
     int	    id;
     int     label;

@@ -8,8 +8,7 @@ package tan.leveldecomposition.ui;
 
 import javax.swing.JTextField;
 import javax.swing.UIManager;
-import javax.swing.PopupFactory;
-import javax.swing.Popup;
+import javax.swing.JFileChooser;
 
 import tan.leveldecomposition.*;
 import tan.leveldecomposition.dynkindiagram.*;
@@ -87,12 +86,30 @@ public class Main extends javax.swing.JFrame
 
         MenuFile.setMnemonic('f');
         MenuFile.setLabel("File");
+        MenuItemOpen.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.CTRL_MASK));
         MenuItemOpen.setMnemonic('o');
         MenuItemOpen.setText("Open algebra settings");
+        MenuItemOpen.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                MenuItemOpenActionPerformed(evt);
+            }
+        });
+
         MenuFile.add(MenuItemOpen);
 
+        MenuItemSave.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
         MenuItemSave.setMnemonic('s');
         MenuItemSave.setText("Save algebra settings");
+        MenuItemSave.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                MenuItemSaveActionPerformed(evt);
+            }
+        });
+
         MenuFile.add(MenuItemSave);
 
         MenuFile.add(jSeparator1);
@@ -171,6 +188,42 @@ public class Main extends javax.swing.JFrame
         );
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void MenuItemSaveActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_MenuItemSaveActionPerformed
+    {//GEN-HEADEREND:event_MenuItemSaveActionPerformed
+	JFileChooser chooser = new JFileChooser("");
+	int returnVal = chooser.showSaveDialog(this);
+	
+	if ( returnVal == chooser.APPROVE_OPTION )
+	{
+	    /* To create a URL for a file on the local file-system, we simply
+	     * pre-pend the "file" protocol to the absolute path of the file.
+	     */
+	    String fileURL = chooser.getSelectedFile().getAbsolutePath();
+	    DynkinDiagram.SaveTo(fileURL);
+	}
+    }//GEN-LAST:event_MenuItemSaveActionPerformed
+    
+    private void MenuItemOpenActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_MenuItemOpenActionPerformed
+    {//GEN-HEADEREND:event_MenuItemOpenActionPerformed
+	String initialDirectory = "";
+	String fileURL;
+	JFileChooser chooser;
+	int returnVal;
+	
+	chooser = new JFileChooser(initialDirectory);
+	returnVal = chooser.showOpenDialog(this);
+	
+	if ( returnVal == chooser.APPROVE_OPTION )
+	{
+	    /* To create a URL for a file on the local file-system, we simply
+	     * pre-pend the "file" protocol to the absolute path of the file.
+	     */
+	    fileURL = chooser.getSelectedFile().getAbsolutePath();
+	    DynkinDiagram.LoadFrom(fileURL);
+	    algebraSetup.Update();
+	}
+    }//GEN-LAST:event_MenuItemOpenActionPerformed
     
     private void MenuItemLoadE11ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_MenuItemLoadE11ActionPerformed
     {//GEN-HEADEREND:event_MenuItemLoadE11ActionPerformed
