@@ -20,6 +20,9 @@ import tan.leveldecomposition.dynkindiagram.CDynkinDiagram;
  */
 public class Main extends javax.swing.JFrame
 {
+    /** 
+     * TODO: Make dynkinDiagram a singleton
+     */
     CDynkinDiagram dynkinDiagram;
     
     /** Creates new form LevelDecompositionUI */

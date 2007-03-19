@@ -13,15 +13,28 @@ import Jama.Matrix;
  *
  * @author Teake Nutma
  */
-public class CHelper
+public class Helper
 {
+    private static Helper _instance = null;
     
-    /** Creates a new instance of CHelper */
-    public CHelper()
+    /** Private constructor */
+    private Helper()
     {
     }
     
-    public String IntArrayToString(int[] array)
+    private  static synchronized void createInstance()
+    {
+	if(_instance == null)
+	    _instance = new Helper();
+    }
+    
+    public static Helper getInstance()
+    {
+	if(_instance == null) createInstance();
+	return _instance;
+    }
+    
+    public static String IntArrayToString(int[] array)
     {
 	String output = new String();
 	for (int i = 0; i < array.length; i++)
@@ -32,7 +45,7 @@ public class CHelper
 	return output;
     }
     
-    public String MatrixToString(Matrix matrix, int decimalPlates)
+    public static String MatrixToString(Matrix matrix, int decimalPlates)
     {
 	int decimalFactor   = Math.round((float) Math.pow(10,decimalPlates));
 	int biggestEntry    = 0;
@@ -94,4 +107,9 @@ public class CHelper
 	}
 	return stringMatrix;
     }
+
+	public Helper get_instance()
+	{
+		return _instance;
+	}
 }

@@ -21,7 +21,6 @@ public class LevelDecomposition extends javax.swing.JPanel
 {
     CDynkinDiagram	dynkinDiagram;
     CLevelDecomposer	levelDecomposer;
-    CHelper		helper;
     Vector<CRepresentation> reps;
    
     /** Creates new form LevelDecomposition */
@@ -29,7 +28,6 @@ public class LevelDecomposition extends javax.swing.JPanel
     {
 	initComponents();
 	levelDecomposer = new CLevelDecomposer();
-	helper		= new CHelper();
 	
 	autoScanMinLevel.SetLabel("Minimum level:");
 	autoScanMaxLevel.SetLabel("Maximum level:");
@@ -55,6 +53,10 @@ public class LevelDecomposition extends javax.swing.JPanel
     /** Automatically scan every possible level between minLevel and maxLevel */
     public void AutoScan(int minLevel, int maxLevel)
     {
+	/** 
+	 * TODO: Rewrite this as a SwingWorker and possibly add a progress bar / cancel button.
+	 */
+	
 	if(minLevel > maxLevel)
 	    return;
 	if(dynkinDiagram.GetRank() == dynkinDiagram.GetSubRank())
@@ -133,9 +135,9 @@ public class LevelDecomposition extends javax.swing.JPanel
 	for (Enumeration e = reps.elements(); e.hasMoreElements();)
 	{
 	    CRepresentation rep = (CRepresentation) e.nextElement();
-	    data[i][0] = helper.IntArrayToString(rep.GetLevels());
-	    data[i][1] = helper.IntArrayToString(rep.GetDynkinLabels());
-	    data[i][2] = helper.IntArrayToString(rep.GetRootComponents());
+	    data[i][0] = Helper.IntArrayToString(rep.GetLevels());
+	    data[i][1] = Helper.IntArrayToString(rep.GetDynkinLabels());
+	    data[i][2] = Helper.IntArrayToString(rep.GetRootComponents());
 	    data[i][3] = rep.GetRootLength();
 	    i++;
 	}

@@ -17,13 +17,11 @@ import tan.leveldecomposition.helper.*;
 public class AlgebraSetup extends javax.swing.JPanel
 {
     CDynkinDiagram dynkinDiagram;
-    CHelper helper;
     
     /** Creates new form LevelDecompositionUI */
     public AlgebraSetup()
     {
 	initComponents();
-	this.helper		= new CHelper();
     }
     
     public void Initialize(CDynkinDiagram dynkinDiagram)
@@ -35,9 +33,9 @@ public class AlgebraSetup extends javax.swing.JPanel
     public void Update()
     {
 	taDynkinDiagram.setText(dynkinDiagram.GetDiagram());
-	taCartanMatrix.setText(helper.MatrixToString(dynkinDiagram.GetCartanMatrix(), 0));
-	taCartanSubMatrix.setText(helper.MatrixToString(dynkinDiagram.GetCartanSubMatrix(), 0));
-	taCartanSubInvMatrix.setText(helper.MatrixToString(dynkinDiagram.GetCartanSubMatrix().inverse().times(dynkinDiagram.GetSubRank()+1), 1));
+	taCartanMatrix.setText(Helper.MatrixToString(dynkinDiagram.GetCartanMatrix(), 0));
+	taCartanSubMatrix.setText(Helper.MatrixToString(dynkinDiagram.GetCartanSubMatrix(), 0));
+	taCartanSubInvMatrix.setText(Helper.MatrixToString(dynkinDiagram.GetCartanSubMatrix().inverse().times(dynkinDiagram.GetSubRank()+1), 1));
 	
 	Integer lastLabel = new Integer(dynkinDiagram.GetLastLabel());
 	tfAddNodeConnectionTo.setText(lastLabel.toString());
