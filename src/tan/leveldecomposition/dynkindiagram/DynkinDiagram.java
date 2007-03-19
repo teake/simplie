@@ -1,5 +1,5 @@
 /*
- * CDynkinDiagram.java
+ * DynkinDiagram.java
  *
  * Created on 8 maart 2007, 14:38
  *
@@ -11,31 +11,42 @@ import java.util.*;
 import Jama.Matrix;
 
 /**
+ * Singleton class
  *
  * @author Teake Nutma
  */
-public class CDynkinDiagram
+public class DynkinDiagram
 {
-    private Vector<CDynkinNode>		nodes;
-    private Vector<CDynkinConnection>	connections;
+    private static DynkinDiagram _instance = new DynkinDiagram();    
+    private static Vector<CDynkinNode>		nodes;
+    private static Vector<CDynkinConnection>	connections;
     
-    /** Creates a new instance of CDynkinDiagram */
-    public CDynkinDiagram()
+    /**
+     * Creates a new instance of DynkinDiagram
+     */
+    private DynkinDiagram()
     {
 	nodes	    = new Vector<CDynkinNode>();
 	connections = new Vector<CDynkinConnection>();
     }
-
+    
+    public static DynkinDiagram getInstance()
+    {
+	return _instance;
+    }
+    
     /** Clears the Dynkin diagram */
-    public void Clear()
+    public static void Clear()
     {
 	nodes.clear();
 	connections.clear();
     }
     
-    /** Returns an array of booleans.
-	True if the corresponding node is enabled, false if disabled. */
-    public boolean[] GetEnabledNodes()
+    /**
+     * Returns an array of booleans.
+     * True if the corresponding node is enabled, false if disabled.
+     */
+    public static boolean[] GetEnabledNodes()
     {
 	boolean[] enabledNodes = new boolean[GetRank()];
 	for (int i = 0; i < GetRank(); i++)
@@ -48,9 +59,11 @@ public class CDynkinDiagram
 	return enabledNodes;
     }
     
-    /** Returns the internal id of a node, given its label number.
-	Returns -1 if there's no node found.  */
-    private int GetNodeIdByLabel(int label)
+    /**
+     * Returns the internal id of a node, given its label number.
+     * Returns -1 if there's no node found.
+     */
+    private static int GetNodeIdByLabel(int label)
     {
 	for (Enumeration e = nodes.elements(); e.hasMoreElements();)
 	{
@@ -63,9 +76,11 @@ public class CDynkinDiagram
 	return -1;
     }
     
-    /** Returns the external label of a node, given its internal id.
-	Returns -1 if there's no node found.  */
-    private int GetNodeLabelById(int id)
+    /**
+     * Returns the external label of a node, given its internal id.
+     * Returns -1 if there's no node found.
+     */
+    private static int GetNodeLabelById(int id)
     {
 	for (Enumeration e = nodes.elements(); e.hasMoreElements();)
 	{
@@ -79,7 +94,7 @@ public class CDynkinDiagram
     }
     
     /** Returns a vector containing ids of nodes with a connection to this node. */
-    private Vector<Integer> GetNodeConnections(int id)
+    private static Vector<Integer> GetNodeConnections(int id)
     {
 	Vector<Integer> nodeConnections = new Vector<Integer>();
 	int connectionId;
@@ -99,11 +114,11 @@ public class CDynkinDiagram
 	return nodeConnections;
     }
     
-    /** 
+    /**
      * Fetches a node by its internal id.
      * Returns null if the node is not found.
      */
-    private CDynkinNode GetNodeById(int id)
+    private static CDynkinNode GetNodeById(int id)
     {
 	for (Enumeration e = nodes.elements(); e.hasMoreElements();)
 	{
@@ -116,11 +131,11 @@ public class CDynkinDiagram
 	return null;
     }
     
-    /** 
+    /**
      * Fetches a node by its external label.
      * Returns null if the node is not found.
      */
-    private CDynkinNode GetNodeByLabel(int label)
+    private static CDynkinNode GetNodeByLabel(int label)
     {
 	for (Enumeration e = nodes.elements(); e.hasMoreElements();)
 	{
@@ -134,13 +149,15 @@ public class CDynkinDiagram
     }
     
     /** Returns the rank of the whole algebra */
-    public int GetRank()
+    public static int GetRank()
     {
+	if(nodes == null)
+	    System.out.println("blablabla");
 	return nodes.size();
     }
     
     /** Returns the rank of the subalgebra. */
-    public int GetSubRank()
+    public static int GetSubRank()
     {
 	int subRank = 0;
 	for (Enumeration e = nodes.elements(); e.hasMoreElements();)
@@ -155,7 +172,7 @@ public class CDynkinDiagram
     }
     
     /** Returns the Cartan matrix of the whole algebra. */
-    public Matrix GetCartanMatrix()
+    public static Matrix GetCartanMatrix()
     {
 	Refactor();
 	
@@ -179,7 +196,7 @@ public class CDynkinDiagram
     }
     
     /** Returns the Cartan matrix of the subalgebra */
-    public Matrix GetCartanSubMatrix()
+    public static Matrix GetCartanSubMatrix()
     {
 	int subRank = GetSubRank();
 	int rank    = GetRank();
@@ -211,7 +228,7 @@ public class CDynkinDiagram
     }
     
     /** Returns a plain string visually representing the Dynkin diagram. */
-    public String GetDiagram()
+    public static String GetDiagram()
     {
 	// ONLY WORKS FOR THE A SERIES CURRENTLY!!! FIX IT FOR MORE GENERAL CONNECTIONS!!!
 	
@@ -268,7 +285,7 @@ public class CDynkinDiagram
     }
     
     /** Returns the last label that was added. */
-    public int GetLastLabel()
+    public static int GetLastLabel()
     {
 	int lastLabel = 0;
 	for (Enumeration e = nodes.elements(); e.hasMoreElements();)
@@ -283,13 +300,13 @@ public class CDynkinDiagram
 	return lastLabel;
     }
     
-    public int GetNextFreeLabel()
+    public static int GetNextFreeLabel()
     {
 	int nextFreeLabel = GetLastLabel() + 1;
 	return nextFreeLabel;
     }
     
-    public void AddNode(int newLabel, int toLabel)
+    public static void AddNode(int newLabel, int toLabel)
     {
 	int newId = -1;
 	
@@ -314,7 +331,7 @@ public class CDynkinDiagram
 	ModifyConnection(newLabel,toLabel,true);
     }
     
-    public void RemoveNode(int label)
+    public static void RemoveNode(int label)
     {
 	int id = GetNodeIdByLabel(label);
 	if(id == -1)
@@ -334,7 +351,7 @@ public class CDynkinDiagram
 	
     }
     
-    public void ToggleNode(int label)
+    public static void ToggleNode(int label)
     {
 	CDynkinNode node = GetNodeByLabel(label);
 	if(node != null)
@@ -343,7 +360,7 @@ public class CDynkinDiagram
 	}
     }
     
-    public void ModifyConnection(int fromLabel, int toLabel, boolean add) // if add == false then remove
+    public static void ModifyConnection(int fromLabel, int toLabel, boolean add) // if add == false then remove
     {
 	int fromId  = GetNodeIdByLabel(fromLabel);
 	int toId    = GetNodeIdByLabel(toLabel);
@@ -365,7 +382,7 @@ public class CDynkinDiagram
     }
     
     /** Reshapes the internal structure. */
-    private void Refactor()
+    private static void Refactor()
     {
 	/** sort the nodes according to their label */
 	Collections.sort(nodes);

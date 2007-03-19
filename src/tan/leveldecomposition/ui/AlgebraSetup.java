@@ -7,7 +7,7 @@
 package tan.leveldecomposition.ui;
 
 import javax.swing.JTextField;
-import tan.leveldecomposition.dynkindiagram.CDynkinDiagram;
+import tan.leveldecomposition.dynkindiagram.*;
 import tan.leveldecomposition.helper.*;
 
 /**
@@ -16,36 +16,29 @@ import tan.leveldecomposition.helper.*;
  */
 public class AlgebraSetup extends javax.swing.JPanel
 {
-    CDynkinDiagram dynkinDiagram;
-    
     /** Creates new form LevelDecompositionUI */
     public AlgebraSetup()
     {
 	initComponents();
-    }
-    
-    public void Initialize(CDynkinDiagram dynkinDiagram)
-    {
-	this.dynkinDiagram	= dynkinDiagram;
 	Update();
     }
     
     public void Update()
     {
-	taDynkinDiagram.setText(dynkinDiagram.GetDiagram());
-	taCartanMatrix.setText(Helper.MatrixToString(dynkinDiagram.GetCartanMatrix(), 0));
-	taCartanSubMatrix.setText(Helper.MatrixToString(dynkinDiagram.GetCartanSubMatrix(), 0));
-	taCartanSubInvMatrix.setText(Helper.MatrixToString(dynkinDiagram.GetCartanSubMatrix().inverse().times(dynkinDiagram.GetSubRank()+1), 1));
+	taDynkinDiagram.setText(DynkinDiagram.GetDiagram());
+	taCartanMatrix.setText(Helper.MatrixToString(DynkinDiagram.GetCartanMatrix(), 0));
+	taCartanSubMatrix.setText(Helper.MatrixToString(DynkinDiagram.GetCartanSubMatrix(), 0));
+	taCartanSubInvMatrix.setText(Helper.MatrixToString(DynkinDiagram.GetCartanSubMatrix().inverse().times(DynkinDiagram.GetSubRank()+1), 1));
 	
-	Integer lastLabel = new Integer(dynkinDiagram.GetLastLabel());
+	Integer lastLabel = new Integer(DynkinDiagram.GetLastLabel());
 	tfAddNodeConnectionTo.setText(lastLabel.toString());
 	tfRemoveNodeLabel.setText(lastLabel.toString());
 	tfToggleNodeLabel.setText(lastLabel.toString());
 	
-	Integer nextFreeLabel = new Integer(dynkinDiagram.GetNextFreeLabel());
+	Integer nextFreeLabel = new Integer(DynkinDiagram.GetNextFreeLabel());
 	tfAddNodeLabel.setText(nextFreeLabel.toString());
 	
-	TabbedPaneCartanMatrix.setTitleAt(2,"Subalgebra inverse * " + (dynkinDiagram.GetSubRank()+1));
+	TabbedPaneCartanMatrix.setTitleAt(2,"Subalgebra inverse * " + (DynkinDiagram.GetSubRank()+1));
 	
     }
     
@@ -375,31 +368,31 @@ public class AlgebraSetup extends javax.swing.JPanel
     
     private void bRemoveConnectionActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_bRemoveConnectionActionPerformed
     {//GEN-HEADEREND:event_bRemoveConnectionActionPerformed
-	dynkinDiagram.ModifyConnection(Integer.parseInt(tfRemoveConnectionFromLabel.getText()),Integer.parseInt(tfRemoveConnectionToLabel.getText()),false);
+	DynkinDiagram.ModifyConnection(Integer.parseInt(tfRemoveConnectionFromLabel.getText()),Integer.parseInt(tfRemoveConnectionToLabel.getText()),false);
 	Update();
     }//GEN-LAST:event_bRemoveConnectionActionPerformed
     
     private void bAddConnectionActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_bAddConnectionActionPerformed
     {//GEN-HEADEREND:event_bAddConnectionActionPerformed
-	dynkinDiagram.ModifyConnection(Integer.parseInt(tfAddConnectionFromLabel.getText()),Integer.parseInt(tfAddConnectionToLabel.getText()),true);
+	DynkinDiagram.ModifyConnection(Integer.parseInt(tfAddConnectionFromLabel.getText()),Integer.parseInt(tfAddConnectionToLabel.getText()),true);
 	Update();
     }//GEN-LAST:event_bAddConnectionActionPerformed
     
     private void bToggleNodeActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_bToggleNodeActionPerformed
     {//GEN-HEADEREND:event_bToggleNodeActionPerformed
-	dynkinDiagram.ToggleNode(Integer.parseInt(tfToggleNodeLabel.getText()));
+	DynkinDiagram.ToggleNode(Integer.parseInt(tfToggleNodeLabel.getText()));
 	Update();
     }//GEN-LAST:event_bToggleNodeActionPerformed
     
     private void bRemoveNodeActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_bRemoveNodeActionPerformed
     {//GEN-HEADEREND:event_bRemoveNodeActionPerformed
-	dynkinDiagram.RemoveNode(Integer.parseInt(tfRemoveNodeLabel.getText()));
+	DynkinDiagram.RemoveNode(Integer.parseInt(tfRemoveNodeLabel.getText()));
 	Update();
     }//GEN-LAST:event_bRemoveNodeActionPerformed
     
     private void bAddNodeActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_bAddNodeActionPerformed
     {//GEN-HEADEREND:event_bAddNodeActionPerformed
-	dynkinDiagram.AddNode(Integer.parseInt(tfAddNodeLabel.getText()),Integer.parseInt(tfAddNodeConnectionTo.getText()));
+	DynkinDiagram.AddNode(Integer.parseInt(tfAddNodeLabel.getText()),Integer.parseInt(tfAddNodeConnectionTo.getText()));
 	Update();
     }//GEN-LAST:event_bAddNodeActionPerformed
     

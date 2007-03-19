@@ -10,6 +10,7 @@ package tan.leveldecomposition.helper;
 import Jama.Matrix;
 
 /**
+ * Singleton class
  *
  * @author Teake Nutma
  */
@@ -22,7 +23,7 @@ public class Helper
     {
     }
     
-    private  static synchronized void createInstance()
+    private static synchronized void createInstance()
     {
 	if(_instance == null)
 	    _instance = new Helper();

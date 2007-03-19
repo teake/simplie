@@ -12,7 +12,7 @@ import javax.swing.PopupFactory;
 import javax.swing.Popup;
 
 import tan.leveldecomposition.*;
-import tan.leveldecomposition.dynkindiagram.CDynkinDiagram;
+import tan.leveldecomposition.dynkindiagram.*;
 
 /**
  *
@@ -20,10 +20,6 @@ import tan.leveldecomposition.dynkindiagram.CDynkinDiagram;
  */
 public class Main extends javax.swing.JFrame
 {
-    /** 
-     * TODO: Make dynkinDiagram a singleton
-     */
-    CDynkinDiagram dynkinDiagram;
     
     /** Creates new form LevelDecompositionUI */
     public Main()
@@ -38,15 +34,9 @@ public class Main extends javax.swing.JFrame
 	{
 	}
 	initComponents();
-	
-	dynkinDiagram = new CDynkinDiagram();
-	
-	algebraSetup.Initialize(dynkinDiagram);
-	levelDecomposition.Initialize(dynkinDiagram);
-
     }
     
-
+    
     
     /** This method is called from within the constructor to
      * initialize the form.
@@ -173,7 +163,7 @@ public class Main extends javax.swing.JFrame
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(TabbedPane, javax.swing.GroupLayout.DEFAULT_SIZE, 668, Short.MAX_VALUE)
+            .addComponent(TabbedPane, javax.swing.GroupLayout.DEFAULT_SIZE, 749, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -181,32 +171,32 @@ public class Main extends javax.swing.JFrame
         );
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    
     private void MenuItemLoadE11ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_MenuItemLoadE11ActionPerformed
     {//GEN-HEADEREND:event_MenuItemLoadE11ActionPerformed
-	dynkinDiagram.Clear();
-	dynkinDiagram.AddNode(1,0);
-	dynkinDiagram.AddNode(2,1);
-	dynkinDiagram.AddNode(3,2);
-	dynkinDiagram.AddNode(4,3);
-	dynkinDiagram.AddNode(5,4);
-	dynkinDiagram.AddNode(6,5);
-	dynkinDiagram.AddNode(7,6);
-	dynkinDiagram.AddNode(8,7);
-	dynkinDiagram.AddNode(9,8);
-	dynkinDiagram.AddNode(10,9);
-	dynkinDiagram.AddNode(11,3);
-	dynkinDiagram.ToggleNode(11);
+	DynkinDiagram.Clear();
+	DynkinDiagram.AddNode(1,0);
+	DynkinDiagram.AddNode(2,1);
+	DynkinDiagram.AddNode(3,2);
+	DynkinDiagram.AddNode(4,3);
+	DynkinDiagram.AddNode(5,4);
+	DynkinDiagram.AddNode(6,5);
+	DynkinDiagram.AddNode(7,6);
+	DynkinDiagram.AddNode(8,7);
+	DynkinDiagram.AddNode(9,8);
+	DynkinDiagram.AddNode(10,9);
+	DynkinDiagram.AddNode(11,3);
+	DynkinDiagram.ToggleNode(11);
 	algebraSetup.Update();
 	
     }//GEN-LAST:event_MenuItemLoadE11ActionPerformed
-
+    
     private void MenuItemClearActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_MenuItemClearActionPerformed
     {//GEN-HEADEREND:event_MenuItemClearActionPerformed
-	dynkinDiagram.Clear();
+	DynkinDiagram.Clear();
 	algebraSetup.Update();
     }//GEN-LAST:event_MenuItemClearActionPerformed
-
+    
     private void MenuItemAboutActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_MenuItemAboutActionPerformed
     {//GEN-HEADEREND:event_MenuItemAboutActionPerformed
 	aboutOptionPane.showMessageDialog(
@@ -215,12 +205,12 @@ public class Main extends javax.swing.JFrame
 		"About",
 		aboutOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_MenuItemAboutActionPerformed
-
+    
     private void MenuItemExitActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_MenuItemExitActionPerformed
     {//GEN-HEADEREND:event_MenuItemExitActionPerformed
 	System.exit(0);
     }//GEN-LAST:event_MenuItemExitActionPerformed
-                        
+    
     /**
      * @param args the command line arguments
      */

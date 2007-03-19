@@ -19,10 +19,9 @@ import java.awt.Cursor;
  */
 public class LevelDecomposition extends javax.swing.JPanel
 {
-    CDynkinDiagram	dynkinDiagram;
     CLevelDecomposer	levelDecomposer;
     Vector<CRepresentation> reps;
-   
+    
     /** Creates new form LevelDecomposition */
     public LevelDecomposition()
     {
@@ -37,11 +36,6 @@ public class LevelDecomposition extends javax.swing.JPanel
 	representationsTable.setAutoCreateRowSorter(true);
     }
     
-    public void Initialize(CDynkinDiagram diagram)
-    {
-	dynkinDiagram = diagram;
-    }
-    
     private void SetSignConvention()
     {
 	if(signButtonPos.isSelected())
@@ -53,27 +47,27 @@ public class LevelDecomposition extends javax.swing.JPanel
     /** Automatically scan every possible level between minLevel and maxLevel */
     public void AutoScan(int minLevel, int maxLevel)
     {
-	/** 
+	/**
 	 * TODO: Rewrite this as a SwingWorker and possibly add a progress bar / cancel button.
 	 */
 	
 	if(minLevel > maxLevel)
 	    return;
-	if(dynkinDiagram.GetRank() == dynkinDiagram.GetSubRank())
+	if(DynkinDiagram.GetRank() == DynkinDiagram.GetSubRank())
 	    return;
 	
 	this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 	
 	levelDecomposer.Initialize(
-		dynkinDiagram.GetRank(),
-		dynkinDiagram.GetSubRank(),
-		dynkinDiagram.GetCartanMatrix(),
-		dynkinDiagram.GetCartanSubMatrix().inverse(),
-		dynkinDiagram.GetEnabledNodes()
+		DynkinDiagram.GetRank(),
+		DynkinDiagram.GetSubRank(),
+		DynkinDiagram.GetCartanMatrix(),
+		DynkinDiagram.GetCartanSubMatrix().inverse(),
+		DynkinDiagram.GetEnabledNodes()
 		);
 	
-	int[] levels = new int[dynkinDiagram.GetRank() - dynkinDiagram.GetSubRank()];
-	for (int i = 0; i < dynkinDiagram.GetRank() - dynkinDiagram.GetSubRank(); i++)
+	int[] levels = new int[DynkinDiagram.GetRank() - DynkinDiagram.GetSubRank()];
+	for (int i = 0; i < DynkinDiagram.GetRank() - DynkinDiagram.GetSubRank(); i++)
 	{
 	    levels[i] = minLevel;
 	}
@@ -141,7 +135,6 @@ public class LevelDecomposition extends javax.swing.JPanel
 	    data[i][3] = rep.GetRootLength();
 	    i++;
 	}
-	
 	representationsTable.setModel(new DefaultTableModel(data,new String [] {"l", "p", "m", "root length"}));
     }
     
