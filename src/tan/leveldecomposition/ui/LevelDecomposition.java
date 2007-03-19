@@ -275,7 +275,6 @@ public class LevelDecomposition extends javax.swing.JPanel
         tfSign.setText("Sign convention:");
 
         signButtonGroup.add(signButtonPos);
-        signButtonPos.setSelected(true);
         signButtonPos.setText("p_i = + A_ij m^j");
         signButtonPos.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
         signButtonPos.setMargin(new java.awt.Insets(0, 0, 0, 0));
@@ -288,6 +287,7 @@ public class LevelDecomposition extends javax.swing.JPanel
         });
 
         signButtonGroup.add(signButtonNeg);
+        signButtonNeg.setSelected(true);
         signButtonNeg.setText("p_i = - A_ij m^j");
         signButtonNeg.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
         signButtonNeg.setMargin(new java.awt.Insets(0, 0, 0, 0));

@@ -54,10 +54,7 @@ public class Main extends javax.swing.JFrame
     private void initComponents()
     {
         aboutPopup = new javax.swing.JFrame();
-        closeButton = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
+        aboutOptionPane = new javax.swing.JOptionPane();
         TabbedPane = new javax.swing.JTabbedPane();
         algebraSetup = new tan.leveldecomposition.ui.AlgebraSetup();
         levelDecomposition = new tan.leveldecomposition.ui.LevelDecomposition();
@@ -67,59 +64,26 @@ public class Main extends javax.swing.JFrame
         MenuItemSave = new javax.swing.JMenuItem();
         jSeparator1 = new javax.swing.JSeparator();
         MenuItemExit = new javax.swing.JMenuItem();
+        MenuEdit = new javax.swing.JMenu();
+        MenuItemClear = new javax.swing.JMenuItem();
+        jSeparator2 = new javax.swing.JSeparator();
+        MenuItemLoadE11 = new javax.swing.JMenuItem();
         MenuHelp = new javax.swing.JMenu();
         MenuItemAbout = new javax.swing.JMenuItem();
 
         aboutPopup.setTitle("About");
         aboutPopup.setMinimumSize(new java.awt.Dimension(220, 180));
         aboutPopup.setResizable(false);
-        closeButton.setText("Close");
-        closeButton.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
-                closeButtonActionPerformed(evt);
-            }
-        });
-
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Level Decomposition");
-
-        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel2.setText("Written by Teake Nutma");
-
-        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel3.setText("t.a.nutma@rug.nl");
 
         javax.swing.GroupLayout aboutPopupLayout = new javax.swing.GroupLayout(aboutPopup.getContentPane());
         aboutPopup.getContentPane().setLayout(aboutPopupLayout);
         aboutPopupLayout.setHorizontalGroup(
             aboutPopupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(aboutPopupLayout.createSequentialGroup()
-                .addGroup(aboutPopupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(aboutPopupLayout.createSequentialGroup()
-                        .addGap(77, 77, 77)
-                        .addComponent(closeButton))
-                    .addGroup(aboutPopupLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(aboutPopupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE))))
-                .addContainerGap())
+            .addComponent(aboutOptionPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         aboutPopupLayout.setVerticalGroup(
             aboutPopupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, aboutPopupLayout.createSequentialGroup()
-                .addContainerGap(42, Short.MAX_VALUE)
-                .addComponent(jLabel1)
-                .addGap(27, 27, 27)
-                .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel3)
-                .addGap(29, 29, 29)
-                .addComponent(closeButton)
-                .addContainerGap())
+            .addComponent(aboutOptionPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -128,23 +92,19 @@ public class Main extends javax.swing.JFrame
 
         TabbedPane.addTab("Level Decomposition", levelDecomposition);
 
+        MenuFile.setMnemonic('f');
         MenuFile.setLabel("File");
+        MenuItemOpen.setMnemonic('o');
         MenuItemOpen.setText("Open algebra settings");
-        MenuItemOpen.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
-                MenuItemOpenActionPerformed(evt);
-            }
-        });
-
         MenuFile.add(MenuItemOpen);
 
+        MenuItemSave.setMnemonic('s');
         MenuItemSave.setText("Save algebra settings");
         MenuFile.add(MenuItemSave);
 
         MenuFile.add(jSeparator1);
 
+        MenuItemExit.setMnemonic('x');
         MenuItemExit.setText("Exit");
         MenuItemExit.addActionListener(new java.awt.event.ActionListener()
         {
@@ -158,7 +118,39 @@ public class Main extends javax.swing.JFrame
 
         MenuBar.add(MenuFile);
 
+        MenuEdit.setMnemonic('e');
+        MenuEdit.setText("Edit");
+        MenuItemClear.setMnemonic('c');
+        MenuItemClear.setText("Clear diagram");
+        MenuItemClear.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                MenuItemClearActionPerformed(evt);
+            }
+        });
+
+        MenuEdit.add(MenuItemClear);
+
+        MenuEdit.add(jSeparator2);
+
+        MenuItemLoadE11.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F11, java.awt.event.InputEvent.SHIFT_MASK));
+        MenuItemLoadE11.setText("E_11 preset");
+        MenuItemLoadE11.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                MenuItemLoadE11ActionPerformed(evt);
+            }
+        });
+
+        MenuEdit.add(MenuItemLoadE11);
+
+        MenuBar.add(MenuEdit);
+
+        MenuHelp.setMnemonic('h');
         MenuHelp.setText("Help");
+        MenuItemAbout.setMnemonic('a');
         MenuItemAbout.setText("About");
         MenuItemAbout.addActionListener(new java.awt.event.ActionListener()
         {
@@ -187,25 +179,44 @@ public class Main extends javax.swing.JFrame
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void closeButtonActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_closeButtonActionPerformed
-    {//GEN-HEADEREND:event_closeButtonActionPerformed
-	aboutPopup.setVisible(false);
-    }//GEN-LAST:event_closeButtonActionPerformed
+    private void MenuItemLoadE11ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_MenuItemLoadE11ActionPerformed
+    {//GEN-HEADEREND:event_MenuItemLoadE11ActionPerformed
+	dynkinDiagram.Clear();
+	dynkinDiagram.AddNode(1,0);
+	dynkinDiagram.AddNode(2,1);
+	dynkinDiagram.AddNode(3,2);
+	dynkinDiagram.AddNode(4,3);
+	dynkinDiagram.AddNode(5,4);
+	dynkinDiagram.AddNode(6,5);
+	dynkinDiagram.AddNode(7,6);
+	dynkinDiagram.AddNode(8,7);
+	dynkinDiagram.AddNode(9,8);
+	dynkinDiagram.AddNode(10,9);
+	dynkinDiagram.AddNode(11,3);
+	dynkinDiagram.ToggleNode(11);
+	algebraSetup.Update();
+	
+    }//GEN-LAST:event_MenuItemLoadE11ActionPerformed
+
+    private void MenuItemClearActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_MenuItemClearActionPerformed
+    {//GEN-HEADEREND:event_MenuItemClearActionPerformed
+	dynkinDiagram.Clear();
+	algebraSetup.Update();
+    }//GEN-LAST:event_MenuItemClearActionPerformed
 
     private void MenuItemAboutActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_MenuItemAboutActionPerformed
     {//GEN-HEADEREND:event_MenuItemAboutActionPerformed
-	aboutPopup.setVisible(true);
+	aboutOptionPane.showMessageDialog(
+		aboutPopup,
+		"Level Decomposition \n \n Teake Nutma \n t.a.nutma@rug.nl",
+		"About",
+		aboutOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_MenuItemAboutActionPerformed
 
     private void MenuItemExitActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_MenuItemExitActionPerformed
     {//GEN-HEADEREND:event_MenuItemExitActionPerformed
 	System.exit(0);
     }//GEN-LAST:event_MenuItemExitActionPerformed
-
-    private void MenuItemOpenActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_MenuItemOpenActionPerformed
-    {//GEN-HEADEREND:event_MenuItemOpenActionPerformed
-// TODO add your handling code here:
-    }//GEN-LAST:event_MenuItemOpenActionPerformed
                         
     /**
      * @param args the command line arguments
@@ -223,20 +234,21 @@ public class Main extends javax.swing.JFrame
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuBar MenuBar;
+    private javax.swing.JMenu MenuEdit;
     private javax.swing.JMenu MenuFile;
     private javax.swing.JMenu MenuHelp;
     private javax.swing.JMenuItem MenuItemAbout;
+    private javax.swing.JMenuItem MenuItemClear;
     private javax.swing.JMenuItem MenuItemExit;
+    private javax.swing.JMenuItem MenuItemLoadE11;
     private javax.swing.JMenuItem MenuItemOpen;
     private javax.swing.JMenuItem MenuItemSave;
     private javax.swing.JTabbedPane TabbedPane;
+    private javax.swing.JOptionPane aboutOptionPane;
     private javax.swing.JFrame aboutPopup;
     private tan.leveldecomposition.ui.AlgebraSetup algebraSetup;
-    private javax.swing.JButton closeButton;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JSeparator jSeparator2;
     private tan.leveldecomposition.ui.LevelDecomposition levelDecomposition;
     // End of variables declaration//GEN-END:variables
     

@@ -26,6 +26,13 @@ public class CDynkinDiagram
 	connections = new Vector<CDynkinConnection>();
     }
 
+    /** Clears the Dynkin diagram */
+    public void Clear()
+    {
+	nodes.clear();
+	connections.clear();
+    }
+    
     /** Returns an array of booleans.
 	True if the corresponding node is enabled, false if disabled. */
     public boolean[] GetEnabledNodes()
@@ -313,7 +320,7 @@ public class CDynkinDiagram
 	if(id == -1)
 	    return;
 	
-	// check if the node has connections and remove them
+	/** check if the node has connections and remove them */
 	for (Enumeration e = connections.elements(); e.hasMoreElements();)
 	{
 	    CDynkinConnection connection = (CDynkinConnection) e.nextElement();
