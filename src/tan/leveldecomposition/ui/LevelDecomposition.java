@@ -9,6 +9,7 @@ package tan.leveldecomposition.ui;
 import tan.leveldecomposition.dynkindiagram.*;
 import tan.leveldecomposition.leveldecomposer.*;
 import tan.leveldecomposition.helper.*;
+
 import java.util.*;
 import javax.swing.table.*;
 import java.awt.Cursor;
@@ -20,7 +21,7 @@ import java.awt.Cursor;
 public class LevelDecomposition extends javax.swing.JPanel
 {
     CLevelDecomposer	levelDecomposer;
-    Vector<CRepresentation> reps;
+    DefaultTableModel	tableModel;
     
     /** Creates new form LevelDecomposition */
     public LevelDecomposition()
@@ -33,7 +34,9 @@ public class LevelDecomposition extends javax.swing.JPanel
 	
 	SetSignConvention();
 	
+	tableModel = (DefaultTableModel) representationsTable.getModel();
 	representationsTable.setAutoCreateRowSorter(true);
+	representationsTable.setModel(tableModel);
     }
     
     private void SetSignConvention()
@@ -50,6 +53,9 @@ public class LevelDecomposition extends javax.swing.JPanel
 	/**
 	 * TODO: Rewrite this as a SwingWorker and possibly add a progress bar / cancel button.
 	 */
+	
+	/** Clear the table. */
+	tableModel.setRowCount(0);
 	
 	if(minLevel > maxLevel)
 	    return;
@@ -71,10 +77,7 @@ public class LevelDecomposition extends javax.swing.JPanel
 	{
 	    levels[i] = minLevel;
 	}
-	reps = new Vector<CRepresentation>();
 	LoopLevels(levels.clone(),0,maxLevel, true);
-	PopulateTable(reps);
-	
 	this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
     }
     
@@ -108,7 +111,7 @@ public class LevelDecomposition extends javax.swing.JPanel
 	    
 	    /** Only scan the level if we haven't scanned it already. */
 	    if(scanFirst)
-		reps.addAll(levelDecomposer.ScanLevel(levels));
+		levelDecomposer.ScanLevel(levels, tableModel);
 	    
 	    /** Loop through the remaining indices */
 	    if(beginIndex + 1 < levels.length)
@@ -119,23 +122,6 @@ public class LevelDecomposition extends javax.swing.JPanel
 	    scanFirst = true;
 	    
 	} while(levels[beginIndex] <= maxLevel);
-    }
-    
-    /** Populates the table with data from the argument. */
-    private void PopulateTable(Vector<CRepresentation> reps)
-    {
-	Object[][] data = new Object[reps.size()][4];
-	int i = 0;
-	for (Enumeration e = reps.elements(); e.hasMoreElements();)
-	{
-	    CRepresentation rep = (CRepresentation) e.nextElement();
-	    data[i][0] = Helper.IntArrayToString(rep.GetLevels());
-	    data[i][1] = Helper.IntArrayToString(rep.GetDynkinLabels());
-	    data[i][2] = Helper.IntArrayToString(rep.GetRootComponents());
-	    data[i][3] = rep.GetRootLength();
-	    i++;
-	}
-	representationsTable.setModel(new DefaultTableModel(data,new String [] {"l", "p", "m", "root length"}));
     }
     
     /** This method is called from within the constructor to

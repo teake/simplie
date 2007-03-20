@@ -7,8 +7,10 @@
 
 package tan.leveldecomposition.leveldecomposer;
 
+import tan.leveldecomposition.helper.*;
 import Jama.Matrix;
 import java.util.Vector;
+import javax.swing.table.*;
 
 /**
  *
@@ -35,8 +37,6 @@ public class CLevelDecomposer
     int[][] cartanMatrix;
     /** The inverse of the Cartan matrix multiplied with the subFactor */
     int[][] S;
-    
-    Vector<CRepresentation> reps;
     
     /** Creates a new instance of CLevelDecomposer */
     public CLevelDecomposer()
@@ -170,10 +170,8 @@ public class CLevelDecomposer
     }
     
     /** Scans all the possible highest weight representations at a given level */
-    public Vector<CRepresentation> ScanLevel(int[] levels)
+    public void ScanLevel(int[] levels, DefaultTableModel tableModel)
     {
-	reps = new Vector<CRepresentation>();
-	
 	/** Are the levels all positive or all negative? */
 	int levelSign = 0;
 	boolean positive = false;
@@ -187,7 +185,7 @@ public class CLevelDecomposer
 	}
 	if(positive && negative)
 	    /** This cannot be, thanks to the triangular decomposition. */
-	    return reps;
+	    return;
 	if(positive)
 	    levelSign = 1;
 	if(negative)
@@ -201,12 +199,10 @@ public class CLevelDecomposer
 	}
 	
 	/** Do the scan. */
-	LoopDynkinLabels(dynkinLabels, levels, 0, true, levelSign);
-	
-	return reps;
+	LoopDynkinLabels(dynkinLabels, levels, 0, true, levelSign, tableModel);
     }
     
-    private void LoopDynkinLabels(int[] dynkinLabels, int[] levels, int beginIndex, boolean scanFirst, int levelSign)
+    private void LoopDynkinLabels(int[] dynkinLabels, int[] levels, int beginIndex, boolean scanFirst, int levelSign, DefaultTableModel tableModel)
     {
 	do
 	{
@@ -231,13 +227,17 @@ public class CLevelDecomposer
 		    if(allGoodIntegers)
 		    {
 			/** First divide all the root components by the subfactor. */
-			int[] properRootComponents = new int[subRank];
 			for (int i = 0; i < rootComponents.length; i++)
 			{
-			    properRootComponents[i] = rootComponents[i] / subFactor;
+			    rootComponents[i] = rootComponents[i] / subFactor;
 			}
-			CRepresentation rep = new CRepresentation(levels, dynkinLabels, properRootComponents, rootLength / subFactor);
-			reps.add(rep);
+			/** Add the data to the table */
+			Object[] data = new Object[4];
+			data[0] = Helper.IntArrayToString(levels);
+			data[1] = Helper.IntArrayToString(dynkinLabels);
+			data[2] = Helper.IntArrayToString(rootComponents);
+			data[3] = rootLength / subFactor;
+			tableModel.addRow(data);
 		    }
 		}
 		else
@@ -247,7 +247,7 @@ public class CLevelDecomposer
 		}
 	    }
 	    if(beginIndex + 1 < dynkinLabels.length)
-		LoopDynkinLabels(dynkinLabels.clone(), levels, beginIndex + 1, false, levelSign);
+		LoopDynkinLabels(dynkinLabels.clone(), levels, beginIndex + 1, false, levelSign, tableModel);
 	    dynkinLabels[beginIndex]++;
 	    scanFirst = true;
 	} while( true );
