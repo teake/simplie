@@ -9,6 +9,7 @@ package tan.leveldecomposition.ui;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
 import javax.swing.JFileChooser;
+import javax.swing.filechooser.*;
 
 import tan.leveldecomposition.*;
 import tan.leveldecomposition.dynkindiagram.*;
@@ -19,6 +20,7 @@ import tan.leveldecomposition.dynkindiagram.*;
  */
 public class Main extends javax.swing.JFrame
 {
+    FileFilter fileFilter;
     
     /** Creates new form LevelDecompositionUI */
     public Main()
@@ -33,6 +35,8 @@ public class Main extends javax.swing.JFrame
 	{
 	}
 	initComponents();
+	
+	fileFilter = new FileNameExtensionFilter("Dynkin diagram", "dd");
     }
     
     
@@ -192,6 +196,8 @@ public class Main extends javax.swing.JFrame
     private void MenuItemSaveActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_MenuItemSaveActionPerformed
     {//GEN-HEADEREND:event_MenuItemSaveActionPerformed
 	JFileChooser chooser = new JFileChooser("");
+	chooser.addChoosableFileFilter(fileFilter);
+	chooser.setDialogTitle("Save Dynkin diagram");
 	int returnVal = chooser.showSaveDialog(this);
 	
 	if ( returnVal == chooser.APPROVE_OPTION )
@@ -200,6 +206,8 @@ public class Main extends javax.swing.JFrame
 	     * pre-pend the "file" protocol to the absolute path of the file.
 	     */
 	    String fileURL = chooser.getSelectedFile().getAbsolutePath();
+	    if(!fileFilter.accept(chooser.getSelectedFile()))
+		fileURL += ".dd";
 	    DynkinDiagram.SaveTo(fileURL);
 	}
     }//GEN-LAST:event_MenuItemSaveActionPerformed
@@ -212,6 +220,8 @@ public class Main extends javax.swing.JFrame
 	int returnVal;
 	
 	chooser = new JFileChooser(initialDirectory);
+	chooser.addChoosableFileFilter(fileFilter);
+	chooser.setDialogTitle("Open Dynkin diagram");
 	returnVal = chooser.showOpenDialog(this);
 	
 	if ( returnVal == chooser.APPROVE_OPTION )
