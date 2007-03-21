@@ -8,10 +8,14 @@ package tan.leveldecomposition.ui;
 
 import tan.leveldecomposition.dynkindiagram.*;
 
+import java.util.*;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.geom.*;
 import java.awt.RenderingHints;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Cursor;
 
 /**
  *
@@ -19,11 +23,39 @@ import java.awt.RenderingHints;
  */
 public class DynkinDiagramPanel extends javax.swing.JPanel
 {
+    int spacing;
+    int radius;
+    int offset;
+    Font font;
+    
+    boolean mouseFocus;
+    
+    boolean addingConnection;
+    int	    connectionTo;
+    
+    AlgebraSetup algebraSetup;
     
     /** Creates new form DynkinDiagramPanel */
     public DynkinDiagramPanel()
     {
 	initComponents();
+	
+	spacing = 40;
+	radius	= 10;
+	offset	= 25;
+	font	= new Font("Monospaced", Font.PLAIN, 12);
+	
+	mouseFocus = false;
+	
+	addingConnection    = false;
+	connectionTo	    = -1;
+	
+	this.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+    }
+    
+    public void Initialize(AlgebraSetup algebraSetup)
+    {
+	this.algebraSetup = algebraSetup;
     }
     
     public void paintComponent(Graphics g)
@@ -31,13 +63,63 @@ public class DynkinDiagramPanel extends javax.swing.JPanel
 	super.paintComponent(g);
 	Graphics2D g2 = (Graphics2D) g;
 	g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
-	for (int i = 0; i < DynkinDiagram.GetRank(); i++)
+	for (Enumeration e = DynkinDiagram.connections.elements(); e.hasMoreElements();)
 	{
-	    g2.drawOval(50*i+25,25,20,20);
-	    if(i != DynkinDiagram.GetRank() - 1) g2.drawLine(50*i+45,35,50*i+75,35);
+	    CDynkinConnection connection = (CDynkinConnection) e.nextElement();
+	    paintConnection(connection, g2);
+	}
+	for (Enumeration e = DynkinDiagram.nodes.elements(); e.hasMoreElements();)
+	{
+	    CDynkinNode node = (CDynkinNode) e.nextElement();
+	    paintNode(node, g2);
 	}
     }
     
+    private void paintNode(CDynkinNode node, Graphics2D g2)
+    {
+	if(node.enabled)
+	    g2.setColor(Color.WHITE);
+	else
+	    g2.setColor(Color.GRAY);
+	g2.fillOval(cTrans(node.x), cTrans(node.y), radius, radius);
+	
+	g2.setColor(Color.BLACK);
+	g2.drawOval(cTrans(node.x), cTrans(node.y), radius, radius);
+	
+	g2.setFont(font);
+	g2.drawString(new Integer(node.label).toString(), cTrans(node.x) + radius/2, cTrans(node.y) + radius + 15);
+    }
+    
+    private void paintConnection(CDynkinConnection connection, Graphics2D g2)
+    {
+	CDynkinNode node1 = DynkinDiagram.GetNodeById(connection.idNode1);
+	CDynkinNode node2 = DynkinDiagram.GetNodeById(connection.idNode2);
+	if(node1 != null && node2 != null)
+	{
+	    g2.drawLine(cTrans(node1.x) + radius/2,cTrans(node1.y) + radius/2, cTrans(node2.x) + radius/2,cTrans(node2.y) + radius/2);
+	}
+    }
+    
+    private int cTrans(int coordinate)
+    {
+	return spacing*coordinate + offset;
+    }
+    private int cTransInv(int coordinate)
+    {
+	return Math.round((coordinate - offset) / spacing);
+    }
+    private void startAddConnection(int label)
+    {
+	addingConnection = true;
+	connectionTo = label;
+	this.setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
+    }
+    private void stopAddConnection()
+    {
+	addingConnection = false;
+	connectionTo = -1;
+	this.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+    }
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -48,18 +130,98 @@ public class DynkinDiagramPanel extends javax.swing.JPanel
     {
 
         setBackground(new java.awt.Color(255, 255, 255));
-        setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseEntered(java.awt.event.MouseEvent evt)
+            {
+                formMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt)
+            {
+                formMouseExited(evt);
+            }
+            public void mouseReleased(java.awt.event.MouseEvent evt)
+            {
+                formMouseReleased(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 235, Short.MAX_VALUE)
+            .addGap(0, 138, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 199, Short.MAX_VALUE)
+            .addGap(0, 90, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
+    
+    private void formMouseExited(java.awt.event.MouseEvent evt)//GEN-FIRST:event_formMouseExited
+    {//GEN-HEADEREND:event_formMouseExited
+	mouseFocus = false;
+    }//GEN-LAST:event_formMouseExited
+    
+    private void formMouseEntered(java.awt.event.MouseEvent evt)//GEN-FIRST:event_formMouseEntered
+    {//GEN-HEADEREND:event_formMouseEntered
+	mouseFocus = true;
+    }//GEN-LAST:event_formMouseEntered
+    
+    private void formMouseReleased(java.awt.event.MouseEvent evt)//GEN-FIRST:event_formMouseReleased
+    {//GEN-HEADEREND:event_formMouseReleased
+	int x = cTransInv(evt.getX());
+	int y = cTransInv(evt.getY());
+	CDynkinNode node = DynkinDiagram.GetNodeByCoor(x,y);
+	
+	if(evt.getButton() == evt.BUTTON1)
+	{
+	    if(!evt.isControlDown())
+	    {
+		if(node == null)
+		{
+		    int nextLabel = DynkinDiagram.GetNextFreeLabel();
+		    int lastLabel = DynkinDiagram.GetLastLabel();
+		    DynkinDiagram.AddNode(x,y);
+		    if(evt.isShiftDown())
+			DynkinDiagram.ModifyConnection(nextLabel,lastLabel,true);
+		}
+	    }
+	    else
+	    {
+		if(node != null) DynkinDiagram.RemoveNode(node);
+	    }
+	}
+	
+	if(node == null)
+	{
+	    stopAddConnection();
+	    algebraSetup.Update();
+	    return;
+	}
+	
+	if(evt.getButton() == evt.BUTTON2)
+	{
+	    stopAddConnection();
+	    node.enabled = !node.enabled;
+	}
+	if(evt.getButton() == evt.BUTTON3)
+	{
+	    if(!addingConnection)
+	    {
+		startAddConnection(node.label);
+	    }
+	    else
+	    {
+		if(evt.isControlDown())
+		    DynkinDiagram.ModifyConnection(node.label, connectionTo, false);
+		else
+		    DynkinDiagram.ModifyConnection(node.label, connectionTo, true);
+		stopAddConnection();
+	    }
+	}
+	algebraSetup.Update();
+    }//GEN-LAST:event_formMouseReleased
     
     
     // Variables declaration - do not modify//GEN-BEGIN:variables

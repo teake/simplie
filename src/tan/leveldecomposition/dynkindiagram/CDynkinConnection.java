@@ -16,8 +16,8 @@ import java.io.Serializable;
 public class CDynkinConnection implements Serializable
 {
     // always have idNode1 < idNode2
-    int idNode1;
-    int idNode2;
+    public int idNode1;
+    public int idNode2;
     
     /** possibly extend this for non-simpy laced cases */
     // int laced;

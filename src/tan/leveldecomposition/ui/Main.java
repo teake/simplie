@@ -238,20 +238,28 @@ public class Main extends javax.swing.JFrame
     private void MenuItemLoadE11ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_MenuItemLoadE11ActionPerformed
     {//GEN-HEADEREND:event_MenuItemLoadE11ActionPerformed
 	DynkinDiagram.Clear();
-	DynkinDiagram.AddNode(1,0);
+	DynkinDiagram.AddNode(2,0);
+	DynkinDiagram.AddNode(0,1);
+	DynkinDiagram.AddNode(1,1);
 	DynkinDiagram.AddNode(2,1);
-	DynkinDiagram.AddNode(3,2);
-	DynkinDiagram.AddNode(4,3);
-	DynkinDiagram.AddNode(5,4);
-	DynkinDiagram.AddNode(6,5);
-	DynkinDiagram.AddNode(7,6);
-	DynkinDiagram.AddNode(8,7);
-	DynkinDiagram.AddNode(9,8);
-	DynkinDiagram.AddNode(10,9);
-	DynkinDiagram.AddNode(11,3);
-	DynkinDiagram.ToggleNode(11);
+	DynkinDiagram.AddNode(3,1);
+	DynkinDiagram.AddNode(4,1);
+	DynkinDiagram.AddNode(5,1);
+	DynkinDiagram.AddNode(6,1);
+	DynkinDiagram.AddNode(7,1);
+	DynkinDiagram.AddNode(8,1);
+	DynkinDiagram.AddNode(9,1);
+	DynkinDiagram.ModifyConnection(1,4,true);
+	DynkinDiagram.ModifyConnection(2,3,true);
+	DynkinDiagram.ModifyConnection(3,4,true);
+	DynkinDiagram.ModifyConnection(4,5,true);
+	DynkinDiagram.ModifyConnection(5,6,true);
+	DynkinDiagram.ModifyConnection(6,7,true);
+	DynkinDiagram.ModifyConnection(7,8,true);
+	DynkinDiagram.ModifyConnection(8,9,true);
+	DynkinDiagram.ModifyConnection(9,10,true);
+	DynkinDiagram.ModifyConnection(10,11,true);
 	algebraSetup.Update();
-	
     }//GEN-LAST:event_MenuItemLoadE11ActionPerformed
     
     private void MenuItemClearActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_MenuItemClearActionPerformed

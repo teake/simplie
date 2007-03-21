@@ -19,8 +19,8 @@ import java.io.*;
 public class DynkinDiagram
 {
     private static DynkinDiagram _instance = new DynkinDiagram();
-    private static Vector<CDynkinNode>		nodes;
-    private static Vector<CDynkinConnection>	connections;
+    public static Vector<CDynkinNode>		nodes;
+    public static Vector<CDynkinConnection>	connections;
     
     /**
      * Creates a new instance of DynkinDiagram
@@ -120,7 +120,7 @@ public class DynkinDiagram
      * Fetches a node by its internal id.
      * Returns null if the node is not found.
      */
-    private static CDynkinNode GetNodeById(int id)
+    public static CDynkinNode GetNodeById(int id)
     {
 	for (Enumeration e = nodes.elements(); e.hasMoreElements();)
 	{
@@ -150,25 +150,17 @@ public class DynkinDiagram
 	return null;
     }
     
-    /** Returns a vector containing ids of nodes with a connection to this node. */
-    private static Vector<Integer> GetNodeConnections(int id)
+    public static CDynkinNode GetNodeByCoor(int x, int y)
     {
-	Vector<Integer> nodeConnections = new Vector<Integer>();
-	int connectionId;
-	for (Enumeration e = connections.elements(); e.hasMoreElements();)
+	for (Enumeration e = nodes.elements(); e.hasMoreElements();)
 	{
-	    connectionId = -1;
-	    CDynkinConnection connection = (CDynkinConnection) e.nextElement();
-	    
-	    if(connection.idNode1 == id)
-		connectionId = connection.idNode2;
-	    if(connection.idNode2 == id)
-		connectionId = connection.idNode1;
-	    
-	    if(connectionId != -1 && !nodeConnections.contains(new Integer(connectionId)))
-		nodeConnections.add(new Integer(connectionId));
+	    CDynkinNode node = (CDynkinNode) e.nextElement();
+	    if(node.x == x && node.y == y)
+	    {
+		return node;
+	    }
 	}
-	return nodeConnections;
+	return null;
     }
     
     /** Returns the Cartan matrix of the whole algebra. */
@@ -227,63 +219,6 @@ public class DynkinDiagram
 	return cartanSubMatrix;
     }
     
-    /** Returns a plain string visually representing the Dynkin diagram. */
-    public static String GetDiagram()
-    {
-	// ONLY WORKS FOR THE A SERIES CURRENTLY!!! FIX IT FOR MORE GENERAL CONNECTIONS!!!
-	
-	String diagram		= new String();
-	String diagramNodes	= new String();
-	String diagramLabels	= new String();
-	
-	if(GetRank() == 0)
-	    return diagram;
-	
-	Refactor();
-	
-	Vector<Integer> drawnNodes  = new Vector<Integer>();
-	int	nextNode	    = -1;
-	boolean hasNewConnection    = false;
-	
-	for(int i = 1; i < GetRank() + 1; i++)
-	{
-	    if(!drawnNodes.contains(new Integer(i)))
-	    {
-		do
-		{
-		    int label		= hasNewConnection ? nextNode : i;
-		    CDynkinNode node	= GetNodeByLabel(label);
-		    hasNewConnection	= false;
-		    
-		    if(node.enabled)
-			diagramNodes += "o";
-		    else
-			diagramNodes += "x";
-		    diagramLabels += label;
-		    
-		    drawnNodes.add(new Integer(label));
-		    for (Enumeration e = GetNodeConnections(node.id).elements(); e.hasMoreElements();)
-		    {
-			nextNode = GetNodeLabelById((Integer) e.nextElement());
-			if(!drawnNodes.contains(nextNode))
-			{
-			    hasNewConnection = true;
-			    diagramNodes += " - ";
-			    break;
-			}
-		    }
-		    if(!hasNewConnection)
-			diagramNodes += "   ";
-		    diagramLabels += "   ";
-		    
-		} while (hasNewConnection);
-	    }
-	}
-	
-	
-	return diagramNodes + "\n" + diagramLabels;
-    }
-    
     /** Returns the last label that was added. */
     public static int GetLastLabel()
     {
@@ -306,11 +241,10 @@ public class DynkinDiagram
 	return nextFreeLabel;
     }
     
-    public static void AddNode(int newLabel, int toLabel)
+    public static boolean AddNode(int x, int y)
     {
 	int newId = -1;
 	
-	// get the first free id and check if the label isn't already present
 	for (Enumeration e = nodes.elements(); e.hasMoreElements();)
 	{
 	    CDynkinNode node = (CDynkinNode) e.nextElement();
@@ -318,46 +252,28 @@ public class DynkinDiagram
 	    {
 		newId = node.id;
 	    }
-	    if(node.label == newLabel)
-	    {
-		return; // we can't add a label that's already there
-	    }
 	}
 	newId++;
 	
-	CDynkinNode newNode = new CDynkinNode(newId, newLabel);
+	CDynkinNode newNode = new CDynkinNode( newId, GetNextFreeLabel(), x, y);
 	nodes.add(newNode);
-	
-	ModifyConnection(newLabel,toLabel,true);
+	return true;
     }
     
-    public static void RemoveNode(int label)
+    public static void RemoveNode(CDynkinNode node)
     {
-	int id = GetNodeIdByLabel(label);
-	if(id == -1)
-	    return;
-	
 	/** check if the node has connections and remove them */
 	for (Enumeration e = connections.elements(); e.hasMoreElements();)
 	{
 	    CDynkinConnection connection = (CDynkinConnection) e.nextElement();
-	    if(connection.idNode1 == id || connection.idNode2 == id)
+	    if(connection.idNode1 == node.id || connection.idNode2 == node.id)
 	    {
 		connections.remove(connection);
 	    }
 	}
 	
-	nodes.remove(GetNodeById(id));
+	nodes.remove(node);
 	
-    }
-    
-    public static void ToggleNode(int label)
-    {
-	CDynkinNode node = GetNodeByLabel(label);
-	if(node != null)
-	{
-	    node.enabled = !node.enabled;
-	}
     }
     
     public static void ModifyConnection(int fromLabel, int toLabel, boolean add) // if add == false then remove

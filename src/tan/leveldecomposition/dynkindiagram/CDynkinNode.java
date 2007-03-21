@@ -17,15 +17,19 @@ import java.io.Serializable;
 public class CDynkinNode implements Serializable, Comparable<CDynkinNode>
 {
     int	    id;
-    int     label;
-    boolean enabled;
+    public int     label;
+    public boolean enabled;
+    public int x;
+    public int y;
     
     /** Creates a new instance of CDynkinNode */
-    public CDynkinNode(int id, int label)
+    public CDynkinNode(int id, int label, int x, int y)
     {
-	this.id		    = id;
-	this.label	    = label;
-	this.enabled	    = true;
+	this.id		= id;
+	this.label	= label;
+	this.enabled	= true;
+	this.x		= x;
+	this.y		= y;
     }
     
     // compares labels
@@ -35,8 +39,11 @@ public class CDynkinNode implements Serializable, Comparable<CDynkinNode>
 	final int EQUAL = 0;
 	final int AFTER = 1;
 	
-	if(this.label > compareNode.label) return AFTER;
-	if(this.label < compareNode.label) return BEFORE;
+	if(this.y > compareNode.y) return AFTER;
+	if(this.y < compareNode.y) return BEFORE;
+	
+	if(this.x > compareNode.x) return AFTER;
+	if(this.x < compareNode.x) return BEFORE;
 	
 	return EQUAL;
     }
