@@ -40,6 +40,8 @@ public class AlgebraSetup extends javax.swing.JPanel
 	
 	TabbedPaneCartanMatrix.setTitleAt(2,"Subalgebra inverse * " + (DynkinDiagram.GetSubRank()+1));
 	
+	dynkinDiagramPanel.repaint();
+	
     }
     
     /** This method is called from within the constructor to
@@ -65,6 +67,7 @@ public class AlgebraSetup extends javax.swing.JPanel
         PanelDynkinDiagram = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         taDynkinDiagram = new javax.swing.JTextArea();
+        dynkinDiagramPanel = new tan.leveldecomposition.ui.DynkinDiagramPanel();
         PanelAddConnection = new javax.swing.JPanel();
         lAddConnectionFromLabel = new javax.swing.JLabel();
         lAddConnectionToLabel = new javax.swing.JLabel();
@@ -192,15 +195,19 @@ public class AlgebraSetup extends javax.swing.JPanel
         PanelDynkinDiagram.setLayout(PanelDynkinDiagramLayout);
         PanelDynkinDiagramLayout.setHorizontalGroup(
             PanelDynkinDiagramLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelDynkinDiagramLayout.createSequentialGroup()
+            .addGroup(PanelDynkinDiagramLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 379, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(dynkinDiagramPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
         PanelDynkinDiagramLayout.setVerticalGroup(
             PanelDynkinDiagramLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(PanelDynkinDiagramLayout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 193, Short.MAX_VALUE)
+                .addGroup(PanelDynkinDiagramLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 203, Short.MAX_VALUE)
+                    .addComponent(dynkinDiagramPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -310,13 +317,13 @@ public class AlgebraSetup extends javax.swing.JPanel
             PanelCartanMatrixLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelCartanMatrixLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(TabbedPaneCartanMatrix, javax.swing.GroupLayout.DEFAULT_SIZE, 379, Short.MAX_VALUE)
+                .addComponent(TabbedPaneCartanMatrix, javax.swing.GroupLayout.DEFAULT_SIZE, 391, Short.MAX_VALUE)
                 .addContainerGap())
         );
         PanelCartanMatrixLayout.setVerticalGroup(
             PanelCartanMatrixLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(PanelCartanMatrixLayout.createSequentialGroup()
-                .addComponent(TabbedPaneCartanMatrix, javax.swing.GroupLayout.DEFAULT_SIZE, 276, Short.MAX_VALUE)
+                .addComponent(TabbedPaneCartanMatrix, javax.swing.GroupLayout.DEFAULT_SIZE, 266, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -408,6 +415,7 @@ public class AlgebraSetup extends javax.swing.JPanel
     private javax.swing.JButton bRemoveConnection;
     private javax.swing.JButton bRemoveNode;
     private javax.swing.JButton bToggleNode;
+    private tan.leveldecomposition.ui.DynkinDiagramPanel dynkinDiagramPanel;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;

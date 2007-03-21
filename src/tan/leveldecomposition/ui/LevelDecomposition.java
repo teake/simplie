@@ -20,108 +20,31 @@ import java.awt.Cursor;
  */
 public class LevelDecomposition extends javax.swing.JPanel
 {
-    CLevelDecomposer	levelDecomposer;
     DefaultTableModel	tableModel;
+    CLevelScanner	levelScanner;
+    CAutoLevelScanner	autoScanner;
     
     /** Creates new form LevelDecomposition */
     public LevelDecomposition()
     {
 	initComponents();
-	levelDecomposer = new CLevelDecomposer();
 	
 	autoScanMinLevel.SetLabel("Minimum level:");
 	autoScanMaxLevel.SetLabel("Maximum level:");
 	
-	SetSignConvention();
-	
 	tableModel = (DefaultTableModel) representationsTable.getModel();
 	representationsTable.setAutoCreateRowSorter(true);
 	representationsTable.setModel(tableModel);
+	
+	SetSignConvention();
     }
     
     private void SetSignConvention()
     {
 	if(signButtonPos.isSelected())
-	    levelDecomposer.SetSignConvention(1);
+	    LevelHelper.SetSignConvention(1);
 	else
-	    levelDecomposer.SetSignConvention(-1);
-    }
-    
-    /** Automatically scan every possible level between minLevel and maxLevel */
-    public void AutoScan(int minLevel, int maxLevel)
-    {
-	/**
-	 * TODO: Rewrite this as a SwingWorker and possibly add a progress bar / cancel button.
-	 */
-	
-	/** Clear the table. */
-	tableModel.setRowCount(0);
-	
-	if(minLevel > maxLevel)
-	    return;
-	if(DynkinDiagram.GetRank() == DynkinDiagram.GetSubRank())
-	    return;
-	
-	this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-	
-	levelDecomposer.Initialize(
-		DynkinDiagram.GetRank(),
-		DynkinDiagram.GetSubRank(),
-		DynkinDiagram.GetCartanMatrix(),
-		DynkinDiagram.GetCartanSubMatrix().inverse(),
-		DynkinDiagram.GetEnabledNodes()
-		);
-	
-	int[] levels = new int[DynkinDiagram.GetRank() - DynkinDiagram.GetSubRank()];
-	for (int i = 0; i < DynkinDiagram.GetRank() - DynkinDiagram.GetSubRank(); i++)
-	{
-	    levels[i] = minLevel;
-	}
-	LoopLevels(levels.clone(),0,maxLevel, true);
-	this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-    }
-    
-    /** Iterates through all possible levels for which levels[i] <= maxLevel and scans them. */
-    private void LoopLevels(int[] levels, int beginIndex, int maxLevel, boolean scanFirst)
-    {
-	do
-	{
-	    /**
-	     * Keep the triangular decomposition in mind:
-	     * if levels[i] < 0 then levels[j] > 0 can not be for any i and j.
-	     */
-	    for (int i = 0; i < levels.length - 1; i++)
-	    {
-		if(i < beginIndex && levels[i] < 0 && levels[beginIndex] > 0)
-		    /** We can safely abort this line. */
-		    return;
-		
-		if(levels[i] > 0 && levels[i+1] < 0)
-		{
-		    /** Increase the value of the remaining levels to at least 0. */
-		    for(int j = i+1; j < levels.length; j++ )
-		    {
-			levels[j] = 0;
-		    }
-		    /** We changed the levels, so scan it. */
-		    scanFirst = true;
-		    break;
-		}
-	    }
-	    
-	    /** Only scan the level if we haven't scanned it already. */
-	    if(scanFirst)
-		levelDecomposer.ScanLevel(levels, tableModel);
-	    
-	    /** Loop through the remaining indices */
-	    if(beginIndex + 1 < levels.length)
-		LoopLevels(levels.clone(), beginIndex + 1, maxLevel, false);
-	    
-	    /** Increase the current level and scan it the next loop. */
-	    levels[beginIndex]++;
-	    scanFirst = true;
-	    
-	} while(levels[beginIndex] <= maxLevel);
+	    LevelHelper.SetSignConvention(-1);
     }
     
     /** This method is called from within the constructor to
@@ -359,7 +282,12 @@ public class LevelDecomposition extends javax.swing.JPanel
     
     private void bAutoScanActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_bAutoScanActionPerformed
     {//GEN-HEADEREND:event_bAutoScanActionPerformed
-	AutoScan(autoScanMinLevel.GetValue(),autoScanMaxLevel.GetValue());
+	/** Clear the table. */
+	tableModel.setRowCount(0);
+	/** Do the scan */
+	levelScanner	= new CLevelScanner(tableModel);
+	autoScanner	= new CAutoLevelScanner(levelScanner, autoScanMinLevel.GetValue(),autoScanMaxLevel.GetValue());
+	autoScanner.execute();
     }//GEN-LAST:event_bAutoScanActionPerformed
     
     
