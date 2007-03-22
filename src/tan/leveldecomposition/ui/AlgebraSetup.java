@@ -24,33 +24,35 @@ public class AlgebraSetup extends javax.swing.JPanel
 	initComponents();
 	dynkinDiagramPanel.Initialize(this);
 	Update();
+	algebraInfo.SetTitle("Algebra information");
+	subAlgebraInfo.SetTitle("Subalgebra information");
     }
     
     public void Update()
     {
-	taCartanMatrix.setText(Helper.MatrixToString(DynkinDiagram.GetCartanMatrix(), 0));
-	taCartanSubMatrix.setText(Helper.MatrixToString(DynkinDiagram.GetCartanSubMatrix(), 0));
-	taCartanSubInvMatrix.setText(Helper.MatrixToString(DynkinDiagram.GetCartanSubMatrix().inverse().times(DynkinDiagram.GetSubRank()+1), 1));
-	
-	TabbedPaneCartanMatrix.setTitleAt(2,"Subalgebra inverse * " + (DynkinDiagram.GetSubRank()+1));
-	
 	dynkinDiagramPanel.repaint();
 	
 	int rank  = DynkinDiagram.GetRank();
 	int CMDet = (rank == 0) ? 0 : (int) Math.round(DynkinDiagram.GetCartanMatrix().det());
 	int CMRank = (rank == 0) ? 0 : Math.round(DynkinDiagram.GetCartanMatrix().rank());
 	
-	algebraInfoRank.setText(new Integer(rank).toString());
-	algebraInfoCMDet.setText(new Integer(CMDet).toString());
-	algebraInfoCMRank.setText(new Integer(CMRank).toString());
+	algebraInfo.SetRank(rank);
+	algebraInfo.SetCMDet(CMDet);
+	algebraInfo.SetCMRank(CMRank);
 	
 	int subRank  = DynkinDiagram.GetSubRank();
 	int subCMDet = (subRank == 0) ? 0 : (int) Math.round(DynkinDiagram.GetCartanSubMatrix().det());
 	int subCMRank = (subRank == 0) ? 0 : Math.round(DynkinDiagram.GetCartanSubMatrix().rank());
 	
-	subAlgebraInfoRank.setText(new Integer(subRank).toString());
-	subAlgebraInfoCMDet.setText(new Integer(subCMDet).toString());
-	subAlgebraInfoCMRank.setText(new Integer(subCMRank).toString());
+	subAlgebraInfo.SetRank(subRank);
+	subAlgebraInfo.SetCMDet(subCMDet);
+	subAlgebraInfo.SetCMRank(subCMRank);
+	
+	TabbedPaneCartanMatrix.setTitleAt(2,"Subalgebra inverse * " + (DynkinDiagram.GetSubRank()+1));
+	
+	taCartanMatrix.setText(Helper.MatrixToString(DynkinDiagram.GetCartanMatrix(), 0));
+	taCartanSubMatrix.setText(Helper.MatrixToString(DynkinDiagram.GetCartanSubMatrix(), 0));
+	taCartanSubInvMatrix.setText(Helper.MatrixToString(DynkinDiagram.GetCartanSubMatrix().inverse().times(DynkinDiagram.GetSubRank()+1), 1));
 	
     }
     
@@ -73,20 +75,8 @@ public class AlgebraSetup extends javax.swing.JPanel
         taCartanSubMatrix = new javax.swing.JTextArea();
         jScrollPane4 = new javax.swing.JScrollPane();
         taCartanSubInvMatrix = new javax.swing.JTextArea();
-        algebraInfoPanel = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        algebraInfoRank = new javax.swing.JLabel();
-        algebraInfoCMRank = new javax.swing.JLabel();
-        algebraInfoCMDet = new javax.swing.JLabel();
-        subAlgebraInfoPanel = new javax.swing.JPanel();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
-        subAlgebraInfoRank = new javax.swing.JLabel();
-        subAlgebraInfoCMRank = new javax.swing.JLabel();
-        subAlgebraInfoCMDet = new javax.swing.JLabel();
+        algebraInfo = new tan.leveldecomposition.ui.reusable.UIAlgebraInfo();
+        subAlgebraInfo = new tan.leveldecomposition.ui.reusable.UIAlgebraInfo();
 
         PanelDynkinDiagram.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Dynkin Diagram", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12)));
 
@@ -98,7 +88,7 @@ public class AlgebraSetup extends javax.swing.JPanel
             PanelDynkinDiagramLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(PanelDynkinDiagramLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 376, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 318, Short.MAX_VALUE)
                 .addContainerGap())
         );
         PanelDynkinDiagramLayout.setVerticalGroup(
@@ -111,7 +101,7 @@ public class AlgebraSetup extends javax.swing.JPanel
         PanelCartanMatrix.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Cartan Matrices", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12)));
         taCartanMatrix.setColumns(20);
         taCartanMatrix.setEditable(false);
-        taCartanMatrix.setFont(new java.awt.Font("Courier New", 0, 12));
+        taCartanMatrix.setFont(new java.awt.Font("Monospaced", 0, 12));
         taCartanMatrix.setRows(5);
         jScrollPane2.setViewportView(taCartanMatrix);
 
@@ -119,14 +109,14 @@ public class AlgebraSetup extends javax.swing.JPanel
 
         taCartanSubMatrix.setColumns(20);
         taCartanSubMatrix.setEditable(false);
-        taCartanSubMatrix.setFont(new java.awt.Font("Courier New", 0, 12));
+        taCartanSubMatrix.setFont(new java.awt.Font("Monospaced", 0, 12));
         taCartanSubMatrix.setRows(5);
         jScrollPane3.setViewportView(taCartanSubMatrix);
 
         TabbedPaneCartanMatrix.addTab("Subalgebra", jScrollPane3);
 
         taCartanSubInvMatrix.setColumns(20);
-        taCartanSubInvMatrix.setFont(new java.awt.Font("Courier New", 0, 12));
+        taCartanSubInvMatrix.setFont(new java.awt.Font("Monospaced", 0, 12));
         taCartanSubInvMatrix.setRows(5);
         jScrollPane4.setViewportView(taCartanSubInvMatrix);
 
@@ -138,110 +128,14 @@ public class AlgebraSetup extends javax.swing.JPanel
             PanelCartanMatrixLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelCartanMatrixLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(TabbedPaneCartanMatrix, javax.swing.GroupLayout.DEFAULT_SIZE, 376, Short.MAX_VALUE)
+                .addComponent(TabbedPaneCartanMatrix, javax.swing.GroupLayout.DEFAULT_SIZE, 318, Short.MAX_VALUE)
                 .addContainerGap())
         );
         PanelCartanMatrixLayout.setVerticalGroup(
             PanelCartanMatrixLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(PanelCartanMatrixLayout.createSequentialGroup()
-                .addComponent(TabbedPaneCartanMatrix, javax.swing.GroupLayout.DEFAULT_SIZE, 232, Short.MAX_VALUE)
+                .addComponent(TabbedPaneCartanMatrix, javax.swing.GroupLayout.DEFAULT_SIZE, 199, Short.MAX_VALUE)
                 .addContainerGap())
-        );
-
-        algebraInfoPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Algebra information", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12)));
-        jLabel1.setText("Rank:");
-
-        jLabel2.setText("Cartan matrix rank:");
-
-        jLabel3.setText("Cartan matrix determinant:");
-
-        algebraInfoRank.setText("jLabel4");
-
-        algebraInfoCMRank.setText("jLabel5");
-
-        algebraInfoCMDet.setText("jLabel6");
-
-        javax.swing.GroupLayout algebraInfoPanelLayout = new javax.swing.GroupLayout(algebraInfoPanel);
-        algebraInfoPanel.setLayout(algebraInfoPanelLayout);
-        algebraInfoPanelLayout.setHorizontalGroup(
-            algebraInfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(algebraInfoPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(algebraInfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel3))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(algebraInfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(algebraInfoRank, javax.swing.GroupLayout.DEFAULT_SIZE, 47, Short.MAX_VALUE)
-                    .addComponent(algebraInfoCMRank, javax.swing.GroupLayout.DEFAULT_SIZE, 47, Short.MAX_VALUE)
-                    .addComponent(algebraInfoCMDet, javax.swing.GroupLayout.DEFAULT_SIZE, 47, Short.MAX_VALUE))
-                .addContainerGap())
-        );
-        algebraInfoPanelLayout.setVerticalGroup(
-            algebraInfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(algebraInfoPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(algebraInfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(algebraInfoRank))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(algebraInfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(algebraInfoCMRank))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(algebraInfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(algebraInfoCMDet))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
-        subAlgebraInfoPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Subalgebra information", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12)));
-        jLabel4.setText("Rank:");
-
-        jLabel5.setText("Cartan matrix rank:");
-
-        jLabel6.setText("Cartan matrix determinant:");
-
-        subAlgebraInfoRank.setText("jLabel4");
-
-        subAlgebraInfoCMRank.setText("jLabel5");
-
-        subAlgebraInfoCMDet.setText("jLabel6");
-
-        javax.swing.GroupLayout subAlgebraInfoPanelLayout = new javax.swing.GroupLayout(subAlgebraInfoPanel);
-        subAlgebraInfoPanel.setLayout(subAlgebraInfoPanelLayout);
-        subAlgebraInfoPanelLayout.setHorizontalGroup(
-            subAlgebraInfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(subAlgebraInfoPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(subAlgebraInfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel4)
-                    .addComponent(jLabel5)
-                    .addComponent(jLabel6))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(subAlgebraInfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(subAlgebraInfoRank, javax.swing.GroupLayout.DEFAULT_SIZE, 47, Short.MAX_VALUE)
-                    .addComponent(subAlgebraInfoCMRank, javax.swing.GroupLayout.DEFAULT_SIZE, 47, Short.MAX_VALUE)
-                    .addComponent(subAlgebraInfoCMDet, javax.swing.GroupLayout.DEFAULT_SIZE, 47, Short.MAX_VALUE))
-                .addContainerGap())
-        );
-        subAlgebraInfoPanelLayout.setVerticalGroup(
-            subAlgebraInfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(subAlgebraInfoPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(subAlgebraInfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(subAlgebraInfoRank))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(subAlgebraInfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(subAlgebraInfoCMRank))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(subAlgebraInfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel6)
-                    .addComponent(subAlgebraInfoCMDet))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -250,25 +144,28 @@ public class AlgebraSetup extends javax.swing.JPanel
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(subAlgebraInfoPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(algebraInfoPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(algebraInfo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(subAlgebraInfo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(PanelCartanMatrix, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(PanelDynkinDiagram, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(PanelCartanMatrix, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(PanelDynkinDiagram, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
+
+        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {algebraInfo, subAlgebraInfo});
+
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(algebraInfoPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(subAlgebraInfoPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(PanelDynkinDiagram, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(algebraInfo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(subAlgebraInfo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(PanelDynkinDiagram, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(PanelCartanMatrix, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
@@ -280,25 +177,13 @@ public class AlgebraSetup extends javax.swing.JPanel
     private javax.swing.JPanel PanelCartanMatrix;
     private javax.swing.JPanel PanelDynkinDiagram;
     private javax.swing.JTabbedPane TabbedPaneCartanMatrix;
-    private javax.swing.JLabel algebraInfoCMDet;
-    private javax.swing.JLabel algebraInfoCMRank;
-    private javax.swing.JPanel algebraInfoPanel;
-    private javax.swing.JLabel algebraInfoRank;
+    private tan.leveldecomposition.ui.reusable.UIAlgebraInfo algebraInfo;
     private tan.leveldecomposition.ui.DynkinDiagramPanel dynkinDiagramPanel;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
-    private javax.swing.JLabel subAlgebraInfoCMDet;
-    private javax.swing.JLabel subAlgebraInfoCMRank;
-    private javax.swing.JPanel subAlgebraInfoPanel;
-    private javax.swing.JLabel subAlgebraInfoRank;
+    private tan.leveldecomposition.ui.reusable.UIAlgebraInfo subAlgebraInfo;
     private javax.swing.JTextArea taCartanMatrix;
     private javax.swing.JTextArea taCartanSubInvMatrix;
     private javax.swing.JTextArea taCartanSubMatrix;

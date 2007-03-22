@@ -49,8 +49,8 @@ public class Main extends javax.swing.JFrame
     // <editor-fold defaultstate="collapsed" desc=" Generated Code ">//GEN-BEGIN:initComponents
     private void initComponents()
     {
-        aboutPopup = new javax.swing.JFrame();
-        aboutOptionPane = new javax.swing.JOptionPane();
+        popup = new javax.swing.JFrame();
+        optionPane = new javax.swing.JOptionPane();
         TabbedPane = new javax.swing.JTabbedPane();
         algebraSetup = new tan.leveldecomposition.ui.AlgebraSetup();
         levelDecomposition = new tan.leveldecomposition.ui.LevelDecomposition();
@@ -65,21 +65,22 @@ public class Main extends javax.swing.JFrame
         jSeparator2 = new javax.swing.JSeparator();
         MenuItemLoadE11 = new javax.swing.JMenuItem();
         MenuHelp = new javax.swing.JMenu();
+        MenuItemHelp = new javax.swing.JMenuItem();
         MenuItemAbout = new javax.swing.JMenuItem();
 
-        aboutPopup.setTitle("About");
-        aboutPopup.setMinimumSize(new java.awt.Dimension(220, 180));
-        aboutPopup.setResizable(false);
+        popup.setTitle("About");
+        popup.setMinimumSize(new java.awt.Dimension(220, 180));
+        popup.setResizable(false);
 
-        javax.swing.GroupLayout aboutPopupLayout = new javax.swing.GroupLayout(aboutPopup.getContentPane());
-        aboutPopup.getContentPane().setLayout(aboutPopupLayout);
-        aboutPopupLayout.setHorizontalGroup(
-            aboutPopupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(aboutOptionPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+        javax.swing.GroupLayout popupLayout = new javax.swing.GroupLayout(popup.getContentPane());
+        popup.getContentPane().setLayout(popupLayout);
+        popupLayout.setHorizontalGroup(
+            popupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(optionPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
-        aboutPopupLayout.setVerticalGroup(
-            aboutPopupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(aboutOptionPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+        popupLayout.setVerticalGroup(
+            popupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(optionPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -164,6 +165,19 @@ public class Main extends javax.swing.JFrame
 
         MenuHelp.setMnemonic('h');
         MenuHelp.setText("Help");
+        MenuItemHelp.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F1, 0));
+        MenuItemHelp.setMnemonic('h');
+        MenuItemHelp.setText("Help");
+        MenuItemHelp.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                MenuItemHelpActionPerformed(evt);
+            }
+        });
+
+        MenuHelp.add(MenuItemHelp);
+
         MenuItemAbout.setMnemonic('a');
         MenuItemAbout.setText("About");
         MenuItemAbout.addActionListener(new java.awt.event.ActionListener()
@@ -192,6 +206,20 @@ public class Main extends javax.swing.JFrame
         );
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void MenuItemHelpActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_MenuItemHelpActionPerformed
+    {//GEN-HEADEREND:event_MenuItemHelpActionPerformed
+	optionPane.showMessageDialog(
+		popup,
+		"Dynkin diagram interaction: \n \n" +
+		"Add a node: \n   Left mouse \n" +
+		"Remove node: \n   Control + left mouse \n" +
+		"Add connection: \n   Right mouse \n" +
+		"Remove connection: \n   Control + right mouse \n" +
+		"Toggle node: \n   Middle mouse",
+		"Help",
+		optionPane.INFORMATION_MESSAGE);
+    }//GEN-LAST:event_MenuItemHelpActionPerformed
 
     private void MenuItemSaveActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_MenuItemSaveActionPerformed
     {//GEN-HEADEREND:event_MenuItemSaveActionPerformed
@@ -270,11 +298,11 @@ public class Main extends javax.swing.JFrame
     
     private void MenuItemAboutActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_MenuItemAboutActionPerformed
     {//GEN-HEADEREND:event_MenuItemAboutActionPerformed
-	aboutOptionPane.showMessageDialog(
-		aboutPopup,
+	optionPane.showMessageDialog(
+		popup,
 		"Level Decomposition \n \n Teake Nutma \n t.a.nutma@rug.nl",
 		"About",
-		aboutOptionPane.INFORMATION_MESSAGE);
+		optionPane.PLAIN_MESSAGE);
     }//GEN-LAST:event_MenuItemAboutActionPerformed
     
     private void MenuItemExitActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_MenuItemExitActionPerformed
@@ -304,16 +332,17 @@ public class Main extends javax.swing.JFrame
     private javax.swing.JMenuItem MenuItemAbout;
     private javax.swing.JMenuItem MenuItemClear;
     private javax.swing.JMenuItem MenuItemExit;
+    private javax.swing.JMenuItem MenuItemHelp;
     private javax.swing.JMenuItem MenuItemLoadE11;
     private javax.swing.JMenuItem MenuItemOpen;
     private javax.swing.JMenuItem MenuItemSave;
     private javax.swing.JTabbedPane TabbedPane;
-    private javax.swing.JOptionPane aboutOptionPane;
-    private javax.swing.JFrame aboutPopup;
     private tan.leveldecomposition.ui.AlgebraSetup algebraSetup;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private tan.leveldecomposition.ui.LevelDecomposition levelDecomposition;
+    private javax.swing.JOptionPane optionPane;
+    private javax.swing.JFrame popup;
     // End of variables declaration//GEN-END:variables
     
 }

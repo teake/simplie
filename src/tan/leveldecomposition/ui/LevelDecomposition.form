@@ -135,11 +135,13 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                      <Component id="autoScanMinLevel" alignment="0" max="32767" attributes="1"/>
-                      <Component id="cbLocked" alignment="0" min="-2" max="-2" attributes="0"/>
-                      <Component id="autoScanMaxLevel" alignment="0" max="32767" attributes="1"/>
-                      <Component id="bAutoScan" alignment="0" max="32767" attributes="1"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                          <Component id="cbLocked" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="bAutoScan" alignment="0" max="32767" attributes="1"/>
+                      </Group>
+                      <Component id="autoScanMaxLevel" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Component id="autoScanMinLevel" alignment="0" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="32767" attributes="0"/>
               </Group>
@@ -152,7 +154,7 @@
                   <Component id="cbLocked" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="autoScanMaxLevel" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
                   <Component id="autoScanMinLevel" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="bAutoScan" min="-2" max="-2" attributes="0"/>
@@ -170,10 +172,6 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="bAutoScanActionPerformed"/>
           </Events>
         </Component>
-        <Component class="tan.leveldecomposition.ui.LevelTextfield" name="autoScanMinLevel">
-        </Component>
-        <Component class="tan.leveldecomposition.ui.LevelTextfield" name="autoScanMaxLevel">
-        </Component>
         <Component class="javax.swing.JCheckBox" name="cbLocked">
           <Properties>
             <Property name="text" type="java.lang.String" value="Lock maximum - minimum"/>
@@ -189,6 +187,10 @@
           <Events>
             <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="cbLockedStateChanged"/>
           </Events>
+        </Component>
+        <Component class="tan.leveldecomposition.ui.reusable.UILevelTextfield" name="autoScanMaxLevel">
+        </Component>
+        <Component class="tan.leveldecomposition.ui.reusable.UILevelTextfield" name="autoScanMinLevel">
         </Component>
       </SubComponents>
     </Container>

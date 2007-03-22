@@ -36,14 +36,20 @@ public class Helper
 	if(_instance == null) createInstance();
 	return _instance;
     }
+
+    public static String IntToString(int x)
+    {
+	Integer value = new Integer(x);
+	return value.toString();
+    }
+    
     
     public static String IntArrayToString(int[] array)
     {
 	String output = new String();
 	for (int i = 0; i < array.length; i++)
 	{
-	    Integer value = new Integer(array[i]);
-	    output += value.toString() + " ";
+	    output += IntToString(array[i]) + " ";
 	}
 	return output;
     }

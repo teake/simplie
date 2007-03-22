@@ -62,9 +62,9 @@ public class LevelDecomposition extends javax.swing.JPanel
         representationsTable = new javax.swing.JTable();
         AutoScanPanel = new javax.swing.JPanel();
         bAutoScan = new javax.swing.JButton();
-        autoScanMinLevel = new tan.leveldecomposition.ui.LevelTextfield();
-        autoScanMaxLevel = new tan.leveldecomposition.ui.LevelTextfield();
         cbLocked = new javax.swing.JCheckBox();
+        autoScanMaxLevel = new tan.leveldecomposition.ui.reusable.UILevelTextfield();
+        autoScanMinLevel = new tan.leveldecomposition.ui.reusable.UILevelTextfield();
         settingsPanel = new javax.swing.JPanel();
         tfSign = new javax.swing.JLabel();
         signButtonPos = new javax.swing.JRadioButton();
@@ -149,11 +149,12 @@ public class LevelDecomposition extends javax.swing.JPanel
             AutoScanPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(AutoScanPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(AutoScanPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(autoScanMinLevel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(cbLocked)
-                    .addComponent(autoScanMaxLevel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(bAutoScan, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(AutoScanPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(AutoScanPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(cbLocked)
+                        .addComponent(bAutoScan, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(autoScanMaxLevel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(autoScanMinLevel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         AutoScanPanelLayout.setVerticalGroup(
@@ -163,7 +164,7 @@ public class LevelDecomposition extends javax.swing.JPanel
                 .addComponent(cbLocked)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(autoScanMaxLevel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(6, 6, 6)
                 .addComponent(autoScanMinLevel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(bAutoScan)
@@ -295,8 +296,8 @@ public class LevelDecomposition extends javax.swing.JPanel
     private javax.swing.JPanel AutoScanPanel;
     private javax.swing.JPanel RepresentationPanel;
     private javax.swing.JPanel SinglelLevelScanPanel;
-    private tan.leveldecomposition.ui.LevelTextfield autoScanMaxLevel;
-    private tan.leveldecomposition.ui.LevelTextfield autoScanMinLevel;
+    private tan.leveldecomposition.ui.reusable.UILevelTextfield autoScanMaxLevel;
+    private tan.leveldecomposition.ui.reusable.UILevelTextfield autoScanMinLevel;
     private javax.swing.JButton bAutoScan;
     private javax.swing.JCheckBox cbLocked;
     private javax.swing.JScrollPane jScrollPane1;
