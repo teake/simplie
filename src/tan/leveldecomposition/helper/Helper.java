@@ -36,6 +36,20 @@ public class Helper
 	if(_instance == null) createInstance();
 	return _instance;
     }
+    
+    public static int StringtoInt(String string)
+    {
+	int value;
+	try
+	{
+	    value = Integer.parseInt(string);
+	}
+	catch (Exception e)
+	{
+	    value = 0;
+	}
+	return value;
+    }
 
     public static String IntToString(int x)
     {

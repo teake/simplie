@@ -80,17 +80,20 @@ public class CLevelScanner
 		    /** If we found a valid representation, add it. */
 		    if(allGoodIntegers)
 		    {
-			/** First divide all the root components by the subfactor. */
+			/** Divide all the root components by the subfactor. */
 			for (int i = 0; i < rootComponents.length; i++)
 			{
 			    rootComponents[i] = rootComponents[i] / LevelHelper.subFactor;
 			}
+			int[] coDynkinLabels = LevelHelper.CalculateCoDynkinLabels(levels,rootComponents);
+			
 			/** Add the data to the table */
-			Object[] data = new Object[4];
+			Object[] data = new Object[5];
 			data[0] = Helper.IntArrayToString(levels);
 			data[1] = Helper.IntArrayToString(dynkinLabels);
-			data[2] = Helper.IntArrayToString(rootComponents);
-			data[3] = rootLength / LevelHelper.subFactor;
+			data[2] = Helper.IntArrayToString(coDynkinLabels);
+			data[3] = Helper.IntArrayToString(rootComponents);
+			data[4] = rootLength / LevelHelper.subFactor;
 			tableModel.addRow(data);
 		    }
 		}

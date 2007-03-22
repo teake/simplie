@@ -89,13 +89,13 @@ public class LevelDecomposition extends javax.swing.JPanel
             },
             new String []
             {
-                "l", "p", "m", "root length"
+                "l", "p", "p deleted", "m", "root length"
             }
         )
         {
             boolean[] canEdit = new boolean []
             {
-                false, false, false, false
+                false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex)
@@ -103,7 +103,7 @@ public class LevelDecomposition extends javax.swing.JPanel
                 return canEdit [columnIndex];
             }
         });
-        representationsTable.setRowSelectionAllowed(false);
+        representationsTable.setColumnSelectionAllowed(true);
         jScrollPane1.setViewportView(representationsTable);
 
         javax.swing.GroupLayout RepresentationPanelLayout = new javax.swing.GroupLayout(RepresentationPanel);

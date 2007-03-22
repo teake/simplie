@@ -57,7 +57,7 @@ public class UILevelTextfield extends javax.swing.JPanel
 	    public void keyTyped(KeyEvent e)
 	    {
 		int k=e.getKeyChar();
-		if((k>47 && k<58)||(k==8))
+		if((k>47 && k<58)|| k==8 || k==e.VK_MINUS)
 		{
 		}
 		else
@@ -74,9 +74,7 @@ public class UILevelTextfield extends javax.swing.JPanel
     }
     public int GetValue()
     {
-	String value = tfLevel.getText();
-	if(value.length() == 0) value = "0";
-	return Integer.parseInt(value);
+	return Helper.StringtoInt(tfLevel.getText());
     }
     
     public void SetValue(int value)

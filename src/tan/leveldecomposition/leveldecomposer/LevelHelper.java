@@ -42,7 +42,7 @@ public class LevelHelper
     /** The inverse of the Cartan matrix multiplied with the subFactor */
     static int[][] S;
     
-  
+    
     /**
      * Creates a new instance of LevelHelper
      */
@@ -54,7 +54,7 @@ public class LevelHelper
     {
 	return _instance;
     }
-
+    
     /** Sets it all up */
     public static void Setup()
     {
@@ -82,7 +82,7 @@ public class LevelHelper
 		LevelHelper.cartanMatrix[i][j] = (int) Math.round(cM.get(i,j));
 	    }
 	}
-
+	
 	for(int i=0; i<subRank; i++)
 	{
 	    for(int j=0; j<subRank; j++)
@@ -185,4 +185,28 @@ public class LevelHelper
 	}
 	return levelComponents;
     }
- }
+    
+    /** 
+     * Calculates the co-Dynkin labels (i.e. the dynkin labels of the deleted nodes)
+     * NOTE: the rootComponents should not have the subFactor!
+     **/
+    public static int[] CalculateCoDynkinLabels(int[] levels, int[] rootComponents)
+    {
+	int[] coDynkinLabels = new int[coRank];
+	
+	for (int i = 0; i < coRank; i++)
+	{
+	    coDynkinLabels[i] = 0;
+	    for (int j = 0; j < coRank; j++)
+	    {
+		coDynkinLabels[i] += cartanMatrix[TranslateCoIndex(i)][TranslateCoIndex(j)] * levels[j];
+	    }
+	    for (int j = 0; j < subRank; j++)
+	    {
+		coDynkinLabels[i] += cartanMatrix[TranslateCoIndex(i)][TranslateSubIndex(j)] * rootComponents[j];
+	    }
+	}
+	return coDynkinLabels;
+    }
+    
+}
