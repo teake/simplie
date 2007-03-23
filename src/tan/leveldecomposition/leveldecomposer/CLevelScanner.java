@@ -16,13 +16,17 @@ import javax.swing.table.DefaultTableModel;
  */
 public class CLevelScanner
 {
-    DefaultTableModel tableModel;
+    CAutoLevelScanner autoScanner;
     int levelSign = 0;
     
     /** Creates a new instance of CLevelScanner */
-    public CLevelScanner(DefaultTableModel tableModel)
+    public CLevelScanner()
     {
-	this.tableModel = tableModel;
+    }
+    
+    public void Initialize(CAutoLevelScanner autoScanner)
+    {
+	this.autoScanner = autoScanner;
     }
     
     /** Scans all the possible highest weight representations at a given level */
@@ -88,13 +92,13 @@ public class CLevelScanner
 			int[] coDynkinLabels = LevelHelper.CalculateCoDynkinLabels(levels,rootComponents);
 			
 			/** Add the data to the table */
-			Object[] data = new Object[5];
-			data[0] = Helper.IntArrayToString(levels);
-			data[1] = Helper.IntArrayToString(dynkinLabels);
-			data[2] = Helper.IntArrayToString(coDynkinLabels);
-			data[3] = Helper.IntArrayToString(rootComponents);
-			data[4] = rootLength / LevelHelper.subFactor;
-			tableModel.addRow(data);
+			Object[] rowData = new Object[5];
+			rowData[0] = Helper.IntArrayToString(levels);
+			rowData[1] = Helper.IntArrayToString(dynkinLabels);
+			rowData[2] = Helper.IntArrayToString(coDynkinLabels);
+			rowData[3] = Helper.IntArrayToString(rootComponents);
+			rowData[4] = rootLength / LevelHelper.subFactor;
+			autoScanner.addRow(rowData);
 		    }
 		}
 		else
@@ -107,7 +111,7 @@ public class CLevelScanner
 		LoopDynkinLabels(levels, dynkinLabels.clone(), beginIndex + 1, false);
 	    dynkinLabels[beginIndex]++;
 	    scanFirst = true;
-	} while( true );
+	} while( !autoScanner.isCancelled() );
     }
     
 }

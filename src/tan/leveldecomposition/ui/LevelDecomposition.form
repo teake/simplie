@@ -19,9 +19,8 @@
           <Group type="102" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="AutoScanPanel" linkSize="1" alignment="0" min="-2" max="-2" attributes="1"/>
                   <Component id="settingsPanel" linkSize="1" alignment="0" min="-2" max="-2" attributes="1"/>
-                  <Component id="SinglelLevelScanPanel" linkSize="1" min="-2" max="-2" attributes="1"/>
+                  <Component id="AutoScanPanel" linkSize="1" min="-2" max="-2" attributes="1"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="RepresentationPanel" max="32767" attributes="0"/>
@@ -39,8 +38,6 @@
                       <Component id="settingsPanel" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="AutoScanPanel" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="SinglelLevelScanPanel" max="32767" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
@@ -49,21 +46,6 @@
     </DimensionLayout>
   </Layout>
   <SubComponents>
-    <Container class="javax.swing.JPanel" name="SinglelLevelScanPanel">
-
-      <Layout>
-        <DimensionLayout dim="0">
-          <Group type="103" groupAlignment="0" attributes="0">
-              <EmptySpace min="0" pref="247" max="32767" attributes="0"/>
-          </Group>
-        </DimensionLayout>
-        <DimensionLayout dim="1">
-          <Group type="103" groupAlignment="0" attributes="0">
-              <EmptySpace min="0" pref="306" max="32767" attributes="0"/>
-          </Group>
-        </DimensionLayout>
-      </Layout>
-    </Container>
     <Container class="javax.swing.JPanel" name="RepresentationPanel">
       <Properties>
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
@@ -124,7 +106,7 @@
       <Properties>
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
           <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-            <TitledBorder title="Automatic scan">
+            <TitledBorder title="Scan levels">
               <Font PropertyName="font" name="Tahoma" size="12" style="1"/>
             </TitledBorder>
           </Border>
@@ -137,14 +119,16 @@
               <Group type="102" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="cbLocked" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="bAutoScan" alignment="0" max="32767" attributes="1"/>
+                      <Component id="cbLocked" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Component id="autoScanMaxLevel" alignment="0" max="32767" attributes="1"/>
+                      <Component id="autoScanMinLevel" alignment="0" max="32767" attributes="1"/>
+                      <Group type="102" alignment="1" attributes="0">
+                          <Component id="autoScanProgressBar" pref="120" max="32767" attributes="1"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="bAutoScan" min="-2" pref="89" max="-2" attributes="1"/>
                       </Group>
-                      <Component id="autoScanMaxLevel" alignment="0" min="-2" max="-2" attributes="0"/>
-                      <Component id="autoScanMinLevel" alignment="0" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace max="32767" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -158,8 +142,11 @@
                   <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
                   <Component id="autoScanMinLevel" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="bAutoScan" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace max="32767" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Component id="autoScanProgressBar" pref="23" max="32767" attributes="1"/>
+                      <Component id="bAutoScan" alignment="0" max="32767" attributes="1"/>
+                  </Group>
+                  <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -192,6 +179,12 @@
         <Component class="tan.leveldecomposition.ui.reusable.UILevelTextfield" name="autoScanMaxLevel">
         </Component>
         <Component class="tan.leveldecomposition.ui.reusable.UILevelTextfield" name="autoScanMinLevel">
+        </Component>
+        <Component class="javax.swing.JProgressBar" name="autoScanProgressBar">
+          <Properties>
+            <Property name="string" type="java.lang.String" value="Idle"/>
+            <Property name="stringPainted" type="boolean" value="true"/>
+          </Properties>
         </Component>
       </SubComponents>
     </Container>

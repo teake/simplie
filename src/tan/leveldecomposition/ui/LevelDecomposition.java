@@ -13,6 +13,10 @@ import tan.leveldecomposition.helper.*;
 import java.util.*;
 import javax.swing.table.*;
 import java.awt.Cursor;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeEvent;
+import javax.swing.SwingWorker;
+
 
 /**
  *
@@ -23,6 +27,8 @@ public class LevelDecomposition extends javax.swing.JPanel
     DefaultTableModel	tableModel;
     CLevelScanner	levelScanner;
     CAutoLevelScanner	autoScanner;
+    
+    boolean isBusy;
     
     /** Creates new form LevelDecomposition */
     public LevelDecomposition()
@@ -36,7 +42,11 @@ public class LevelDecomposition extends javax.swing.JPanel
 	representationsTable.setAutoCreateRowSorter(true);
 	representationsTable.setModel(tableModel);
 	
+	levelScanner= new CLevelScanner();
+	
 	SetSignConvention();
+	
+	isBusy = false;
     }
     
     private void SetSignConvention()
@@ -56,7 +66,6 @@ public class LevelDecomposition extends javax.swing.JPanel
     private void initComponents()
     {
         signButtonGroup = new javax.swing.ButtonGroup();
-        SinglelLevelScanPanel = new javax.swing.JPanel();
         RepresentationPanel = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         representationsTable = new javax.swing.JTable();
@@ -65,21 +74,11 @@ public class LevelDecomposition extends javax.swing.JPanel
         cbLocked = new javax.swing.JCheckBox();
         autoScanMaxLevel = new tan.leveldecomposition.ui.reusable.UILevelTextfield();
         autoScanMinLevel = new tan.leveldecomposition.ui.reusable.UILevelTextfield();
+        autoScanProgressBar = new javax.swing.JProgressBar();
         settingsPanel = new javax.swing.JPanel();
         tfSign = new javax.swing.JLabel();
         signButtonPos = new javax.swing.JRadioButton();
         signButtonNeg = new javax.swing.JRadioButton();
-
-        javax.swing.GroupLayout SinglelLevelScanPanelLayout = new javax.swing.GroupLayout(SinglelLevelScanPanel);
-        SinglelLevelScanPanel.setLayout(SinglelLevelScanPanelLayout);
-        SinglelLevelScanPanelLayout.setHorizontalGroup(
-            SinglelLevelScanPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 247, Short.MAX_VALUE)
-        );
-        SinglelLevelScanPanelLayout.setVerticalGroup(
-            SinglelLevelScanPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 306, Short.MAX_VALUE)
-        );
 
         RepresentationPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Subalgebra Representations", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12)));
         representationsTable.setModel(new javax.swing.table.DefaultTableModel(
@@ -122,7 +121,7 @@ public class LevelDecomposition extends javax.swing.JPanel
                 .addContainerGap())
         );
 
-        AutoScanPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Automatic scan", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12)));
+        AutoScanPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Scan levels", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12)));
         bAutoScan.setText("Scan");
         bAutoScan.addActionListener(new java.awt.event.ActionListener()
         {
@@ -143,6 +142,9 @@ public class LevelDecomposition extends javax.swing.JPanel
             }
         });
 
+        autoScanProgressBar.setString("Idle");
+        autoScanProgressBar.setStringPainted(true);
+
         javax.swing.GroupLayout AutoScanPanelLayout = new javax.swing.GroupLayout(AutoScanPanel);
         AutoScanPanel.setLayout(AutoScanPanelLayout);
         AutoScanPanelLayout.setHorizontalGroup(
@@ -150,12 +152,14 @@ public class LevelDecomposition extends javax.swing.JPanel
             .addGroup(AutoScanPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(AutoScanPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(AutoScanPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(cbLocked)
-                        .addComponent(bAutoScan, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addComponent(autoScanMaxLevel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(autoScanMinLevel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(cbLocked)
+                    .addComponent(autoScanMaxLevel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(autoScanMinLevel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, AutoScanPanelLayout.createSequentialGroup()
+                        .addComponent(autoScanProgressBar, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(bAutoScan, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
         );
         AutoScanPanelLayout.setVerticalGroup(
             AutoScanPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -167,8 +171,10 @@ public class LevelDecomposition extends javax.swing.JPanel
                 .addGap(6, 6, 6)
                 .addComponent(autoScanMinLevel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(bAutoScan)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(AutoScanPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(autoScanProgressBar, javax.swing.GroupLayout.DEFAULT_SIZE, 23, Short.MAX_VALUE)
+                    .addComponent(bAutoScan, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         settingsPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Settings", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12)));
@@ -231,15 +237,14 @@ public class LevelDecomposition extends javax.swing.JPanel
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(AutoScanPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(settingsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(SinglelLevelScanPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(AutoScanPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(RepresentationPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
-        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {AutoScanPanel, SinglelLevelScanPanel, settingsPanel});
+        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {AutoScanPanel, settingsPanel});
 
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -250,9 +255,7 @@ public class LevelDecomposition extends javax.swing.JPanel
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addComponent(settingsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(AutoScanPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(SinglelLevelScanPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addComponent(AutoScanPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -283,21 +286,50 @@ public class LevelDecomposition extends javax.swing.JPanel
     
     private void bAutoScanActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_bAutoScanActionPerformed
     {//GEN-HEADEREND:event_bAutoScanActionPerformed
-	/** Clear the table. */
-	tableModel.setRowCount(0);
-	/** Do the scan */
-	levelScanner	= new CLevelScanner(tableModel);
-	autoScanner	= new CAutoLevelScanner(levelScanner, autoScanMinLevel.GetValue(),autoScanMaxLevel.GetValue());
-	autoScanner.execute();
+	if(isBusy)
+	{
+	    autoScanner.cancel(true);
+	}
+	else
+	{
+	    /** Clear the table. */
+	    tableModel.setRowCount(0);
+	    
+	    /* Prepare the UI */
+	    bAutoScan.setText("Cancel");
+	    autoScanProgressBar.setIndeterminate(true);
+	    autoScanProgressBar.setString("Scanning");
+	    isBusy = true;
+	    
+	    /** Set up the scan */
+	    autoScanner	= new CAutoLevelScanner(tableModel, levelScanner, autoScanMinLevel.GetValue(),autoScanMaxLevel.GetValue());
+	    levelScanner.Initialize(autoScanner);
+	    autoScanner.addPropertyChangeListener(new PropertyChangeListener()
+	    {
+		public void propertyChange(PropertyChangeEvent evt)
+		{
+		    if (autoScanner.getState().equals(SwingWorker.StateValue.DONE))
+		    {
+			bAutoScan.setText("Scan");
+			isBusy = false;
+			autoScanProgressBar.setIndeterminate(false);
+			autoScanProgressBar.setString("Idle");
+		    }
+		}
+	    });
+	    
+	    /* Start the scan */
+	    autoScanner.execute();
+	}
     }//GEN-LAST:event_bAutoScanActionPerformed
     
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel AutoScanPanel;
     private javax.swing.JPanel RepresentationPanel;
-    private javax.swing.JPanel SinglelLevelScanPanel;
     private tan.leveldecomposition.ui.reusable.UILevelTextfield autoScanMaxLevel;
     private tan.leveldecomposition.ui.reusable.UILevelTextfield autoScanMinLevel;
+    private javax.swing.JProgressBar autoScanProgressBar;
     private javax.swing.JButton bAutoScan;
     private javax.swing.JCheckBox cbLocked;
     private javax.swing.JScrollPane jScrollPane1;

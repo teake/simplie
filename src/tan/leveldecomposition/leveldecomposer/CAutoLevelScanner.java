@@ -9,20 +9,25 @@ package tan.leveldecomposition.leveldecomposer;
 
 import tan.leveldecomposition.dynkindiagram.*;
 import javax.swing.SwingWorker;
+import javax.swing.table.DefaultTableModel;
+import java.util.List;
+
 
 /**
  *
  * @author Teake Nutma
  */
-public class CAutoLevelScanner extends SwingWorker<Void,Void>
+public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 {
     CLevelScanner levelScanner;
     int minLevel;
     int maxLevel;
+    DefaultTableModel tableModel;
     
     /** Creates a new instance of CAutoLevelScanner */
-    public CAutoLevelScanner(CLevelScanner levelScanner, int minLevel, int maxLevel)
+    public CAutoLevelScanner(DefaultTableModel tableModel, CLevelScanner levelScanner, int minLevel, int maxLevel)
     {
+	this.tableModel = tableModel;
 	this.levelScanner = levelScanner;
 	this.minLevel = minLevel;
 	this.maxLevel = maxLevel;
@@ -46,6 +51,20 @@ public class CAutoLevelScanner extends SwingWorker<Void,Void>
 	LoopLevels(levels.clone(),0,maxLevel, true);
 	
 	return null;
+    }
+    
+    @Override
+    protected void process(List<Object[]> chunks)
+    {
+	for(Object[] rowData : chunks)
+	{
+	    tableModel.addRow(rowData);
+	}
+    }
+    
+    public void addRow(Object[] rowData)
+    {
+	publish(rowData);
     }
     
     /** Iterates through all possible levels for which levels[i] <= maxLevel and scans them. */
@@ -90,7 +109,7 @@ public class CAutoLevelScanner extends SwingWorker<Void,Void>
 	    levels[beginIndex]++;
 	    scanFirst = true;
 	    
-	} while(levels[beginIndex] <= maxLevel);
+	} while(levels[beginIndex] <= maxLevel && !isCancelled());
     }
     
 }
