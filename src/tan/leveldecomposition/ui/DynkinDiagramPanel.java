@@ -9,7 +9,7 @@ package tan.leveldecomposition.ui;
 import tan.leveldecomposition.dynkindiagram.*;
 import tan.leveldecomposition.helper.*;
 
-import java.util.*;
+import java.util.Vector;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
@@ -28,8 +28,6 @@ public class DynkinDiagramPanel extends javax.swing.JPanel
     int offset;
     Font font;
     
-    boolean mouseFocus;
-    
     boolean addingConnection;
     int	    connectionTo;
     
@@ -44,8 +42,6 @@ public class DynkinDiagramPanel extends javax.swing.JPanel
 	radius	= 10;
 	offset	= 25;
 	font	= new Font("Monospaced", Font.PLAIN, 12);
-	
-	mouseFocus = false;
 	
 	addingConnection    = false;
 	connectionTo	    = -1;
@@ -63,14 +59,13 @@ public class DynkinDiagramPanel extends javax.swing.JPanel
 	super.paintComponent(g);
 	Graphics2D g2 = (Graphics2D) g;
 	g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
-	for (Enumeration e = DynkinDiagram.connections.elements(); e.hasMoreElements();)
+	
+	for (CDynkinConnection connection : DynkinDiagram.connections)
 	{
-	    CDynkinConnection connection = (CDynkinConnection) e.nextElement();
 	    paintConnection(connection, g2);
 	}
-	for (Enumeration e = DynkinDiagram.nodes.elements(); e.hasMoreElements();)
+	for (CDynkinNode node : DynkinDiagram.nodes)
 	{
-	    CDynkinNode node = (CDynkinNode) e.nextElement();
 	    paintNode(node, g2);
 	}
     }
@@ -132,14 +127,6 @@ public class DynkinDiagramPanel extends javax.swing.JPanel
         setBackground(new java.awt.Color(255, 255, 255));
         addMouseListener(new java.awt.event.MouseAdapter()
         {
-            public void mouseEntered(java.awt.event.MouseEvent evt)
-            {
-                formMouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt)
-            {
-                formMouseExited(evt);
-            }
             public void mouseReleased(java.awt.event.MouseEvent evt)
             {
                 formMouseReleased(evt);
@@ -157,17 +144,7 @@ public class DynkinDiagramPanel extends javax.swing.JPanel
             .addGap(0, 90, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
-    
-    private void formMouseExited(java.awt.event.MouseEvent evt)//GEN-FIRST:event_formMouseExited
-    {//GEN-HEADEREND:event_formMouseExited
-	mouseFocus = false;
-    }//GEN-LAST:event_formMouseExited
-    
-    private void formMouseEntered(java.awt.event.MouseEvent evt)//GEN-FIRST:event_formMouseEntered
-    {//GEN-HEADEREND:event_formMouseEntered
-	mouseFocus = true;
-    }//GEN-LAST:event_formMouseEntered
-    
+            
     private void formMouseReleased(java.awt.event.MouseEvent evt)//GEN-FIRST:event_formMouseReleased
     {//GEN-HEADEREND:event_formMouseReleased
 	int x = cTransInv(evt.getX());

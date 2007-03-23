@@ -7,9 +7,10 @@
 
 package tan.leveldecomposition.dynkindiagram;
 
-import java.util.*;
-import Jama.Matrix;
+import java.util.Vector;
+import java.util.Collections;
 import java.io.*;
+import Jama.Matrix;
 
 /**
  * Singleton class
@@ -54,9 +55,8 @@ public class DynkinDiagram
     public static int GetSubRank()
     {
 	int subRank = 0;
-	for (Enumeration e = nodes.elements(); e.hasMoreElements();)
+	for (CDynkinNode node : nodes)
 	{
-	    CDynkinNode node = (CDynkinNode) e.nextElement();
 	    if(node.enabled)
 	    {
 		subRank++;
@@ -88,9 +88,8 @@ public class DynkinDiagram
      */
     private static int GetNodeIdByLabel(int label)
     {
-	for (Enumeration e = nodes.elements(); e.hasMoreElements();)
+	for (CDynkinNode node : nodes)
 	{
-	    CDynkinNode node = (CDynkinNode) e.nextElement();
 	    if(node.label == label)
 	    {
 		return node.id;
@@ -105,9 +104,8 @@ public class DynkinDiagram
      */
     private static int GetNodeLabelById(int id)
     {
-	for (Enumeration e = nodes.elements(); e.hasMoreElements();)
+	for (CDynkinNode node : nodes)
 	{
-	    CDynkinNode node = (CDynkinNode) e.nextElement();
 	    if(node.id == id)
 	    {
 		return node.label;
@@ -122,9 +120,8 @@ public class DynkinDiagram
      */
     public static CDynkinNode GetNodeById(int id)
     {
-	for (Enumeration e = nodes.elements(); e.hasMoreElements();)
+	for (CDynkinNode node : nodes)
 	{
-	    CDynkinNode node = (CDynkinNode) e.nextElement();
 	    if(node.id == id)
 	    {
 		return node;
@@ -139,9 +136,8 @@ public class DynkinDiagram
      */
     private static CDynkinNode GetNodeByLabel(int label)
     {
-	for (Enumeration e = nodes.elements(); e.hasMoreElements();)
+	for (CDynkinNode node : nodes)
 	{
-	    CDynkinNode node = (CDynkinNode) e.nextElement();
 	    if(node.label == label)
 	    {
 		return node;
@@ -152,9 +148,8 @@ public class DynkinDiagram
     
     public static CDynkinNode GetNodeByCoor(int x, int y)
     {
-	for (Enumeration e = nodes.elements(); e.hasMoreElements();)
+	for (CDynkinNode node : nodes)
 	{
-	    CDynkinNode node = (CDynkinNode) e.nextElement();
 	    if(node.x == x && node.y == y)
 	    {
 		return node;
@@ -172,9 +167,8 @@ public class DynkinDiagram
 	for(int i = 0; i < GetRank(); i++)
 	{
 	    cartanMatrix.set(i,i,2);
-	    for (Enumeration e = connections.elements(); e.hasMoreElements();)
+	    for (CDynkinConnection connection : connections)
 	    {
-		CDynkinConnection connection = (CDynkinConnection) e.nextElement();
 		if(GetNodeLabelById(connection.idNode1) == i + 1)
 		{
 		    int index2 = GetNodeLabelById(connection.idNode2) - 1;
@@ -223,9 +217,8 @@ public class DynkinDiagram
     public static int GetLastLabel()
     {
 	int lastLabel = 0;
-	for (Enumeration e = nodes.elements(); e.hasMoreElements();)
+	for (CDynkinNode node : nodes)
 	{
-	    CDynkinNode node = (CDynkinNode) e.nextElement();
 	    if(node.label > lastLabel)
 	    {
 		lastLabel = node.label;
@@ -245,9 +238,8 @@ public class DynkinDiagram
     {
 	int newId = -1;
 	
-	for (Enumeration e = nodes.elements(); e.hasMoreElements();)
+	for (CDynkinNode node : nodes)
 	{
-	    CDynkinNode node = (CDynkinNode) e.nextElement();
 	    if (newId < node.id)
 	    {
 		newId = node.id;
@@ -263,9 +255,8 @@ public class DynkinDiagram
     public static void RemoveNode(CDynkinNode node)
     {
 	/** check if the node has connections and remove them */
-	for (Enumeration e = connections.elements(); e.hasMoreElements();)
+	for (CDynkinConnection connection : connections)
 	{
-	    CDynkinConnection connection = (CDynkinConnection) e.nextElement();
 	    if(connection.idNode1 == node.id || connection.idNode2 == node.id)
 	    {
 		connections.remove(connection);
@@ -305,9 +296,8 @@ public class DynkinDiagram
 	
 	/** Reset all the labels */
 	int label = 1;
-	for (Enumeration e = nodes.elements(); e.hasMoreElements();)
+	for (CDynkinNode node : nodes)
 	{
-	    CDynkinNode node = (CDynkinNode) e.nextElement();
 	    node.label = label++;
 	}
     }
