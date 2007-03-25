@@ -8,6 +8,8 @@
 package tan.leveldecomposition.leveldecomposer;
 
 import tan.leveldecomposition.dynkindiagram.*;
+import tan.leveldecomposition.helper.*;
+
 import javax.swing.SwingWorker;
 import javax.swing.table.DefaultTableModel;
 import java.util.List;
@@ -22,6 +24,7 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
     CLevelScanner levelScanner;
     int minLevel;
     int maxLevel;
+    int levelSign;
     DefaultTableModel tableModel;
     
     /** Creates a new instance of CAutoLevelScanner */
@@ -31,6 +34,8 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 	this.levelScanner = levelScanner;
 	this.minLevel = minLevel;
 	this.maxLevel = maxLevel;
+	
+	this.levelSign = 0;
     }
     
     @Override
@@ -62,14 +67,12 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 	}
     }
     
-    public void addRow(Object[] rowData)
-    {
-	publish(rowData);
-    }
-    
     /** Iterates through all possible levels for which levels[i] <= maxLevel and scans them. */
     private void LoopLevels(int[] levels, int beginIndex, int maxLevel, boolean scanFirst)
     {
+	if(isCancelled())
+	    return;
+	
 	do
 	{
 	    /**
@@ -98,7 +101,7 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 	    /** Only scan the level if we haven't scanned it already. */
 	    if(scanFirst)
 	    {
-		levelScanner.Scan(levels);
+		Scan(levels);
 	    }
 	    
 	    /** Loop through the remaining indices */
@@ -110,6 +113,94 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 	    scanFirst = true;
 	    
 	} while(levels[beginIndex] <= maxLevel && !isCancelled());
+    }
+    
+    /** Scans all the possible highest weight representations at a given level */
+    public void Scan(int[] levels)
+    {
+	/** Are the levels all positive or all negative? */
+	levelSign = 0;
+	boolean positive = false;
+	boolean negative = false;
+	for (int i = 0; i < levels.length; i++)
+	{
+	    if(levels[i] < 0)
+		negative = true;
+	    if(levels[i] > 0)
+		positive = true;
+	}
+	if(positive && negative)
+	    /** This cannot be, thanks to the triangular decomposition. */
+	    return;
+	if(positive)
+	    levelSign = 1;
+	if(negative)
+	    levelSign = -1;
+	
+	/** Set up the Dynkin labels */
+	int[] dynkinLabels = new int[LevelHelper.subRank];
+	for (int i = 0; i < LevelHelper.subRank; i++)
+	{
+	    dynkinLabels[i] = 0;
+	}
+	LoopDynkinLabels(levels, dynkinLabels, 0, true);
+    }
+    
+    private void LoopDynkinLabels(int[] levels, int[] dynkinLabels, int beginIndex, boolean scanFirst)
+    {
+	if (isCancelled())
+	    return;
+	
+	do
+	{
+	    if(scanFirst)
+	    {
+		int rootLength = LevelHelper.CalculateRootLength(levels, dynkinLabels);
+		/** Only continue if the root length is not bigger than 2. */
+		if(LevelHelper.CalculateRootLength(levels, dynkinLabels) <= 2 * LevelHelper.subFactor)
+		{
+		    /** First check if all root components are integers and non-negative. */
+		    int[] rootComponents    = LevelHelper.CalculateRootComponents(levels, dynkinLabels);
+		    boolean allGoodIntegers  = true;
+		    for (int i = 0; i < rootComponents.length; i++)
+		    {
+			if(rootComponents[i] % LevelHelper.subFactor != 0 || rootComponents[i] * levelSign < 0)
+			{
+			    allGoodIntegers = false;
+			    break;
+			}
+		    }
+		    /** If we found a valid representation, add it. */
+		    if(allGoodIntegers)
+		    {
+			/** Divide all the root components by the subfactor. */
+			for (int i = 0; i < rootComponents.length; i++)
+			{
+			    rootComponents[i] = rootComponents[i] / LevelHelper.subFactor;
+			}
+			int[] coDynkinLabels = LevelHelper.CalculateCoDynkinLabels(levels,rootComponents);
+			
+			/** Add the data to the table */
+			Object[] rowData = new Object[5];
+			rowData[0] = Helper.IntArrayToString(levels);
+			rowData[1] = Helper.IntArrayToString(dynkinLabels);
+			rowData[2] = Helper.IntArrayToString(coDynkinLabels);
+			rowData[3] = Helper.IntArrayToString(rootComponents);
+			rowData[4] = rootLength / LevelHelper.subFactor;
+			publish(rowData);
+		    }
+		}
+		else
+		{
+		    /** The root length is bigger than 2, so abort this line. */
+		    break;
+		}
+	    }
+	    if(beginIndex + 1 < dynkinLabels.length)
+		LoopDynkinLabels(levels, dynkinLabels.clone(), beginIndex + 1, false);
+	    dynkinLabels[beginIndex]++;
+	    scanFirst = true;
+	} while( !isCancelled() );
     }
     
 }
