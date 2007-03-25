@@ -25,7 +25,6 @@ import javax.swing.SwingWorker;
 public class LevelDecomposition extends javax.swing.JPanel
 {
     DefaultTableModel	tableModel;
-    CLevelScanner	levelScanner;
     CAutoLevelScanner	autoScanner;
     
     boolean isBusy;
@@ -41,8 +40,6 @@ public class LevelDecomposition extends javax.swing.JPanel
 	tableModel = (DefaultTableModel) representationsTable.getModel();
 	representationsTable.setAutoCreateRowSorter(true);
 	representationsTable.setModel(tableModel);
-	
-	levelScanner= new CLevelScanner();
 	
 	SetSignConvention();
 	
@@ -302,8 +299,7 @@ public class LevelDecomposition extends javax.swing.JPanel
 	    isBusy = true;
 	    
 	    /** Set up the scan */
-	    autoScanner	= new CAutoLevelScanner(tableModel, levelScanner, autoScanMinLevel.GetValue(),autoScanMaxLevel.GetValue());
-	    levelScanner.Initialize(autoScanner);
+	    autoScanner	= new CAutoLevelScanner(tableModel, autoScanMinLevel.GetValue(),autoScanMaxLevel.GetValue());
 	    autoScanner.addPropertyChangeListener(new PropertyChangeListener()
 	    {
 		public void propertyChange(PropertyChangeEvent evt)

@@ -21,17 +21,15 @@ import java.util.List;
  */
 public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 {
-    CLevelScanner levelScanner;
     int minLevel;
     int maxLevel;
     int levelSign;
     DefaultTableModel tableModel;
     
     /** Creates a new instance of CAutoLevelScanner */
-    public CAutoLevelScanner(DefaultTableModel tableModel, CLevelScanner levelScanner, int minLevel, int maxLevel)
+    public CAutoLevelScanner(DefaultTableModel tableModel, int minLevel, int maxLevel)
     {
 	this.tableModel = tableModel;
-	this.levelScanner = levelScanner;
 	this.minLevel = minLevel;
 	this.maxLevel = maxLevel;
 	
