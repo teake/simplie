@@ -176,15 +176,25 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 			{
 			    rootComponents[i] = rootComponents[i] / LevelHelper.subFactor;
 			}
+			
+			/** Calculate the remaining Dynkin labels */
 			int[] coDynkinLabels = LevelHelper.CalculateCoDynkinLabels(levels,rootComponents);
 			
+			/** Calculate the number of indices of the subalgebra representation. */
+			int numIndices = 0;
+			for (int i = 0; i < dynkinLabels.length; i++)
+			{
+			    numIndices += dynkinLabels[i] * (i+1);
+			}
+			
 			/** Add the data to the table */
-			Object[] rowData = new Object[5];
+			Object[] rowData = new Object[6];
 			rowData[0] = Helper.IntArrayToString(levels);
 			rowData[1] = Helper.IntArrayToString(dynkinLabels);
 			rowData[2] = Helper.IntArrayToString(coDynkinLabels);
 			rowData[3] = Helper.IntArrayToString(rootComponents);
 			rowData[4] = rootLength / LevelHelper.subFactor;
+			rowData[5] = numIndices;
 			publish(rowData);
 		    }
 		}
