@@ -27,8 +27,6 @@ public class LevelDecomposition extends javax.swing.JPanel
     DefaultTableModel	tableModel;
     CAutoLevelScanner	autoScanner;
     
-    boolean isBusy;
-    
     /** Creates new form LevelDecomposition */
     public LevelDecomposition()
     {
@@ -42,8 +40,6 @@ public class LevelDecomposition extends javax.swing.JPanel
 	representationsTable.setModel(tableModel);
 	
 	SetSignConvention();
-	
-	isBusy = false;
     }
     
     private void SetSignConvention()
@@ -283,8 +279,9 @@ public class LevelDecomposition extends javax.swing.JPanel
     
     private void bAutoScanActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_bAutoScanActionPerformed
     {//GEN-HEADEREND:event_bAutoScanActionPerformed
-	if(isBusy)
+	if(!(autoScanner == null || autoScanner.isDone()))
 	{
+	    /** The scanner is busy, and the button is a cancel button. So cancel the task. */
 	    autoScanner.cancel(true);
 	}
 	else
@@ -292,11 +289,14 @@ public class LevelDecomposition extends javax.swing.JPanel
 	    /** Clear the table. */
 	    tableModel.setRowCount(0);
 	    
-	    /* Prepare the UI */
+	    /** 
+	     * Prepare the UI:
+	     *  - Change the "scan" button into a "cancel" button.
+	     *  - Start the progressbar animation.
+	     */
 	    bAutoScan.setText("Cancel");
 	    autoScanProgressBar.setIndeterminate(true);
 	    autoScanProgressBar.setString("Scanning");
-	    isBusy = true;
 	    
 	    /** Set up the scan */
 	    autoScanner	= new CAutoLevelScanner(tableModel, autoScanMinLevel.GetValue(),autoScanMaxLevel.GetValue());
@@ -306,8 +306,8 @@ public class LevelDecomposition extends javax.swing.JPanel
 		{
 		    if (autoScanner.getState().equals(SwingWorker.StateValue.DONE))
 		    {
+			/** Invoked when the scan is done (or canceled). */
 			bAutoScan.setText("Scan");
-			isBusy = false;
 			autoScanProgressBar.setIndeterminate(false);
 			autoScanProgressBar.setString("Idle");
 		    }
