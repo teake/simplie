@@ -13,20 +13,42 @@ package tan.leveldecomposition.group;
  */
 public class CRoot
 {
-    public int[]    components;
+    public int[]    vector;
     public int	    height;
     public int	    mult;
     public int	    norm;
     
     /** Creates a new instance of CRoot */
-    public CRoot(int[] components)
+    public CRoot(int[] rootVector)
     {
-	this.components = components;
-	this.height	= 0;
-	for (int i = 0; i < components.length; i++)
+	vector = rootVector;
+	height = 0;
+	for (int i = 0; i < vector.length; i++)
 	{
-	    height += components[i];
+	    height += vector[i];
 	}
+    }
+    
+    public boolean equals(Object obj)
+    {
+	if(this == obj)
+	    return true;
+	
+	if((obj == null) || (obj.getClass() != this.getClass()))
+	    return false;
+	
+	CRoot compareRoot = (CRoot) obj;
+	
+	if(vector.length != compareRoot.vector.length)
+	    return false;
+	
+	for (int i = 0; i < vector.length; i++)
+	{
+	    if(vector[i] != compareRoot.vector[i])
+		return false;
+	}
+
+	return true;
     }
     
 }

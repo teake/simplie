@@ -28,14 +28,19 @@ public class UIAlgebraInfo extends javax.swing.JPanel
 	setBorder(javax.swing.BorderFactory.createTitledBorder(null, title, javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12)));
     }
     
+    public void SetType(String type)
+    {
+	algebraInfoType.setText(type);
+    }
+    
     public void SetRank(int rank)
     {
 	algebraInfoRank.setText(Helper.IntToString(rank));
     }
     
-    public void SetCMRank(int rank)
+    public void SetDim(int dim)
     {
-	algebraInfoCMRank.setText(Helper.IntToString(rank));
+	algebraInfoDim.setText(Helper.IntToString(dim));
     }
     
     public void SetCMDet(int det)
@@ -56,21 +61,27 @@ public class UIAlgebraInfo extends javax.swing.JPanel
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         algebraInfoRank = new javax.swing.JLabel();
-        algebraInfoCMRank = new javax.swing.JLabel();
+        algebraInfoDim = new javax.swing.JLabel();
         algebraInfoCMDet = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        algebraInfoType = new javax.swing.JLabel();
 
         setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Algebra information", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12)));
         jLabel1.setText("Rank:");
 
-        jLabel2.setText("Cartan matrix rank:");
+        jLabel2.setText("Dimension:");
 
         jLabel3.setText("Cartan matrix determinant:");
 
         algebraInfoRank.setText("jLabel4");
 
-        algebraInfoCMRank.setText("jLabel5");
+        algebraInfoDim.setText("jLabel5");
 
         algebraInfoCMDet.setText("jLabel6");
+
+        jLabel4.setText("Type:");
+
+        algebraInfoType.setText("jLabel5");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -79,20 +90,33 @@ public class UIAlgebraInfo extends javax.swing.JPanel
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel3)
-                    .addComponent(jLabel2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(algebraInfoCMRank, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(algebraInfoCMDet, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(algebraInfoRank, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel4)
+                        .addGap(109, 109, 109)
+                        .addComponent(algebraInfoType))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel2))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(algebraInfoDim, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(algebraInfoCMDet, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(algebraInfoRank, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
+
+        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {algebraInfoCMDet, algebraInfoDim, algebraInfoRank, algebraInfoType});
+
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(algebraInfoType))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1)
@@ -101,23 +125,25 @@ public class UIAlgebraInfo extends javax.swing.JPanel
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(algebraInfoRank)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(algebraInfoCMRank)))
+                        .addComponent(algebraInfoDim)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(algebraInfoCMDet))
-                .addContainerGap())
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
     
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel algebraInfoCMDet;
-    private javax.swing.JLabel algebraInfoCMRank;
+    private javax.swing.JLabel algebraInfoDim;
     private javax.swing.JLabel algebraInfoRank;
+    private javax.swing.JLabel algebraInfoType;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     // End of variables declaration//GEN-END:variables
     
 }

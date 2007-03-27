@@ -68,6 +68,23 @@ public class Helper
 	return output;
     }
     
+    /** Returns the A_n cartan matrix of the given rank */
+    public static Matrix RegularMatrix(int rank)
+    {
+	Matrix matrix = new Matrix(rank, rank);
+	for (int i = 0; i < rank; i++)
+	{
+	    for (int j = 0; j < rank; j++)
+	    {
+		if(i == j)
+		    matrix.set(i,j,2);
+		if(j == i-1 || j == i+1)
+		    matrix.set(i,j,-1);
+	    }
+	}
+	return matrix;
+    }
+    
     public static String MatrixToString(Matrix matrix, int decimalPlates)
     {
 	/** Set up the decimal format for double -> string parsing */
@@ -121,10 +138,5 @@ public class Helper
 	    }
 	}
 	return stringMatrix;
-    }
-    
-    public Helper get_instance()
-    {
-	return _instance;
     }
 }
