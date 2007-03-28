@@ -18,9 +18,9 @@ import java.text.DecimalFormat;
  */
 public class CGroup
 {
-    /**
+    /*********************************
      * Public properties
-     */
+     *********************************/
     
     /** The Cartan matrix of the group. */
     public int[][]  cartanMatrix;
@@ -37,9 +37,9 @@ public class CGroup
     /** Boolean indicating whethet the group is finite or not. */
     public boolean  finite;
     
-    /** 
-     * Private properties 
-     */
+    /*********************************
+     * Private properties
+     *********************************/
     
     /** The height up to and included to which we constructed the root system. */
     private int		    constructedHeight;
@@ -49,9 +49,10 @@ public class CGroup
     private Vector<Vector>  rootTable;
     
     
-    /**
+    
+    /**********************************
      * Public methods
-     */
+     **********************************/
     
     /**
      * Creates a new instance of CGroup.
@@ -60,6 +61,9 @@ public class CGroup
      */
     public CGroup(Matrix cartanMatrix)
     {
+	Vector<CRoot>	csaRoots;
+	Matrix		compareMatrix;
+	
 	/** Do some preliminary checks */
 	if(cartanMatrix.getColumnDimension() != cartanMatrix.getRowDimension()
 	|| cartanMatrix.getColumnDimension() == 0)
@@ -80,22 +84,34 @@ public class CGroup
 	
 	/** Try to determine the group type */
 	// TODO: make this algorithm find more types
-	Matrix compare = Globals.regularMatrix(rank);
-	if(Globals.sameMatrices(compare,cartanMatrix))
+	compareMatrix = Globals.regularMatrix(rank);
+	if(Globals.sameMatrices(compareMatrix,cartanMatrix))
 	    type = "A" + rank;
 	else
 	{
-	    compare.set(0,3,-1);
-	    compare.set(3,0,-1);
-	    compare.set(0,1,0);
-	    compare.set(1,0,0);
-	    if(Globals.sameMatrices(compare,cartanMatrix))
+	    compareMatrix.set(0,3,-1);
+	    compareMatrix.set(3,0,-1);
+	    compareMatrix.set(0,1,0);
+	    compareMatrix.set(1,0,0);
+	    if(Globals.sameMatrices(compareMatrix,cartanMatrix))
 		type = "E" + rank;
+	    else
+	    {
+		compareMatrix = Globals.regularMatrix(rank);
+		compareMatrix.set(rank-1,2,-1);
+		compareMatrix.set(2,rank-1,-1);
+		compareMatrix.set(rank-2,rank-1,0);
+		compareMatrix.set(rank-1,rank-2,0);
+		if(Globals.sameMatrices(compareMatrix,cartanMatrix))
+		    type = "E" + rank;
+	    }
 	}
 	
-	/** Add an empty Vector at index 0 of the root table */
-	rootTable = new Vector<Vector>();
-	rootTable.add(0,new Vector<CRoot>());
+	/** Add the CSA to the root table */
+	rootTable   = new Vector<Vector>();
+	csaRoots    = new Vector<CRoot>();
+	csaRoots.add(new CRoot(rank));
+	rootTable.add(0,csaRoots);
 	/** Add the simple roots to the root table */
 	for (int i = 0; i < rank; i++)
 	{
@@ -121,7 +137,6 @@ public class CGroup
 	}
     }
     
-    
     /**
      * Get a root by its root vector.
      *
@@ -130,32 +145,68 @@ public class CGroup
      */
     public CRoot getRoot(int[] vector)
     {
-	CRoot		rootToGet;
-	Vector<CRoot>	roots;
-	
-	rootToGet = new CRoot(vector);
-	/** If we haven't constructed the root system this far, do so now. */
-	if(rootToGet.height > constructedHeight)
-	    constructRootSystem(rootToGet.height);
-	/** Try to fetch the root. */
-	try
+	/** Dirty hack to check for negative roots. */
+	// TODO: implement this better.
+	if(vector.length != 0 && vector[vector.length-1] < 0)
 	{
-	    roots = rootTable.get(rootToGet.height);
-	    for(CRoot root : roots)
+	    for (int i = 0; i < vector.length; i++)
 	    {
-		if(root.equals(rootToGet))
-		    return root;
+		vector[i] = -vector[i];
 	    }
 	}
-	catch (Exception e)
+	return getRoot(new CRoot(vector));
+    }
+    
+    /**
+     * Check if a root is in the root system.
+     *
+     * @param rootToGet	 The root of which we should check if it's in the root system.
+     * @return		 A pointer to the root if found, and null if not found.
+     */
+    public CRoot getRoot(CRoot rootToGet)
+    {
+	return getRoot(rootToGet, rootToGet.height());
+    }
+    
+    
+    /**
+     * Check if a root is in the root system.
+     *
+     * @param rootToGet	 The root of which we should check if it's in the root system.
+     * @param rootHeight The height of the root.
+     * @return		 A pointer to the root if found, and null if not found.
+     */
+    public CRoot getRoot(CRoot rootToGet, int rootHeight)
+    {
+	Vector<CRoot>	roots;
+	int		index;
+	
+	if(rootHeight < 0)
 	{
+	    return null;
+	}
+	
+	/** If we haven't constructed the root system this far, do so now. */
+	if(rootHeight > constructedHeight)
+	    constructRootSystem(rootHeight);
+	
+	/** Try to fetch the root. */
+	if(rootTable.size() > rootHeight)
+	{
+	    roots = rootTable.get(rootHeight);
+	    index = roots.lastIndexOf(rootToGet);
+	    if(index != -1)
+	    {
+		return roots.get(index);
+	    }
 	}
 	return null;
     }
     
-    /**
+    
+    /**********************************
      * Private methods
-     */
+     **********************************/
     
     /**
      * Construct the root system up to the given height.
@@ -166,32 +217,81 @@ public class CGroup
     private void constructRootSystem(int maxHeight)
     {
 	Vector<CRoot>	simpleRoots = rootTable.get(1);
-	Vector<CRoot>	previousRoots;
-	boolean		addedSomething;
+	Vector<CRoot>	prevRoots;
+	CRoot		oldRoot;
+	CRoot		newRoot;
+	int		prevNumPosRoots;
+	int		innerProduct;
+	int		n_minus;
+	int		newHeight;
+	int		oldHeight;
 	
 	while(constructedHeight < maxHeight || maxHeight == 0)
 	{
-	    addedSomething  = false;
-	    previousRoots   = rootTable.get(constructedHeight);
+	    prevRoots	    = rootTable.get(constructedHeight);
+	    prevNumPosRoots = numPosRoots;
+	    newHeight	    = constructedHeight + 1;
 	    
-	    /** Try to add the simple roots to all the previous roots */
-	    for(CRoot root : previousRoots)
+	    /**
+	     * Try to add the simple roots to all the previous roots.
+	     * The main formula employed here is
+	     *
+	     *	    <alpha, beta> = n_minus - n_plus ,
+	     *
+	     * where alpha and beta are roots.
+	     * For simple roots beta this reduces to
+	     *
+	     *	    (alpha, beta) = n_minus - n_plus .
+	     *
+	     * If n_plus is positive, then alpha + beta is again a root.
+	     */
+	    for(CRoot root : prevRoots)
 	    {
 		for(CRoot simpleRoot : simpleRoots)
 		{
-		    if(innerProduct(root,simpleRoot) < 0)
+		    newRoot = sumRoots(root,simpleRoot);
+		    if(rootTable.size() > newHeight)
 		    {
-			/** root + simpleRoot is a root, so add it to the root table */
-			if(addRoot(sumRoots(root,simpleRoot)))
-			    addedSomething = true;
+			if(rootTable.get(newHeight).contains(newRoot))
+			    continue;
+		    }
+		    
+		    innerProduct = innerProduct(root,simpleRoot);
+		    if(innerProduct < 0)
+		    {
+			/**
+			 * n_plus is always positive, thus (root + simpleRoot) is a root
+			 * Add it to the root table.
+			 */
+			addRoot(newRoot);
+		    }
+		    
+		    if(innerProduct >= 0)
+		    {
+			/** Iterate through the previous heights to obtain n_minus. */
+			n_minus	    = 0;
+			oldHeight   = newHeight - 2;
+			oldRoot	    = getRoot(subtractRoots(root,simpleRoot), oldHeight);
+			while(oldRoot != null)
+			{
+			    n_minus++;
+			    if(n_minus > innerProduct)
+			    {
+				/** n_plus is positive. */
+				addRoot(newRoot);
+				break;
+			    }
+			    oldHeight--;
+			    oldRoot = getRoot(subtractRoots(oldRoot,simpleRoot), oldHeight);
+			}
 		    }
 		}
 	    }
 	    
-	    if(addedSomething)
+	    if(numPosRoots > prevNumPosRoots)
 	    {
-		/** Add the next height of roots to the root table */
 		constructedHeight++;
+		System.out.println(numPosRoots);
 	    }
 	    else
 	    {
@@ -225,30 +325,53 @@ public class CGroup
     private boolean addRoot(CRoot root)
     {
 	Vector<CRoot> roots;
-	try
+	if(rootTable.size() > root.height())
 	{
-	    roots = rootTable.get(root.height);
+	    roots = rootTable.get(root.height());
 	    if(roots.contains(root))
 		return false;
 	    roots.add(root);
 	}
-	catch (Exception e)
+	else
 	{
 	    roots = new Vector<CRoot>();
 	    roots.add(root);
-	    rootTable.add(root.height,roots);
+	    rootTable.add(root.height(),roots);
 	}
 	numPosRoots++;
 	return true;
     }
     
-    
+    /**
+     * Takes two roots and returns their sum.
+     *
+     * @param	root1	 The first root to add to the second.
+     * @param	root2	 The second root to add to the first.
+     * @return		 root1 + root2.
+     */
     private CRoot sumRoots(CRoot root1, CRoot root2)
     {
 	int[] rootVector = new int[rank];
 	for (int i = 0; i < rank; i++)
 	{
 	    rootVector[i] = root1.vector[i] + root2.vector[i];
+	}
+	return new CRoot(rootVector);
+    }
+    
+    /**
+     * Takes two roots and returns their difference.
+     *
+     * @param	root1	 The first root from which the second is subtracted.
+     * @param	root2	 The root to subtract from the first.
+     * @return		 root1 - root2.
+     */
+    private CRoot subtractRoots(CRoot root1, CRoot root2)
+    {
+	int[] rootVector = new int[rank];
+	for (int i = 0; i < rank; i++)
+	{
+	    rootVector[i] = root1.vector[i] - root2.vector[i];
 	}
 	return new CRoot(rootVector);
     }
@@ -264,7 +387,7 @@ public class CGroup
 	    {
 		if(first)
 		{
-		    System.out.println("====== height: " + root.height + " ========");
+		    System.out.println("====== height: " + root.height() + " ========");
 		    first = false;
 		}
 		System.out.println(Globals.intArrayToString(root.vector));

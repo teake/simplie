@@ -13,25 +13,48 @@ package tan.leveldecomposition.group;
  */
 public class CRoot
 {
-    public int[]    vector;
-    public int	    height;
-    public int	    mult;
-    public int	    norm;
+    public  int[]	vector;
+    private Integer	height;
     
-    /** 
+    /**
      * Creates a new instance of CRoot.
      *
-     * @param	rootVector   Integer array representing the root vector 
+     * @param	rootVector   Integer array representing the root vector
      *			     from which we should construct the root.
      */
     public CRoot(int[] rootVector)
     {
 	vector = rootVector;
-	height = 0;
-	for (int i = 0; i < vector.length; i++)
+    }
+    
+    /**
+     * Creates a new instance of CRoot with a trivial vector.
+     *
+     * @param	rank	 The size of the zero-valued vector.
+     */
+    public CRoot(int rank)
+    {
+	vector = new int[rank];
+	for (int i = 0; i < rank; i++)
 	{
-	    height += vector[i];
+	    vector[i] = 0;
 	}
+	height = 0;
+    }
+    
+    
+    
+    public int height()
+    {
+	if(height == null)
+	{
+	    height = 0;
+	    for (int i = 0; i < vector.length; i++)
+	    {
+		height += vector[i];
+	    }
+	}
+	return height;
     }
     
     public boolean equals(Object obj)
@@ -52,7 +75,7 @@ public class CRoot
 	    if(vector[i] != compareRoot.vector[i])
 		return false;
 	}
-
+	
 	return true;
     }
     
