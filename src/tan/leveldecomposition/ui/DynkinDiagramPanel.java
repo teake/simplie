@@ -7,7 +7,7 @@
 package tan.leveldecomposition.ui;
 
 import tan.leveldecomposition.dynkindiagram.*;
-import tan.leveldecomposition.helper.*;
+import tan.leveldecomposition.*;
 
 import java.util.Vector;
 import java.awt.Graphics;
@@ -82,7 +82,7 @@ public class DynkinDiagramPanel extends javax.swing.JPanel
 	g2.drawOval(cTrans(node.x), cTrans(node.y), radius, radius);
 	
 	g2.setFont(font);
-	g2.drawString(Helper.intToString(node.label), cTrans(node.x) + radius/2, cTrans(node.y) + radius + 15);
+	g2.drawString(Globals.intToString(node.label), cTrans(node.x) + radius/2, cTrans(node.y) + radius + 15);
     }
     
     private void paintConnection(CDynkinConnection connection, Graphics2D g2)

@@ -8,7 +8,7 @@
 package tan.leveldecomposition.leveldecomposer;
 
 import tan.leveldecomposition.dynkindiagram.DynkinDiagram;
-import tan.leveldecomposition.helper.*;
+import tan.leveldecomposition.*;
 
 import Jama.Matrix;
 import java.util.Vector;
@@ -61,15 +61,15 @@ public class LevelHelper
 	Matrix cM	= DynkinDiagram.GetCartanMatrix();
 	Matrix subInv	= DynkinDiagram.GetCartanSubMatrix().inverse();
 	
-	LevelHelper.rank	= DynkinDiagram.GetRank();
-	LevelHelper.subRank	= DynkinDiagram.GetSubRank();
+	LevelHelper.rank	= Globals.group.rank;
+	LevelHelper.subRank	= Globals.subGroup.rank;
 	LevelHelper.coRank	= LevelHelper.rank - LevelHelper.subRank;
 	LevelHelper.subFactor	= LevelHelper.subRank + 1;
 	
 	LevelHelper.enabledNodes = DynkinDiagram.GetEnabledNodes();
 	
 	LevelHelper.cartanMatrix   = new int[rank][rank];
-	LevelHelper.S		    = new int[subRank][subRank];
+	LevelHelper.S		   = new int[subRank][subRank];
 	
 	/**
 	 * Copy both matrices into integer arrays.

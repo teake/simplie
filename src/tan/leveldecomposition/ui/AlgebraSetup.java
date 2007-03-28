@@ -7,7 +7,6 @@
 package tan.leveldecomposition.ui;
 
 import tan.leveldecomposition.dynkindiagram.*;
-import tan.leveldecomposition.helper.*;
 import tan.leveldecomposition.group.*;
 import tan.leveldecomposition.*;
 
@@ -44,11 +43,11 @@ public class AlgebraSetup extends javax.swing.JPanel
 	subAlgebraInfo.SetDim(Globals.subGroup.dimension);
 	subAlgebraInfo.SetCMDet(Globals.subGroup.det);
 	
-	TabbedPaneCartanMatrix.setTitleAt(2,"Subalgebra inverse * " + (DynkinDiagram.GetSubRank()+1));
+	TabbedPaneCartanMatrix.setTitleAt(2,"Subalgebra inverse * " + (Globals.subGroup.rank+1));
 	
-	taCartanMatrix.setText(Helper.matrixToString(DynkinDiagram.GetCartanMatrix(), 0));
-	taCartanSubMatrix.setText(Helper.matrixToString(DynkinDiagram.GetCartanSubMatrix(), 0));
-	taCartanSubInvMatrix.setText(Helper.matrixToString(DynkinDiagram.GetCartanSubMatrix().inverse().times(DynkinDiagram.GetSubRank()+1), 1));
+	taCartanMatrix.setText(Globals.matrixToString(DynkinDiagram.GetCartanMatrix(), 0));
+	taCartanSubMatrix.setText(Globals.matrixToString(DynkinDiagram.GetCartanSubMatrix(), 0));
+	taCartanSubInvMatrix.setText(Globals.matrixToString(DynkinDiagram.GetCartanSubMatrix().inverse().times(Globals.subGroup.rank+1), 1));
 	
 	dynkinDiagramPanel.repaint();	
     }

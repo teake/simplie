@@ -6,7 +6,7 @@
 
 package tan.leveldecomposition.ui.reusable;
 
-import tan.leveldecomposition.helper.*;
+import tan.leveldecomposition.*;
 
 /**
  *
@@ -35,7 +35,7 @@ public class UIAlgebraInfo extends javax.swing.JPanel
     
     public void SetRank(int rank)
     {
-	algebraInfoRank.setText(Helper.intToString(rank));
+	algebraInfoRank.setText(Globals.intToString(rank));
     }
     
     public void SetDim(String dim)
@@ -45,7 +45,7 @@ public class UIAlgebraInfo extends javax.swing.JPanel
     
     public void SetCMDet(int det)
     {
-	algebraInfoCMDet.setText(Helper.intToString(det));
+	algebraInfoCMDet.setText(Globals.intToString(det));
     }
     
     

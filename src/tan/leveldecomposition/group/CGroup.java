@@ -7,7 +7,7 @@
 
 package tan.leveldecomposition.group;
 
-import tan.leveldecomposition.helper.*;
+import tan.leveldecomposition.*;
 import java.util.Vector;
 import Jama.Matrix;
 import java.text.DecimalFormat;
@@ -18,19 +18,34 @@ import java.text.DecimalFormat;
  */
 public class CGroup
 {
-    /** Public properties */
+    /**
+     * Public properties
+     */
+    
+    /** The Cartan matrix of the group. */
     public int[][]  cartanMatrix;
-    public int	    rank;
+    /** The determinant of the Cartan Matrix. */
     public int	    det;
-    public int	    numRoots;
+    /** The rank of the group. */
+    public int	    rank;
+    /** The dimension of the group (i.e. the number of generators). Only set for finite groups. */
     public int	    dim;
+    /** String value of dim. "Infinite" if the group is infinite. */
     public String   dimension;
+    /** The type of the group (e.g. "A1", "E6", etc) */
     public String   type;
+    /** Boolean indicating whethet the group is finite or not. */
     public boolean  finite;
     
-    /** Private properties */
+    /** 
+     * Private properties 
+     */
+    
+    /** The height up to and included to which we constructed the root system. */
     private int		    constructedHeight;
+    /** The number of positive roots constructed so far. */
     private int		    numPosRoots;
+    /** The table containing all the (positive) roots. */
     private Vector<Vector>  rootTable;
     
     
@@ -65,8 +80,8 @@ public class CGroup
 	
 	/** Try to determine the group type */
 	// TODO: make this algorithm find more types
-	Matrix compare = Helper.regularMatrix(rank);
-	if(Helper.sameMatrices(compare,cartanMatrix))
+	Matrix compare = Globals.regularMatrix(rank);
+	if(Globals.sameMatrices(compare,cartanMatrix))
 	    type = "A" + rank;
 	else
 	{
@@ -74,7 +89,7 @@ public class CGroup
 	    compare.set(3,0,-1);
 	    compare.set(0,1,0);
 	    compare.set(1,0,0);
-	    if(Helper.sameMatrices(compare,cartanMatrix))
+	    if(Globals.sameMatrices(compare,cartanMatrix))
 		type = "E" + rank;
 	}
 	
@@ -98,7 +113,7 @@ public class CGroup
 	{
 	    constructRootSystem(0);
 	    dim		= 2 * numPosRoots + rank;
-	    dimension	= Helper.intToString(dim);
+	    dimension	= Globals.intToString(dim);
 	}
 	else
 	{
@@ -240,11 +255,19 @@ public class CGroup
     
     private void printRootTable()
     {
+	boolean first;
+	
 	for(Vector<CRoot> roots : rootTable)
 	{
+	    first = true;
 	    for(CRoot root : roots)
 	    {
-		System.out.println(Helper.intArrayToString(root.vector));
+		if(first)
+		{
+		    System.out.println("====== height: " + root.height + " ========");
+		    first = false;
+		}
+		System.out.println(Globals.intArrayToString(root.vector));
 	    }
 	}
     }

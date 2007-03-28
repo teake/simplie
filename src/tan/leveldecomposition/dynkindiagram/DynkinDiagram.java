@@ -43,27 +43,6 @@ public class DynkinDiagram
 	nodes.clear();
 	connections.clear();
     }
-    /** Returns the rank of the whole algebra */
-    public static int GetRank()
-    {
-	if(nodes == null)
-	    System.out.println("blablabla");
-	return nodes.size();
-    }
-    
-    /** Returns the rank of the subalgebra. */
-    public static int GetSubRank()
-    {
-	int subRank = 0;
-	for (CDynkinNode node : nodes)
-	{
-	    if(node.enabled)
-	    {
-		subRank++;
-	    }
-	}
-	return subRank;
-    }
     
     /**
      * Returns an array of booleans.
@@ -71,8 +50,8 @@ public class DynkinDiagram
      */
     public static boolean[] GetEnabledNodes()
     {
-	boolean[] enabledNodes = new boolean[GetRank()];
-	for (int i = 0; i < GetRank(); i++)
+	boolean[] enabledNodes = new boolean[nodes.size()];
+	for (int i = 0; i < nodes.size(); i++)
 	{
 	    if(GetNodeByLabel(i+1).enabled)
 		enabledNodes[i] = true;
@@ -163,8 +142,8 @@ public class DynkinDiagram
     {
 	Refactor();
 	
-	Matrix cartanMatrix = new Matrix(GetRank(),GetRank());
-	for(int i = 0; i < GetRank(); i++)
+	Matrix cartanMatrix = new Matrix(nodes.size(),nodes.size());
+	for(int i = 0; i < nodes.size(); i++)
 	{
 	    cartanMatrix.set(i,i,2);
 	    for (CDynkinConnection connection : connections)
@@ -184,8 +163,15 @@ public class DynkinDiagram
     /** Returns the Cartan matrix of the subalgebra */
     public static Matrix GetCartanSubMatrix()
     {
-	int subRank = GetSubRank();
-	int rank    = GetRank();
+	int subRank = 0;
+	for (CDynkinNode node : nodes)
+	{
+	    if(node.enabled)
+	    {
+		subRank++;
+	    }
+	}
+	int rank    = nodes.size();
 	int offsetI = 0;
 	int offsetJ = 0;
 	

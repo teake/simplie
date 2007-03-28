@@ -6,9 +6,10 @@
 
 package tan.leveldecomposition.ui.reusable;
 
+import tan.leveldecomposition.*;
+
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import tan.leveldecomposition.helper.*;
 import javax.swing.event.*;
 
 /**
@@ -74,12 +75,12 @@ public class UILevelTextfield extends javax.swing.JPanel
     }
     public int GetValue()
     {
-	return Helper.stringToInt(tfLevel.getText());
+	return Globals.stringToInt(tfLevel.getText());
     }
     
     public void SetValue(int value)
     {
-	tfLevel.setText(Helper.intToString(value));
+	tfLevel.setText(Globals.intToString(value));
     }
     
     public void LinkTo(UILevelTextfield linkTo)

@@ -8,7 +8,7 @@
 package tan.leveldecomposition.leveldecomposer;
 
 import tan.leveldecomposition.dynkindiagram.*;
-import tan.leveldecomposition.helper.*;
+import tan.leveldecomposition.*;
 
 import javax.swing.SwingWorker;
 import javax.swing.table.DefaultTableModel;
@@ -41,7 +41,7 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
     {
 	if(minLevel > maxLevel)
 	    return null;
-	if(DynkinDiagram.GetRank() == DynkinDiagram.GetSubRank())
+	if(Globals.group.rank == Globals.subGroup.rank)
 	    return null;
 	
 	LevelHelper.Setup();
@@ -187,14 +187,31 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 			    numIndices += dynkinLabels[i] * (i+1);
 			}
 			
+			/** Construct the whole root vector and see if it's present */
+			int[] rootVector =  new int[LevelHelper.rank];
+			int mult = 0;
+			for (int i = 0; i < LevelHelper.subRank; i++)
+			{
+			    rootVector[LevelHelper.TranslateSubIndex(i)] = rootComponents[i];
+			}
+			for (int i = 0; i < LevelHelper.coRank; i++)
+			{
+			    rootVector[LevelHelper.TranslateCoIndex(i)] = levels[i];
+			}
+			if(Globals.group.getRoot(rootVector) != null)
+			{
+			    mult = 1;
+			}
+			
 			/** Add the data to the table */
-			Object[] rowData = new Object[6];
-			rowData[0] = Helper.intArrayToString(levels);
-			rowData[1] = Helper.intArrayToString(dynkinLabels);
-			rowData[2] = Helper.intArrayToString(coDynkinLabels);
-			rowData[3] = Helper.intArrayToString(rootComponents);
+			Object[] rowData = new Object[7];
+			rowData[0] = Globals.intArrayToString(levels);
+			rowData[1] = Globals.intArrayToString(dynkinLabels);
+			rowData[2] = Globals.intArrayToString(coDynkinLabels);
+			rowData[3] = Globals.intArrayToString(rootComponents);
 			rowData[4] = rootLength / LevelHelper.subFactor;
-			rowData[5] = numIndices;
+			rowData[5] = mult;
+			rowData[6] = numIndices;
 			publish(rowData);
 		    }
 		}

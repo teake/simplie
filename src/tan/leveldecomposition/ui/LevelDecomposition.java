@@ -8,7 +8,7 @@ package tan.leveldecomposition.ui;
 
 import tan.leveldecomposition.dynkindiagram.*;
 import tan.leveldecomposition.leveldecomposer.*;
-import tan.leveldecomposition.helper.*;
+import tan.leveldecomposition.*;
 
 import java.util.*;
 import javax.swing.table.*;
@@ -81,17 +81,17 @@ public class LevelDecomposition extends javax.swing.JPanel
             },
             new String []
             {
-                "l", "p", "p deleted", "m", "root length", "# indices"
+                "l", "p", "p deleted", "m", "root length", "mult", "# indices"
             }
         )
         {
             Class[] types = new Class []
             {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Integer.class
             };
             boolean[] canEdit = new boolean []
             {
-                false, false, false, false, false, false
+                false, false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex)
