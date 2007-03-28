@@ -36,19 +36,19 @@ public class AlgebraSetup extends javax.swing.JPanel
 	
 	algebraInfo.SetType(Globals.group.type);
 	algebraInfo.SetRank(Globals.group.rank);
-	algebraInfo.SetDim(Globals.group.dim);
+	algebraInfo.SetDim(Globals.group.dimension);
 	algebraInfo.SetCMDet(Globals.group.det);
 	
 	subAlgebraInfo.SetType(Globals.subGroup.type);
 	subAlgebraInfo.SetRank(Globals.subGroup.rank);
-	subAlgebraInfo.SetDim(Globals.subGroup.dim);
+	subAlgebraInfo.SetDim(Globals.subGroup.dimension);
 	subAlgebraInfo.SetCMDet(Globals.subGroup.det);
 	
 	TabbedPaneCartanMatrix.setTitleAt(2,"Subalgebra inverse * " + (DynkinDiagram.GetSubRank()+1));
 	
-	taCartanMatrix.setText(Helper.MatrixToString(DynkinDiagram.GetCartanMatrix(), 0));
-	taCartanSubMatrix.setText(Helper.MatrixToString(DynkinDiagram.GetCartanSubMatrix(), 0));
-	taCartanSubInvMatrix.setText(Helper.MatrixToString(DynkinDiagram.GetCartanSubMatrix().inverse().times(DynkinDiagram.GetSubRank()+1), 1));
+	taCartanMatrix.setText(Helper.matrixToString(DynkinDiagram.GetCartanMatrix(), 0));
+	taCartanSubMatrix.setText(Helper.matrixToString(DynkinDiagram.GetCartanSubMatrix(), 0));
+	taCartanSubInvMatrix.setText(Helper.matrixToString(DynkinDiagram.GetCartanSubMatrix().inverse().times(DynkinDiagram.GetSubRank()+1), 1));
 	
 	dynkinDiagramPanel.repaint();	
     }

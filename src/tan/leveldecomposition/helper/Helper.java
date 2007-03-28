@@ -18,6 +18,10 @@ import java.text.DecimalFormat;
  */
 public class Helper
 {
+    /**
+     * Singleton stuff
+     */
+    
     private static Helper _instance = null;
     
     /** Private constructor */
@@ -37,7 +41,11 @@ public class Helper
 	return _instance;
     }
     
-    public static int StringtoInt(String string)
+    /**
+     * Actual helper functions
+     */
+    
+    public static int stringToInt(String string)
     {
 	int value;
 	try
@@ -51,25 +59,30 @@ public class Helper
 	return value;
     }
 
-    public static String IntToString(int x)
+    public static String intToString(int x)
     {
 	Integer value = new Integer(x);
 	return value.toString();
     }
     
     
-    public static String IntArrayToString(int[] array)
+    public static String intArrayToString(int[] array)
     {
 	String output = new String();
 	for (int i = 0; i < array.length; i++)
 	{
-	    output += IntToString(array[i]) + " ";
+	    output += intToString(array[i]) + " ";
 	}
 	return output;
     }
     
-    /** Returns the A_n cartan matrix of the given rank */
-    public static Matrix RegularMatrix(int rank)
+    /** 
+     * Returns the A_n cartan matrix of the given rank.
+     *
+     * @param	 rank	 The rank of the A_n matrix to be returned.
+     * @return		 The A_n cartan matrix of the given rank.
+     */
+    public static Matrix regularMatrix(int rank)
     {
 	Matrix matrix = new Matrix(rank, rank);
 	for (int i = 0; i < rank; i++)
@@ -85,7 +98,40 @@ public class Helper
 	return matrix;
     }
     
-    public static String MatrixToString(Matrix matrix, int decimalPlates)
+    /**
+     * Compares two Matrices.
+     * Appareantly Matrix.equals() isn't properly implemented ...
+     *
+     * @param	matrix1	 The first matrix we compare against the second.
+     * @param	matrix2	 The second matrix we compare against the first.
+     * @return		 True if the matrices are the same, false otherwise.
+     */
+    public static boolean sameMatrices(Matrix matrix1, Matrix matrix2)
+    {
+	if(matrix1.getColumnDimension() != matrix2.getColumnDimension())
+	    return false;
+	if(matrix1.getRowDimension() != matrix2.getRowDimension())
+	    return false;
+	for (int i = 0; i < matrix1.getRowDimension(); i++)
+	{
+	    for (int j = 0; j < matrix1.getColumnDimension(); j++)
+	    {
+		if(matrix1.get(i,j) != matrix2.get(i,j))
+		    return false;
+	    }
+	}
+	return true;
+    }
+        
+    /** 
+     * Takes a matrix and returns it as a string, 
+     * with all entries formatted to have the given decimal plates.
+     *
+     * @param	matrix		 The matrix to be formatted to a string.
+     * @param	decimalPlates	 The number of decimals each entry will have.
+     * @return			 A string representing the matrix.
+     */
+    public static String matrixToString(Matrix matrix, int decimalPlates)
     {
 	/** Set up the decimal format for double -> string parsing */
 	String dfPattern = new String("0");

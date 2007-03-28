@@ -35,17 +35,17 @@ public class UIAlgebraInfo extends javax.swing.JPanel
     
     public void SetRank(int rank)
     {
-	algebraInfoRank.setText(Helper.IntToString(rank));
+	algebraInfoRank.setText(Helper.intToString(rank));
     }
     
-    public void SetDim(int dim)
+    public void SetDim(String dim)
     {
-	algebraInfoDim.setText(Helper.IntToString(dim));
+	algebraInfoDim.setText(dim);
     }
     
     public void SetCMDet(int det)
     {
-	algebraInfoCMDet.setText(Helper.IntToString(det));
+	algebraInfoCMDet.setText(Helper.intToString(det));
     }
     
     

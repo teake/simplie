@@ -24,9 +24,9 @@ public class CGroup
     public int	    det;
     public int	    numRoots;
     public int	    dim;
+    public String   dimension;
+    public String   type;
     public boolean  finite;
-    public String   type; //TODO: implement ("E_n", "A_n", etc)
-    
     
     /** Private properties */
     private int		    constructedHeight;
@@ -38,7 +38,11 @@ public class CGroup
      * Public methods
      */
     
-    /** Creates a new instance of CGroup */
+    /**
+     * Creates a new instance of CGroup.
+     *
+     * @param cartanMatrix    The Cartan matrix from which to construct the group.
+     */
     public CGroup(Matrix cartanMatrix)
     {
 	/** Do some preliminary checks */
@@ -57,22 +61,22 @@ public class CGroup
 	    }
 	}
 	det    = (int) Math.round(cartanMatrix.det());
-	finite = (this.det > 0) ? true : false;
+	finite = (det > 0) ? true : false;
 	
 	/** Try to determine the group type */
-	Matrix diff = Helper.RegularMatrix(rank).minus(cartanMatrix);
-	boolean zero = true;
-	for (int i = 0; i < rank; i++)
-	{
-	    for (int j = 0; j < rank; j++)
-	    {
-		if(diff.get(i,j) != 0)
-		    zero = false;
-	    }
-	}
-	if(zero)
+	// TODO: make this algorithm find more types
+	Matrix compare = Helper.regularMatrix(rank);
+	if(Helper.sameMatrices(compare,cartanMatrix))
 	    type = "A" + rank;
-	
+	else
+	{
+	    compare.set(0,3,-1);
+	    compare.set(3,0,-1);
+	    compare.set(0,1,0);
+	    compare.set(1,0,0);
+	    if(Helper.sameMatrices(compare,cartanMatrix))
+		type = "E" + rank;
+	}
 	
 	/** Add an empty Vector at index 0 of the root table */
 	rootTable = new Vector<Vector>();
@@ -93,10 +97,46 @@ public class CGroup
 	if(finite)
 	{
 	    constructRootSystem(0);
-	    dim = 2 * numPosRoots + rank;
+	    dim		= 2 * numPosRoots + rank;
+	    dimension	= Helper.intToString(dim);
 	}
-     }
+	else
+	{
+	    dimension	= "Infinite";
+	}
+    }
     
+    
+    /**
+     * Get a root by its root vector.
+     *
+     * @param vector	 The root vector of the root we should get.
+     * @return		 A pointer to the root if found, and null if not found.
+     */
+    public CRoot getRoot(int[] vector)
+    {
+	CRoot		rootToGet;
+	Vector<CRoot>	roots;
+	
+	rootToGet = new CRoot(vector);
+	/** If we haven't constructed the root system this far, do so now. */
+	if(rootToGet.height > constructedHeight)
+	    constructRootSystem(rootToGet.height);
+	/** Try to fetch the root. */
+	try
+	{
+	    roots = rootTable.get(rootToGet.height);
+	    for(CRoot root : roots)
+	    {
+		if(root.equals(rootToGet))
+		    return root;
+	    }
+	}
+	catch (Exception e)
+	{
+	}
+	return null;
+    }
     
     /**
      * Private methods
@@ -104,7 +144,9 @@ public class CGroup
     
     /**
      * Construct the root system up to the given height.
-     * If maxHeight == 0, construct the whole root system.
+     *
+     * @param maxHeight	 The height up to and including which we should construct the root system.
+     *			 Construct the whole root system if maxHeight == 0.
      */
     private void constructRootSystem(int maxHeight)
     {
@@ -158,6 +200,13 @@ public class CGroup
 	return result;
     }
     
+    
+    /**
+     * Adds a root to the root table and increments numPosRoots.
+     *
+     * @param	root	 The root to add.
+     * @return		 True if succesfull, false if it already was present.
+     */
     private boolean addRoot(CRoot root)
     {
 	Vector<CRoot> roots;
@@ -195,7 +244,7 @@ public class CGroup
 	{
 	    for(CRoot root : roots)
 	    {
-		System.out.println(Helper.IntArrayToString(root.vector));
+		System.out.println(Helper.intArrayToString(root.vector));
 	    }
 	}
     }

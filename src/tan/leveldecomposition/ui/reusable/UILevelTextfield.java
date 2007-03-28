@@ -74,12 +74,12 @@ public class UILevelTextfield extends javax.swing.JPanel
     }
     public int GetValue()
     {
-	return Helper.StringtoInt(tfLevel.getText());
+	return Helper.stringToInt(tfLevel.getText());
     }
     
     public void SetValue(int value)
     {
-	tfLevel.setText(Helper.IntToString(value));
+	tfLevel.setText(Helper.intToString(value));
     }
     
     public void LinkTo(UILevelTextfield linkTo)

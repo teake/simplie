@@ -189,10 +189,10 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 			
 			/** Add the data to the table */
 			Object[] rowData = new Object[6];
-			rowData[0] = Helper.IntArrayToString(levels);
-			rowData[1] = Helper.IntArrayToString(dynkinLabels);
-			rowData[2] = Helper.IntArrayToString(coDynkinLabels);
-			rowData[3] = Helper.IntArrayToString(rootComponents);
+			rowData[0] = Helper.intArrayToString(levels);
+			rowData[1] = Helper.intArrayToString(dynkinLabels);
+			rowData[2] = Helper.intArrayToString(coDynkinLabels);
+			rowData[3] = Helper.intArrayToString(rootComponents);
 			rowData[4] = rootLength / LevelHelper.subFactor;
 			rowData[5] = numIndices;
 			publish(rowData);

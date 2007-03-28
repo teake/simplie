@@ -18,7 +18,12 @@ public class CRoot
     public int	    mult;
     public int	    norm;
     
-    /** Creates a new instance of CRoot */
+    /** 
+     * Creates a new instance of CRoot.
+     *
+     * @param	rootVector   Integer array representing the root vector 
+     *			     from which we should construct the root.
+     */
     public CRoot(int[] rootVector)
     {
 	vector = rootVector;
