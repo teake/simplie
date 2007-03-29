@@ -8,9 +8,9 @@
 package tan.leveldecomposition.group;
 
 import tan.leveldecomposition.*;
-import java.util.Vector;
-import Jama.Matrix;
+import java.util.ArrayList;
 import java.text.DecimalFormat;
+import Jama.Matrix;
 
 /**
  *
@@ -46,7 +46,7 @@ public class CGroup
     /** The number of positive roots constructed so far. */
     private int		    numPosRoots;
     /** The table containing all the (positive) roots. */
-    private Vector<Vector>  rootTable;
+    private ArrayList<ArrayList>  rootTable;
     
     
     
@@ -61,8 +61,8 @@ public class CGroup
      */
     public CGroup(Matrix cartanMatrix)
     {
-	Vector<CRoot>	csaRoots;
-	Matrix		compareMatrix;
+	ArrayList<CRoot> csaRoots;
+	Matrix		 compareMatrix;
 	
 	/** Do some preliminary checks */
 	if(cartanMatrix.getColumnDimension() != cartanMatrix.getRowDimension()
@@ -108,8 +108,8 @@ public class CGroup
 	}
 	
 	/** Add the CSA to the root table */
-	rootTable   = new Vector<Vector>();
-	csaRoots    = new Vector<CRoot>();
+	rootTable   = new ArrayList<ArrayList>();
+	csaRoots    = new ArrayList<CRoot>();
 	csaRoots.add(new CRoot(rank));
 	rootTable.add(0,csaRoots);
 	/** Add the simple roots to the root table */
@@ -178,8 +178,8 @@ public class CGroup
      */
     public CRoot getRoot(CRoot rootToGet, int rootHeight)
     {
-	Vector<CRoot>	roots;
-	int		index;
+	ArrayList<CRoot> roots;
+	int		 index;
 	
 	if(rootHeight < 0)
 	{
@@ -194,7 +194,7 @@ public class CGroup
 	if(rootTable.size() > rootHeight)
 	{
 	    roots = rootTable.get(rootHeight);
-	    index = roots.lastIndexOf(rootToGet);
+	    index = roots.indexOf(rootToGet);
 	    if(index != -1)
 	    {
 		return roots.get(index);
@@ -216,8 +216,8 @@ public class CGroup
      */
     private void constructRootSystem(int maxHeight)
     {
-	Vector<CRoot>	simpleRoots = rootTable.get(1);
-	Vector<CRoot>	prevRoots;
+	ArrayList<CRoot> simpleRoots = rootTable.get(1);
+	ArrayList<CRoot> prevRoots;
 	CRoot		oldRoot;
 	CRoot		newRoot;
 	int		prevNumPosRoots;
@@ -250,6 +250,8 @@ public class CGroup
 		for(CRoot simpleRoot : simpleRoots)
 		{
 		    newRoot = sumRoots(root,simpleRoot);
+		    
+		    /** First check if the new root isn't already present. */
 		    if(rootTable.size() > newHeight)
 		    {
 			if(rootTable.get(newHeight).contains(newRoot))
@@ -270,7 +272,7 @@ public class CGroup
 		    {
 			/** Iterate through the previous heights to obtain n_minus. */
 			n_minus	    = 0;
-			oldHeight   = newHeight - 2;
+			oldHeight   = constructedHeight - 1;
 			oldRoot	    = getRoot(subtractRoots(root,simpleRoot), oldHeight);
 			while(oldRoot != null)
 			{
@@ -324,7 +326,7 @@ public class CGroup
      */
     private boolean addRoot(CRoot root)
     {
-	Vector<CRoot> roots;
+	ArrayList<CRoot> roots;
 	if(rootTable.size() > root.height())
 	{
 	    roots = rootTable.get(root.height());
@@ -334,7 +336,7 @@ public class CGroup
 	}
 	else
 	{
-	    roots = new Vector<CRoot>();
+	    roots = new ArrayList<CRoot>();
 	    roots.add(root);
 	    rootTable.add(root.height(),roots);
 	}
@@ -380,7 +382,7 @@ public class CGroup
     {
 	boolean first;
 	
-	for(Vector<CRoot> roots : rootTable)
+	for(ArrayList<CRoot> roots : rootTable)
 	{
 	    first = true;
 	    for(CRoot root : roots)
