@@ -213,14 +213,15 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 			}
 			
 			/** Add the data to the table */
-			Object[] rowData = new Object[7];
+			Object[] rowData = new Object[8];
 			rowData[0] = Globals.intArrayToString(levels);
 			rowData[1] = Globals.intArrayToString(dynkinLabels);
 			rowData[2] = Globals.intArrayToString(coDynkinLabels);
 			rowData[3] = Globals.intArrayToString(rootComponents);
 			rowData[4] = rootLength / LevelHelper.subFactor;
-			rowData[5] = mult;
-			rowData[6] = numIndices;
+			rowData[5] = Globals.subGroup.dimOfRep(dynkinLabels);
+			rowData[6] = mult;
+			rowData[7] = numIndices;
 			publish(rowData);
 		    }
 		}

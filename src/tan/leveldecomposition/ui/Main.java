@@ -216,7 +216,7 @@ public class Main extends javax.swing.JFrame
 		"Remove node: \n   Control + left mouse \n" +
 		"Add connection: \n   Right mouse \n" +
 		"Remove connection: \n   Control + right mouse \n" +
-		"Toggle node: \n   Middle mouse",
+		"Toggle node: \n   Middle mouse or Alt + left mouse",
 		"Help",
 		optionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_MenuItemHelpActionPerformed

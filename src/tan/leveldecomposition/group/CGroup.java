@@ -87,7 +87,7 @@ public class CGroup
 	compareMatrix = Globals.regularMatrix(rank);
 	if(Globals.sameMatrices(compareMatrix,cartanMatrix))
 	    type = "A" + rank;
-	else
+	else if(rank > 4)
 	{
 	    compareMatrix.set(0,3,-1);
 	    compareMatrix.set(3,0,-1);
@@ -135,6 +135,45 @@ public class CGroup
 	{
 	    dimension	= "Infinite";
 	}
+    }
+    
+    /**
+     * Determines the dimension of the representation defined by
+     * Dynkin labels associated to the given dynkinLabels.
+     *
+     * @param dynkinLabels  The Dynkin labels of the representation.
+     * @return		    The dimension of the presentation.
+     */
+    public int dimOfRep(int[] dynkinLabels)
+    {
+	float	dim;
+	float	p_dot_m;
+	CRoot	weight;
+	
+	/** Preliminary checks. */
+	if(!finite || dynkinLabels.length != rank)
+	    return 0;
+	
+	dim	= 1;
+	weight	= new CRoot(dynkinLabels);
+	
+	for (ArrayList<CRoot> roots : rootTable)
+	{
+	    for(CRoot root : roots)
+	    {
+		if(root.height() != 0)
+		{
+		    p_dot_m = 0;
+		    for (int i = 0; i < rank; i++)
+		    {
+			p_dot_m += dynkinLabels[i] * root.vector[i];
+		    }
+		    dim = dim * ( ( p_dot_m / root.height() ) + 1);
+		}
+	    }
+	}
+	
+	return Math.round(dim);
     }
     
     /**
@@ -293,7 +332,6 @@ public class CGroup
 	    if(numPosRoots > prevNumPosRoots)
 	    {
 		constructedHeight++;
-		System.out.println(numPosRoots);
 	    }
 	    else
 	    {

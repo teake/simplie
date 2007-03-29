@@ -151,7 +151,7 @@ public class DynkinDiagramPanel extends javax.swing.JPanel
 	int y = cTransInv(evt.getY());
 	CDynkinNode node = DynkinDiagram.GetNodeByCoor(x,y);
 	
-	if(evt.getButton() == evt.BUTTON1)
+	if(evt.getButton() == evt.BUTTON1 && !evt.isAltDown())
 	{
 	    if(!evt.isControlDown())
 	    {
@@ -177,7 +177,7 @@ public class DynkinDiagramPanel extends javax.swing.JPanel
 	    return;
 	}
 	
-	if(evt.getButton() == evt.BUTTON2)
+	if(evt.getButton() == evt.BUTTON2 || (evt.getButton() == evt.BUTTON1 && evt.isAltDown() ) )
 	{
 	    stopAddConnection();
 	    node.enabled = !node.enabled;

@@ -82,17 +82,17 @@ public class LevelDecomposition extends javax.swing.JPanel
             },
             new String []
             {
-                "l", "p", "p deleted", "m", "root length", "mult", "# indices"
+                "l", "p", "p deleted", "m", "root length", "dimension", "mult", "# indices"
             }
         )
         {
             Class[] types = new Class []
             {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Integer.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Integer.class
             };
             boolean[] canEdit = new boolean []
             {
-                false, false, false, false, false, false, false
+                false, false, false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex)
