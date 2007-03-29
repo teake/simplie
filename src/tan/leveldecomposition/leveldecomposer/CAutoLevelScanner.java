@@ -21,17 +21,19 @@ import java.util.List;
  */
 public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 {
+    boolean multiplicities;
     int minLevel;
     int maxLevel;
     int levelSign;
     DefaultTableModel tableModel;
     
     /** Creates a new instance of CAutoLevelScanner */
-    public CAutoLevelScanner(DefaultTableModel tableModel, int minLevel, int maxLevel)
+    public CAutoLevelScanner(boolean multiplicities, DefaultTableModel tableModel, int minLevel, int maxLevel)
     {
-	this.tableModel = tableModel;
-	this.minLevel = minLevel;
-	this.maxLevel = maxLevel;
+	this.tableModel	    = tableModel;
+	this.minLevel	    = minLevel;
+	this.maxLevel	    = maxLevel;
+	this.multiplicities = multiplicities;
 	
 	this.levelSign = 0;
     }
@@ -146,6 +148,13 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
     
     private void LoopDynkinLabels(int[] levels, int[] dynkinLabels, int beginIndex, boolean scanFirst)
     {
+	boolean allGoodIntegers;
+	int[]	rootComponents;
+	int[]	coDynkinLabels;
+	int	numIndices;
+	int	mult = 0;
+	int[]	rootVector;
+	
 	if (isCancelled())
 	    return;
 	
@@ -158,8 +167,8 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 		if(LevelHelper.CalculateRootLength(levels, dynkinLabels) <= 2 * LevelHelper.subFactor)
 		{
 		    /** First check if all root components are integers and non-negative. */
-		    int[] rootComponents    = LevelHelper.CalculateRootComponents(levels, dynkinLabels);
-		    boolean allGoodIntegers  = true;
+		    rootComponents  = LevelHelper.CalculateRootComponents(levels, dynkinLabels);
+		    allGoodIntegers = true;
 		    for (int i = 0; i < rootComponents.length; i++)
 		    {
 			if(rootComponents[i] % LevelHelper.subFactor != 0 || rootComponents[i] * levelSign < 0)
@@ -178,29 +187,29 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 			}
 			
 			/** Calculate the remaining Dynkin labels */
-			int[] coDynkinLabels = LevelHelper.CalculateCoDynkinLabels(levels,rootComponents);
+			coDynkinLabels = LevelHelper.CalculateCoDynkinLabels(levels,rootComponents);
 			
 			/** Calculate the number of indices of the subalgebra representation. */
-			int numIndices = 0;
+			numIndices = 0;
 			for (int i = 0; i < dynkinLabels.length; i++)
 			{
 			    numIndices += dynkinLabels[i] * (i+1);
 			}
 			
-			/** Construct the whole root vector and see if it's present */
-			int[] rootVector =  new int[LevelHelper.rank];
-			int mult = 0;
-			for (int i = 0; i < LevelHelper.subRank; i++)
+			if(multiplicities)
 			{
-			    rootVector[LevelHelper.TranslateSubIndex(i)] = rootComponents[i];
-			}
-			for (int i = 0; i < LevelHelper.coRank; i++)
-			{
-			    rootVector[LevelHelper.TranslateCoIndex(i)] = levels[i];
-			}
-			if(Globals.group.getRoot(rootVector) != null)
-			{
-			    mult = 1;
+			    /** Construct the whole root vector and see if it's present */
+			    rootVector =  new int[LevelHelper.rank];
+			    for (int i = 0; i < LevelHelper.subRank; i++)
+			    {
+				rootVector[LevelHelper.TranslateSubIndex(i)] = rootComponents[i];
+			    }
+			    for (int i = 0; i < LevelHelper.coRank; i++)
+			    {
+				rootVector[LevelHelper.TranslateCoIndex(i)] = levels[i];
+			    }
+			    if( Globals.group.getRoot(rootVector) != null )
+				mult = 1;
 			}
 			
 			/** Add the data to the table */
