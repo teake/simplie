@@ -8,6 +8,7 @@
 package tan.leveldecomposition.dynkindiagram;
 
 import java.util.Vector;
+import java.util.Iterator;
 import java.util.Collections;
 import java.io.*;
 import Jama.Matrix;
@@ -241,11 +242,12 @@ public class DynkinDiagram
     public static void RemoveNode(CDynkinNode node)
     {
 	/** check if the node has connections and remove them */
-	for (CDynkinConnection connection : connections)
+	for (Iterator it = connections.iterator(); it.hasNext(); )
 	{
+	    CDynkinConnection connection = (CDynkinConnection) it.next();
 	    if(connection.idNode1 == node.id || connection.idNode2 == node.id)
 	    {
-		connections.remove(connection);
+		it.remove();
 	    }
 	}
 	
