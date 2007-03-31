@@ -16,6 +16,8 @@ package tan.leveldecomposition.math;
  *
  * Changes from the original:
  * - Added a new constructor where the denominator is always 1.
+ * - Added in-place methods for multiplying, dividing, adding and subtracting.
+ * - Added asLong() & asInt() methods.
  */
 
 /**
@@ -89,6 +91,16 @@ public class fraction implements Cloneable, Comparable, java.io.Serializable
 	public double asDouble()
 	{
 		return ((double)(numerator())) / ((double)(denominator()));
+	}
+	
+	public long asLong()
+	{
+		return Math.round(asDouble());
+	}
+	
+	public int asInt()
+	{
+		return (int) asLong();
 	}
 	
 	/**

@@ -26,28 +26,28 @@ public class CGroup
 	/** The Cartan matrix of the group. */
 	public int[][]  cartanMatrix;
 	/** The determinant of the Cartan Matrix. */
-	public int	    det;
+	public int		det;
 	/** The rank of the group. */
-	public int	    rank;
+	public int		rank;
 	/** The dimension of the group (i.e. the number of generators). Only set for finite groups. */
-	public int	    dim;
+	public int		dim;
 	/** String value of dim. "Infinite" if the group is infinite. */
-	public String   dimension;
+	public String	dimension;
 	/** The type of the group (e.g. "A1", "E6", etc) */
-	public String   type;
+	public String	type;
 	/** Boolean indicating whethet the group is finite or not. */
-	public boolean  finite;
+	public boolean	finite;
 	
 	/*********************************
 	 * Private properties
 	 *********************************/
 	
 	/** The height up to and included to which we constructed the root system. */
-	private int		    constructedHeight;
+	private int constructedHeight;
 	/** The number of positive roots constructed so far. */
-	private int		    numPosRoots;
+	private int	numPosRoots;
 	/** The table containing all the (positive) roots. */
-	private ArrayList<ArrayList>  rootTable;
+	private ArrayList<ArrayList> rootTable;
 	
 	
 	
@@ -62,16 +62,15 @@ public class CGroup
 	 */
 	public CGroup(Matrix cartanMatrix)
 	{
-		ArrayList<CRoot> csaRoots;
-		CRoot		 simpleRoot;
-		Matrix		 compareMatrix;
+		CRoot	simpleRoot;
+		Matrix	compareMatrix;
 		
 		/** Do some preliminary checks */
 		if(cartanMatrix.getColumnDimension() != cartanMatrix.getRowDimension())
 			return;
 		if(cartanMatrix.getColumnDimension() == 0)
 		{
-			type	= "Trivial";
+			type		= "Trivial";
 			dimension	= "0";
 			return;
 		}
@@ -89,7 +88,7 @@ public class CGroup
 		det    = (int) Math.round(cartanMatrix.det());
 		finite = (det > 0) ? true : false;
 		
-		rootTable   = new ArrayList<ArrayList>();
+		rootTable = new ArrayList<ArrayList>();
 		
 		/** Add the CSA to the root table */
 		addRoot(new CRoot(rank));
@@ -110,7 +109,7 @@ public class CGroup
 		if(finite)
 		{
 			constructRootSystem(0);
-			dim		= 2 * numPosRoots + rank;
+			dim			= 2 * numPosRoots + rank;
 			dimension	= Globals.intToString(dim);
 		}
 		else
@@ -148,21 +147,19 @@ public class CGroup
 	 * Determines the dimension of the representation defined by
 	 * Dynkin labels associated to the given dynkinLabels.
 	 *
-	 * @param dynkinLabels  The Dynkin labels of the representation.
-	 * @return		    The dimension of the presentation.
+	 * @param	dynkinLabels	The Dynkin labels of the representation.
+	 * @return					The dimension of the presentation.
 	 */
 	public int dimOfRep(int[] dynkinLabels)
 	{
-		float	dim;
-		float	p_dot_m;
-		CRoot	weight;
+		fraction	dim;
+		int			p_dot_m;
 		
 		/** Preliminary checks. */
 		if(!finite || dynkinLabels.length != rank)
 			return 0;
 		
-		dim	= 1;
-		weight	= new CRoot(dynkinLabels);
+		dim	= new fraction(1);
 		
 		for (ArrayList<CRoot> roots : rootTable)
 		{
@@ -175,19 +172,20 @@ public class CGroup
 					{
 						p_dot_m += dynkinLabels[i] * root.vector[i];
 					}
-					dim = dim * ( ( p_dot_m / root.height() ) + 1);
+					dim.multiply( p_dot_m + root.height() );
+					dim.divide( root.height() );
 				}
 			}
 		}
 		
-		return Math.round(dim);
+		return dim.asInt();
 	}
 	
 	/**
 	 * Get a root by its root vector.
 	 *
-	 * @param vector	 The root vector of the root we should get.
-	 * @return		 A pointer to the root if found, and null if not found.
+	 * @param	vector	The root vector of the root we should get.
+	 * @return			A pointer to the root if found, and null if not found.
 	 */
 	public CRoot getRoot(int[] vector)
 	{
@@ -264,8 +262,8 @@ public class CGroup
 	{
 		ArrayList<CRoot> simpleRoots = rootTable.get(1);
 		ArrayList<CRoot> prevRoots;
-		CRoot		oldRoot;
-		CRoot		newRoot;
+		CRoot	oldRoot;
+		CRoot	newRoot;
 		int		prevNumPosRoots;
 		int		innerProduct;
 		int		n_minus;
@@ -282,12 +280,12 @@ public class CGroup
 			 * Try to add the simple roots to all the previous roots.
 			 * The main formula employed here is
 			 *
-			 *	    <alpha, beta> = n_minus - n_plus ,
+			 *		<alpha, beta> = n_minus - n_plus ,
 			 *
 			 * where alpha and beta are roots.
 			 * For simple roots beta this reduces to
 			 *
-			 *	    (alpha, beta) = n_minus - n_plus .
+			 *		(alpha, beta) = n_minus - n_plus .
 			 *
 			 * If n_plus is positive, then alpha + beta is again a root.
 			 */
@@ -317,9 +315,9 @@ public class CGroup
 					if(innerProduct >= 0)
 					{
 						/** Iterate through the previous heights to obtain n_minus. */
-						n_minus	    = 0;
-						oldHeight   = constructedHeight - 1;
-						oldRoot	    = getRoot(root.minus(simpleRoot), oldHeight);
+						n_minus		= 0;
+						oldHeight	= constructedHeight - 1;
+						oldRoot		= getRoot(root.minus(simpleRoot), oldHeight);
 						while(oldRoot != null)
 						{
 							n_minus++;
@@ -401,15 +399,15 @@ public class CGroup
 			{
 				/** We don't need to calculate these for roots with norm 1. */
 				// TODO: check if this is true! Look it up in Kac (1990) e.g. ...
-				root.mult   = 1;
-				root.c_mult = new fraction(1);
+				root.mult	= 1;
+				root.c_mult	= new fraction(1);
 				break;
 			}
 			case 0:
 			{
 				// TODO: same here ...
-				root.mult = 8;
-				root.c_mult = new fraction(8);
+				root.mult	= 8;
+				root.c_mult	= new fraction(8);
 				break;
 			}
 			default:
@@ -464,7 +462,7 @@ public class CGroup
 				}
 				multiplicity.divide( innerProduct(root,root) - (2 * root.height() ) );
 				multiplicity.subtract(c_mult);
-				root.mult	= Math.round(multiplicity.asDouble());
+				root.mult	= multiplicity.asLong();
 				root.c_mult = c_mult.plus(root.mult);
 				//System.out.println(multiplicity.toString());
 				//System.out.println(multiplicity.asDouble());
