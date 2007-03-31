@@ -7,7 +7,8 @@
 
 package tan.leveldecomposition.group;
 
-import EDU.oswego.cs.dl.util.concurrent.misc.Fraction;
+import tan.leveldecomposition.math.*;
+import tan.leveldecomposition.*;
 
 /**
  *
@@ -16,11 +17,11 @@ import EDU.oswego.cs.dl.util.concurrent.misc.Fraction;
 public class CRoot
 {
 	/** The root vector. */
-	public  int[]	vector;
+	public int[]	vector;
 	/** The root multiplicity. */
-	public  long		mult;
+	public long		mult;
 	/** Sum over multiplicities of roots that are fractionals of this one (used in Peterson's formula). */
-	public  Fraction	c_mult;
+	public fraction	c_mult;
 	/** The height of the root (lazily calculated). */
 	private Integer	height;
 	
@@ -153,6 +154,15 @@ public class CRoot
 		}
 		
 		return true;
+	}
+	
+	/** Overrides default toString method */
+	public String toString()
+	{
+		return "height: " + height() + 
+			", vector: " + Globals.intArrayToString(vector) +
+			", mult: " + mult +
+			", c_mult: " + c_mult;
 	}
 	
 }

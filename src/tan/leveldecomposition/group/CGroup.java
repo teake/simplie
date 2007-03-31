@@ -8,10 +8,10 @@
 package tan.leveldecomposition.group;
 
 import tan.leveldecomposition.*;
+import tan.leveldecomposition.math.*;
 import java.util.ArrayList;
 import java.text.DecimalFormat;
 import Jama.Matrix;
-import EDU.oswego.cs.dl.util.concurrent.misc.Fraction;
 
 /**
  *
@@ -386,18 +386,33 @@ public class CGroup
 			rootTable.add(root.height(),roots);
 		}
 		
-		if(root.height() > 0)
+		/** And add it to the table */
+		roots.add(root);
+		
+		if(root.height() == 0)
+			return true;
+		
+		/** Increment numPosRoots */
+		numPosRoots++;
+		
+		switch(innerProduct(root,root))
 		{
-			/** Increment numPosRoots */
-			numPosRoots++;
-			
-			if(root.height() == 1)
+			case 2:
 			{
-				/** We don't need to calculate these for the simple roots. */
+				/** We don't need to calculate these for roots with norm 1. */
+				// TODO: check if this is true! Look it up in Kac (1990) e.g. ...
 				root.mult   = 1;
-				root.c_mult = new Fraction(1,1);
+				root.c_mult = new fraction(1);
+				break;
 			}
-			else
+			case 0:
+			{
+				// TODO: same here ...
+				root.mult = 8;
+				root.c_mult = new fraction(8);
+				break;
+			}
+			default:
 			{
 				/** Determine its c_mult minus the root multiplicity. */
 				// First see how far we should sum.
@@ -408,7 +423,7 @@ public class CGroup
 						highestK = root.vector[i];
 				}
 				// Now sum over all fractional roots.
-				Fraction c_mult	= new Fraction(0,1);
+				fraction c_mult	= new fraction(0);
 				for (int i = 2; i < highestK + 1; i++)
 				{
 					CRoot divRoot = root.div(i);
@@ -417,13 +432,19 @@ public class CGroup
 						CRoot alpha = getRoot(divRoot);
 						if(alpha != null)
 						{
-							c_mult = c_mult.plus(new Fraction(alpha.mult,i));
+							/*
+							System.out.println("found for root:");
+							System.out.println(root.toString());
+							System.out.println("fractional:");
+							System.out.println(alpha.toString());
+							 */
+							c_mult.add(new fraction(alpha.mult,i));
 						}
 					}
 				}
 				
 				/** Determine its multiplicity. */
-				Fraction petersonNumerator = new Fraction(0,1);
+				fraction multiplicity = new fraction(0);
 				for(int i = 1; i < root.height(); i++)
 				{
 					ArrayList<CRoot> betas	= rootTable.get(i);
@@ -434,44 +455,32 @@ public class CGroup
 						{
 							if(beta.plus(gamma).equals(root))
 							{
-								Fraction c_betagamma = beta.c_mult.times(gamma.c_mult);
-								Fraction part = c_betagamma.times(innerProduct(beta,gamma));
-								petersonNumerator = petersonNumerator.plus(part);
+								fraction part = beta.c_mult.times(gamma.c_mult);
+								part.multiply(innerProduct(beta,gamma));
+								multiplicity.add(part);
 							}
 						}
 					}
 				}
-				Fraction mult = (petersonNumerator.dividedBy( innerProduct(root,root) - (2 * root.height()) )).minus(c_mult);
-				//System.out.println(mult.toString());
-				root.mult = Math.round(mult.asDouble());
-				//System.out.println(root.mult);
+				multiplicity.divide( innerProduct(root,root) - (2 * root.height() ) );
+				multiplicity.subtract(c_mult);
+				root.mult	= Math.round(multiplicity.asDouble());
 				root.c_mult = c_mult.plus(root.mult);
+				//System.out.println(multiplicity.toString());
+				//System.out.println(multiplicity.asDouble());
 			}
+			
 		}
-		/** And add it to the table */
-		roots.add(root);
 		return true;
 	}
 	
 	private void printRootTable()
 	{
-		boolean first;
-		
 		for(ArrayList<CRoot> roots : rootTable)
 		{
-			first = true;
 			for(CRoot root : roots)
 			{
-				if(first)
-				{
-					System.out.println("====== height: " + root.height() + " ========");
-					first = false;
-				}
-				System.out.println(
-						"vector: " + Globals.intArrayToString(root.vector) +
-						", mult: " + root.mult +
-						", c_mult: " + root.c_mult
-						);
+				System.out.println(root.toString());
 			}
 		}
 	}
