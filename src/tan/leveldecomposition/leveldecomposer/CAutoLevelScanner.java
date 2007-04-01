@@ -153,7 +153,7 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 		int[]	rootComponents;
 		int[]	coDynkinLabels;
 		int		numIndices;
-		long		mult = 0;
+		long	mult = 0;
 		int[]	rootVector;
 		
 		if (isCancelled())

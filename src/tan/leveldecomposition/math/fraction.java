@@ -20,10 +20,6 @@ package tan.leveldecomposition.math;
  * - Added asLong() & asInt() methods.
  */
 
-/**
- * An immutable class representing fractions as pairs of longs.
- * fractions are always maintained in reduced form.
- */
 public class fraction implements Cloneable, Comparable, java.io.Serializable
 {
 	private long numerator;
