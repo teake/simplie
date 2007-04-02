@@ -406,53 +406,19 @@ public class CGroup
 		/** Increment numPosRoots */
 		numPosRoots++;
 		
-		switch(innerProduct(root,root))
+		switch(root.height())
 		{
-			case 2:
+			case 1:
 			{
-				/** We don't need to calculate these for roots with norm 1. */
-				// TODO: check if this is true! Look it up in Kac (1990) e.g. ...
+				/** We don't need to calculate these for the simple roots. */
 				root.mult	= 1;
 				root.c_mult	= new fraction(1);
-				break;
-			}
-			case 0:
-			{
-				// TODO: same here ...
-				root.mult	= 8;
-				root.c_mult	= new fraction(8);
 				break;
 			}
 			default:
 			{
 				/** Determine its c_mult minus the root multiplicity. */
-				// First see how far we should sum.
-				int highestK = 0;
-				for (int i = 0; i < rank; i++)
-				{
-					if(root.vector[i] > highestK)
-						highestK = root.vector[i];
-				}
-				// Now sum over all fractional roots.
-				fraction c_mult	= new fraction(0);
-				for (int i = 2; i < highestK + 1; i++)
-				{
-					CRoot divRoot = root.div(i);
-					if(divRoot != null)
-					{
-						CRoot alpha = getRoot(divRoot);
-						if(alpha != null)
-						{
-							/*
-							System.out.println("found for root:");
-							System.out.println(root.toString());
-							System.out.println("fractional:");
-							System.out.println(alpha.toString());
-							 */
-							c_mult.add(new fraction(alpha.mult,i));
-						}
-					}
-				}
+				fraction coMult = coMult(root);
 				
 				/** Determine its multiplicity. */
 				fraction multiplicity = new fraction(0);
@@ -474,15 +440,49 @@ public class CGroup
 					}
 				}
 				multiplicity.divide( innerProduct(root,root) - (2 * root.height() ) );
-				multiplicity.subtract(c_mult);
+				multiplicity.subtract(coMult);
 				root.mult	= multiplicity.asLong();
-				root.c_mult = c_mult.plus(root.mult);
+				root.c_mult = coMult.plus(root.mult);
 				//System.out.println(multiplicity.toString());
 				//System.out.println(multiplicity.asDouble());
 			}
 			
 		}
 		return true;
+	}
+	
+	/**
+	 * Calculates the "co-multiplicity", i.e. the fractional sum of multiplicities
+	 * of all fractional roots. Used in the Peterson formula.
+	 *
+	 * @param	root	The root whose co-multiplicity we should calculate.
+	 * @return			The co-multiplicity.
+	 */
+	private fraction coMult(CRoot root)
+	{
+		/** First see how far we should sum. */
+		int highestK = 0;
+		for (int i = 0; i < rank; i++)
+		{
+			if(root.vector[i] > highestK)
+				highestK = root.vector[i];
+		}
+		
+		/** Now sum over all fractional roots. */
+		fraction coMult	= new fraction(0);
+		for (int i = 2; i < highestK + 1; i++)
+		{
+			CRoot divRoot = root.div(i);
+			if(divRoot != null)
+			{
+				CRoot alpha = getRoot(divRoot);
+				if(alpha != null)
+				{
+					coMult.add(new fraction(alpha.mult,i));
+				}
+			}
+		}
+		return coMult;
 	}
 	
 	private void printRootTable()

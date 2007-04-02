@@ -9,6 +9,7 @@ package tan.leveldecomposition;
 
 import tan.leveldecomposition.group.*;
 import Jama.Matrix;
+import java.util.ArrayList;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 
@@ -203,6 +204,32 @@ public class Globals
 			}
 		}
 		return stringMatrix;
+	}
+	
+	/**
+	 * Convert a decimal number to a vector of the given size in the given rank,
+	 * with given offset.
+	 */
+	public static int[] numberToVector(int number, int base, int size, int offset)
+	{
+		ArrayList<Integer> stack = new ArrayList<Integer>();
+		while(number >= base)
+		{
+			stack.add(number % base);
+			number = number / base;
+		}
+		stack.add(number);
+		
+		int[] vector = new int[size];
+		for (int i = 0; i <stack.size(); i++)
+		{
+			vector[i] = (int) stack.get(i) + offset;
+		}
+		for (int i = stack.size(); i < size; i++)
+		{
+			vector[i] = 0 + offset;
+		}
+		return vector;		
 	}
 	
 }
