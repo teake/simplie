@@ -7,6 +7,7 @@
 package tan.leveldecomposition.ui.reusable;
 
 import tan.leveldecomposition.*;
+import tan.leveldecomposition.group.*;
 
 /**
  *
@@ -48,6 +49,13 @@ public class UIAlgebraInfo extends javax.swing.JPanel
 		algebraInfoCMDet.setText(Globals.intToString(det));
 	}
 	
+	public void Update(CGroup group)
+	{
+		SetType(group.type);
+		SetRank(group.rank);
+		SetDim(group.dimension);
+		SetCMDet(group.det);
+	}
 	
 	/** This method is called from within the constructor to
 	 * initialize the form.

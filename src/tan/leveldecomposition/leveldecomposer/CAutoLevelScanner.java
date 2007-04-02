@@ -49,8 +49,8 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 		
 		LevelHelper.Setup();
 		
-		int[] levels = new int[LevelHelper.coRank];
-		for (int i = 0; i < LevelHelper.coRank; i++)
+		int[] levels = new int[Globals.delGroup.rank];
+		for (int i = 0; i < Globals.delGroup.rank; i++)
 		{
 			levels[i] = minLevel;
 		}
@@ -139,8 +139,8 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 			levelSign = -1;
 		
 		/** Set up the Dynkin labels */
-		int[] dynkinLabels = new int[LevelHelper.subRank];
-		for (int i = 0; i < LevelHelper.subRank; i++)
+		int[] dynkinLabels = new int[Globals.subGroup.rank];
+		for (int i = 0; i < Globals.subGroup.rank; i++)
 		{
 			dynkinLabels[i] = 0;
 		}
@@ -200,12 +200,12 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 						if(multiplicities)
 						{
 							/** Construct the whole root vector and see if it's present */
-							rootVector =  new int[LevelHelper.rank];
-							for (int i = 0; i < LevelHelper.subRank; i++)
+							rootVector =  new int[Globals.group.rank];
+							for (int i = 0; i < Globals.subGroup.rank; i++)
 							{
 								rootVector[LevelHelper.TranslateSubIndex(i)] = rootComponents[i];
 							}
-							for (int i = 0; i < LevelHelper.coRank; i++)
+							for (int i = 0; i < Globals.delGroup.rank; i++)
 							{
 								rootVector[LevelHelper.TranslateCoIndex(i)] = levels[i];
 							}

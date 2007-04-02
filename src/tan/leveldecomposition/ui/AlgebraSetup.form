@@ -17,6 +17,7 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="algebraInfo" linkSize="2" min="-2" max="-2" attributes="1"/>
                   <Component id="subAlgebraInfo" linkSize="2" alignment="0" max="32767" attributes="1"/>
+                  <Component id="delAlgebraInfo" linkSize="2" alignment="0" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
@@ -36,6 +37,8 @@
                       <Component id="algebraInfo" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="subAlgebraInfo" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="delAlgebraInfo" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" attributes="0">
                       <Component id="PanelDynkinDiagram" min="-2" max="-2" attributes="1"/>
@@ -209,6 +212,8 @@
     <Component class="tan.leveldecomposition.ui.reusable.UIAlgebraInfo" name="algebraInfo">
     </Component>
     <Component class="tan.leveldecomposition.ui.reusable.UIAlgebraInfo" name="subAlgebraInfo">
+    </Component>
+    <Component class="tan.leveldecomposition.ui.reusable.UIAlgebraInfo" name="delAlgebraInfo">
     </Component>
   </SubComponents>
 </Form>

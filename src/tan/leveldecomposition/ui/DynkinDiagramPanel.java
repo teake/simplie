@@ -147,6 +147,12 @@ public class DynkinDiagramPanel extends javax.swing.JPanel
 	
     private void formMouseReleased(java.awt.event.MouseEvent evt)//GEN-FIRST:event_formMouseReleased
     {//GEN-HEADEREND:event_formMouseReleased
+		/** Don't do anything while we are scanning. */
+		if(Globals.scanning)
+		{
+			return;
+		}
+		
 		int x = cTransInv(evt.getX());
 		int y = cTransInv(evt.getY());
 		CDynkinNode node = DynkinDiagram.GetNodeByCoor(x,y);

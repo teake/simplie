@@ -317,6 +317,7 @@ public class LevelDecomposition extends javax.swing.JPanel
 			bAutoScan.setText("Cancel");
 			autoScanProgressBar.setIndeterminate(true);
 			autoScanProgressBar.setString("Scanning");
+			Globals.scanning = true;
 			
 			/** Set up the scan */
 			autoScanner	= new CAutoLevelScanner(cbMultiplicities.isSelected(), tableModel, autoScanMinLevel.GetValue(),autoScanMaxLevel.GetValue());
@@ -330,6 +331,7 @@ public class LevelDecomposition extends javax.swing.JPanel
 						bAutoScan.setText("Scan");
 						autoScanProgressBar.setIndeterminate(false);
 						autoScanProgressBar.setString("Idle");
+						Globals.scanning = false;
 					}
 				}
 			});

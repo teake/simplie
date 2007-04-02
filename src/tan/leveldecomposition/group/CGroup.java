@@ -25,6 +25,8 @@ public class CGroup
 	
 	/** The Cartan matrix of the group. */
 	public int[][]  cartanMatrix;
+	/** The inverse of the cartan matrix. */
+	public fraction[][] cartanMatrixInv;
 	/** The determinant of the Cartan Matrix. */
 	public int		det;
 	/** The rank of the group. */
@@ -87,6 +89,20 @@ public class CGroup
 		}
 		det    = (int) Math.round(cartanMatrix.det());
 		finite = (det > 0) ? true : false;
+		
+		/** Set the inverse of the Cartan matrix if possible. */
+		this.cartanMatrixInv = new fraction[rank][rank];
+		if(cartanMatrix.rank() == rank && det != 0)
+		{
+			Matrix cmInv = cartanMatrix.inverse();
+			for (int i = 0; i < rank; i++)
+			{
+				for (int j = 0; j < rank; j++)
+				{
+					cartanMatrixInv[i][j] = new fraction( Math.round( det * cmInv.get(i,j) ), det);
+				}
+			}
+		}
 		
 		rootTable = new ArrayList<ArrayList>();
 		

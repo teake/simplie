@@ -161,13 +161,23 @@ public class DynkinDiagram
 		return cartanMatrix;
 	}
 	
-	/** Returns the Cartan matrix of the subalgebra */
-	public static Matrix GetCartanSubMatrix()
+	/** 
+	 * Returns the Cartan matrix of one of the subalgebras
+	 *
+	 * param	type	The name of the subalgebra to get. Either "regular" or "deleted".
+	 * return			The cartan matrix of the regular or deleted subalgebra.
+	 */
+	public static Matrix GetCartanSubMatrix(String type)
 	{
+		if( !( type == "regular" || type == "deleted" ) )
+		{
+			return null;
+		}
+		
 		int subRank = 0;
 		for (CDynkinNode node : nodes)
 		{
-			if(node.enabled)
+			if( (node.enabled && type == "regular") || (!node.enabled && type == "deleted") )
 			{
 				subRank++;
 			}
@@ -182,11 +192,11 @@ public class DynkinDiagram
 		/** Copy the Cartan matrix elements into the submatrix. */
 		for(int i = 0; i < rank; i++)
 		{
-			if(GetNodeByLabel(i+1).enabled)
+			if( (GetNodeByLabel(i+1).enabled && type == "regular") || (!GetNodeByLabel(i+1).enabled && type == "deleted") )
 			{
 				for(int j = 0; j < rank; j++)
 				{
-					if(GetNodeByLabel(j+1).enabled)
+					if( (GetNodeByLabel(j+1).enabled && type == "regular") || (!GetNodeByLabel(j+1).enabled && type == "deleted") )
 					{
 						cartanSubMatrix.set(offsetI, offsetJ, cartanMatrix.get(i,j));
 						offsetJ++;
@@ -199,6 +209,7 @@ public class DynkinDiagram
 		
 		return cartanSubMatrix;
 	}
+	
 	
 	/** Returns the last label that was added. */
 	public static int GetLastLabel()

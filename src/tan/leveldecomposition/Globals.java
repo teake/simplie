@@ -28,7 +28,10 @@ public class Globals
 	public static CGroup group;
 	/** Global CGroup object for the regular subgroup */
 	public static CGroup subGroup;
-	
+	/** Global CGroup object for the deleted subgroup */
+	public static CGroup delGroup;
+	/** Are we performing a scan right now? */
+	public static boolean scanning;
 	
 	/**********************************
 	 * Singleton stuff
@@ -39,6 +42,7 @@ public class Globals
 	/** Private constructor */
 	private Globals()
 	{
+		scanning = false;
 	}
 	
 	private static synchronized void createInstance()
