@@ -207,12 +207,9 @@ public class CGroup
 	{
 		/** Dirty hack to check for negative roots. */
 		// TODO: implement this better.
-		if(vector.length != 0 && vector[vector.length-1] < 0)
+		for (int i = 0; i < vector.length; i++)
 		{
-			for (int i = 0; i < vector.length; i++)
-			{
-				vector[i] = -vector[i];
-			}
+			vector[i] = Math.abs(vector[i]);
 		}
 		return getRoot(new CRoot(vector));
 	}
