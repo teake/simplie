@@ -574,9 +574,24 @@ public class CGroup
 				}
 			}
 			
+			/** Loop the next index. */
 			if(beginIndex + 1 < vector.length)
 				loopFakeRoots(height, vector.clone(), beginIndex + 1, false, fakeList, properList);
+			
+			/** Increase this index s.t. it is a multiple of previous indices. */
 			vector[beginIndex]++;
+			for (int i = 0; i < beginIndex; i++)
+			{
+				if(vector[i] != 0)
+				{
+					while( (vector[beginIndex] % vector[i]) != 0)
+					{
+						vector[beginIndex]++;
+					}
+					
+				}
+			}
+			
 			scanFirst = true;
 		} while( true );
 	}
