@@ -21,7 +21,7 @@ public class CRoot
 	/** The root multiplicity. */
 	public long		mult;
 	/** Sum over multiplicities of roots that are fractionals of this one (used in Peterson's formula). */
-	public fraction	c_mult;
+	public fraction	coMult;
 	/** The height of the root (lazily calculated). */
 	private Integer	height;
 	/** The highest component (lazily calculated). */
@@ -184,7 +184,7 @@ public class CRoot
 		return "height: " + height() +
 				", vector: " + Globals.intArrayToString(vector) +
 				", mult: " + mult +
-				", c_mult: " + c_mult;
+				", coMult: " + coMult.toString();
 	}
 	
 }

@@ -49,7 +49,9 @@ public class CGroup
 	/** The number of positive roots constructed so far. */
 	private int	numPosRoots;
 	/** The table containing all the (positive) roots. */
-	private ArrayList<ArrayList> rootTable;
+	private ArrayList<ArrayList> rootSystem;
+	/** The table containing all non-root vectors which do have a non-zero co-mult. */
+	private ArrayList<ArrayList> fakeRootTable;
 	
 	
 	
@@ -104,7 +106,7 @@ public class CGroup
 			}
 		}
 		
-		rootTable = new ArrayList<ArrayList>();
+		rootSystem = new ArrayList<ArrayList>();
 		
 		/** Add the CSA to the root table */
 		addRoot(new CRoot(rank));
@@ -120,6 +122,11 @@ public class CGroup
 			addRoot(new CRoot(rootVector));
 		}
 		constructedHeight = 1;
+		
+		/** Set the fake root table. */
+		fakeRootTable	= new ArrayList<ArrayList>();
+		fakeRootTable.add(0,new ArrayList<CRoot>());
+		fakeRootTable.add(1,new ArrayList<CRoot>());
 		
 		/** If the group is finite, we can construct the root system to all heights. */
 		if(finite)
@@ -177,7 +184,7 @@ public class CGroup
 		
 		dim	= new fraction(1);
 		
-		for (ArrayList<CRoot> roots : rootTable)
+		for (ArrayList<CRoot> roots : rootSystem)
 		{
 			for(CRoot root : roots)
 			{
@@ -248,9 +255,9 @@ public class CGroup
 			constructRootSystem(rootHeight);
 		
 		/** Try to fetch the root. */
-		if(rootTable.size() > rootHeight)
+		if(rootSystem.size() > rootHeight)
 		{
-			roots = rootTable.get(rootHeight);
+			roots = rootSystem.get(rootHeight);
 			index = roots.indexOf(rootToGet);
 			if(index != -1)
 			{
@@ -273,7 +280,7 @@ public class CGroup
 	 */
 	private void constructRootSystem(int maxHeight)
 	{
-		ArrayList<CRoot> simpleRoots = rootTable.get(1);
+		ArrayList<CRoot> simpleRoots = rootSystem.get(1);
 		ArrayList<CRoot> prevRoots;
 		ArrayList<CRoot> rootCache;
 		CRoot	oldRoot;
@@ -286,7 +293,7 @@ public class CGroup
 		
 		while(constructedHeight < maxHeight || maxHeight == 0)
 		{
-			prevRoots	    = rootTable.get(constructedHeight);
+			prevRoots	    = rootSystem.get(constructedHeight);
 			rootCache		= new ArrayList<CRoot>();
 			prevNumPosRoots = numPosRoots;
 			newHeight	    = constructedHeight + 1;
@@ -351,6 +358,20 @@ public class CGroup
 			if(numPosRoots > prevNumPosRoots)
 			{
 				constructedHeight++;
+				
+				/** There are only fake roots for infinite groups. */
+				if(!finite)
+				{
+					/** Setup for a fake root scan of this height. */
+					int[] fakeVector = new int[rank];
+					for (int i = 0; i < fakeVector.length; i++)
+					{
+						fakeVector[i] = 0;
+					}
+					ArrayList fakeList = new ArrayList<CRoot>();
+					loopFakeRoots(newHeight, fakeVector, 0, true, fakeList, rootSystem.get(newHeight));
+					fakeRootTable.add(newHeight,fakeList);
+				}
 			}
 			else
 			{
@@ -391,16 +412,16 @@ public class CGroup
 		ArrayList<CRoot> roots;
 		
 		/** Where should we add it, if we shoud add it at all? */
-		if(rootTable.size() > root.height())
+		if(rootSystem.size() > root.height())
 		{
-			roots = rootTable.get(root.height());
+			roots = rootSystem.get(root.height());
 			if(roots.contains(root))
 				return false;
 		}
 		else
 		{
 			roots = new ArrayList<CRoot>();
-			rootTable.add(root.height(),roots);
+			rootSystem.add(root.height(),roots);
 		}
 		
 		switch(root.height())
@@ -411,7 +432,7 @@ public class CGroup
 			{
 				/** We don't need to calculate these for the simple roots. */
 				root.mult	= 1;
-				root.c_mult	= new fraction(1);
+				root.coMult	= new fraction(1);
 				break;
 			}
 			default:
@@ -419,10 +440,10 @@ public class CGroup
 				/** Determine its c_mult minus the root multiplicity. */
 				fraction coMult = coMult(root,false);
 				
-				/** 
+				/**
 				 * Determine its multiplicity.
 				 *
-				 * We split the Peterson formula into two symmetric halves, 
+				 * We split the Peterson formula into two symmetric halves,
 				 * plus a remainder if the root height is even.
 				 * Note that this only works because the Cartan matrix is symmetric!
 				 */
@@ -430,44 +451,22 @@ public class CGroup
 				int halfHeight			= (int) Math.ceil(((float) root.height()) / 2);
 				for(int i = 1; i < halfHeight; i++)
 				{
-					ArrayList<CRoot> betas	= rootTable.get(i);
-					ArrayList<CRoot> gammas	= rootTable.get(root.height() - i);
-					for(CRoot beta : betas)
-					{
-						for(CRoot gamma : gammas)
-						{
-							if(beta.plus(gamma).equals(root))
-							{
-								fraction part = beta.c_mult.times(gamma.c_mult);
-								part.multiply(innerProduct(beta,gamma));
-								multiplicity.add(part);
-							}
-						}
-					}
+					multiplicity.add(petersonPart(rootSystem, root, i));
+					if(!finite)
+						multiplicity.add(petersonPart(fakeRootTable, root, i));
 				}
 				multiplicity.multiply(2);
 				if(root.height() % 2 == 0)
 				{
-					ArrayList<CRoot> betas	= rootTable.get(root.height() / 2);
-					ArrayList<CRoot> gammas	= rootTable.get(root.height() / 2);
-					for(CRoot beta : betas)
-					{
-						for(CRoot gamma : gammas)
-						{
-							if(beta.plus(gamma).equals(root))
-							{
-								fraction part = beta.c_mult.times(gamma.c_mult);
-								part.multiply(innerProduct(beta,gamma));
-								multiplicity.add(part);
-							}
-						}
-					}
+					multiplicity.add(petersonPart(rootSystem, root, root.height() / 2));
+					if(!finite)
+						multiplicity.add(petersonPart(fakeRootTable, root, root.height() / 2));
 				}
 				
 				multiplicity.divide( innerProduct(root,root) - (2 * root.height() ) );
 				multiplicity.subtract(coMult);
 				root.mult	= multiplicity.asLong();
-				root.c_mult = coMult.plus(root.mult);
+				root.coMult = coMult.plus(root.mult);
 				//System.out.println(multiplicity.toString());
 				//System.out.println(multiplicity.asDouble());
 				
@@ -477,6 +476,7 @@ public class CGroup
 		
 		/** And add it to the table */
 		roots.add(root);
+		System.out.println("added root: " + root.toString());
 		
 		/** Increment numPosRoots */
 		numPosRoots++;
@@ -511,9 +511,79 @@ public class CGroup
 		return coMult;
 	}
 	
+	/**
+	 * Calculate a part of the Peterson formula (in particular the r.h.s. for
+	 * a given value of the height of one of the decomposition parts).
+	 *
+	 * @param	rootTable 	The table from which we should fetch the decomposition parts.
+	 * @param	root 		The root for which we are calculating the multiplicity.
+	 * @param	height 		The height of one of the decomposition parts.
+	 * @return				A part of the Peterson formula, which is to be summed over.
+	 */
+	private fraction petersonPart(ArrayList<ArrayList> rootTable, CRoot root, int height)
+	{
+		fraction multiplicity = new fraction(0);
+		ArrayList<CRoot> betas	= rootTable.get(height);
+		ArrayList<CRoot> gammas	= rootTable.get(root.height() - height);
+		for(CRoot beta : betas)
+		{
+			for(CRoot gamma : gammas)
+			{
+				if(beta.plus(gamma).equals(root))
+				{
+					fraction part = beta.coMult.times(gamma.coMult);
+					part.multiply(innerProduct(beta,gamma));
+					multiplicity.add(part);
+				}
+			}
+		}
+		return multiplicity;
+	}
+	
+	private void loopFakeRoots(
+			int height,
+			int[] vector,
+			int beginIndex,
+			boolean scanFirst,
+			ArrayList<CRoot> fakeList,
+			ArrayList<CRoot> properList)
+	{
+		do
+		{
+			if(scanFirst)
+			{
+				CRoot fakeRoot = new CRoot(vector);
+				/** Only continue if the height is not exceeded. */
+				if(fakeRoot.height() > height)
+				{
+					/** Abort this line. */
+					break;
+				}
+				
+				/** Only try to add it if the height is right and it isn't a proper root. */
+				if(fakeRoot.height() == height && !properList.contains(fakeRoot))
+				{
+					fraction coMult = coMult(fakeRoot,false);
+					/** Only add it if the coMult isn't zero. */
+					if(coMult.asDouble() > 0)
+					{
+						fakeRoot.coMult = coMult;
+						fakeList.add(fakeRoot);
+						System.out.println("added fake root: " + fakeRoot.toString());
+					}
+				}
+			}
+			
+			if(beginIndex + 1 < vector.length)
+				loopFakeRoots(height, vector.clone(), beginIndex + 1, false, fakeList, properList);
+			vector[beginIndex]++;
+			scanFirst = true;
+		} while( true );
+	}
+	
 	private void printRootTable()
 	{
-		for(ArrayList<CRoot> roots : rootTable)
+		for(ArrayList<CRoot> roots : rootSystem)
 		{
 			for(CRoot root : roots)
 			{
