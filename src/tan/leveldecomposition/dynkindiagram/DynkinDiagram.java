@@ -164,8 +164,8 @@ public class DynkinDiagram
 	/** 
 	 * Returns the Cartan matrix of one of the subalgebras
 	 *
-	 * param	type	The name of the subalgebra to get. Either "regular" or "deleted".
-	 * return			The cartan matrix of the regular or deleted subalgebra.
+	 * @param	type	The name of the subalgebra to get. Either "regular" or "deleted".
+	 * @return			The cartan matrix of the regular or deleted subalgebra.
 	 */
 	public static Matrix GetCartanSubMatrix(String type)
 	{

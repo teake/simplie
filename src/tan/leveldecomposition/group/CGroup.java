@@ -275,6 +275,7 @@ public class CGroup
 	{
 		ArrayList<CRoot> simpleRoots = rootTable.get(1);
 		ArrayList<CRoot> prevRoots;
+		ArrayList<CRoot> rootCache;
 		CRoot	oldRoot;
 		CRoot	newRoot;
 		int		prevNumPosRoots;
@@ -286,6 +287,7 @@ public class CGroup
 		while(constructedHeight < maxHeight || maxHeight == 0)
 		{
 			prevRoots	    = rootTable.get(constructedHeight);
+			rootCache		= new ArrayList<CRoot>();
 			prevNumPosRoots = numPosRoots;
 			newHeight	    = constructedHeight + 1;
 			
@@ -308,12 +310,11 @@ public class CGroup
 				{
 					newRoot = root.plus(simpleRoot);
 					
-					/** First check if the new root isn't already present. */
-					if(rootTable.size() > newHeight)
-					{
-						if(rootTable.get(newHeight).contains(newRoot))
-							continue;
-					}
+					/** First check if didn't do this root before. */
+					if(rootCache.contains(newRoot))
+						continue;
+					else
+						rootCache.add(newRoot);
 					
 					innerProduct = innerProduct(root,simpleRoot);
 					if(innerProduct < 0)
@@ -362,12 +363,17 @@ public class CGroup
 	
 	private int innerProduct(CRoot root1, CRoot root2)
 	{
+		return innerProduct(root1.vector, root2.vector);
+	}
+	
+	private int innerProduct(int[] vector1, int[] vector2)
+	{
 		int result = 0;
 		for (int i = 0; i < rank; i++)
 		{
 			for (int j = 0; j < rank; j++)
 			{
-				result += cartanMatrix[i][j] * root1.vector[i] * root2.vector[j];
+				result += cartanMatrix[i][j] * vector1[i] * vector2[j];
 			}
 		}
 		return result;
@@ -397,17 +403,10 @@ public class CGroup
 			rootTable.add(root.height(),roots);
 		}
 		
-		/** And add it to the table */
-		roots.add(root);
-		
-		if(root.height() == 0)
-			return true;
-		
-		/** Increment numPosRoots */
-		numPosRoots++;
-		
 		switch(root.height())
 		{
+			case 0:
+				return true;
 			case 1:
 			{
 				/** We don't need to calculate these for the simple roots. */
@@ -418,11 +417,18 @@ public class CGroup
 			default:
 			{
 				/** Determine its c_mult minus the root multiplicity. */
-				fraction coMult = coMult(root);
+				fraction coMult = coMult(root,false);
 				
-				/** Determine its multiplicity. */
-				fraction multiplicity = new fraction(0);
-				for(int i = 1; i < root.height(); i++)
+				/** 
+				 * Determine its multiplicity.
+				 *
+				 * We split the Peterson formula into two symmetric halves, 
+				 * plus a remainder if the root height is even.
+				 * Note that this only works because the Cartan matrix is symmetric!
+				 */
+				fraction multiplicity	= new fraction(0);
+				int halfHeight			= (int) Math.ceil(((float) root.height()) / 2);
+				for(int i = 1; i < halfHeight; i++)
 				{
 					ArrayList<CRoot> betas	= rootTable.get(i);
 					ArrayList<CRoot> gammas	= rootTable.get(root.height() - i);
@@ -439,15 +445,42 @@ public class CGroup
 						}
 					}
 				}
+				multiplicity.multiply(2);
+				if(root.height() % 2 == 0)
+				{
+					ArrayList<CRoot> betas	= rootTable.get(root.height() / 2);
+					ArrayList<CRoot> gammas	= rootTable.get(root.height() / 2);
+					for(CRoot beta : betas)
+					{
+						for(CRoot gamma : gammas)
+						{
+							if(beta.plus(gamma).equals(root))
+							{
+								fraction part = beta.c_mult.times(gamma.c_mult);
+								part.multiply(innerProduct(beta,gamma));
+								multiplicity.add(part);
+							}
+						}
+					}
+				}
+				
 				multiplicity.divide( innerProduct(root,root) - (2 * root.height() ) );
 				multiplicity.subtract(coMult);
 				root.mult	= multiplicity.asLong();
 				root.c_mult = coMult.plus(root.mult);
 				//System.out.println(multiplicity.toString());
 				//System.out.println(multiplicity.asDouble());
+				
 			}
 			
 		}
+		
+		/** And add it to the table */
+		roots.add(root);
+		
+		/** Increment numPosRoots */
+		numPosRoots++;
+		
 		return true;
 	}
 	
@@ -458,19 +491,12 @@ public class CGroup
 	 * @param	root	The root whose co-multiplicity we should calculate.
 	 * @return			The co-multiplicity.
 	 */
-	private fraction coMult(CRoot root)
+	private fraction coMult(CRoot root, boolean includeRoot)
 	{
-		/** First see how far we should sum. */
-		int highestK = 0;
-		for (int i = 0; i < rank; i++)
-		{
-			if(root.vector[i] > highestK)
-				highestK = root.vector[i];
-		}
-		
-		/** Now sum over all fractional roots. */
+		int offset		= ( includeRoot ) ? 1 : 2;
 		fraction coMult	= new fraction(0);
-		for (int i = 2; i < highestK + 1; i++)
+		
+		for (int i = offset; i < root.highest() + 1; i++)
 		{
 			CRoot divRoot = root.div(i);
 			if(divRoot != null)

@@ -24,6 +24,8 @@ public class CRoot
 	public fraction	c_mult;
 	/** The height of the root (lazily calculated). */
 	private Integer	height;
+	/** The highest component (lazily calculated). */
+	private Integer highest;
 	
 	/**
 	 * Creates a new instance of CRoot.
@@ -49,6 +51,7 @@ public class CRoot
 			vector[i] = 0;
 		}
 		height = 0;
+		highest = 0;
 	}
 	
 	/**
@@ -67,6 +70,25 @@ public class CRoot
 			}
 		}
 		return height;
+	}
+	
+	/**
+	 * Lazily determine the highest component of the root.
+	 *
+	 * @return The highest component of the root.
+	 */
+	public int highest()
+	{
+		if(highest == null)
+		{
+			highest = 0;
+			for (int i = 0; i < vector.length; i++)
+			{
+				if(vector[i] > highest)
+					highest = vector[i];
+			}
+		}
+		return highest;
 	}
 	
 	
@@ -159,10 +181,10 @@ public class CRoot
 	/** Overrides default toString method */
 	public String toString()
 	{
-		return "height: " + height() + 
-			", vector: " + Globals.intArrayToString(vector) +
-			", mult: " + mult +
-			", c_mult: " + c_mult;
+		return "height: " + height() +
+				", vector: " + Globals.intArrayToString(vector) +
+				", mult: " + mult +
+				", c_mult: " + c_mult;
 	}
 	
 }

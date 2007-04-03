@@ -210,15 +210,15 @@ public class Globals
 	 * Convert a decimal number to a vector of the given size in the given rank,
 	 * with given offset.
 	 */
-	public static int[] numberToVector(int number, int base, int size, int offset)
+	public static int[] numberToVector(long number, int base, int size, int offset)
 	{
 		ArrayList<Integer> stack = new ArrayList<Integer>();
 		while(number >= base)
 		{
-			stack.add(number % base);
+			stack.add((int) (number % base));
 			number = number / base;
 		}
-		stack.add(number);
+		stack.add((int) number);
 		
 		int[] vector = new int[size];
 		for (int i = 0; i <stack.size(); i++)

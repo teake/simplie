@@ -50,8 +50,8 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 		LevelHelper.Setup();
 		
 		int base	= maxLevel + 1 - minLevel;
-		int num		= (int) Math.pow(base, Globals.delGroup.rank);
-		for (int i = 0; i < num; i++)
+		long num	= (long) Math.pow(base, Globals.delGroup.rank);
+		for (long i = 0; i < num; i++)
 		{
 			Scan(Globals.numberToVector(i,base,Globals.delGroup.rank,minLevel));
 		}
