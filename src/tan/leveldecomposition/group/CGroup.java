@@ -450,25 +450,31 @@ public class CGroup
 				fraction multiplicity	= new fraction(0);
 				int halfHeight			= (int) Math.ceil(((float) root.height()) / 2);
 				for(int i = 1; i < halfHeight; i++)
-				{
-					multiplicity.add(petersonPart(rootSystem, root, i));
-					if(!finite)
-						multiplicity.add(petersonPart(fakeRootTable, root, i));
-				}
+					multiplicity.add(petersonPart(root, i));
+				
 				multiplicity.multiply(2);
+				
 				if(root.height() % 2 == 0)
-				{
-					multiplicity.add(petersonPart(rootSystem, root, root.height() / 2));
-					if(!finite)
-						multiplicity.add(petersonPart(fakeRootTable, root, root.height() / 2));
-				}
+					multiplicity.add(petersonPart(root, root.height() / 2));
 				
 				multiplicity.divide( innerProduct(root,root) - (2 * root.height() ) );
 				multiplicity.subtract(coMult);
 				root.mult	= multiplicity.asLong();
 				root.coMult = coMult.plus(root.mult);
-				//System.out.println(multiplicity.toString());
-				//System.out.println(multiplicity.asDouble());
+				if(multiplicity.asDouble() > 1)
+				{
+					System.out.println(root.toString());
+				}
+				if(multiplicity.asDouble() < 1 )
+				{
+					/*
+					System.out.println(root.toString());
+					System.out.println("actual mult: " + multiplicity.toString());
+					printRootTable(true);
+					printRootTable(false);
+					System.exit(0);
+					 */
+				}
 				
 			}
 			
@@ -476,7 +482,7 @@ public class CGroup
 		
 		/** And add it to the table */
 		roots.add(root);
-		System.out.println("added root: " + root.toString());
+		//System.out.println("added root: " + root.toString());
 		
 		/** Increment numPosRoots */
 		numPosRoots++;
@@ -515,16 +521,17 @@ public class CGroup
 	 * Calculate a part of the Peterson formula (in particular the r.h.s. for
 	 * a given value of the height of one of the decomposition parts).
 	 *
-	 * @param	rootTable 	The table from which we should fetch the decomposition parts.
 	 * @param	root 		The root for which we are calculating the multiplicity.
 	 * @param	height 		The height of one of the decomposition parts.
 	 * @return				A part of the Peterson formula, which is to be summed over.
 	 */
-	private fraction petersonPart(ArrayList<ArrayList> rootTable, CRoot root, int height)
+	private fraction petersonPart(CRoot root, int height)
 	{
 		fraction multiplicity = new fraction(0);
-		ArrayList<CRoot> betas	= rootTable.get(height);
-		ArrayList<CRoot> gammas	= rootTable.get(root.height() - height);
+		
+		ArrayList<CRoot> betas	= rootSystem.get(height);
+		ArrayList<CRoot> gammas	= rootSystem.get(root.height() - height);
+		
 		for(CRoot beta : betas)
 		{
 			for(CRoot gamma : gammas)
@@ -537,6 +544,49 @@ public class CGroup
 				}
 			}
 		}
+		if(finite)
+			return multiplicity;
+		
+		ArrayList<CRoot> fakeBetas	= fakeRootTable.get(height);
+		ArrayList<CRoot> fakeGammas	= fakeRootTable.get(root.height() - height);
+		
+		for(CRoot beta : fakeBetas)
+		{
+			for(CRoot gamma : fakeGammas)
+			{
+				if(beta.plus(gamma).equals(root))
+				{
+					fraction part = beta.coMult.times(gamma.coMult);
+					part.multiply(innerProduct(beta,gamma));
+					multiplicity.add(part);
+				}
+			}
+		}
+		for(CRoot beta : betas)
+		{
+			for(CRoot gamma : fakeGammas)
+			{
+				if(beta.plus(gamma).equals(root))
+				{
+					fraction part = beta.coMult.times(gamma.coMult);
+					part.multiply(innerProduct(beta,gamma));
+					multiplicity.add(part);
+				}
+			}
+		}
+		for(CRoot beta : fakeBetas)
+		{
+			for(CRoot gamma : gammas)
+			{
+				if(beta.plus(gamma).equals(root))
+				{
+					fraction part = beta.coMult.times(gamma.coMult);
+					part.multiply(innerProduct(beta,gamma));
+					multiplicity.add(part);
+				}
+			}
+		}
+		
 		return multiplicity;
 	}
 	
@@ -557,7 +607,7 @@ public class CGroup
 				if(fakeRoot.height() > height)
 				{
 					/** Abort this line. */
-					break;
+					return;
 				}
 				
 				/** Only try to add it if the height is right and it isn't a proper root. */
@@ -569,7 +619,7 @@ public class CGroup
 					{
 						fakeRoot.coMult = coMult;
 						fakeList.add(fakeRoot);
-						System.out.println("added fake root: " + fakeRoot.toString());
+						//System.out.println("added fake root: " + fakeRoot.toString());
 					}
 				}
 			}
@@ -596,13 +646,27 @@ public class CGroup
 		} while( true );
 	}
 	
-	private void printRootTable()
+	private void printRootTable(boolean fake)
 	{
-		for(ArrayList<CRoot> roots : rootSystem)
+		ArrayList<ArrayList> table;
+		String type;
+		if(!fake)
 		{
+			table = rootSystem;
+			type = "proper";
+		}
+		else
+		{
+			table = fakeRootTable;
+			type = "fake";
+		}
+		
+		for (int i = 0; i < table.size(); i++)
+		{
+			ArrayList<CRoot> roots = table.get(i);
 			for(CRoot root : roots)
 			{
-				System.out.println(root.toString());
+				System.out.println(type + ", index: " + i + ", " + root.toString());
 			}
 		}
 	}

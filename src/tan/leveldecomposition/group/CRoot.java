@@ -35,7 +35,8 @@ public class CRoot
 	 */
 	public CRoot(int[] rootVector)
 	{
-		vector = rootVector;
+		vector	= rootVector.clone();
+		mult	= 0;
 	}
 	
 	/**
@@ -50,8 +51,9 @@ public class CRoot
 		{
 			vector[i] = 0;
 		}
-		height = 0;
+		height	= 0;
 		highest = 0;
+		mult	= 0;
 	}
 	
 	/**
