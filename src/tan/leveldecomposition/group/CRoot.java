@@ -17,9 +17,9 @@ import tan.leveldecomposition.*;
 public class CRoot
 {
 	/** The root vector. */
-	public int[]	vector;
+	public final int[] vector;
 	/** The root multiplicity. */
-	public long		mult;
+	public long	mult;
 	/** Sum over multiplicities of roots that are fractionals of this one (used in Peterson's formula). */
 	public fraction	coMult;
 	/** The height of the root (lazily calculated). */

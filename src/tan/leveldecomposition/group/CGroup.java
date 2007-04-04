@@ -461,17 +461,14 @@ public class CGroup
 				multiplicity.subtract(coMult);
 				root.mult	= multiplicity.asLong();
 				root.coMult = coMult.plus(root.mult);
-				if(multiplicity.asDouble() > 1)
-				{
-					System.out.println(root.toString());
-				}
 				if(multiplicity.asDouble() < 1 )
 				{
 					/*
 					System.out.println(root.toString());
 					System.out.println("actual mult: " + multiplicity.toString());
-					printRootTable(true);
+					System.out.println("norm:" + innerProduct(root,root));
 					printRootTable(false);
+					printRootTable(true);
 					System.exit(0);
 					 */
 				}
