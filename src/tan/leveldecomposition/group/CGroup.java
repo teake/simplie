@@ -48,6 +48,8 @@ public class CGroup
 	private int constructedHeight;
 	/** The number of positive roots constructed so far. */
 	private int	numPosRoots;
+	/** The number of positive generators constructed so far. */
+	private int numPosGenerators;
 	/** The table containing all the (positive) roots. */
 	private ArrayList<ArrayList> rootSystem;
 	/** The table containing all non-root vectors which do have a non-zero co-mult. */
@@ -107,6 +109,8 @@ public class CGroup
 		}
 		
 		rootSystem = new ArrayList<ArrayList>();
+		numPosRoots = 0;
+		numPosGenerators = 0;
 		
 		/** Add the CSA to the root table */
 		addRoot(new CRoot(rank));
@@ -132,7 +136,7 @@ public class CGroup
 		if(finite)
 		{
 			constructRootSystem(0);
-			dim			= 2 * numPosRoots + rank;
+			dim			= 2 * numPosGenerators + rank;
 			dimension	= Globals.intToString(dim);
 		}
 		else
@@ -483,6 +487,7 @@ public class CGroup
 		
 		/** Increment numPosRoots */
 		numPosRoots++;
+		numPosGenerators += root.mult;
 		
 		return true;
 	}
