@@ -388,22 +388,16 @@ public class CGroup
 	
 	private int innerProduct(CRoot root1, CRoot root2)
 	{
-		return innerProduct(root1.vector, root2.vector);
-	}
-	
-	private int innerProduct(int[] vector1, int[] vector2)
-	{
 		int result = 0;
 		for (int i = 0; i < rank; i++)
 		{
 			for (int j = 0; j < rank; j++)
 			{
-				result += cartanMatrix[i][j] * vector1[i] * vector2[j];
+				result += cartanMatrix[i][j] * root1.vector[i] * root2.vector[j];
 			}
 		}
 		return result;
 	}
-	
 	
 	/**
 	 * Adds a root to the root table and increments numPosRoots.
