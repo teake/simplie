@@ -9,12 +9,13 @@ package tan.leveldecomposition.group;
 
 import tan.leveldecomposition.math.*;
 import tan.leveldecomposition.*;
+import java.io.Serializable;
 
 /**
  *
  * @author Teake Nutma
  */
-public class CRoot
+public class CRoot implements Serializable
 {
 	/** The root vector. */
 	public final int[] vector;

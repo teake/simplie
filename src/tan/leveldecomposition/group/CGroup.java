@@ -54,6 +54,8 @@ public class CGroup
 	private ArrayList<ArrayList> rootSystem;
 	/** The table containing all non-root vectors which do have a non-zero co-mult. */
 	private ArrayList<ArrayList> fakeRootTable;
+	/** The simple roots. */
+	private ArrayList<CRoot> simpleRoots;
 	
 	
 	
@@ -68,7 +70,6 @@ public class CGroup
 	 */
 	public CGroup(Matrix cartanMatrix)
 	{
-		CRoot	simpleRoot;
 		Matrix	compareMatrix;
 		
 		/** Do some preliminary checks */
@@ -125,6 +126,7 @@ public class CGroup
 			}
 			addRoot(new CRoot(rootVector));
 		}
+		simpleRoots = rootSystem.get(1);
 		constructedHeight = 1;
 		
 		/** Set the fake root table. */
@@ -284,7 +286,6 @@ public class CGroup
 	 */
 	private void constructRootSystem(int maxHeight)
 	{
-		ArrayList<CRoot> simpleRoots = rootSystem.get(1);
 		ArrayList<CRoot> prevRoots;
 		ArrayList<CRoot> rootCache;
 		CRoot	oldRoot;
@@ -301,6 +302,8 @@ public class CGroup
 			rootCache		= new ArrayList<CRoot>();
 			prevNumPosRoots = numPosRoots;
 			newHeight	    = constructedHeight + 1;
+			
+			System.out.println("constructing height " + newHeight);
 			
 			/**
 			 * Try to add the simple roots to all the previous roots.
@@ -459,11 +462,11 @@ public class CGroup
 				multiplicity.subtract(coMult);
 				root.mult	= multiplicity.asLong();
 				root.coMult = coMult.plus(root.mult);
-				if(multiplicity.asDouble() < 1 )
+				if(multiplicity.asDouble() != (double) multiplicity.asInt() )
 				{
-					/*
 					System.out.println(root.toString());
 					System.out.println("actual mult: " + multiplicity.toString());
+					/*
 					System.out.println("norm:" + innerProduct(root,root));
 					printRootTable(false);
 					printRootTable(true);
@@ -523,32 +526,30 @@ public class CGroup
 	 */
 	private fraction petersonPart(CRoot root, int height)
 	{
-		fraction multiplicity = new fraction(0);
-		
 		ArrayList<CRoot> betas	= rootSystem.get(height);
 		ArrayList<CRoot> gammas	= rootSystem.get(root.height() - height);
-		
-		for(CRoot beta : betas)
-		{
-			for(CRoot gamma : gammas)
-			{
-				if(beta.plus(gamma).equals(root))
-				{
-					fraction part = beta.coMult.times(gamma.coMult);
-					part.multiply(innerProduct(beta,gamma));
-					multiplicity.add(part);
-				}
-			}
-		}
+
+		fraction multiplicity = petersonSubPart(root, betas, gammas);
+
 		if(finite)
 			return multiplicity;
 		
 		ArrayList<CRoot> fakeBetas	= fakeRootTable.get(height);
 		ArrayList<CRoot> fakeGammas	= fakeRootTable.get(root.height() - height);
 		
-		for(CRoot beta : fakeBetas)
+		multiplicity.add(petersonSubPart(root,fakeBetas,fakeGammas));
+		multiplicity.add(petersonSubPart(root,betas,fakeGammas));
+		multiplicity.add(petersonSubPart(root,fakeBetas,gammas));
+	
+		return multiplicity;
+	}
+	
+	private fraction petersonSubPart(CRoot root, ArrayList<CRoot> list1, ArrayList<CRoot> list2)
+	{
+		fraction multiplicity = new fraction(0);
+		for(CRoot beta : list1)
 		{
-			for(CRoot gamma : fakeGammas)
+			for(CRoot gamma : list2)
 			{
 				if(beta.plus(gamma).equals(root))
 				{
@@ -558,31 +559,6 @@ public class CGroup
 				}
 			}
 		}
-		for(CRoot beta : betas)
-		{
-			for(CRoot gamma : fakeGammas)
-			{
-				if(beta.plus(gamma).equals(root))
-				{
-					fraction part = beta.coMult.times(gamma.coMult);
-					part.multiply(innerProduct(beta,gamma));
-					multiplicity.add(part);
-				}
-			}
-		}
-		for(CRoot beta : fakeBetas)
-		{
-			for(CRoot gamma : gammas)
-			{
-				if(beta.plus(gamma).equals(root))
-				{
-					fraction part = beta.coMult.times(gamma.coMult);
-					part.multiply(innerProduct(beta,gamma));
-					multiplicity.add(part);
-				}
-			}
-		}
-		
 		return multiplicity;
 	}
 	
@@ -598,6 +574,7 @@ public class CGroup
 		{
 			if(scanFirst)
 			{
+				//System.out.println("considering fake: " + Globals.intArrayToString(vector));
 				CRoot fakeRoot = new CRoot(vector);
 				/** Only continue if the height is not exceeded. */
 				if(fakeRoot.height() > height)
@@ -607,34 +584,64 @@ public class CGroup
 				}
 				
 				/** Only try to add it if the height is right and it isn't a proper root. */
-				if(fakeRoot.height() == height && !properList.contains(fakeRoot))
+				if(fakeRoot.height() == height)
 				{
-					fraction coMult = coMult(fakeRoot,false);
-					/** Only add it if the coMult isn't zero. */
-					if(coMult.asDouble() > 0)
+					if(!properList.contains(fakeRoot))
 					{
-						fakeRoot.coMult = coMult;
-						fakeList.add(fakeRoot);
-						//System.out.println("added fake root: " + fakeRoot.toString());
+						fraction coMult = coMult(fakeRoot,false);
+						/** Only add it if the coMult isn't zero. */
+						if(coMult.asDouble() > 0)
+						{
+							fakeRoot.coMult = coMult;
+							fakeList.add(fakeRoot);
+							//System.out.println("added fake root: " + fakeRoot.toString());
+						}
 					}
+					return;
 				}
+				
 			}
 			
 			/** Loop the next index. */
 			if(beginIndex + 1 < vector.length)
 				loopFakeRoots(height, vector.clone(), beginIndex + 1, false, fakeList, properList);
 			
-			/** Increase this index s.t. it is a multiple of previous indices. */
-			vector[beginIndex]++;
+			/** Make sure the height is right. */
+			if(beginIndex == rank - 1)
+			{
+				int thisHeight = 0;
+				for (int i = 0; i < beginIndex; i++)
+				{
+					thisHeight += vector[i];
+				}
+				if(thisHeight > height)
+					return;
+				vector[beginIndex] = height - thisHeight;
+			}
+			else
+				vector[beginIndex]++;
+			
+			/** Increase this index s.t. it is a multiple of the lowest of the previous indices. */
+			int lowestEntry = Integer.MAX_VALUE;
 			for (int i = 0; i < beginIndex; i++)
 			{
-				if(vector[i] != 0)
+				if(vector[i] > 0 && vector[i] < lowestEntry)
 				{
-					while( (vector[beginIndex] % vector[i]) != 0)
-					{
-						vector[beginIndex]++;
-					}
-					
+					lowestEntry = vector[i];
+				}
+			}
+			if(lowestEntry == 1)
+			{
+				return;
+			}
+			if(lowestEntry != Integer.MAX_VALUE)
+			{
+				while( (vector[beginIndex] % lowestEntry) != 0)
+				{
+					/** It's useless to add anything if we're already at the wanted height. */
+					if(beginIndex == rank - 1)
+						return;
+					vector[beginIndex]++;
 				}
 			}
 			
