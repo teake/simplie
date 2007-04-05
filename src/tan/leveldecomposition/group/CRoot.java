@@ -136,7 +136,7 @@ public class CRoot implements Serializable
 	 * Divides the root vector with an integral value and returns a new root with that vector.
 	 *
 	 * @param	factor	The value with which to divide the root vector.
-	 * @return		A new root with divided vector. Returns null if not all the root vector values are integral.
+	 * @return			A new root with divided vector. Returns null if not all the root vector values are integral.
 	 */
 	public CRoot div(int factor)
 	{
@@ -151,6 +151,21 @@ public class CRoot implements Serializable
 		return new CRoot(newVector);
 	}
 	
+	/**
+	 * Multiplies the root vector with an integral value and returns a new root with that vector.
+	 *
+	 * @param	factor	The value with which to multiply the root vector.
+	 * @return			A new root with multiplied vector.
+	 */
+	public CRoot times(int factor)
+	{
+		int[] newVector = new int[vector.length];
+		for (int i = 0; i < vector.length; i++)
+		{
+			newVector[i] = vector[i] * factor;
+		}
+		return new CRoot(newVector);
+	}
 	
 	
 	

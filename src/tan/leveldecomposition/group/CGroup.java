@@ -52,8 +52,8 @@ public class CGroup
 	private int numPosGenerators;
 	/** The table containing all the (positive) roots. */
 	private ArrayList<ArrayList> rootSystem;
-	/** The table containing all non-root vectors which do have a non-zero co-mult. */
-	private ArrayList<ArrayList> fakeRootTable;
+	/** The table containing all the multiples of roots that aren't roots themselves (used in the Peterson formula). */
+	private ArrayList<ArrayList> rootMultiples;
 	/** The simple roots. */
 	private ArrayList<CRoot> simpleRoots;
 	
@@ -129,10 +129,10 @@ public class CGroup
 		simpleRoots = rootSystem.get(1);
 		constructedHeight = 1;
 		
-		/** Set the fake root table. */
-		fakeRootTable	= new ArrayList<ArrayList>();
-		fakeRootTable.add(0,new ArrayList<CRoot>());
-		fakeRootTable.add(1,new ArrayList<CRoot>());
+		/** Set the table of root multiples. */
+		rootMultiples = new ArrayList<ArrayList>();
+		rootMultiples.add(0,new ArrayList<CRoot>());
+		rootMultiples.add(1,new ArrayList<CRoot>());
 		
 		/** If the group is finite, we can construct the root system to all heights. */
 		if(finite)
@@ -366,19 +366,33 @@ public class CGroup
 			{
 				constructedHeight++;
 				
-				/** There are only fake roots for infinite groups. */
-				if(!finite)
+				/** 
+				 * Construct all the root multiples of this height
+				 */
+				ArrayList multiplesList	= new ArrayList<CRoot>();
+				ArrayList properList	= rootSystem.get(newHeight);
+				for (int i = 1; i < Math.floor(newHeight / 2) + 1; i++)
 				{
-					/** Setup for a fake root scan of this height. */
-					int[] fakeVector = new int[rank];
-					for (int i = 0; i < fakeVector.length; i++)
+					/** We're only interested in i's with zero divisor. */
+					if(newHeight % i != 0)
+						continue;
+					int factor = newHeight / i;
+					ArrayList<CRoot> roots = rootSystem.get(i);
+					for(CRoot root : roots)
 					{
-						fakeVector[i] = 0;
+						CRoot rootMultiple = root.times(factor);
+						/**
+						 * Don't add it if it's already in the 'proper' root list.
+						 * Else we would count this one double.
+						 */
+						if(properList.contains(rootMultiple))
+							continue;
+						rootMultiple.coMult	= coMult(rootMultiple,false);
+						multiplesList.add(rootMultiple);
 					}
-					ArrayList fakeList = new ArrayList<CRoot>();
-					loopFakeRoots(newHeight, fakeVector, 0, true, fakeList, rootSystem.get(newHeight));
-					fakeRootTable.add(newHeight,fakeList);
 				}
+				rootMultiples.add(newHeight,multiplesList);
+				
 			}
 			else
 			{
@@ -466,12 +480,6 @@ public class CGroup
 				{
 					System.out.println(root.toString());
 					System.out.println("actual mult: " + multiplicity.toString());
-					/*
-					System.out.println("norm:" + innerProduct(root,root));
-					printRootTable(false);
-					printRootTable(true);
-					System.exit(0);
-					 */
 				}
 				
 			}
@@ -480,7 +488,6 @@ public class CGroup
 		
 		/** And add it to the table */
 		roots.add(root);
-		//System.out.println("added root: " + root.toString());
 		
 		/** Increment numPosRoots */
 		numPosRoots++;
@@ -496,6 +503,7 @@ public class CGroup
 	 * @param	root	The root whose co-multiplicity we should calculate.
 	 * @return			The co-multiplicity.
 	 */
+	// TODO : possible move this to CRoot.
 	private fraction coMult(CRoot root, boolean includeRoot)
 	{
 		int offset		= ( includeRoot ) ? 1 : 2;
@@ -528,19 +536,16 @@ public class CGroup
 	{
 		ArrayList<CRoot> betas	= rootSystem.get(height);
 		ArrayList<CRoot> gammas	= rootSystem.get(root.height() - height);
-
+		
 		fraction multiplicity = petersonSubPart(root, betas, gammas);
-
-		if(finite)
-			return multiplicity;
 		
-		ArrayList<CRoot> fakeBetas	= fakeRootTable.get(height);
-		ArrayList<CRoot> fakeGammas	= fakeRootTable.get(root.height() - height);
+		ArrayList<CRoot> betaMultiples	= rootMultiples.get(height);
+		ArrayList<CRoot> gammaMultiples	= rootMultiples.get(root.height() - height);
 		
-		multiplicity.add(petersonSubPart(root,fakeBetas,fakeGammas));
-		multiplicity.add(petersonSubPart(root,betas,fakeGammas));
-		multiplicity.add(petersonSubPart(root,fakeBetas,gammas));
-	
+		multiplicity.add(petersonSubPart(root,betaMultiples,gammaMultiples));
+		multiplicity.add(petersonSubPart(root,betas,gammaMultiples));
+		multiplicity.add(petersonSubPart(root,betaMultiples,gammas));
+		
 		return multiplicity;
 	}
 	
@@ -562,106 +567,19 @@ public class CGroup
 		return multiplicity;
 	}
 	
-	private void loopFakeRoots(
-			int height,
-			int[] vector,
-			int beginIndex,
-			boolean scanFirst,
-			ArrayList<CRoot> fakeList,
-			ArrayList<CRoot> properList)
-	{
-		do
-		{
-			if(scanFirst)
-			{
-				//System.out.println("considering fake: " + Globals.intArrayToString(vector));
-				CRoot fakeRoot = new CRoot(vector);
-				/** Only continue if the height is not exceeded. */
-				if(fakeRoot.height() > height)
-				{
-					/** Abort this line. */
-					return;
-				}
-				
-				/** Only try to add it if the height is right and it isn't a proper root. */
-				if(fakeRoot.height() == height)
-				{
-					if(!properList.contains(fakeRoot))
-					{
-						fraction coMult = coMult(fakeRoot,false);
-						/** Only add it if the coMult isn't zero. */
-						if(coMult.asDouble() > 0)
-						{
-							fakeRoot.coMult = coMult;
-							fakeList.add(fakeRoot);
-							//System.out.println("added fake root: " + fakeRoot.toString());
-						}
-					}
-					return;
-				}
-				
-			}
-			
-			/** Loop the next index. */
-			if(beginIndex + 1 < vector.length)
-				loopFakeRoots(height, vector.clone(), beginIndex + 1, false, fakeList, properList);
-			
-			/** Make sure the height is right. */
-			if(beginIndex == rank - 1)
-			{
-				int thisHeight = 0;
-				for (int i = 0; i < beginIndex; i++)
-				{
-					thisHeight += vector[i];
-				}
-				if(thisHeight > height)
-					return;
-				vector[beginIndex] = height - thisHeight;
-			}
-			else
-				vector[beginIndex]++;
-			
-			/** Increase this index s.t. it is a multiple of the lowest of the previous indices. */
-			int lowestEntry = Integer.MAX_VALUE;
-			for (int i = 0; i < beginIndex; i++)
-			{
-				if(vector[i] > 0 && vector[i] < lowestEntry)
-				{
-					lowestEntry = vector[i];
-				}
-			}
-			if(lowestEntry == 1)
-			{
-				return;
-			}
-			if(lowestEntry != Integer.MAX_VALUE)
-			{
-				while( (vector[beginIndex] % lowestEntry) != 0)
-				{
-					/** It's useless to add anything if we're already at the wanted height. */
-					if(beginIndex == rank - 1)
-						return;
-					vector[beginIndex]++;
-				}
-			}
-			
-			scanFirst = true;
-		} while( true );
-	}
-	
-	private void printRootTable(boolean fake)
+	private void printRootTable(boolean multiples)
 	{
 		ArrayList<ArrayList> table;
 		String type;
-		if(!fake)
+		if(!multiples)
 		{
 			table = rootSystem;
 			type = "proper";
 		}
 		else
 		{
-			table = fakeRootTable;
-			type = "fake";
+			table = rootMultiples;
+			type = "multiple";
 		}
 		
 		for (int i = 0; i < table.size(); i++)
