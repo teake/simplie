@@ -128,6 +128,8 @@ public class Globals
 	 */
 	public static boolean sameMatrices(Matrix matrix1, Matrix matrix2)
 	{
+		if(matrix1 == null || matrix2 == null)
+			return false;
 		if(matrix1.getColumnDimension() != matrix2.getColumnDimension())
 			return false;
 		if(matrix1.getRowDimension() != matrix2.getRowDimension())
@@ -137,6 +139,54 @@ public class Globals
 			for (int j = 0; j < matrix1.getColumnDimension(); j++)
 			{
 				if(matrix1.get(i,j) != matrix2.get(i,j))
+					return false;
+			}
+		}
+		return true;
+	}
+	
+	/**
+	 * Compares two Matrices.
+	 *
+	 * @param	matrix1	The first matrix we compare against the second.
+	 * @param	matrix2	The second matrix we compare against the first.
+	 * @return			True if the matrices are the same, false otherwise.
+	 */
+	public static boolean sameMatrices(int[][] matrix1, int[][] matrix2)
+	{
+		if(matrix1 == null || matrix2 == null)
+			return false;
+		if(matrix1.length != matrix2.length)
+			return false;
+		for (int i = 0; i < matrix1.length; i++)
+		{
+			for (int j = 0; j < matrix1.length; j++)
+			{
+				if(matrix1[i][j] != matrix2[i][j])
+					return false;
+			}
+		}
+		return true;
+	}
+	
+	/**
+	 * Compares two Matrices.
+	 *
+	 * @param	matrix1	The first matrix we compare against the second.
+	 * @param	matrix2	The second matrix we compare against the first.
+	 * @return			True if the matrices are the same, false otherwise.
+	 */
+	public static boolean sameMatrices(Matrix matrix1, int[][] matrix2)
+	{
+		if(matrix1 == null || matrix2 == null)
+			return false;
+		if(matrix1.getColumnDimension() != matrix2.length || matrix1.getColumnDimension() != matrix2.length)
+			return false;
+		for (int i = 0; i < matrix2.length; i++)
+		{
+			for (int j = 0; j < matrix2.length; j++)
+			{
+				if(matrix1.get(i,j) != (double) matrix2[i][j])
 					return false;
 			}
 		}
@@ -229,7 +279,7 @@ public class Globals
 		{
 			vector[i] = 0 + offset;
 		}
-		return vector;		
+		return vector;
 	}
 	
 }

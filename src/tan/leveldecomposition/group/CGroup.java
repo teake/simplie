@@ -11,6 +11,7 @@ import tan.leveldecomposition.*;
 import tan.leveldecomposition.math.*;
 import java.util.ArrayList;
 import java.text.DecimalFormat;
+import java.io.*;
 import Jama.Matrix;
 
 /**
@@ -179,7 +180,7 @@ public class CGroup
 	 * @param	dynkinLabels	The Dynkin labels of the representation.
 	 * @return					The dimension of the presentation.
 	 */
-	public int dimOfRep(int[] dynkinLabels)
+	public long dimOfRep(int[] dynkinLabels)
 	{
 		fraction	dim;
 		int			p_dot_m;
@@ -207,7 +208,7 @@ public class CGroup
 			}
 		}
 		
-		return dim.asInt();
+		return dim.asLong();
 	}
 	
 	/**
@@ -273,6 +274,69 @@ public class CGroup
 		return null;
 	}
 	
+	
+	/**
+	 * Saves the root system to file.
+	 *
+	 * @param	filename	Where to save the file.
+	 * @return				True upon succes, false on failure.
+	 */
+	public boolean saveTo(String filename)
+	{
+		filename.trim();
+		FileOutputStream fos	= null;
+		ObjectOutputStream out	= null;
+		try
+		{
+			fos = new FileOutputStream(filename);
+			out = new ObjectOutputStream(fos);
+			out.writeObject(cartanMatrix);
+			out.writeInt(constructedHeight);
+			out.writeObject(rootSystem);
+			out.writeObject(rootMultiples);
+			out.close();
+		}
+		catch(IOException ex)
+		{
+			return false;
+		}
+		return true;
+	}
+	
+	
+	/**
+	 * Loads the root system from a file.
+	 * Returns true on succes, false on failure.
+	 */
+	public boolean loadFrom(String filename)
+	{
+		filename.trim();
+		FileInputStream fis		= null;
+		ObjectInputStream in	= null;
+		try
+		{
+			fis = new FileInputStream(filename);
+			in	= new ObjectInputStream(fis);
+			int[][] savedCM	= (int[][]) in.readObject();
+			if(Globals.sameMatrices(savedCM, cartanMatrix))
+			{
+				constructedHeight	= in.readInt();
+				rootSystem			= (ArrayList<ArrayList>) in.readObject();
+				rootMultiples		= (ArrayList<ArrayList>) in.readObject();
+			}
+			else
+			{
+				in.close();
+				return false;
+			}
+			in.close();
+		}
+		catch(Exception ex)
+		{
+			return false;
+		}
+		return true;
+	}
 	
 	/**********************************
 	 * Private methods
@@ -366,7 +430,7 @@ public class CGroup
 			{
 				constructedHeight++;
 				
-				/** 
+				/**
 				 * Construct all the root multiples of this height
 				 */
 				ArrayList multiplesList	= new ArrayList<CRoot>();

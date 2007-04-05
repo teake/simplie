@@ -20,7 +20,8 @@ import tan.leveldecomposition.dynkindiagram.*;
  */
 public class Main extends javax.swing.JFrame
 {
-	FileFilter fileFilter;
+	FileFilter ddFilter;
+	FileFilter rsFilter;
 	
 	/** Creates new form LevelDecompositionUI */
 	public Main()
@@ -36,7 +37,9 @@ public class Main extends javax.swing.JFrame
 		}
 		initComponents();
 		
-		fileFilter = new FileNameExtensionFilter("Dynkin diagram", "dd");
+		ddFilter = new FileNameExtensionFilter("Dynkin diagram (*.dd)", "dd");
+		rsFilter = new FileNameExtensionFilter("Root system (*.rs)", "rs");
+		
 	}
 	
 	
@@ -56,8 +59,10 @@ public class Main extends javax.swing.JFrame
         levelDecomposition = new tan.leveldecomposition.ui.LevelDecomposition();
         MenuBar = new javax.swing.JMenuBar();
         MenuFile = new javax.swing.JMenu();
-        MenuItemOpen = new javax.swing.JMenuItem();
-        MenuItemSave = new javax.swing.JMenuItem();
+        MenuItemLoadAlgebra = new javax.swing.JMenuItem();
+        MenuItemLoadRoots = new javax.swing.JMenuItem();
+        MenuItemSaveAlgebra = new javax.swing.JMenuItem();
+        MenuItemSaveRoots = new javax.swing.JMenuItem();
         jSeparator1 = new javax.swing.JSeparator();
         MenuItemExit = new javax.swing.JMenuItem();
         MenuEdit = new javax.swing.JMenu();
@@ -91,31 +96,54 @@ public class Main extends javax.swing.JFrame
 
         MenuFile.setMnemonic('f');
         MenuFile.setLabel("File");
-        MenuItemOpen.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.CTRL_MASK));
-        MenuItemOpen.setMnemonic('o');
-        MenuItemOpen.setText("Open algebra settings");
-        MenuItemOpen.addActionListener(new java.awt.event.ActionListener()
+        MenuItemLoadAlgebra.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.CTRL_MASK));
+        MenuItemLoadAlgebra.setMnemonic('o');
+        MenuItemLoadAlgebra.setText("Load algebra settings");
+        MenuItemLoadAlgebra.addActionListener(new java.awt.event.ActionListener()
         {
             public void actionPerformed(java.awt.event.ActionEvent evt)
             {
-                MenuItemOpenActionPerformed(evt);
+                MenuItemLoadAlgebraActionPerformed(evt);
             }
         });
 
-        MenuFile.add(MenuItemOpen);
+        MenuFile.add(MenuItemLoadAlgebra);
 
-        MenuItemSave.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
-        MenuItemSave.setMnemonic('s');
-        MenuItemSave.setText("Save algebra settings");
-        MenuItemSave.addActionListener(new java.awt.event.ActionListener()
+        MenuItemLoadRoots.setMnemonic('r');
+        MenuItemLoadRoots.setText("Load root system");
+        MenuItemLoadRoots.addActionListener(new java.awt.event.ActionListener()
         {
             public void actionPerformed(java.awt.event.ActionEvent evt)
             {
-                MenuItemSaveActionPerformed(evt);
+                MenuItemLoadRootsActionPerformed(evt);
             }
         });
 
-        MenuFile.add(MenuItemSave);
+        MenuFile.add(MenuItemLoadRoots);
+
+        MenuItemSaveAlgebra.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
+        MenuItemSaveAlgebra.setMnemonic('s');
+        MenuItemSaveAlgebra.setText("Save algebra settings");
+        MenuItemSaveAlgebra.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                MenuItemSaveAlgebraActionPerformed(evt);
+            }
+        });
+
+        MenuFile.add(MenuItemSaveAlgebra);
+
+        MenuItemSaveRoots.setText("Save root system");
+        MenuItemSaveRoots.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                MenuItemSaveRootsActionPerformed(evt);
+            }
+        });
+
+        MenuFile.add(MenuItemSaveRoots);
 
         MenuFile.add(jSeparator1);
 
@@ -207,6 +235,53 @@ public class Main extends javax.swing.JFrame
         pack();
     }// </editor-fold>//GEN-END:initComponents
 	
+	private void MenuItemSaveRootsActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_MenuItemSaveRootsActionPerformed
+	{//GEN-HEADEREND:event_MenuItemSaveRootsActionPerformed
+		JFileChooser chooser = new JFileChooser("");
+		chooser.addChoosableFileFilter(rsFilter);
+		chooser.setDialogTitle("Save root system");
+		int returnVal = chooser.showSaveDialog(this);
+		
+		if ( returnVal == chooser.APPROVE_OPTION )
+		{
+		/* To create a URL for a file on the local file-system, we simply
+		 * pre-pend the "file" protocol to the absolute path of the file.
+		 */
+			String fileURL = chooser.getSelectedFile().getAbsolutePath();
+			if(!rsFilter.accept(chooser.getSelectedFile()))
+				fileURL += ".rs";
+			Globals.group.saveTo(fileURL);
+		}
+	}//GEN-LAST:event_MenuItemSaveRootsActionPerformed
+	
+	private void MenuItemLoadRootsActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_MenuItemLoadRootsActionPerformed
+	{//GEN-HEADEREND:event_MenuItemLoadRootsActionPerformed
+		String fileURL;
+		JFileChooser chooser;
+		int returnVal;
+		
+		chooser = new JFileChooser("");
+		chooser.addChoosableFileFilter(rsFilter);
+		chooser.setDialogTitle("Open root system");
+		returnVal = chooser.showOpenDialog(this);
+		
+		if ( returnVal == chooser.APPROVE_OPTION )
+		{
+		/* To create a URL for a file on the local file-system, we simply
+		 * pre-pend the "file" protocol to the absolute path of the file.
+		 */
+			fileURL = chooser.getSelectedFile().getAbsolutePath();
+			if(!Globals.group.loadFrom(fileURL))
+			{
+				optionPane.showMessageDialog(
+						popup,
+						"The root system does not belong to this Dynkin diagram.",
+						"Failed to load root system",
+						optionPane.WARNING_MESSAGE);
+			}
+		}
+	}//GEN-LAST:event_MenuItemLoadRootsActionPerformed
+	
     private void MenuItemHelpActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_MenuItemHelpActionPerformed
     {//GEN-HEADEREND:event_MenuItemHelpActionPerformed
 		optionPane.showMessageDialog(
@@ -221,10 +296,10 @@ public class Main extends javax.swing.JFrame
 				optionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_MenuItemHelpActionPerformed
 	
-    private void MenuItemSaveActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_MenuItemSaveActionPerformed
-    {//GEN-HEADEREND:event_MenuItemSaveActionPerformed
+	private void MenuItemSaveAlgebraActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_MenuItemSaveAlgebraActionPerformed
+	{//GEN-HEADEREND:event_MenuItemSaveAlgebraActionPerformed
 		JFileChooser chooser = new JFileChooser("");
-		chooser.addChoosableFileFilter(fileFilter);
+		chooser.addChoosableFileFilter(ddFilter);
 		chooser.setDialogTitle("Save Dynkin diagram");
 		int returnVal = chooser.showSaveDialog(this);
 		
@@ -234,21 +309,20 @@ public class Main extends javax.swing.JFrame
 		 * pre-pend the "file" protocol to the absolute path of the file.
 		 */
 			String fileURL = chooser.getSelectedFile().getAbsolutePath();
-			if(!fileFilter.accept(chooser.getSelectedFile()))
+			if(!ddFilter.accept(chooser.getSelectedFile()))
 				fileURL += ".dd";
 			DynkinDiagram.SaveTo(fileURL);
 		}
-    }//GEN-LAST:event_MenuItemSaveActionPerformed
+	}//GEN-LAST:event_MenuItemSaveAlgebraActionPerformed
 	
-    private void MenuItemOpenActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_MenuItemOpenActionPerformed
-    {//GEN-HEADEREND:event_MenuItemOpenActionPerformed
-		String initialDirectory = "";
+	private void MenuItemLoadAlgebraActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_MenuItemLoadAlgebraActionPerformed
+	{//GEN-HEADEREND:event_MenuItemLoadAlgebraActionPerformed
 		String fileURL;
 		JFileChooser chooser;
 		int returnVal;
 		
-		chooser = new JFileChooser(initialDirectory);
-		chooser.addChoosableFileFilter(fileFilter);
+		chooser = new JFileChooser("");
+		chooser.addChoosableFileFilter(ddFilter);
 		chooser.setDialogTitle("Open Dynkin diagram");
 		returnVal = chooser.showOpenDialog(this);
 		
@@ -261,7 +335,7 @@ public class Main extends javax.swing.JFrame
 			DynkinDiagram.LoadFrom(fileURL);
 			algebraSetup.Update();
 		}
-    }//GEN-LAST:event_MenuItemOpenActionPerformed
+	}//GEN-LAST:event_MenuItemLoadAlgebraActionPerformed
 	
     private void MenuItemLoadE11ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_MenuItemLoadE11ActionPerformed
     {//GEN-HEADEREND:event_MenuItemLoadE11ActionPerformed
@@ -333,9 +407,11 @@ public class Main extends javax.swing.JFrame
     private javax.swing.JMenuItem MenuItemClear;
     private javax.swing.JMenuItem MenuItemExit;
     private javax.swing.JMenuItem MenuItemHelp;
+    private javax.swing.JMenuItem MenuItemLoadAlgebra;
     private javax.swing.JMenuItem MenuItemLoadE11;
-    private javax.swing.JMenuItem MenuItemOpen;
-    private javax.swing.JMenuItem MenuItemSave;
+    private javax.swing.JMenuItem MenuItemLoadRoots;
+    private javax.swing.JMenuItem MenuItemSaveAlgebra;
+    private javax.swing.JMenuItem MenuItemSaveRoots;
     private javax.swing.JTabbedPane TabbedPane;
     private tan.leveldecomposition.ui.AlgebraSetup algebraSetup;
     private javax.swing.JSeparator jSeparator1;

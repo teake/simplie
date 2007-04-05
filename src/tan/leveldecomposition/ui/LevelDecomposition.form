@@ -93,7 +93,7 @@
                     <Column editable="false" title="p deleted" type="java.lang.String"/>
                     <Column editable="false" title="m" type="java.lang.String"/>
                     <Column editable="false" title="root length" type="java.lang.Integer"/>
-                    <Column editable="false" title="dimension" type="java.lang.Integer"/>
+                    <Column editable="false" title="dimension" type="java.lang.Long"/>
                     <Column editable="false" title="mult" type="java.lang.Integer"/>
                     <Column editable="false" title="height" type="java.lang.Integer"/>
                     <Column editable="false" title="# indices" type="java.lang.Integer"/>

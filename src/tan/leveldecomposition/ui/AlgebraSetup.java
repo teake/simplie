@@ -31,7 +31,10 @@ public class AlgebraSetup extends javax.swing.JPanel
 	
 	public void Update()
 	{
-		Globals.group		= new CGroup(DynkinDiagram.GetCartanMatrix());
+		if(Globals.group == null || !Globals.sameMatrices(DynkinDiagram.GetCartanMatrix(), Globals.group.cartanMatrix))
+		{
+			Globals.group		= new CGroup(DynkinDiagram.GetCartanMatrix());
+		}
 		Globals.subGroup	= new CGroup(DynkinDiagram.GetCartanSubMatrix("regular"));
 		Globals.delGroup	= new CGroup(DynkinDiagram.GetCartanSubMatrix("deleted"));
 		
