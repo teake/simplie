@@ -48,15 +48,17 @@ public class CGroup
 	/** The height up to and included to which we constructed the root system. */
 	private int constructedHeight;
 	/** The number of positive roots constructed so far. */
-	private int	numPosRoots;
+	private long numPosRoots;
 	/** The number of positive generators constructed so far. */
-	private int numPosGenerators;
+	private long numPosGenerators;
 	/** The table containing all the (positive) roots. */
 	private ArrayList<ArrayList> rootSystem;
 	/** The table containing all the multiples of roots that aren't roots themselves (used in the Peterson formula). */
 	private ArrayList<ArrayList> rootMultiples;
 	/** The simple roots. */
 	private ArrayList<CRoot> simpleRoots;
+	/** Boolean to indicate whether the root system construction should be canceled */
+	private boolean cancelConstruction;
 	
 	
 	
@@ -139,7 +141,7 @@ public class CGroup
 		if(finite)
 		{
 			constructRootSystem(0);
-			dim			= 2 * numPosGenerators + rank;
+			dim			= 2 * (int) numPosGenerators + rank;
 			dimension	= Globals.intToString(dim);
 		}
 		else
@@ -292,6 +294,8 @@ public class CGroup
 			out = new ObjectOutputStream(fos);
 			out.writeObject(cartanMatrix);
 			out.writeInt(constructedHeight);
+			out.writeLong(numPosRoots);
+			out.writeLong(numPosGenerators);
 			out.writeObject(rootSystem);
 			out.writeObject(rootMultiples);
 			out.close();
@@ -321,6 +325,8 @@ public class CGroup
 			if(Globals.sameMatrices(savedCM, cartanMatrix))
 			{
 				constructedHeight	= in.readInt();
+				numPosRoots			= in.readLong();
+				numPosGenerators	= in.readLong();
 				rootSystem			= (ArrayList<ArrayList>) in.readObject();
 				rootMultiples		= (ArrayList<ArrayList>) in.readObject();
 			}
@@ -336,6 +342,11 @@ public class CGroup
 			return false;
 		}
 		return true;
+	}
+	
+	public void cancelRootSystemConstruction()
+	{
+		cancelConstruction = true;
 	}
 	
 	/**********************************
@@ -354,11 +365,13 @@ public class CGroup
 		ArrayList<CRoot> rootCache;
 		CRoot	oldRoot;
 		CRoot	newRoot;
-		int		prevNumPosRoots;
+		long	prevNumPosRoots;
 		int		innerProduct;
 		int		n_minus;
 		int		newHeight;
 		int		oldHeight;
+		
+		cancelConstruction = false;
 		
 		while(constructedHeight < maxHeight || maxHeight == 0)
 		{
@@ -386,6 +399,9 @@ public class CGroup
 			{
 				for(CRoot simpleRoot : simpleRoots)
 				{
+					if(cancelConstruction)
+						return;
+					
 					newRoot = root.plus(simpleRoot);
 					
 					/** First check if didn't do this root before. */
@@ -618,15 +634,18 @@ public class CGroup
 		fraction multiplicity = new fraction(0);
 		for(CRoot beta : list1)
 		{
-			for(CRoot gamma : list2)
-			{
-				if(beta.plus(gamma).equals(root))
+			innerRootLoop:
+				for(CRoot gamma : list2)
 				{
+					for (int i = 0; i < rank; i++)
+					{
+						if(beta.vector[i] + gamma.vector[i] != root.vector[i])
+							continue innerRootLoop;
+					}
 					fraction part = beta.coMult.times(gamma.coMult);
 					part.multiply(innerProduct(beta,gamma));
 					multiplicity.add(part);
 				}
-			}
 		}
 		return multiplicity;
 	}

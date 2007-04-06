@@ -303,6 +303,7 @@ public class LevelDecomposition extends javax.swing.JPanel
 		{
 			/** The scanner is busy, and the button is a cancel button. So cancel the task. */
 			autoScanner.cancel(true);
+			Globals.group.cancelRootSystemConstruction();
 		}
 		else
 		{
