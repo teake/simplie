@@ -28,6 +28,11 @@ public class CGroup
 	public int[][]  cartanMatrix;
 	/** The inverse of the cartan matrix. */
 	public fraction[][] cartanMatrixInv;
+	/** 
+	 * The quadratic form matrix. Because we only work with simply-laced algebras, 
+	 * this is the same as the inverse of the cartan matrix.
+	 */
+	public fraction[][] qFormMatrix;
 	/** The determinant of the Cartan Matrix. */
 	public int		det;
 	/** The rank of the group. */
@@ -111,6 +116,8 @@ public class CGroup
 				}
 			}
 		}
+		/** Set a pointer to the inverse of the cartan matrix. */
+		this.qFormMatrix = cartanMatrixInv; 
 		
 		rootSystem = new ArrayList<ArrayList>();
 		numPosRoots = 0;
@@ -177,10 +184,11 @@ public class CGroup
 	
 	/**
 	 * Determines the dimension of the representation defined by
-	 * Dynkin labels associated to the given dynkinLabels.
+	 * Dynkin labels associated to the given dynkinLabels. 
+	 * Basically an implementation of Weyl's dimensionality formula.
 	 *
 	 * @param	dynkinLabels	The Dynkin labels of the representation.
-	 * @return					The dimension of the presentation.
+	 * @return					The dimension of the presentation, 0 if something's wrong.
 	 */
 	public long dimOfRep(int[] dynkinLabels)
 	{
@@ -211,6 +219,38 @@ public class CGroup
 		}
 		
 		return dim.asLong();
+	}
+	
+	/** 
+	 * Determines the multiplicity of a weight that sits in the representation
+	 * given by heighestWeight. Basically an implementation of the Freudenthal 
+	 * recursion formula.
+	 * 
+	 * @param	dynkinLabels	The Dynkin labels of the representation.
+	 * @param	weight			The weight for which the multiplicity is calculated.
+	 * @return					The multiplicity of the weight, 0 if something's wrong.
+	 */
+	public long weightMultiplicity(int[] dynkinLabels, int[] weight)
+	{
+		fraction multiplicity;
+		fraction denominator;
+		
+		/** Preliminary checks */
+		if(!finite || dynkinLabels.length != rank || weight.length != rank)
+			return 0;
+		
+		multiplicity = new fraction(0);
+		
+		//TODO: implement the recursive part
+		
+		denominator = innerProduct(dynkinLabels,dynkinLabels).minus(innerProduct(weight,weight));
+		for (int i = 0; i < rank; i++)
+		{
+			denominator.add(2 * (dynkinLabels[i] - weight[i]) );
+		}
+		multiplicity.divide(denominator);
+		
+		return multiplicity.asLong();
 	}
 	
 	/**
@@ -482,7 +522,9 @@ public class CGroup
 		}
 	}
 	
-	
+	/** 
+	 * Calculate the innerproduct between two roots.
+	 */
 	private int innerProduct(CRoot root1, CRoot root2)
 	{
 		int result = 0;
@@ -491,6 +533,22 @@ public class CGroup
 			for (int j = 0; j < rank; j++)
 			{
 				result += cartanMatrix[i][j] * root1.vector[i] * root2.vector[j];
+			}
+		}
+		return result;
+	}
+	
+	/** 
+	 * Calculate the innerproduct between to weights.
+	 */
+	private fraction innerProduct(int[] weight1, int[] weight2)
+	{
+		fraction result = new fraction(0);
+		for (int i = 0; i < rank; i++)
+		{
+			for (int j = 0; j < rank; j++)
+			{
+				result.add( qFormMatrix[i][j].times(weight1[i] * weight2[j]) );
 			}
 		}
 		return result;
