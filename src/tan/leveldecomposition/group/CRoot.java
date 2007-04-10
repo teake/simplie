@@ -199,10 +199,14 @@ public class CRoot implements Serializable
 	/** Overrides default toString method */
 	public String toString()
 	{
-		return "height: " + height() +
+		String output = "height: " + height() +
 				", vector: " + Globals.intArrayToString(vector) +
-				", mult: " + mult +
-				", coMult: " + coMult.toString();
+				", mult: " + mult;
+		
+		if(coMult != null)
+			output += ", coMult: " + coMult.toString();
+		
+		return output;
 	}
 	
 }
