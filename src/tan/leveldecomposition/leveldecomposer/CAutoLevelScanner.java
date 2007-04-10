@@ -14,6 +14,8 @@ import tan.leveldecomposition.*;
 import javax.swing.SwingWorker;
 import javax.swing.table.DefaultTableModel;
 import java.util.List;
+import java.util.ArrayList;
+import java.util.Collections;
 
 
 /**
@@ -27,6 +29,8 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 	int maxLevel;
 	int levelSign;
 	DefaultTableModel tableModel;
+	
+	ArrayList<CRepresentation> reps;
 	
 	/** Creates a new instance of CAutoLevelScanner */
 	public CAutoLevelScanner(boolean multiplicities, DefaultTableModel tableModel, int minLevel, int maxLevel)
@@ -96,7 +100,10 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 		{
 			dynkinLabels[i] = 0;
 		}
+		
+		reps = new ArrayList<CRepresentation>();
 		LoopDynkinLabels(levels, dynkinLabels, 0, true);
+		processRepresentations();
 	}
 	
 	private void LoopDynkinLabels(int[] levels, int[] dynkinLabels, int beginIndex, boolean scanFirst)
@@ -129,7 +136,7 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 					/** If we found a valid representation, add it. */
 					if(allGoodIntegers)
 					{
-						processHighestWeight(levels, dynkinLabels.clone(), rootComponents, rootLength);
+						addRepresentation(levels, dynkinLabels.clone(), rootComponents, rootLength);
 					}
 				}
 				else
@@ -145,63 +152,62 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 		} while( !isCancelled() );
 	}
 	
-	private void processHighestWeight(int[] levels, int[] dynkinLabels, int[] rootComponents, int rootLength)
+	private void addRepresentation(int[] levels, int[] dynkinLabels, int[] rootComponents, int rootLength)
 	{
-		int[]	coDynkinLabels;
-		int		numIndices;
-		long	mult = 0;
 		int[]	rootVector;
-		int		height;
+		CRoot	root;
+		CRepresentation rep;
 		
 		/** Divide all the root components by the subfactor. */
 		for (int i = 0; i < rootComponents.length; i++)
-		{
 			rootComponents[i] = rootComponents[i] / LevelHelper.subFactor;
-		}
-		
-		/** Calculate the remaining Dynkin labels */
-		coDynkinLabels = LevelHelper.CalculateCoDynkinLabels(levels,rootComponents);
-		
-		/** Calculate the number of indices of the subalgebra representation. */
-		numIndices = 0;
-		for (int i = 0; i < dynkinLabels.length; i++)
-		{
-			numIndices += dynkinLabels[i] * (i+1);
-		}
 		
 		/** Construct the whole root vector and see if it's present */
-		height		= 0;
 		rootVector	= new int[Globals.group.rank];
 		for (int i = 0; i < Globals.subGroup.rank; i++)
-		{
 			rootVector[LevelHelper.TranslateSubIndex(i)] = rootComponents[i];
-			height += rootComponents[i];
-		}
 		for (int i = 0; i < Globals.delGroup.rank; i++)
-		{
 			rootVector[LevelHelper.TranslateCoIndex(i)] = levels[i];
-			height += levels[i];
-		}
-		if(multiplicities)
-		{
-			
-			CRoot root = Globals.group.getRoot(rootVector);
-			if(root != null)
-				mult = root.mult;
-		}
+		root = Globals.group.getRoot(rootVector);
+		if(root == null)
+			return;
 		
-		/** Add the data to the table */
-		Object[] rowData = new Object[9];
-		rowData[0] = Globals.intArrayToString(levels);
-		rowData[1] = Globals.intArrayToString(dynkinLabels);
-		rowData[2] = Globals.intArrayToString(coDynkinLabels);
-		rowData[3] = Globals.intArrayToString(rootComponents);
-		rowData[4] = rootLength / LevelHelper.subFactor;
-		rowData[5] = (long) Globals.subGroup.dimOfRep(dynkinLabels);
-		rowData[6] = mult;
-		rowData[7] = height;
-		rowData[8] = numIndices;
-		publish(rowData);
+		/** Add the representation. */
+		rep = new CRepresentation(root,dynkinLabels,levels,rootComponents,rootLength / LevelHelper.subFactor);
+		reps.add(rep);
+	}
+	
+	private void processRepresentations()
+	{
+		int[]	coDynkinLabels;
+		int		numIndices;
+		
+		Collections.sort(reps);
+		
+		for(CRepresentation rep : reps)
+		{
+			/** Calculate the remaining Dynkin labels */
+			coDynkinLabels = LevelHelper.CalculateCoDynkinLabels(rep.levels,rep.rootComponents);
+			
+			/** Calculate the number of indices of the subalgebra representation. */
+			numIndices = 0;
+			for (int i = 0; i < rep.dynkinLabels.length; i++)
+			{
+				numIndices += rep.dynkinLabels[i] * (i+1);
+			}
+			/** Add the data to the table */
+			Object[] rowData = new Object[9];
+			rowData[0] = Globals.intArrayToString(rep.levels);
+			rowData[1] = Globals.intArrayToString(rep.dynkinLabels);
+			rowData[2] = Globals.intArrayToString(coDynkinLabels);
+			rowData[3] = Globals.intArrayToString(rep.rootComponents);
+			rowData[4] = rep.length;
+			rowData[5] = (long) Globals.subGroup.dimOfRep(rep.dynkinLabels);
+			rowData[6] = rep.root.mult;
+			rowData[7] = rep.root.height();
+			rowData[8] = numIndices;
+			publish(rowData);
+		}
 	}
 	
 }

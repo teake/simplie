@@ -28,8 +28,8 @@ public class CGroup
 	public int[][]  cartanMatrix;
 	/** The inverse of the cartan matrix. */
 	public fraction[][] cartanMatrixInv;
-	/** 
-	 * The quadratic form matrix. Because we only work with simply-laced algebras, 
+	/**
+	 * The quadratic form matrix. Because we only work with simply-laced algebras,
 	 * this is the same as the inverse of the cartan matrix.
 	 */
 	public fraction[][] qFormMatrix;
@@ -117,7 +117,7 @@ public class CGroup
 			}
 		}
 		/** Set a pointer to the inverse of the cartan matrix. */
-		this.qFormMatrix = cartanMatrixInv; 
+		this.qFormMatrix = cartanMatrixInv;
 		
 		rootSystem = new ArrayList<ArrayList>();
 		numPosRoots = 0;
@@ -184,7 +184,7 @@ public class CGroup
 	
 	/**
 	 * Determines the dimension of the representation defined by
-	 * Dynkin labels associated to the given dynkinLabels. 
+	 * Dynkin labels associated to the given dynkinLabels.
 	 * Basically an implementation of Weyl's dimensionality formula.
 	 *
 	 * @param	dynkinLabels	The Dynkin labels of the representation.
@@ -221,11 +221,11 @@ public class CGroup
 		return dim.asLong();
 	}
 	
-	/** 
+	/**
 	 * Determines the multiplicity of a weight that sits in the representation
-	 * given by heighestWeight. Basically an implementation of the Freudenthal 
+	 * given by heighestWeight. Basically an implementation of the Freudenthal
 	 * recursion formula.
-	 * 
+	 *
 	 * @param	dynkinLabels	The Dynkin labels of the representation.
 	 * @param	weight			The weight for which the multiplicity is calculated.
 	 * @return					The multiplicity of the weight, 0 if something's wrong.
@@ -522,7 +522,7 @@ public class CGroup
 		}
 	}
 	
-	/** 
+	/**
 	 * Calculate the innerproduct between two roots.
 	 */
 	private int innerProduct(CRoot root1, CRoot root2)
@@ -538,7 +538,7 @@ public class CGroup
 		return result;
 	}
 	
-	/** 
+	/**
 	 * Calculate the innerproduct between to weights.
 	 */
 	private fraction innerProduct(int[] weight1, int[] weight2)
@@ -576,6 +576,9 @@ public class CGroup
 			roots = new ArrayList<CRoot>();
 			rootSystem.add(root.height(),roots);
 		}
+		
+		/** Add it to the table */
+		roots.add(root);
 		
 		switch(root.height())
 		{
@@ -623,9 +626,6 @@ public class CGroup
 			}
 			
 		}
-		
-		/** And add it to the table */
-		roots.add(root);
 		
 		/** Increment numPosRoots */
 		numPosRoots++;

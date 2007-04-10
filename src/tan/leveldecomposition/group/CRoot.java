@@ -15,7 +15,7 @@ import java.io.Serializable;
  *
  * @author Teake Nutma
  */
-public class CRoot implements Serializable
+public class CRoot implements Serializable, Comparable<CRoot>
 {
 	/** The root vector. */
 	public final int[] vector;
@@ -194,6 +194,39 @@ public class CRoot implements Serializable
 		}
 		
 		return true;
+	}
+	
+	/**
+	 * Implements partial ordering on the roots.
+	 */
+	public int compareTo(CRoot root)
+	{
+		final int BEFORE = -1;
+		final int EQUAL = 0;
+		final int AFTER = 1;
+		
+		boolean biggerOrEqual	= true;
+		boolean smallerOrEqual	= true;
+		
+		for (int i = 0; i < vector.length; i++)
+		{
+			if(vector[i] - root.vector[i] < 0)
+				biggerOrEqual = false;
+			if(vector[i] - root.vector[i] > 0)
+				smallerOrEqual = false;
+		}
+
+		if(biggerOrEqual && !smallerOrEqual)
+			return AFTER;
+		if(!biggerOrEqual && smallerOrEqual)
+			return BEFORE;
+		
+		if(height() > root.height())
+			return AFTER;
+		if(height() < root.height())
+			return BEFORE;
+		
+		return EQUAL;
 	}
 	
 	/** Overrides default toString method */
