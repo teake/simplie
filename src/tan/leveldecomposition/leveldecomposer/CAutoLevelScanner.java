@@ -154,8 +154,7 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 	
 	private void addRepresentation(int[] levels, int[] dynkinLabels, int[] rootComponents, int rootLength)
 	{
-		int[]	rootVector;
-		CRoot	root;
+		int[]			rootVector;
 		CRepresentation rep;
 		
 		/** Divide all the root components by the subfactor. */
@@ -168,12 +167,15 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 			rootVector[LevelHelper.TranslateSubIndex(i)] = rootComponents[i];
 		for (int i = 0; i < Globals.delGroup.rank; i++)
 			rootVector[LevelHelper.TranslateCoIndex(i)] = levels[i];
-		root = Globals.group.getRoot(rootVector);
-		if(root == null)
-			return;
 		
 		/** Add the representation. */
-		rep = new CRepresentation(root,dynkinLabels,levels,rootComponents,rootLength / LevelHelper.subFactor);
+		rep = new CRepresentation(
+				rootVector,
+				dynkinLabels,
+				levels,
+				rootComponents,
+				rootLength / LevelHelper.subFactor
+				);
 		reps.add(rep);
 	}
 	
@@ -181,20 +183,31 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 	{
 		int[]	coDynkinLabels;
 		int		numIndices;
+		long	mult;
 		
 		Collections.sort(reps);
 		
 		for(CRepresentation rep : reps)
 		{
+			mult		= 0;
+			numIndices	= 0;
+	
 			/** Calculate the remaining Dynkin labels */
 			coDynkinLabels = LevelHelper.CalculateCoDynkinLabels(rep.levels,rep.rootComponents);
 			
 			/** Calculate the number of indices of the subalgebra representation. */
-			numIndices = 0;
 			for (int i = 0; i < rep.dynkinLabels.length; i++)
 			{
 				numIndices += rep.dynkinLabels[i] * (i+1);
 			}
+					
+			if(multiplicities)
+			{
+				CRoot root = Globals.group.getRoot(rep.rootVector);
+				if(root != null)
+					mult = root.mult;
+			}
+			
 			/** Add the data to the table */
 			Object[] rowData = new Object[9];
 			rowData[0] = Globals.intArrayToString(rep.levels);
@@ -203,8 +216,8 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 			rowData[3] = Globals.intArrayToString(rep.rootComponents);
 			rowData[4] = rep.length;
 			rowData[5] = (long) Globals.subGroup.dimOfRep(rep.dynkinLabels);
-			rowData[6] = rep.root.mult;
-			rowData[7] = rep.root.height();
+			rowData[6] = mult;
+			rowData[7] = rep.height;
 			rowData[8] = numIndices;
 			publish(rowData);
 		}

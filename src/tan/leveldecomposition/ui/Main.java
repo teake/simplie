@@ -109,6 +109,7 @@ public class Main extends javax.swing.JFrame
 
         MenuFile.add(MenuItemLoadAlgebra);
 
+        MenuItemLoadRoots.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_L, java.awt.event.InputEvent.CTRL_MASK));
         MenuItemLoadRoots.setMnemonic('r');
         MenuItemLoadRoots.setText("Load root system");
         MenuItemLoadRoots.addActionListener(new java.awt.event.ActionListener()
