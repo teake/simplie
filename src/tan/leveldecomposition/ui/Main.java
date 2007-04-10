@@ -64,6 +64,8 @@ public class Main extends javax.swing.JFrame
         MenuItemSaveAlgebra = new javax.swing.JMenuItem();
         MenuItemSaveRoots = new javax.swing.JMenuItem();
         jSeparator1 = new javax.swing.JSeparator();
+        jMenuItemPrint = new javax.swing.JMenuItem();
+        jSeparator3 = new javax.swing.JSeparator();
         MenuItemExit = new javax.swing.JMenuItem();
         MenuEdit = new javax.swing.JMenu();
         MenuItemClear = new javax.swing.JMenuItem();
@@ -147,6 +149,19 @@ public class Main extends javax.swing.JFrame
         MenuFile.add(MenuItemSaveRoots);
 
         MenuFile.add(jSeparator1);
+
+        jMenuItemPrint.setText("Print representation table");
+        jMenuItemPrint.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                jMenuItemPrintActionPerformed(evt);
+            }
+        });
+
+        MenuFile.add(jMenuItemPrint);
+
+        MenuFile.add(jSeparator3);
 
         MenuItemExit.setMnemonic('x');
         MenuItemExit.setText("Exit");
@@ -235,6 +250,11 @@ public class Main extends javax.swing.JFrame
         );
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+	private void jMenuItemPrintActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jMenuItemPrintActionPerformed
+	{//GEN-HEADEREND:event_jMenuItemPrintActionPerformed
+		levelDecomposition.printTable();
+	}//GEN-LAST:event_jMenuItemPrintActionPerformed
 	
 	private void MenuItemSaveRootsActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_MenuItemSaveRootsActionPerformed
 	{//GEN-HEADEREND:event_MenuItemSaveRootsActionPerformed
@@ -415,8 +435,10 @@ public class Main extends javax.swing.JFrame
     private javax.swing.JMenuItem MenuItemSaveRoots;
     private javax.swing.JTabbedPane TabbedPane;
     private tan.leveldecomposition.ui.AlgebraSetup algebraSetup;
+    private javax.swing.JMenuItem jMenuItemPrint;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
+    private javax.swing.JSeparator jSeparator3;
     private tan.leveldecomposition.ui.LevelDecomposition levelDecomposition;
     private javax.swing.JOptionPane optionPane;
     private javax.swing.JFrame popup;

@@ -12,6 +12,7 @@ import tan.leveldecomposition.*;
 
 import java.util.*;
 import javax.swing.table.*;
+import java.awt.print.PrinterException;
 import java.awt.Cursor;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeEvent;
@@ -40,6 +41,18 @@ public class LevelDecomposition extends javax.swing.JPanel
 		representationsTable.setModel(tableModel);
 		
 		SetSignConvention();
+	}
+	
+	public void printTable()
+	{
+		try
+		{
+			representationsTable.print();
+		}
+		catch (PrinterException e)
+		{
+			e.printStackTrace();
+		}
 	}
 	
 	private void SetSignConvention()
