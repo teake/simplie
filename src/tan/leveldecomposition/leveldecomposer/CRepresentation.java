@@ -19,6 +19,8 @@ public class CRepresentation implements Comparable<CRepresentation>
 	public final int[] rootComponents;
 	public final int length;
 	public final int height;
+	private long outerMult;
+	private long rootMult;
 	
 	
 	/** Creates a new instance of CRepresentation */
@@ -29,13 +31,35 @@ public class CRepresentation implements Comparable<CRepresentation>
 		this.levels			= levels;
 		this.rootComponents = rootComponents;
 		this.length			= length;
-
+		this.rootMult		= 0;
+		this.outerMult		= 0;
+		
 		int tHeight = 0;
 		for (int i = 0; i < rootVector.length; i++)
 		{
 			tHeight += rootVector[i];
 		}
-		this.height = tHeight;		
+		this.height = tHeight;
+	}
+	
+	public void setOuterMult(long outerMult)
+	{
+		this.outerMult = outerMult;
+	}
+	
+	public long getOuterMult()
+	{
+		return outerMult;
+	}
+	
+	public void setRootMult(long rootMult)
+	{
+		this.rootMult = rootMult;
+	}
+	
+	public long getRootMult()
+	{
+		return rootMult;
 	}
 	
 	/** Sort representations by means of their associated roots. */

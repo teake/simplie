@@ -87,7 +87,7 @@
             <Component class="javax.swing.JTable" name="representationsTable">
               <Properties>
                 <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                  <Table columnCount="9" rowCount="0">
+                  <Table columnCount="10" rowCount="0">
                     <Column editable="false" title="l" type="java.lang.String"/>
                     <Column editable="false" title="p" type="java.lang.String"/>
                     <Column editable="false" title="p deleted" type="java.lang.String"/>
@@ -95,6 +95,7 @@
                     <Column editable="false" title="root length" type="java.lang.Integer"/>
                     <Column editable="false" title="dimension" type="java.lang.Long"/>
                     <Column editable="false" title="mult" type="java.lang.Integer"/>
+                    <Column editable="false" title="mu" type="java.lang.Integer"/>
                     <Column editable="false" title="height" type="java.lang.Integer"/>
                     <Column editable="false" title="# indices" type="java.lang.Integer"/>
                   </Table>

@@ -99,6 +99,14 @@ public class fraction implements Cloneable, Comparable, java.io.Serializable
 		return (int) asLong();
 	}
 	
+	public boolean isInt()
+	{
+		if(numerator() % denominator() == 0)
+			return true;
+		else
+			return false;
+	}
+	
 	/**
 	 * Compute the nonnegative greatest common divisor of a and b.
 	 * (This is needed for normalizing fractions, but can be

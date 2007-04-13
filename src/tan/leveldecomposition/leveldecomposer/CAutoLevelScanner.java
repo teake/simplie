@@ -55,9 +55,17 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 		
 		int base	= maxLevel + 1 - minLevel;
 		long num	= (long) Math.pow(base, Globals.delGroup.rank);
-		for (long i = 0; i < num; i++)
+		try
 		{
-			Scan(Globals.numberToVector(i,base,Globals.delGroup.rank,minLevel));
+			for (long i = 0; i < num; i++)
+			{
+				Scan(Globals.numberToVector(i,base,Globals.delGroup.rank,minLevel));
+			}
+			
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
 		}
 		
 		return null;
@@ -183,15 +191,48 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 	{
 		int[]	coDynkinLabels;
 		int		numIndices;
-		long	mult;
+		long	outerMult;
+		CRepresentation repI;
+		CRepresentation repJ;
 		
 		Collections.sort(reps);
 		
+		if(multiplicities)
+		{
+			//TODO: also account for the other sign of LevelHelper
+			
+			for (int i = 0; i < reps.size(); i++)
+			{
+				repI = reps.get(i);
+				
+				/** Get and set the root multiplicities */
+				CRoot root = Globals.group.getRoot(repI.rootVector);
+				if(root != null)
+					repI.setRootMult(root.mult);
+				else
+					continue;
+				
+				/** Calculate the outer multiplicities */
+				outerMult = repI.getRootMult();
+				for (int j = 0; j < i; j++)
+				{
+					repJ = reps.get(j);
+					if(repJ.length <= repI.length)
+						continue;
+					outerMult -= repJ.getOuterMult() * Globals.subGroup.weightMultiplicity(
+							Globals.flipIntArray(repJ.dynkinLabels),
+							Globals.flipIntArray(repI.dynkinLabels)
+							);
+				}
+				repI.setOuterMult(outerMult);
+			}
+		}
+		
+		/** Publish the representations to the output table. */
 		for(CRepresentation rep : reps)
 		{
-			mult		= 0;
 			numIndices	= 0;
-	
+			
 			/** Calculate the remaining Dynkin labels */
 			coDynkinLabels = LevelHelper.CalculateCoDynkinLabels(rep.levels,rep.rootComponents);
 			
@@ -200,25 +241,19 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 			{
 				numIndices += rep.dynkinLabels[i] * (i+1);
 			}
-					
-			if(multiplicities)
-			{
-				CRoot root = Globals.group.getRoot(rep.rootVector);
-				if(root != null)
-					mult = root.mult;
-			}
 			
 			/** Add the data to the table */
-			Object[] rowData = new Object[9];
+			Object[] rowData = new Object[10];
 			rowData[0] = Globals.intArrayToString(rep.levels);
 			rowData[1] = Globals.intArrayToString(rep.dynkinLabels);
 			rowData[2] = Globals.intArrayToString(coDynkinLabels);
 			rowData[3] = Globals.intArrayToString(rep.rootComponents);
 			rowData[4] = rep.length;
 			rowData[5] = (long) Globals.subGroup.dimOfRep(rep.dynkinLabels);
-			rowData[6] = mult;
-			rowData[7] = rep.height;
-			rowData[8] = numIndices;
+			rowData[6] = rep.getRootMult();
+			rowData[7] = rep.getOuterMult();
+			rowData[8] = rep.height;
+			rowData[9] = numIndices;
 			publish(rowData);
 		}
 	}

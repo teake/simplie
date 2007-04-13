@@ -96,6 +96,16 @@ public class Globals
 		return output;
 	}
 	
+	public static int[] flipIntArray(int[] array)
+	{
+		int[] output = new int[array.length];
+		for (int i = 0; i < array.length; i++)
+		{
+			output[i] = array[array.length - i - 1];
+		}
+		return output;
+	}
+	
 	/**
 	 * Returns the A_n cartan matrix of the given rank.
 	 *
