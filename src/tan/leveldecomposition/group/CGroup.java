@@ -426,16 +426,13 @@ public class CGroup
 		int						newDepth;
 		CWeight					highestWeight;
 		boolean					addedSomething;
+		int[]					newSubtractable;
 		
 		
 		/** First add the highest weight */
-		weightSystem = new ArrayList<ArrayList>();
-		highestWeight = new CWeight(highestWeightLabels);
-		for (int i = 0; i < rank; i++)
-		{
-			highestWeight.setSimpRootSubtractable(i,highestWeightLabels[i]);
-		}
-		zeroDepthWeight = new ArrayList<CWeight>();
+		weightSystem	= new ArrayList<ArrayList>();
+		highestWeight	= new CWeight(highestWeightLabels);
+		zeroDepthWeight	= new ArrayList<CWeight>();
 		zeroDepthWeight.add(highestWeight);
 		
 		weightSystem.add(0,zeroDepthWeight);
@@ -471,20 +468,24 @@ public class CGroup
 						}
 						CWeight newWeight = new CWeight(newDynkinLabels);
 						
-						/** Don't do anything if this weight is already present */
-						if(thisDepthWeights.contains(newWeight))
-							continue;
-						
 						/** How many times can we subtract a simple root from this weight? */
-						for (int j = 0; j < rank; j++)
+						newSubtractable = oldWeight.getSimpRootSubtractable();
+						newSubtractable[i]--;
+						newWeight.setSimpRootSubtractable(newSubtractable);
+						
+						/** Only possibly increase simpRootSubtractable if this root is already present. */
+						int existingIndex = thisDepthWeights.indexOf(newWeight);
+						if(existingIndex != -1)
 						{
-							newWeight.setSimpRootSubtractable(
-									j,
-									Math.max(oldWeight.getSimpRootSubtractable(j) - 1, newWeight.dynkinLabels[j])
-									);
+							thisDepthWeights.get(existingIndex).setSimpRootSubtractable(newWeight.getSimpRootSubtractable());
+							continue;
 						}
+						
+						/** Set the depth and the multiplicity */
 						newWeight.setDepth(newDepth);
 						setWeightMult(weightSystem, newWeight, highestWeightFactor);
+						
+						/** And add it. */
 						thisDepthWeights.add(newWeight);
 						addedSomething = true;
 					}
@@ -519,7 +520,6 @@ public class CGroup
 		/** Now sum over all positive roots */
 		for (int height = 1; height <= maxHeight; height++)
 		{
-			System.out.println(height);
 			ArrayList<CRoot> roots = rootSystem.get(height);
 			int maxK = (int) Math.floor(weight.getDepth()/height);
 			for(CRoot root : roots)
@@ -551,17 +551,8 @@ public class CGroup
 		mult.divide(denominator);
 		if(!mult.isInt())
 		{
-			for(int i = 0; i < weightSystem.size(); i++)
-			{
-				ArrayList<CWeight> weights2 = weightSystem.get(i);
-				for(CWeight weight2 : weights2)
-				{
-					System.out.println(weight2);
-				}
-			}
 			System.out.println("calculated mult: " + mult);
 			System.out.println(weight);
-			System.exit(0);
 		}
 		weight.setMult(2 * numerator / denominator.asInt());
 	}

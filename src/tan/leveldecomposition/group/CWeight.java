@@ -27,9 +27,13 @@ public class CWeight
 	public CWeight(int[] dynkinLabels)
 	{
 		this.dynkinLabels			= dynkinLabels.clone();
-		this.simpRootSubtractable	= new int[dynkinLabels.length];
 		this.mult					= 1;
 		this.depth					= 0;
+		this.simpRootSubtractable	= new int[dynkinLabels.length];
+		for (int i = 0; i < dynkinLabels.length; i++)
+		{
+			simpRootSubtractable[i] = Math.max(dynkinLabels[i],0);
+		}
 	}
 	
 	public long getMult()
@@ -54,9 +58,16 @@ public class CWeight
 	{
 		return simpRootSubtractable[index];
 	}
-	public void setSimpRootSubtractable(int index, int times)
+	public int[] getSimpRootSubtractable()
 	{
-		simpRootSubtractable[index] = times;
+		return simpRootSubtractable.clone();
+	}
+	public void setSimpRootSubtractable(int[] newMininumValues)
+	{
+		for (int i = 0; i < simpRootSubtractable.length; i++)
+		{
+			simpRootSubtractable[i] = Math.max(simpRootSubtractable[i], newMininumValues[i]);
+		}
 	}
 	
 	/**
@@ -87,6 +98,9 @@ public class CWeight
 	
 	public String toString()
 	{
-		return "depth: " + getDepth() + ", labels: " + Globals.intArrayToString(dynkinLabels) + ", mult: " + getMult();
+		return "depth: " + getDepth() + 
+				", labels: " + Globals.intArrayToString(dynkinLabels) + 
+				", mult: " + getMult() +
+				", simp subtractable: " + Globals.intArrayToString(simpRootSubtractable);
 	}
 }
