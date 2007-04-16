@@ -73,6 +73,8 @@ public class DynkinDiagramPanel extends javax.swing.JPanel
 	{
 		if(node.enabled)
 			g2.setColor(Color.WHITE);
+		else if(node.isDisconnected())
+			g2.setColor(Color.ORANGE);
 		else
 			g2.setColor(Color.GRAY);
 		g2.fillOval(cTrans(node.x), cTrans(node.y), radius, radius);
@@ -148,9 +150,7 @@ public class DynkinDiagramPanel extends javax.swing.JPanel
     {//GEN-HEADEREND:event_formMouseReleased
 		/** Don't do anything while we are scanning. */
 		if(Globals.scanning)
-		{
 			return;
-		}
 		
 		int x = cTransInv(evt.getX());
 		int y = cTransInv(evt.getY());

@@ -43,6 +43,22 @@ public class CDynkinNode implements Serializable, Comparable<CDynkinNode>
 	}
 	
 	/** 
+	 * The node is "disconnected" if it is part of the disconnected subalgebra,
+	 * i.e. the subalgebra that is disabled and has no connections to enabled nodes.
+	 */
+	public boolean isDisconnected()
+	{
+		if(enabled)
+			return false;
+		for(CDynkinConnection conn : connections)
+		{
+			if(conn.toNode.enabled)
+				return false;
+		}
+		return true;
+	}
+	
+	/** 
 	 * Adds a connection from this node to "toNode"
 	 *
 	 * @param	toNode	The node to which we should lay a connection

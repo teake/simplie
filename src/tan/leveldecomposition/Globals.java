@@ -31,6 +31,8 @@ public class Globals
 	public static CGroup subGroup;
 	/** Global CGroup object for the deleted subgroup */
 	public static CGroup delGroup;
+	/** Global CGroup object for the disconnected disabled subgroup */
+	public static CGroup disGroup;
 	/** Are we performing a scan right now? */
 	public static boolean scanning;
 	
