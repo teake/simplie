@@ -332,7 +332,7 @@ public class Main extends javax.swing.JFrame
 			String fileURL = chooser.getSelectedFile().getAbsolutePath();
 			if(!ddFilter.accept(chooser.getSelectedFile()))
 				fileURL += ".dd";
-			DynkinDiagram.SaveTo(fileURL);
+			DynkinDiagram.saveTo(fileURL);
 		}
 	}//GEN-LAST:event_MenuItemSaveAlgebraActionPerformed
 	
@@ -353,7 +353,7 @@ public class Main extends javax.swing.JFrame
 		 * pre-pend the "file" protocol to the absolute path of the file.
 		 */
 			fileURL = chooser.getSelectedFile().getAbsolutePath();
-			DynkinDiagram.LoadFrom(fileURL);
+			DynkinDiagram.loadFrom(fileURL);
 			algebraSetup.Update();
 		}
 	}//GEN-LAST:event_MenuItemLoadAlgebraActionPerformed
@@ -361,27 +361,27 @@ public class Main extends javax.swing.JFrame
     private void MenuItemLoadE11ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_MenuItemLoadE11ActionPerformed
     {//GEN-HEADEREND:event_MenuItemLoadE11ActionPerformed
 		DynkinDiagram.Clear();
-		DynkinDiagram.AddNode(2,0);
-		DynkinDiagram.AddNode(0,1);
-		DynkinDiagram.AddNode(1,1);
-		DynkinDiagram.AddNode(2,1);
-		DynkinDiagram.AddNode(3,1);
-		DynkinDiagram.AddNode(4,1);
-		DynkinDiagram.AddNode(5,1);
-		DynkinDiagram.AddNode(6,1);
-		DynkinDiagram.AddNode(7,1);
-		DynkinDiagram.AddNode(8,1);
-		DynkinDiagram.AddNode(9,1);
-		DynkinDiagram.ModifyConnection(1,4,true);
-		DynkinDiagram.ModifyConnection(2,3,true);
-		DynkinDiagram.ModifyConnection(3,4,true);
-		DynkinDiagram.ModifyConnection(4,5,true);
-		DynkinDiagram.ModifyConnection(5,6,true);
-		DynkinDiagram.ModifyConnection(6,7,true);
-		DynkinDiagram.ModifyConnection(7,8,true);
-		DynkinDiagram.ModifyConnection(8,9,true);
-		DynkinDiagram.ModifyConnection(9,10,true);
-		DynkinDiagram.ModifyConnection(10,11,true);
+		DynkinDiagram.addNode(2,0);
+		DynkinDiagram.addNode(0,1);
+		DynkinDiagram.addNode(1,1);
+		DynkinDiagram.addNode(2,1);
+		DynkinDiagram.addNode(3,1);
+		DynkinDiagram.addNode(4,1);
+		DynkinDiagram.addNode(5,1);
+		DynkinDiagram.addNode(6,1);
+		DynkinDiagram.addNode(7,1);
+		DynkinDiagram.addNode(8,1);
+		DynkinDiagram.addNode(9,1);
+		DynkinDiagram.modifyConnection(1,4,true);
+		DynkinDiagram.modifyConnection(2,3,true);
+		DynkinDiagram.modifyConnection(3,4,true);
+		DynkinDiagram.modifyConnection(4,5,true);
+		DynkinDiagram.modifyConnection(5,6,true);
+		DynkinDiagram.modifyConnection(6,7,true);
+		DynkinDiagram.modifyConnection(7,8,true);
+		DynkinDiagram.modifyConnection(8,9,true);
+		DynkinDiagram.modifyConnection(9,10,true);
+		DynkinDiagram.modifyConnection(10,11,true);
 		algebraSetup.Update();
     }//GEN-LAST:event_MenuItemLoadE11ActionPerformed
 	

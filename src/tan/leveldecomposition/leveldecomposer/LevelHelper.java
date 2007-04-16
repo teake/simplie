@@ -54,7 +54,7 @@ public class LevelHelper
 	public static void Setup()
 	{
 		LevelHelper.subFactor		= Globals.subGroup.det;
-		LevelHelper.enabledNodes	= DynkinDiagram.GetEnabledNodes();
+		LevelHelper.enabledNodes	= DynkinDiagram.enabledNodes();
 		LevelHelper.S				= new int[Globals.subGroup.rank][Globals.subGroup.rank];
 		
 		/**

@@ -22,7 +22,6 @@ public class DynkinDiagram
 {
 	private static DynkinDiagram _instance = new DynkinDiagram();
 	public static Vector<CDynkinNode>		nodes;
-	public static Vector<CDynkinConnection>	connections;
 	
 	/**
 	 * Creates a new instance of DynkinDiagram
@@ -30,7 +29,6 @@ public class DynkinDiagram
 	private DynkinDiagram()
 	{
 		nodes		= new Vector<CDynkinNode>();
-		connections	= new Vector<CDynkinConnection>();
 	}
 	
 	public static DynkinDiagram getInstance()
@@ -42,19 +40,23 @@ public class DynkinDiagram
 	public static void Clear()
 	{
 		nodes.clear();
-		connections.clear();
+	}
+	
+	public static int rank()
+	{
+		return nodes.size();
 	}
 	
 	/**
 	 * Returns an array of booleans.
 	 * True if the corresponding node is enabled, false if disabled.
 	 */
-	public static boolean[] GetEnabledNodes()
+	public static boolean[] enabledNodes()
 	{
-		boolean[] enabledNodes = new boolean[nodes.size()];
-		for (int i = 0; i < nodes.size(); i++)
+		boolean[] enabledNodes = new boolean[rank()];
+		for (int i = 0; i < rank(); i++)
 		{
-			if(GetNodeByLabel(i+1).enabled)
+			if(getNodeByLabel(i+1).enabled)
 				enabledNodes[i] = true;
 			else
 				enabledNodes[i] = false;
@@ -63,58 +65,10 @@ public class DynkinDiagram
 	}
 	
 	/**
-	 * Returns the internal id of a node, given its label number.
-	 * Returns -1 if there's no node found.
-	 */
-	private static int GetNodeIdByLabel(int label)
-	{
-		for (CDynkinNode node : nodes)
-		{
-			if(node.label == label)
-			{
-				return node.id;
-			}
-		}
-		return -1;
-	}
-	
-	/**
-	 * Returns the external label of a node, given its internal id.
-	 * Returns -1 if there's no node found.
-	 */
-	private static int GetNodeLabelById(int id)
-	{
-		for (CDynkinNode node : nodes)
-		{
-			if(node.id == id)
-			{
-				return node.label;
-			}
-		}
-		return -1;
-	}
-	
-	/**
-	 * Fetches a node by its internal id.
-	 * Returns null if the node is not found.
-	 */
-	public static CDynkinNode GetNodeById(int id)
-	{
-		for (CDynkinNode node : nodes)
-		{
-			if(node.id == id)
-			{
-				return node;
-			}
-		}
-		return null;
-	}
-	
-	/**
 	 * Fetches a node by its external label.
 	 * Returns null if the node is not found.
 	 */
-	private static CDynkinNode GetNodeByLabel(int label)
+	private static CDynkinNode getNodeByLabel(int label)
 	{
 		for (CDynkinNode node : nodes)
 		{
@@ -126,7 +80,7 @@ public class DynkinDiagram
 		return null;
 	}
 	
-	public static CDynkinNode GetNodeByCoor(int x, int y)
+	public static CDynkinNode getNodeByCoor(int x, int y)
 	{
 		for (CDynkinNode node : nodes)
 		{
@@ -139,35 +93,40 @@ public class DynkinDiagram
 	}
 	
 	/** Returns the Cartan matrix of the whole algebra. */
-	public static Matrix GetCartanMatrix()
+	public static Matrix cartanMatrix()
 	{
-		Refactor();
+		refactor();
 		
-		Matrix cartanMatrix = new Matrix(nodes.size(),nodes.size());
-		for(int i = 0; i < nodes.size(); i++)
-		{
+		/** Creates a rank x rank matrix filled with zeros. */
+		Matrix cartanMatrix = new Matrix(rank(),rank());
+		
+		/** Set the diagonals to two. */
+		for(int i = 0; i < rank(); i++)
 			cartanMatrix.set(i,i,2);
-			for (CDynkinConnection connection : connections)
+		
+		/** Set the off-diagonal parts. */
+		for (int i = 0; i < rank(); i++)
+		{
+			for (int j = i + 1; j < rank(); j++)
 			{
-				if(GetNodeLabelById(connection.idNode1) == i + 1)
+				if( getNodeByLabel(i+1).hasConnectionTo(j+1) || getNodeByLabel(j+1).hasConnectionTo(i+1) )
 				{
-					int index2 = GetNodeLabelById(connection.idNode2) - 1;
-					cartanMatrix.set(i,index2, -1);
-					cartanMatrix.set(index2,i, -1);
-				}
+					cartanMatrix.set(i,j,-1);
+					cartanMatrix.set(j,i,-1);
+				}				
 			}
-			
 		}
+		
 		return cartanMatrix;
 	}
 	
-	/** 
+	/**
 	 * Returns the Cartan matrix of one of the subalgebras
 	 *
 	 * @param	type	The name of the subalgebra to get. Either "regular" or "deleted".
 	 * @return			The cartan matrix of the regular or deleted subalgebra.
 	 */
-	public static Matrix GetCartanSubMatrix(String type)
+	public static Matrix cartanSubMatrix(String type)
 	{
 		if( !( type == "regular" || type == "deleted" ) )
 		{
@@ -182,21 +141,20 @@ public class DynkinDiagram
 				subRank++;
 			}
 		}
-		int rank    = nodes.size();
 		int offsetI = 0;
 		int offsetJ = 0;
 		
 		Matrix cartanSubMatrix	= new Matrix(subRank,subRank);
-		Matrix cartanMatrix	= GetCartanMatrix();
+		Matrix cartanMatrix	= cartanMatrix();
 		
 		/** Copy the Cartan matrix elements into the submatrix. */
-		for(int i = 0; i < rank; i++)
+		for(int i = 0; i < rank(); i++)
 		{
-			if( (GetNodeByLabel(i+1).enabled && type == "regular") || (!GetNodeByLabel(i+1).enabled && type == "deleted") )
+			if( (getNodeByLabel(i+1).enabled && type == "regular") || (!getNodeByLabel(i+1).enabled && type == "deleted") )
 			{
-				for(int j = 0; j < rank; j++)
+				for(int j = 0; j < rank(); j++)
 				{
-					if( (GetNodeByLabel(j+1).enabled && type == "regular") || (!GetNodeByLabel(j+1).enabled && type == "deleted") )
+					if( (getNodeByLabel(j+1).enabled && type == "regular") || (!getNodeByLabel(j+1).enabled && type == "deleted") )
 					{
 						cartanSubMatrix.set(offsetI, offsetJ, cartanMatrix.get(i,j));
 						offsetJ++;
@@ -210,9 +168,8 @@ public class DynkinDiagram
 		return cartanSubMatrix;
 	}
 	
-	
 	/** Returns the last label that was added. */
-	public static int GetLastLabel()
+	public static int lastLabel()
 	{
 		int lastLabel = 0;
 		for (CDynkinNode node : nodes)
@@ -226,13 +183,12 @@ public class DynkinDiagram
 		return lastLabel;
 	}
 	
-	public static int GetNextFreeLabel()
+	public static int nextFreeLabel()
 	{
-		int nextFreeLabel = GetLastLabel() + 1;
-		return nextFreeLabel;
+		return (lastLabel() + 1);
 	}
 	
-	public static boolean AddNode(int x, int y)
+	public static boolean addNode(int x, int y)
 	{
 		int newId = -1;
 		
@@ -245,50 +201,43 @@ public class DynkinDiagram
 		}
 		newId++;
 		
-		CDynkinNode newNode = new CDynkinNode( newId, GetNextFreeLabel(), x, y);
+		CDynkinNode newNode = new CDynkinNode( newId, nextFreeLabel(), x, y);
 		nodes.add(newNode);
 		return true;
 	}
 	
-	public static void RemoveNode(CDynkinNode node)
+	public static void removeNode(CDynkinNode nodeToRemove)
 	{
-		/** check if the node has connections and remove them */
-		for (Iterator it = connections.iterator(); it.hasNext(); )
+		nodes.remove(nodeToRemove);
+		for(CDynkinNode node : nodes)
 		{
-			CDynkinConnection connection = (CDynkinConnection) it.next();
-			if(connection.idNode1 == node.id || connection.idNode2 == node.id)
-			{
-				it.remove();
-			}
+			node.removeConnection(nodeToRemove);
 		}
-		
-		nodes.remove(node);
 		
 	}
 	
-	public static void ModifyConnection(int fromLabel, int toLabel, boolean add) // if add == false then remove
+	public static void modifyConnection(int fromLabel, int toLabel, boolean add) // if add == false then remove
 	{
-		int fromId	= GetNodeIdByLabel(fromLabel);
-		int toId	= GetNodeIdByLabel(toLabel);
+		CDynkinNode fromNode	= getNodeByLabel(fromLabel);
+		CDynkinNode toNode		= getNodeByLabel(toLabel);
 		
-		// do nothing if either one of the ids is not found, or if both are the same
-		if(toId == -1 || fromId == -1 || toId == fromId)
+		/* Do nothing if either one of the nodes is not found, or if both are the same */
+		if( fromNode == null || toNode == null || fromNode.equals(toNode) )
 			return;
-		
-		CDynkinConnection newConnection = new CDynkinConnection(toId, fromId);
-		if(connections.contains(newConnection))
-		{
-			if(!add)
-				connections.remove(newConnection);
-			return;
-		}
 		
 		if(add)
-			connections.add(newConnection);
+		{
+			fromNode.addConnection(toNode);
+		}
+		else
+		{
+			if(!fromNode.removeConnection(toNode))
+				toNode.removeConnection(fromNode);
+		}
 	}
 	
 	/** Reshapes the internal structure. */
-	private static void Refactor()
+	private static void refactor()
 	{
 		/** sort the nodes according to their label */
 		Collections.sort(nodes);
@@ -305,7 +254,7 @@ public class DynkinDiagram
 	 * Saves the dynkindiagram to file.
 	 * Returns true upon succes, false on failure.
 	 */
-	public static boolean SaveTo(String filename)
+	public static boolean saveTo(String filename)
 	{
 		filename.trim();
 		FileOutputStream fos	= null;
@@ -315,7 +264,6 @@ public class DynkinDiagram
 			fos = new FileOutputStream(filename);
 			out = new ObjectOutputStream(fos);
 			out.writeObject(nodes);
-			out.writeObject(connections);
 			out.close();
 		}
 		catch(IOException ex)
@@ -329,17 +277,16 @@ public class DynkinDiagram
 	 * Loads the dynkindiagram from a file.
 	 * Returns true on succes, false on failure.
 	 */
-	public static boolean LoadFrom(String filename)
+	public static boolean loadFrom(String filename)
 	{
 		filename.trim();
 		FileInputStream fis		= null;
 		ObjectInputStream in	= null;
 		try
 		{
-			fis = new FileInputStream(filename);
-			in	= new ObjectInputStream(fis);
-			nodes		= (Vector<CDynkinNode>) in.readObject();
-			connections = (Vector<CDynkinConnection>) in.readObject();
+			fis		= new FileInputStream(filename);
+			in		= new ObjectInputStream(fis);
+			nodes	= (Vector<CDynkinNode>) in.readObject();
 			in.close();
 		}
 		catch(IOException ex)

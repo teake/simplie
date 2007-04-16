@@ -17,6 +17,8 @@ import java.io.Serializable;
  */
 public class CRoot implements Serializable
 {
+	//TODO: make variables mult & coMult private and get/settable only via method
+	
 	/** The root vector. */
 	public final int[] vector;
 	/** The root multiplicity. */

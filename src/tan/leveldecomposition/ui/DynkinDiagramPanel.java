@@ -19,7 +19,7 @@ import java.awt.Cursor;
 
 /**
  *
- * @author  P221000
+ * @author  Teake Nutma
  */
 public class DynkinDiagramPanel extends javax.swing.JPanel
 {
@@ -60,14 +60,13 @@ public class DynkinDiagramPanel extends javax.swing.JPanel
 		Graphics2D g2 = (Graphics2D) g;
 		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
 		
-		for (CDynkinConnection connection : DynkinDiagram.connections)
-		{
-			paintConnection(connection, g2);
-		}
 		for (CDynkinNode node : DynkinDiagram.nodes)
 		{
-			paintNode(node, g2);
+			for (int i = 0; i < node.numConnections(); i++)
+				paintConnection(node.getConnection(i), g2);
 		}
+		for (CDynkinNode node : DynkinDiagram.nodes)
+			paintNode(node, g2);
 	}
 	
 	private void paintNode(CDynkinNode node, Graphics2D g2)
@@ -87,8 +86,8 @@ public class DynkinDiagramPanel extends javax.swing.JPanel
 	
 	private void paintConnection(CDynkinConnection connection, Graphics2D g2)
 	{
-		CDynkinNode node1 = DynkinDiagram.GetNodeById(connection.idNode1);
-		CDynkinNode node2 = DynkinDiagram.GetNodeById(connection.idNode2);
+		CDynkinNode node1 = connection.fromNode;
+		CDynkinNode node2 = connection.toNode;
 		if(node1 != null && node2 != null)
 		{
 			g2.drawLine(cTrans(node1.x) + radius/2,cTrans(node1.y) + radius/2, cTrans(node2.x) + radius/2,cTrans(node2.y) + radius/2);
@@ -155,7 +154,7 @@ public class DynkinDiagramPanel extends javax.swing.JPanel
 		
 		int x = cTransInv(evt.getX());
 		int y = cTransInv(evt.getY());
-		CDynkinNode node = DynkinDiagram.GetNodeByCoor(x,y);
+		CDynkinNode node = DynkinDiagram.getNodeByCoor(x,y);
 		
 		if(evt.getButton() == evt.BUTTON1 && !evt.isAltDown())
 		{
@@ -163,16 +162,16 @@ public class DynkinDiagramPanel extends javax.swing.JPanel
 			{
 				if(node == null)
 				{
-					int nextLabel = DynkinDiagram.GetNextFreeLabel();
-					int lastLabel = DynkinDiagram.GetLastLabel();
-					DynkinDiagram.AddNode(x,y);
+					int nextLabel = DynkinDiagram.nextFreeLabel();
+					int lastLabel = DynkinDiagram.lastLabel();
+					DynkinDiagram.addNode(x,y);
 					if(evt.isShiftDown())
-						DynkinDiagram.ModifyConnection(nextLabel,lastLabel,true);
+						DynkinDiagram.modifyConnection(nextLabel,lastLabel,true);
 				}
 			}
 			else
 			{
-				if(node != null) DynkinDiagram.RemoveNode(node);
+				if(node != null) DynkinDiagram.removeNode(node);
 			}
 		}
 		
@@ -197,9 +196,9 @@ public class DynkinDiagramPanel extends javax.swing.JPanel
 			else
 			{
 				if(evt.isControlDown())
-					DynkinDiagram.ModifyConnection(node.label, connectionTo, false);
+					DynkinDiagram.modifyConnection(node.label, connectionTo, false);
 				else
-					DynkinDiagram.ModifyConnection(node.label, connectionTo, true);
+					DynkinDiagram.modifyConnection(node.label, connectionTo, true);
 				stopAddConnection();
 			}
 		}

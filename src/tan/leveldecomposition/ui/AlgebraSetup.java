@@ -31,12 +31,11 @@ public class AlgebraSetup extends javax.swing.JPanel
 	
 	public void Update()
 	{
-		if(Globals.group == null || !Globals.sameMatrices(DynkinDiagram.GetCartanMatrix(), Globals.group.cartanMatrix))
-		{
-			Globals.group		= new CGroup(DynkinDiagram.GetCartanMatrix());
-		}
-		Globals.subGroup	= new CGroup(DynkinDiagram.GetCartanSubMatrix("regular"));
-		Globals.delGroup	= new CGroup(DynkinDiagram.GetCartanSubMatrix("deleted"));
+		if(Globals.group == null || !Globals.sameMatrices(DynkinDiagram.cartanMatrix(), Globals.group.cartanMatrix))
+			Globals.group	= new CGroup(DynkinDiagram.cartanMatrix());
+		
+		Globals.subGroup	= new CGroup(DynkinDiagram.cartanSubMatrix("regular"));
+		Globals.delGroup	= new CGroup(DynkinDiagram.cartanSubMatrix("deleted"));
 		
 		algebraInfo.Update(Globals.group);
 		subAlgebraInfo.Update(Globals.subGroup);
@@ -44,9 +43,9 @@ public class AlgebraSetup extends javax.swing.JPanel
 	
 		TabbedPaneCartanMatrix.setTitleAt(2,"Subalgebra inverse * " + (Globals.subGroup.det));
 		
-		taCartanMatrix.setText(Globals.matrixToString(DynkinDiagram.GetCartanMatrix(), 0));
-		taCartanSubMatrix.setText(Globals.matrixToString(DynkinDiagram.GetCartanSubMatrix("regular"), 0));
-		taCartanSubInvMatrix.setText(Globals.matrixToString(DynkinDiagram.GetCartanSubMatrix("regular").inverse().times(Globals.subGroup.det), 1));
+		taCartanMatrix.setText(Globals.matrixToString(DynkinDiagram.cartanMatrix(), 0));
+		taCartanSubMatrix.setText(Globals.matrixToString(DynkinDiagram.cartanSubMatrix("regular"), 0));
+		taCartanSubInvMatrix.setText(Globals.matrixToString(DynkinDiagram.cartanSubMatrix("regular").inverse().times(Globals.subGroup.det), 1));
 		
 		dynkinDiagramPanel.repaint();
 	}
