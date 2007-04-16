@@ -172,9 +172,9 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 		/** Construct the whole root vector and see if it's present */
 		rootVector	= new int[Globals.group.rank];
 		for (int i = 0; i < Globals.subGroup.rank; i++)
-			rootVector[LevelHelper.TranslateSubIndex(i)] = rootComponents[i];
+			rootVector[DynkinDiagram.translateSubIndex(i)] = rootComponents[i];
 		for (int i = 0; i < Globals.delGroup.rank; i++)
-			rootVector[LevelHelper.TranslateCoIndex(i)] = levels[i];
+			rootVector[DynkinDiagram.translateCoIndex(i)] = levels[i];
 		
 		/** Add the representation. */
 		rep = new CRepresentation(

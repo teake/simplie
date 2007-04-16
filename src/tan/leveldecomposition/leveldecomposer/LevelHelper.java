@@ -29,9 +29,6 @@ public class LevelHelper
 	 */
 	static int subFactor;
 	
-	/** Array of which nodes are enabled */
-	static boolean[] enabledNodes;
-	
 	static int signConvention	= 1;
 	
 	/** The inverse of the Cartan matrix multiplied with the subFactor */
@@ -54,7 +51,6 @@ public class LevelHelper
 	public static void Setup()
 	{
 		LevelHelper.subFactor		= Globals.subGroup.det;
-		LevelHelper.enabledNodes	= DynkinDiagram.enabledNodes();
 		LevelHelper.S				= new int[Globals.subGroup.rank][Globals.subGroup.rank];
 		
 		/**
@@ -78,34 +74,6 @@ public class LevelHelper
 		signConvention = sign;
 	}
 	
-	/** Translates an index of the submatrix into an index of the full matrix */
-	public static int TranslateSubIndex(int index)
-	{
-		int subIndex = 0;
-		for(int i=0; i<Globals.group.rank; i++)
-		{
-			if(enabledNodes[i])
-				subIndex++;
-			if(subIndex == index + 1)
-				return i;
-		}
-		return -1; // not found
-	}
-	
-	/** Translates a co-index into an index of the full matrix */
-	public static int TranslateCoIndex(int index)
-	{
-		int subIndex = 0;
-		for(int i=0; i<Globals.group.rank; i++)
-		{
-			if(!enabledNodes[i])
-				subIndex++;
-			if(subIndex == index + 1)
-				return i;
-		}
-		return -1; // not found
-	}
-	
 	/** Returns the actual root length times the subfactor */
 	public static int CalculateRootLength(int[] levels, int[] dynkinLabels)
 	{
@@ -123,7 +91,7 @@ public class LevelHelper
 		{
 			for(int j=0; j < Globals.delGroup.rank; j++)
 			{
-				rootLength += subFactor * Globals.group.cartanMatrix[TranslateCoIndex(i)][TranslateCoIndex(j)] * levels[i] * levels[j];
+				rootLength += subFactor * Globals.group.cartanMatrix[DynkinDiagram.translateCoIndex(i)][DynkinDiagram.translateCoIndex(j)] * levels[i] * levels[j];
 			}
 		}
 		
@@ -158,7 +126,7 @@ public class LevelHelper
 			levelComponents[i] = 0;
 			for(int j=0; j < Globals.delGroup.rank; j++)
 			{
-				levelComponents[i] += Globals.group.cartanMatrix[TranslateSubIndex(i)][TranslateCoIndex(j)] * levels[j];
+				levelComponents[i] += Globals.group.cartanMatrix[DynkinDiagram.translateSubIndex(i)][DynkinDiagram.translateCoIndex(j)] * levels[j];
 			}
 		}
 		return levelComponents;
@@ -177,11 +145,11 @@ public class LevelHelper
 			coDynkinLabels[i] = 0;
 			for (int j = 0; j < Globals.delGroup.rank; j++)
 			{
-				coDynkinLabels[i] += Globals.group.cartanMatrix[TranslateCoIndex(i)][TranslateCoIndex(j)] * levels[j];
+				coDynkinLabels[i] += Globals.group.cartanMatrix[DynkinDiagram.translateCoIndex(i)][DynkinDiagram.translateCoIndex(j)] * levels[j];
 			}
 			for (int j = 0; j < Globals.subGroup.rank; j++)
 			{
-				coDynkinLabels[i] += Globals.group.cartanMatrix[TranslateCoIndex(i)][TranslateSubIndex(j)] * rootComponents[j];
+				coDynkinLabels[i] += Globals.group.cartanMatrix[DynkinDiagram.translateCoIndex(i)][DynkinDiagram.translateSubIndex(j)] * rootComponents[j];
 			}
 		}
 		return coDynkinLabels;

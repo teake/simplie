@@ -28,7 +28,7 @@ public class DynkinDiagram
 	 */
 	private DynkinDiagram()
 	{
-		nodes		= new Vector<CDynkinNode>();
+		nodes = new Vector<CDynkinNode>();
 	}
 	
 	public static DynkinDiagram getInstance()
@@ -45,23 +45,6 @@ public class DynkinDiagram
 	public static int rank()
 	{
 		return nodes.size();
-	}
-	
-	/**
-	 * Returns an array of booleans.
-	 * True if the corresponding node is enabled, false if disabled.
-	 */
-	public static boolean[] enabledNodes()
-	{
-		boolean[] enabledNodes = new boolean[rank()];
-		for (int i = 0; i < rank(); i++)
-		{
-			if(getNodeByLabel(i+1).enabled)
-				enabledNodes[i] = true;
-			else
-				enabledNodes[i] = false;
-		}
-		return enabledNodes;
 	}
 	
 	/**
@@ -92,6 +75,36 @@ public class DynkinDiagram
 		return null;
 	}
 	
+	/** Translates an index of the submatrix into an index of the full matrix */
+	public static int translateSubIndex(int index)
+	{
+		int subIndex = 0;
+		for(int i = 0; i < nodes.size(); i++)
+		{
+			CDynkinNode node = nodes.get(i);
+			if(node.enabled)
+				subIndex++;
+			if(subIndex == index + 1)
+				return i;
+		}
+		return -1; // not found
+	}
+	
+	/** Translates a co-index into an index of the full matrix */
+	public static int translateCoIndex(int index)
+	{
+		int subIndex = 0;
+		for(int i = 0; i < nodes.size(); i++)
+		{
+			CDynkinNode node = nodes.get(i);
+			if(!node.enabled)
+				subIndex++;
+			if(subIndex == index + 1)
+				return i;
+		}
+		return -1; // not found
+	}
+	
 	/** Returns the Cartan matrix of the whole algebra. */
 	public static Matrix cartanMatrix()
 	{
@@ -113,7 +126,7 @@ public class DynkinDiagram
 				{
 					cartanMatrix.set(i,j,-1);
 					cartanMatrix.set(j,i,-1);
-				}				
+				}
 			}
 		}
 		
@@ -129,11 +142,12 @@ public class DynkinDiagram
 	public static Matrix cartanSubMatrix(String type)
 	{
 		if( !( type == "regular" || type == "deleted" ) )
-		{
 			return null;
-		}
 		
+		int indexI;
+		int indexJ;
 		int subRank = 0;
+		
 		for (CDynkinNode node : nodes)
 		{
 			if( (node.enabled && type == "regular") || (!node.enabled && type == "deleted") )
@@ -141,27 +155,17 @@ public class DynkinDiagram
 				subRank++;
 			}
 		}
-		int offsetI = 0;
-		int offsetJ = 0;
-		
 		Matrix cartanSubMatrix	= new Matrix(subRank,subRank);
 		Matrix cartanMatrix	= cartanMatrix();
 		
 		/** Copy the Cartan matrix elements into the submatrix. */
-		for(int i = 0; i < rank(); i++)
+		for(int i = 0; i < subRank; i++)
 		{
-			if( (getNodeByLabel(i+1).enabled && type == "regular") || (!getNodeByLabel(i+1).enabled && type == "deleted") )
+			indexI = (type == "regular") ? translateSubIndex(i) : translateCoIndex(i);
+			for(int j = 0; j < subRank; j++)
 			{
-				for(int j = 0; j < rank(); j++)
-				{
-					if( (getNodeByLabel(j+1).enabled && type == "regular") || (!getNodeByLabel(j+1).enabled && type == "deleted") )
-					{
-						cartanSubMatrix.set(offsetI, offsetJ, cartanMatrix.get(i,j));
-						offsetJ++;
-					}
-				}
-				offsetJ = 0;
-				offsetI++;
+				indexJ = (type == "regular") ? translateSubIndex(j) : translateCoIndex(j);				
+				cartanSubMatrix.set(i,j, cartanMatrix.get(indexI,indexJ));
 			}
 		}
 		
