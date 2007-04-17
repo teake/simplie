@@ -44,7 +44,7 @@ public class AlgebraSetup extends javax.swing.JPanel
 		disAlgebraInfo.Update(Globals.disGroup);
 		coAlgebraInfo.Update(Globals.coGroup);
 	
-		TabbedPaneCartanMatrix.setTitleAt(2,"Subalgebra inverse * " + (Globals.coGroup.det));
+		TabbedPaneCartanMatrix.setTitleAt(2,"Co-algebra inverse * " + (Globals.coGroup.det));
 		
 		taCartanMatrix.setText(Globals.matrixToString(DynkinDiagram.cartanMatrix(), 0));
 		taCartanSubMatrix.setText(Globals.matrixToString(DynkinDiagram.cartanSubMatrix("co"), 0));
@@ -112,14 +112,14 @@ public class AlgebraSetup extends javax.swing.JPanel
         taCartanSubMatrix.setRows(5);
         jScrollPane3.setViewportView(taCartanSubMatrix);
 
-        TabbedPaneCartanMatrix.addTab("Subalgebra", jScrollPane3);
+        TabbedPaneCartanMatrix.addTab("Co-algebra", jScrollPane3);
 
         taCartanSubInvMatrix.setColumns(20);
         taCartanSubInvMatrix.setFont(new java.awt.Font("Monospaced", 0, 12));
         taCartanSubInvMatrix.setRows(5);
         jScrollPane4.setViewportView(taCartanSubInvMatrix);
 
-        TabbedPaneCartanMatrix.addTab("Subalgebra inverse", jScrollPane4);
+        TabbedPaneCartanMatrix.addTab("Co-algebra inverse", jScrollPane4);
 
         javax.swing.GroupLayout PanelCartanMatrixLayout = new javax.swing.GroupLayout(PanelCartanMatrix);
         PanelCartanMatrix.setLayout(PanelCartanMatrixLayout);

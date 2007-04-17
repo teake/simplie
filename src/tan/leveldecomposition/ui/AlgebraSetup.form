@@ -163,8 +163,8 @@
               </AuxValues>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
-                  <JTabbedPaneConstraints tabName="Subalgebra">
-                    <Property name="tabTitle" type="java.lang.String" value="Subalgebra"/>
+                  <JTabbedPaneConstraints tabName="Co-algebra">
+                    <Property name="tabTitle" type="java.lang.String" value="Co-algebra"/>
                   </JTabbedPaneConstraints>
                 </Constraint>
               </Constraints>
@@ -189,8 +189,8 @@
               </AuxValues>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
-                  <JTabbedPaneConstraints tabName="Subalgebra inverse">
-                    <Property name="tabTitle" type="java.lang.String" value="Subalgebra inverse"/>
+                  <JTabbedPaneConstraints tabName="Co-algebra inverse">
+                    <Property name="tabTitle" type="java.lang.String" value="Co-algebra inverse"/>
                   </JTabbedPaneConstraints>
                 </Constraint>
               </Constraints>

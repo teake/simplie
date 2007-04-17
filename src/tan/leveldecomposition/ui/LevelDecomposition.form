@@ -62,14 +62,14 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="jScrollPane1" pref="389" max="32767" attributes="0"/>
+                  <Component id="jScrollPane1" max="32767" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" alignment="0" attributes="0">
+              <Group type="102" alignment="1" attributes="0">
                   <Component id="jScrollPane1" pref="538" max="32767" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -84,22 +84,22 @@
 
           <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
           <SubComponents>
-            <Component class="javax.swing.JTable" name="representationsTable">
+            <Component class="tan.leveldecomposition.ui.reusable.UIPrintableColorTable" name="representationsTable">
               <Properties>
                 <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
                   <Table columnCount="12" rowCount="0">
                     <Column editable="false" title="l" type="java.lang.String"/>
-                    <Column editable="false" title="p regular" type="java.lang.String"/>
-                    <Column editable="false" title="p discon" type="java.lang.String"/>
+                    <Column editable="false" title="p sub" type="java.lang.String"/>
+                    <Column editable="false" title="p dis" type="java.lang.String"/>
                     <Column editable="false" title="m" type="java.lang.String"/>
-                    <Column editable="false" title="root length" type="java.lang.Integer"/>
-                    <Column editable="false" title="dim regular" type="java.lang.Long"/>
-                    <Column editable="false" title="dim discon" type="java.lang.Long"/>
+                    <Column editable="false" title="a^2" type="java.lang.Integer"/>
+                    <Column editable="false" title="d sub" type="java.lang.Long"/>
+                    <Column editable="false" title="d dis" type="java.lang.Long"/>
                     <Column editable="false" title="mult" type="java.lang.Long"/>
-                    <Column editable="false" title="outer submult" type="java.lang.Long"/>
-                    <Column editable="false" title="out mult" type="java.lang.Long"/>
-                    <Column editable="false" title="height" type="java.lang.Integer"/>
-                    <Column editable="false" title="# indices" type="java.lang.Integer"/>
+                    <Column editable="false" title="mu" type="java.lang.Long"/>
+                    <Column editable="false" title="nu" type="java.lang.Long"/>
+                    <Column editable="false" title="h" type="java.lang.Integer"/>
+                    <Column editable="false" title="# ind" type="java.lang.Integer"/>
                   </Table>
                 </Property>
                 <Property name="columnSelectionAllowed" type="boolean" value="true"/>

@@ -39,6 +39,9 @@ public class LevelDecomposition extends javax.swing.JPanel
 		tableModel = (DefaultTableModel) representationsTable.getModel();
 		representationsTable.setAutoCreateRowSorter(true);
 		representationsTable.setModel(tableModel);
+		representationsTable.setShowGrid(false);
+		
+		AutofitTableColumns.autoResizeTable(representationsTable,false);
 		
 		SetSignConvention();
 	}
@@ -74,7 +77,7 @@ public class LevelDecomposition extends javax.swing.JPanel
         signButtonGroup = new javax.swing.ButtonGroup();
         RepresentationPanel = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        representationsTable = new javax.swing.JTable();
+        representationsTable = new tan.leveldecomposition.ui.reusable.UIPrintableColorTable();
         AutoScanPanel = new javax.swing.JPanel();
         bAutoScan = new javax.swing.JButton();
         autoScanMaxLevel = new tan.leveldecomposition.ui.reusable.UILevelTextfield();
@@ -96,7 +99,7 @@ public class LevelDecomposition extends javax.swing.JPanel
             },
             new String []
             {
-                "l", "p regular", "p discon", "m", "root length", "dim regular", "dim discon", "mult", "outer submult", "out mult", "height", "# indices"
+                "l", "p sub", "p dis", "m", "a^2", "d sub", "d dis", "mult", "mu", "nu", "h", "# ind"
             }
         )
         {
@@ -128,12 +131,12 @@ public class LevelDecomposition extends javax.swing.JPanel
             RepresentationPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(RepresentationPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 389, Short.MAX_VALUE)
+                .addComponent(jScrollPane1)
                 .addContainerGap())
         );
         RepresentationPanelLayout.setVerticalGroup(
             RepresentationPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(RepresentationPanelLayout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, RepresentationPanelLayout.createSequentialGroup()
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 538, Short.MAX_VALUE)
                 .addContainerGap())
         );
@@ -354,6 +357,7 @@ public class LevelDecomposition extends javax.swing.JPanel
 						autoScanProgressBar.setIndeterminate(false);
 						autoScanProgressBar.setString("Idle");
 						Globals.scanning = false;
+						AutofitTableColumns.autoResizeTable(representationsTable,false);
 					}
 				}
 			});
@@ -375,7 +379,7 @@ public class LevelDecomposition extends javax.swing.JPanel
     private javax.swing.JCheckBox cbMultiplicities;
     private javax.swing.JCheckBox cbZeroMult;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable representationsTable;
+    private tan.leveldecomposition.ui.reusable.UIPrintableColorTable representationsTable;
     private javax.swing.JPanel settingsPanel;
     private javax.swing.ButtonGroup signButtonGroup;
     private javax.swing.JRadioButton signButtonNeg;
