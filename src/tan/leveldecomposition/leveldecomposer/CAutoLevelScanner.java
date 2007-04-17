@@ -25,6 +25,7 @@ import java.util.Collections;
 public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 {
 	boolean multiplicities;
+	boolean showZeroMult;
 	int minLevel;
 	int maxLevel;
 	int levelSign;
@@ -33,12 +34,13 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 	ArrayList<CRepresentation> reps;
 	
 	/** Creates a new instance of CAutoLevelScanner */
-	public CAutoLevelScanner(boolean multiplicities, DefaultTableModel tableModel, int minLevel, int maxLevel)
+	public CAutoLevelScanner(boolean multiplicities, boolean showZeroMult, DefaultTableModel tableModel, int minLevel, int maxLevel)
 	{
 		this.tableModel		= tableModel;
 		this.minLevel		= minLevel;
 		this.maxLevel		= maxLevel;
 		this.multiplicities	= multiplicities;
+		this.showZeroMult	= showZeroMult;
 		
 		this.levelSign = 0;
 	}
@@ -51,7 +53,7 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 		if(Globals.group.rank == Globals.coGroup.rank)
 			return null;
 		
-		LevelHelper.Setup();
+		LevelHelper.setup();
 		
 		int base	= maxLevel + 1 - minLevel;
 		long num	= (long) Math.pow(base, LevelHelper.levelRank);
@@ -117,7 +119,7 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 	private void LoopDynkinLabels(int[] levels, int[] dynkinLabels, int beginIndex, boolean scanFirst)
 	{
 		boolean allGoodIntegers;
-		int[]	rootComponents;
+		int[]	coLevels;
 		
 		if (isCancelled())
 			return;
@@ -126,16 +128,16 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 		{
 			if(scanFirst)
 			{
-				int rootLength = LevelHelper.CalculateRootLength(levels, dynkinLabels);
+				int rootLength = LevelHelper.calculateRootLength(levels, dynkinLabels);
 				/** Only continue if the root length is not bigger than 2. */
-				if(LevelHelper.CalculateRootLength(levels, dynkinLabels) <= 2 * LevelHelper.subFactor)
+				if(LevelHelper.calculateRootLength(levels, dynkinLabels) <= 2 * LevelHelper.subFactor)
 				{
 					/** First check if all root components are integers and non-negative. */
-					rootComponents  = LevelHelper.CalculateRootComponents(levels, dynkinLabels);
+					coLevels  = LevelHelper.calculateCoLevels(levels, dynkinLabels);
 					allGoodIntegers = true;
-					for (int i = 0; i < rootComponents.length; i++)
+					for (int i = 0; i < coLevels.length; i++)
 					{
-						if(rootComponents[i] % LevelHelper.subFactor != 0 || rootComponents[i] * levelSign < 0)
+						if(coLevels[i] % LevelHelper.subFactor != 0 || coLevels[i] * levelSign < 0)
 						{
 							allGoodIntegers = false;
 							break;
@@ -144,7 +146,7 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 					/** If we found a valid representation, add it. */
 					if(allGoodIntegers)
 					{
-						addRepresentation(levels, dynkinLabels.clone(), rootComponents, rootLength);
+						addRepresentation(levels, dynkinLabels, coLevels, rootLength);
 					}
 				}
 				else
@@ -160,28 +162,17 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 		} while( !isCancelled() );
 	}
 	
-	private void addRepresentation(int[] levels, int[] dynkinLabels, int[] rootComponents, int rootLength)
+	private void addRepresentation(int[] levels, int[] dynkinLabels, int[] coLevels, int rootLength)
 	{
-		int[]			rootVector;
-		CRepresentation rep;
-		
 		/** Divide all the root components by the subfactor. */
-		for (int i = 0; i < rootComponents.length; i++)
-			rootComponents[i] = rootComponents[i] / LevelHelper.subFactor;
-		
-		/** Construct the whole root vector and see if it's present */
-		rootVector	= new int[Globals.group.rank];
-		for (int i = 0; i < Globals.coGroup.rank; i++)
-			rootVector[DynkinDiagram.translateCo(i)] = rootComponents[i];
-		for (int i = 0; i < LevelHelper.levelRank; i++)
-			rootVector[DynkinDiagram.translateLevel(i)] = levels[i];
+		for (int i = 0; i < coLevels.length; i++)
+			coLevels[i] = coLevels[i] / LevelHelper.subFactor;
 		
 		/** Add the representation. */
-		rep = new CRepresentation(
-				rootVector,
+		CRepresentation rep = new CRepresentation(
 				dynkinLabels,
 				levels,
-				rootComponents,
+				coLevels,
 				rootLength / LevelHelper.subFactor
 				);
 		reps.add(rep);
@@ -189,8 +180,8 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 	
 	private void processRepresentations()
 	{
-		int[]	coDynkinLabels;
 		int		numIndices;
+		long	outerSubMult;
 		long	outerMult;
 		CRepresentation repI;
 		CRepresentation repJ;
@@ -212,16 +203,40 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 				else
 					continue;
 				
-				/** Calculate the outer multiplicities */
-				outerMult = repI.getRootMult();
+				/**
+				 * Calculate the outer multiplicities
+				 */
+				
+				/** First the outer multiplicities of the regular subalgebra representation */
+				outerSubMult = repI.getRootMult();
 				for (int j = 0; j < i; j++)
 				{
 					repJ = reps.get(j);
 					if(repJ.length <= repI.length)
 						continue;
-					outerMult -= repJ.getOuterMult() * Globals.coGroup.weightMultiplicity(
-							Globals.flipIntArray(repJ.dynkinLabels),
-							Globals.flipIntArray(repI.dynkinLabels)
+					outerSubMult -= repJ.getOuterSubMult() * Globals.subGroup.weightMultiplicity(
+							Globals.flipIntArray(repJ.subDynkinLabels),
+							Globals.flipIntArray(repI.subDynkinLabels)
+							);
+				}
+				repI.setOuterSubMult(outerSubMult);
+				
+				/** And now the outer multiplicity of the disconnected subalgebra representation. */
+				outerMult = repI.getOuterSubMult();
+				for (int j = 0; j < i; j++)
+				{
+					repJ = reps.get(j);
+					/**
+					 * This representation can only be a weight of the disconnected representation
+					 * if the dynkin labels of the regular subalgebra are the same.
+					 */
+					if(!Globals.sameArrays(repI.subDynkinLabels,repJ.subDynkinLabels))
+						continue;
+					if(repJ.length <= repI.length)
+						continue;
+					outerMult -= repJ.getOuterMult() * Globals.disGroup.weightMultiplicity(
+							Globals.flipIntArray(repJ.disDynkinLabels),
+							Globals.flipIntArray(repI.disDynkinLabels)
 							);
 				}
 				repI.setOuterMult(outerMult);
@@ -231,29 +246,32 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 		/** Publish the representations to the output table. */
 		for(CRepresentation rep : reps)
 		{
+			/** Don't add this representation if is has zero outer multplicity and we don't display zero mults. */
+			if(multiplicities && !showZeroMult && rep.getOuterMult() == 0)
+				continue;
+			
 			numIndices	= 0;
 			
-			/** Calculate the remaining Dynkin labels */
-			coDynkinLabels = LevelHelper.CalculateCoDynkinLabels(rep.levels,rep.rootComponents);
-			
 			/** Calculate the number of indices of the subalgebra representation. */
-			for (int i = 0; i < rep.dynkinLabels.length; i++)
+			for (int i = 0; i < rep.subDynkinLabels.length; i++)
 			{
-				numIndices += rep.dynkinLabels[i] * (i+1);
+				numIndices += rep.subDynkinLabels[i] * (i+1);
 			}
 			
 			/** Add the data to the table */
-			Object[] rowData = new Object[10];
+			Object[] rowData = new Object[12];
 			rowData[0] = Globals.intArrayToString(rep.levels);
-			rowData[1] = Globals.intArrayToString(rep.dynkinLabels);
-			rowData[2] = Globals.intArrayToString(coDynkinLabels);
-			rowData[3] = Globals.intArrayToString(rep.rootComponents);
+			rowData[1] = Globals.intArrayToString(rep.subDynkinLabels);
+			rowData[2] = Globals.intArrayToString(rep.disDynkinLabels);
+			rowData[3] = Globals.intArrayToString(rep.coLevels);
 			rowData[4] = rep.length;
-			rowData[5] = (long) Globals.coGroup.dimOfRep(rep.dynkinLabels);
-			rowData[6] = rep.getRootMult();
-			rowData[7] = rep.getOuterMult();
-			rowData[8] = rep.height;
-			rowData[9] = numIndices;
+			rowData[5] = (long) Globals.subGroup.dimOfRep(rep.subDynkinLabels);
+			rowData[6] = (long) Globals.disGroup.dimOfRep(rep.disDynkinLabels);
+			rowData[7] = rep.getRootMult();
+			rowData[8] = rep.getOuterSubMult();
+			rowData[9] = rep.getOuterMult();
+			rowData[10] = rep.height;
+			rowData[11] = numIndices;
 			publish(rowData);
 		}
 	}

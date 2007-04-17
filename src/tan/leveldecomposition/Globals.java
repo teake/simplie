@@ -205,6 +205,21 @@ public class Globals
 		return true;
 	}
 	
+	
+	public static boolean sameArrays(int[] array1, int[] array2)
+	{
+		if(array1 == null || array2 == null)
+			return false;
+		if(array1.length != array2.length)
+			return false;
+		for (int i = 0; i < array1.length; i++)
+		{
+			if(array1[i] != array2[i])
+				return false;
+		}
+		return true;
+	}
+	
 	/**
 	 * Takes a matrix and returns it as a string,
 	 * with all entries formatted to have the given decimal plates.

@@ -58,9 +58,9 @@ public class LevelDecomposition extends javax.swing.JPanel
 	private void SetSignConvention()
 	{
 		if(signButtonPos.isSelected())
-			LevelHelper.SetSignConvention(1);
+			LevelHelper.setSignConvention(1);
 		else
-			LevelHelper.SetSignConvention(-1);
+			LevelHelper.setSignConvention(-1);
 	}
 	
 	/** This method is called from within the constructor to
@@ -86,6 +86,7 @@ public class LevelDecomposition extends javax.swing.JPanel
         signButtonNeg = new javax.swing.JRadioButton();
         cbMultiplicities = new javax.swing.JCheckBox();
         cbLocked = new javax.swing.JCheckBox();
+        cbZeroMult = new javax.swing.JCheckBox();
 
         RepresentationPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Subalgebra Representations", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12)));
         representationsTable.setModel(new javax.swing.table.DefaultTableModel(
@@ -95,17 +96,17 @@ public class LevelDecomposition extends javax.swing.JPanel
             },
             new String []
             {
-                "l", "p", "p deleted", "m", "root length", "dimension", "mult", "mu", "height", "# indices"
+                "l", "p regular", "p discon", "m", "root length", "dim regular", "dim discon", "mult", "outer submult", "out mult", "height", "# indices"
             }
         )
         {
             Class[] types = new Class []
             {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.Long.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Integer.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.Long.class, java.lang.Long.class, java.lang.Long.class, java.lang.Long.class, java.lang.Long.class, java.lang.Integer.class, java.lang.Integer.class
             };
             boolean[] canEdit = new boolean []
             {
-                false, false, false, false, false, false, false, false, false, false
+                false, false, false, false, false, false, false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex)
@@ -223,6 +224,10 @@ public class LevelDecomposition extends javax.swing.JPanel
             }
         });
 
+        cbZeroMult.setText("Show zero multiplicity");
+        cbZeroMult.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
+        cbZeroMult.setMargin(new java.awt.Insets(0, 0, 0, 0));
+
         javax.swing.GroupLayout settingsPanelLayout = new javax.swing.GroupLayout(settingsPanel);
         settingsPanel.setLayout(settingsPanelLayout);
         settingsPanelLayout.setHorizontalGroup(
@@ -237,7 +242,8 @@ public class LevelDecomposition extends javax.swing.JPanel
                             .addComponent(signButtonNeg)
                             .addComponent(signButtonPos)))
                     .addComponent(cbMultiplicities)
-                    .addComponent(cbLocked))
+                    .addComponent(cbLocked)
+                    .addComponent(cbZeroMult))
                 .addContainerGap(44, Short.MAX_VALUE))
         );
         settingsPanelLayout.setVerticalGroup(
@@ -253,6 +259,8 @@ public class LevelDecomposition extends javax.swing.JPanel
                 .addComponent(cbMultiplicities)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(cbLocked)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(cbZeroMult)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -334,7 +342,7 @@ public class LevelDecomposition extends javax.swing.JPanel
 			Globals.scanning = true;
 			
 			/** Set up the scan */
-			autoScanner	= new CAutoLevelScanner(cbMultiplicities.isSelected(), tableModel, autoScanMinLevel.GetValue(),autoScanMaxLevel.GetValue());
+			autoScanner	= new CAutoLevelScanner(cbMultiplicities.isSelected(), cbZeroMult.isSelected(), tableModel, autoScanMinLevel.GetValue(),autoScanMaxLevel.GetValue());
 			autoScanner.addPropertyChangeListener(new PropertyChangeListener()
 			{
 				public void propertyChange(PropertyChangeEvent evt)
@@ -365,6 +373,7 @@ public class LevelDecomposition extends javax.swing.JPanel
     private javax.swing.JButton bAutoScan;
     private javax.swing.JCheckBox cbLocked;
     private javax.swing.JCheckBox cbMultiplicities;
+    private javax.swing.JCheckBox cbZeroMult;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable representationsTable;
     private javax.swing.JPanel settingsPanel;

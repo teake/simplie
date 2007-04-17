@@ -24,7 +24,7 @@ public class LevelHelper
 	
 	/**
 	 * The inverse of the Cartan matrix gets multiplied with this value in order to make all entries integers.
-	 * Thus also the rootComponents and the rootLength get multiplied with it.
+	 * Thus also the coLevels and the rootLength get multiplied with it.
 	 * Don't forget to divide these with this factor at the end of the day!
 	 */
 	static int subFactor;
@@ -48,7 +48,7 @@ public class LevelHelper
 	}
 	
 	/** Sets it all up */
-	public static void Setup()
+	public static void setup()
 	{
 		LevelHelper.subFactor	= Globals.coGroup.det;
 		LevelHelper.levelRank	= Globals.group.rank - Globals.coGroup.rank;
@@ -68,7 +68,7 @@ public class LevelHelper
 	}
 	
 	
-	public static void SetSignConvention(int sign)
+	public static void setSignConvention(int sign)
 	{
 		if(!(sign == 1 || sign == -1))
 			return;
@@ -76,9 +76,9 @@ public class LevelHelper
 	}
 	
 	/** Returns the actual root length times the subfactor */
-	public static int CalculateRootLength(int[] levels, int[] dynkinLabels)
+	public static int calculateRootLength(int[] levels, int[] dynkinLabels)
 	{
-		int[] levelComponents = CalculateLevelComponents(levels);
+		int[] levelComponents = calculateLevelComponents(levels);
 		int rootLength = 0;
 		
 		for(int i=0; i < Globals.coGroup.rank; i++)
@@ -100,10 +100,10 @@ public class LevelHelper
 	}
 	
 	/** Returns the root components times the subfactor. */
-	public static int[] CalculateRootComponents(int[] levels, int[] dynkinLabels)
+	public static int[] calculateCoLevels(int[] levels, int[] dynkinLabels)
 	{
 		int[] rootLabels	= new int[Globals.coGroup.rank];
-		int[] levelComponents	= CalculateLevelComponents(levels);
+		int[] levelComponents	= calculateLevelComponents(levels);
 		
 		for(int i=0; i < rootLabels.length; i++)
 		{
@@ -118,7 +118,7 @@ public class LevelHelper
 	}
 	
 	/** Calculates the contraction of the levels with the Cartan matrix. */
-	public static int[] CalculateLevelComponents(int[] levels)
+	public static int[] calculateLevelComponents(int[] levels)
 	{
 		int[] levelComponents = new int[Globals.coGroup.rank];
 		
@@ -131,29 +131,6 @@ public class LevelHelper
 			}
 		}
 		return levelComponents;
-	}
-	
-	/**
-	 * Calculates the co-Dynkin labels (i.e. the dynkin labels of the deleted nodes)
-	 * NOTE: the rootComponents should not have the subFactor!
-	 **/
-	public static int[] CalculateCoDynkinLabels(int[] levels, int[] rootComponents)
-	{
-		int[] coDynkinLabels = new int[levelRank];
-		
-		for (int i = 0; i < coDynkinLabels.length; i++)
-		{
-			coDynkinLabels[i] = 0;
-			for (int j = 0; j < levelRank; j++)
-			{
-				coDynkinLabels[i] += Globals.group.cartanMatrix[DynkinDiagram.translateLevel(i)][DynkinDiagram.translateLevel(j)] * levels[j];
-			}
-			for (int j = 0; j < Globals.coGroup.rank; j++)
-			{
-				coDynkinLabels[i] += Globals.group.cartanMatrix[DynkinDiagram.translateLevel(i)][DynkinDiagram.translateCo(j)] * rootComponents[j];
-			}
-		}
-		return coDynkinLabels;
 	}
 	
 }
