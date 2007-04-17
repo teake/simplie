@@ -20,6 +20,7 @@ public class CRepresentation implements Comparable<CRepresentation>
 	public final int[] dynkinLabels;
 	public final int[] subDynkinLabels;
 	public final int[] disDynkinLabels;
+	public final int[] disLevels;
 	public final int[] levels;
 	public final int[] coLevels;
 	public final int length;
@@ -46,6 +47,11 @@ public class CRepresentation implements Comparable<CRepresentation>
 			rootVector[DynkinDiagram.translateCo(i)] = coLevels[i];
 		for (int i = 0; i < LevelHelper.levelRank; i++)
 			rootVector[DynkinDiagram.translateLevel(i)] = levels[i];
+		
+		/** Set the disconnected levels. */
+		this.disLevels = new int[Globals.disGroup.rank];
+		for (int i = 0; i < disLevels.length; i++)
+			disLevels[i] = rootVector[DynkinDiagram.translateDis(i)];
 		
 		/** Calculate the height */
 		int tHeight = 0;

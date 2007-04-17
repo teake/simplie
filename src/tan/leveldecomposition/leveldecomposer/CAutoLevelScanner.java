@@ -212,6 +212,8 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 				for (int j = 0; j < i; j++)
 				{
 					repJ = reps.get(j);
+					if(!Globals.sameArrays(repI.disLevels,repJ.disLevels))
+						continue;
 					if(repJ.length <= repI.length)
 						continue;
 					outerSubMult -= repJ.getOuterSubMult() * Globals.subGroup.weightMultiplicity(
