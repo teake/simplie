@@ -59,6 +59,17 @@ public class CDynkinNode implements Serializable, Comparable<CDynkinNode>
 	}
 	
 	/** 
+	 * The node is a "level node" if it is not enabled and not disconnected.
+	 */
+	public boolean isLevel()
+	{
+		if(!enabled && !isDisconnected())
+			return true;
+		else
+			return false;
+	}
+	
+	/** 
 	 * Adds a connection from this node to "toNode"
 	 *
 	 * @param	toNode	The node to which we should lay a connection

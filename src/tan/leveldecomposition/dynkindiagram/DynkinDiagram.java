@@ -76,7 +76,7 @@ public class DynkinDiagram
 	}
 	
 	/** Translates an index of the submatrix into an index of the full matrix */
-	public static int translateSubIndex(int index)
+	public static int translateSub(int index)
 	{
 		int subIndex = 0;
 		for(int i = 0; i < rank(); i++)
@@ -90,14 +90,14 @@ public class DynkinDiagram
 		return -1; // not found
 	}
 	
-	/** Translates a co-index into an index of the full matrix */
-	public static int translateCoIndex(int index)
+	/** Translates a non-level index into an index of the full matrix */
+	public static int translateCo(int index)
 	{
 		int subIndex = 0;
 		for(int i = 0; i < rank(); i++)
 		{
 			CDynkinNode node = nodes.get(i);
-			if(!node.enabled)
+			if(!node.isLevel())
 				subIndex++;
 			if(subIndex == index + 1)
 				return i;
@@ -105,14 +105,29 @@ public class DynkinDiagram
 		return -1; // not found
 	}
 	
-	/** Translates a disabled-index into an index of the full matrix */
-	public static int translateDisIndex(int index)
+	/** Translates a disconnected-index into an index of the full matrix */
+	public static int translateDis(int index)
 	{
 		int subIndex = 0;
 		for(int i = 0; i < rank(); i++)
 		{
 			CDynkinNode node = nodes.get(i);
 			if(node.isDisconnected())
+				subIndex++;
+			if(subIndex == index + 1)
+				return i;
+		}
+		return -1; // not found
+	}
+	
+	/** Translates a level-index to an index of the full matrix */
+	public static int translateLevel(int index)
+	{
+		int subIndex = 0;
+		for(int i = 0; i < rank(); i++)
+		{
+			CDynkinNode node = nodes.get(i);
+			if(node.isLevel())
 				subIndex++;
 			if(subIndex == index + 1)
 				return i;
@@ -151,12 +166,12 @@ public class DynkinDiagram
 	/**
 	 * Returns the Cartan matrix of one of the subalgebras
 	 *
-	 * @param	type	The name of the subalgebra to get. Either "regular", "deleted", or "disconnected".
+	 * @param	type	The name of the subalgebra to get. Either "sub", "dis", or "co".
 	 * @return			The cartan matrix of the regular or deleted subalgebra.
 	 */
 	public static Matrix cartanSubMatrix(String type)
 	{
-		if( !( type == "regular" || type == "deleted" || type == "disconnected") )
+		if( !( type == "sub" || type == "dis" || type == "co") )
 			return null;
 		
 		int indexI;
@@ -165,9 +180,9 @@ public class DynkinDiagram
 		
 		for (CDynkinNode node : nodes)
 		{
-			if((node.enabled && type == "regular")
-			|| (!node.enabled && type == "deleted")
-			|| (node.isDisconnected() && type == "disconnected"))
+			if((node.enabled && type == "sub")
+			|| (node.isDisconnected() && type == "dis")
+			|| (!node.isLevel() && type == "co") )
 			{
 				subRank++;
 			}
@@ -178,20 +193,20 @@ public class DynkinDiagram
 		/** Copy the Cartan matrix elements into the submatrix. */
 		for(int i = 0; i < subRank; i++)
 		{
-			if(type == "regular")
-				indexI = translateSubIndex(i);
-			else if(type == "deleted")
-				indexI = translateCoIndex(i);
+			if(type == "sub")
+				indexI = translateSub(i);
+			else if(type == "co")
+				indexI = translateCo(i);
 			else
-				indexI = translateDisIndex(i);
+				indexI = translateDis(i);
 			for(int j = 0; j < subRank; j++)
 			{
-				if(type == "regular")
-					indexJ = translateSubIndex(j);
-				else if(type == "deleted")
-					indexJ = translateCoIndex(j);
+				if(type == "sub")
+					indexJ = translateSub(j);
+				else if(type == "co")
+					indexJ = translateCo(j);
 				else
-					indexJ = translateDisIndex(j);
+					indexJ = translateDis(j);
 				cartanSubMatrix.set(i,j, cartanMatrix.get(indexI,indexJ));
 			}
 		}

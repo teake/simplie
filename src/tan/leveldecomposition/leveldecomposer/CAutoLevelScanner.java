@@ -48,18 +48,18 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 	{
 		if(minLevel > maxLevel)
 			return null;
-		if(Globals.group.rank == Globals.subGroup.rank)
+		if(Globals.group.rank == Globals.coGroup.rank)
 			return null;
 		
 		LevelHelper.Setup();
 		
 		int base	= maxLevel + 1 - minLevel;
-		long num	= (long) Math.pow(base, Globals.delGroup.rank);
+		long num	= (long) Math.pow(base, LevelHelper.levelRank);
 		try
 		{
 			for (long i = 0; i < num; i++)
 			{
-				Scan(Globals.numberToVector(i,base,Globals.delGroup.rank,minLevel));
+				Scan(Globals.numberToVector(i,base,LevelHelper.levelRank,minLevel));
 			}
 			
 		}
@@ -103,8 +103,8 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 			levelSign = -1;
 		
 		/** Set up the Dynkin labels */
-		int[] dynkinLabels = new int[Globals.subGroup.rank];
-		for (int i = 0; i < Globals.subGroup.rank; i++)
+		int[] dynkinLabels = new int[Globals.coGroup.rank];
+		for (int i = 0; i < dynkinLabels.length; i++)
 		{
 			dynkinLabels[i] = 0;
 		}
@@ -171,10 +171,10 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 		
 		/** Construct the whole root vector and see if it's present */
 		rootVector	= new int[Globals.group.rank];
-		for (int i = 0; i < Globals.subGroup.rank; i++)
-			rootVector[DynkinDiagram.translateSubIndex(i)] = rootComponents[i];
-		for (int i = 0; i < Globals.delGroup.rank; i++)
-			rootVector[DynkinDiagram.translateCoIndex(i)] = levels[i];
+		for (int i = 0; i < Globals.coGroup.rank; i++)
+			rootVector[DynkinDiagram.translateCo(i)] = rootComponents[i];
+		for (int i = 0; i < LevelHelper.levelRank; i++)
+			rootVector[DynkinDiagram.translateLevel(i)] = levels[i];
 		
 		/** Add the representation. */
 		rep = new CRepresentation(
@@ -219,7 +219,7 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 					repJ = reps.get(j);
 					if(repJ.length <= repI.length)
 						continue;
-					outerMult -= repJ.getOuterMult() * Globals.subGroup.weightMultiplicity(
+					outerMult -= repJ.getOuterMult() * Globals.coGroup.weightMultiplicity(
 							Globals.flipIntArray(repJ.dynkinLabels),
 							Globals.flipIntArray(repI.dynkinLabels)
 							);
@@ -249,7 +249,7 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 			rowData[2] = Globals.intArrayToString(coDynkinLabels);
 			rowData[3] = Globals.intArrayToString(rep.rootComponents);
 			rowData[4] = rep.length;
-			rowData[5] = (long) Globals.subGroup.dimOfRep(rep.dynkinLabels);
+			rowData[5] = (long) Globals.coGroup.dimOfRep(rep.dynkinLabels);
 			rowData[6] = rep.getRootMult();
 			rowData[7] = rep.getOuterMult();
 			rowData[8] = rep.height;

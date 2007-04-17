@@ -26,8 +26,8 @@ public class AlgebraSetup extends javax.swing.JPanel
 		Update();
 		algebraInfo.SetTitle("Full algebra");
 		subAlgebraInfo.SetTitle("Regular subalgebra");
-		delAlgebraInfo.SetTitle("Deleted subalgebra");
 		disAlgebraInfo.SetTitle("Disconnected subalgebra");
+		coAlgebraInfo.SetTitle("Co-subalgebra (regular x disconnected)");
 	}
 	
 	public void Update()
@@ -35,20 +35,20 @@ public class AlgebraSetup extends javax.swing.JPanel
 		if(Globals.group == null || !Globals.sameMatrices(DynkinDiagram.cartanMatrix(), Globals.group.cartanMatrix))
 			Globals.group	= new CGroup(DynkinDiagram.cartanMatrix());
 		
-		Globals.subGroup	= new CGroup(DynkinDiagram.cartanSubMatrix("regular"));
-		Globals.delGroup	= new CGroup(DynkinDiagram.cartanSubMatrix("deleted"));
-		Globals.disGroup	= new CGroup(DynkinDiagram.cartanSubMatrix("disconnected"));
+		Globals.subGroup	= new CGroup(DynkinDiagram.cartanSubMatrix("sub"));
+		Globals.disGroup	= new CGroup(DynkinDiagram.cartanSubMatrix("dis"));
+		Globals.coGroup		= new CGroup(DynkinDiagram.cartanSubMatrix("co"));
 		
 		algebraInfo.Update(Globals.group);
 		subAlgebraInfo.Update(Globals.subGroup);
-		delAlgebraInfo.Update(Globals.delGroup);
 		disAlgebraInfo.Update(Globals.disGroup);
+		coAlgebraInfo.Update(Globals.coGroup);
 	
-		TabbedPaneCartanMatrix.setTitleAt(2,"Subalgebra inverse * " + (Globals.subGroup.det));
+		TabbedPaneCartanMatrix.setTitleAt(2,"Subalgebra inverse * " + (Globals.coGroup.det));
 		
 		taCartanMatrix.setText(Globals.matrixToString(DynkinDiagram.cartanMatrix(), 0));
-		taCartanSubMatrix.setText(Globals.matrixToString(DynkinDiagram.cartanSubMatrix("regular"), 0));
-		taCartanSubInvMatrix.setText(Globals.matrixToString(DynkinDiagram.cartanSubMatrix("regular").inverse().times(Globals.subGroup.det), 1));
+		taCartanSubMatrix.setText(Globals.matrixToString(DynkinDiagram.cartanSubMatrix("co"), 0));
+		taCartanSubInvMatrix.setText(Globals.matrixToString(DynkinDiagram.cartanSubMatrix("co").inverse().times(Globals.coGroup.det), 1));
 		
 		dynkinDiagramPanel.repaint();
 	}
@@ -74,8 +74,8 @@ public class AlgebraSetup extends javax.swing.JPanel
         taCartanSubInvMatrix = new javax.swing.JTextArea();
         algebraInfo = new tan.leveldecomposition.ui.reusable.UIAlgebraInfo();
         subAlgebraInfo = new tan.leveldecomposition.ui.reusable.UIAlgebraInfo();
-        delAlgebraInfo = new tan.leveldecomposition.ui.reusable.UIAlgebraInfo();
         disAlgebraInfo = new tan.leveldecomposition.ui.reusable.UIAlgebraInfo();
+        coAlgebraInfo = new tan.leveldecomposition.ui.reusable.UIAlgebraInfo();
 
         PanelDynkinDiagram.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Dynkin Diagram", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12)));
 
@@ -133,7 +133,7 @@ public class AlgebraSetup extends javax.swing.JPanel
         PanelCartanMatrixLayout.setVerticalGroup(
             PanelCartanMatrixLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(PanelCartanMatrixLayout.createSequentialGroup()
-                .addComponent(TabbedPaneCartanMatrix, javax.swing.GroupLayout.DEFAULT_SIZE, 288, Short.MAX_VALUE)
+                .addComponent(TabbedPaneCartanMatrix, javax.swing.GroupLayout.DEFAULT_SIZE, 281, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -146,8 +146,8 @@ public class AlgebraSetup extends javax.swing.JPanel
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(algebraInfo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(subAlgebraInfo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(delAlgebraInfo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(disAlgebraInfo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(disAlgebraInfo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(coAlgebraInfo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(PanelDynkinDiagram, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -155,7 +155,7 @@ public class AlgebraSetup extends javax.swing.JPanel
                 .addContainerGap())
         );
 
-        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {algebraInfo, delAlgebraInfo, disAlgebraInfo, subAlgebraInfo});
+        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {algebraInfo, disAlgebraInfo, subAlgebraInfo});
 
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -167,9 +167,9 @@ public class AlgebraSetup extends javax.swing.JPanel
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(subAlgebraInfo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(delAlgebraInfo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(disAlgebraInfo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(disAlgebraInfo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(coAlgebraInfo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(PanelDynkinDiagram, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -184,7 +184,7 @@ public class AlgebraSetup extends javax.swing.JPanel
     private javax.swing.JPanel PanelDynkinDiagram;
     private javax.swing.JTabbedPane TabbedPaneCartanMatrix;
     private tan.leveldecomposition.ui.reusable.UIAlgebraInfo algebraInfo;
-    private tan.leveldecomposition.ui.reusable.UIAlgebraInfo delAlgebraInfo;
+    private tan.leveldecomposition.ui.reusable.UIAlgebraInfo coAlgebraInfo;
     private tan.leveldecomposition.ui.reusable.UIAlgebraInfo disAlgebraInfo;
     private tan.leveldecomposition.ui.DynkinDiagramPanel dynkinDiagramPanel;
     private javax.swing.JScrollPane jScrollPane1;
