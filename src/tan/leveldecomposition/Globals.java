@@ -69,15 +69,27 @@ public class Globals
 	public static String getDecompositionType()
 	{
 		String output;
-				
+		
 		output = subGroup.type;
-		if(Globals.disGroup.rank != 0)
+		if(disGroup.rank != 0)
 			output += " x " + disGroup.type;
 		output += " representations in " + group.type;
 		
 		return output;
 	}
 	
+	public static String getDynkinDiagramType()
+	{
+		String output;
+		
+		output = group.type;
+		if(subGroup.rank != group.rank)
+			output += " as " + subGroup.type;
+		if(disGroup.rank != 0)
+			output += " x " + disGroup.type;
+		
+		return output;
+	}
 	
 	public static int stringToInt(String string)
 	{

@@ -47,13 +47,13 @@ public class CGroup
 	public String	type;
 	/** Boolean indicating whethet the group is finite or not. */
 	public boolean	finite;
+	/** The height up to and included to which we constructed the root system. */
+	public int constructedHeight;
 	
 	/*********************************
 	 * Private properties
 	 *********************************/
 	
-	/** The height up to and included to which we constructed the root system. */
-	private int constructedHeight;
 	/** The number of positive roots constructed so far. */
 	private long numPosRoots;
 	/** The number of positive generators constructed so far. */

@@ -26,6 +26,7 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 {
 	boolean multiplicities;
 	boolean showZeroMult;
+	boolean flipDynkinLabels;
 	int minLevel;
 	int maxLevel;
 	int levelSign;
@@ -34,13 +35,20 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 	ArrayList<CRepresentation> reps;
 	
 	/** Creates a new instance of CAutoLevelScanner */
-	public CAutoLevelScanner(boolean multiplicities, boolean showZeroMult, DefaultTableModel tableModel, int minLevel, int maxLevel)
+	public CAutoLevelScanner(
+			boolean multiplicities,
+			boolean showZeroMult,
+			boolean flipDynkinLabels,
+			DefaultTableModel tableModel,
+			int minLevel, 
+			int maxLevel)
 	{
 		this.tableModel		= tableModel;
 		this.minLevel		= minLevel;
 		this.maxLevel		= maxLevel;
 		this.multiplicities	= multiplicities;
 		this.showZeroMult	= showZeroMult;
+		this.flipDynkinLabels = flipDynkinLabels;
 		
 		this.levelSign = 0;
 	}
@@ -300,8 +308,8 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 			/** Add the data to the table */
 			Object[] rowData = new Object[12];
 			rowData[0] = Globals.intArrayToString(rep.levels);
-			rowData[1] = Globals.intArrayToString(rep.subDynkinLabels);
-			rowData[2] = Globals.intArrayToString(rep.disDynkinLabels);
+			rowData[1] = (flipDynkinLabels) ? Globals.intArrayToString(Globals.flipIntArray(rep.subDynkinLabels)) : Globals.intArrayToString(rep.subDynkinLabels);
+			rowData[2] = (flipDynkinLabels) ? Globals.intArrayToString(Globals.flipIntArray(rep.disDynkinLabels)) : Globals.intArrayToString(rep.disDynkinLabels);
 			rowData[3] = Globals.intArrayToString(rep.coLevels);
 			rowData[4] = rep.length;
 			rowData[5] = (long) Globals.subGroup.dimOfRep(rep.subDynkinLabels);

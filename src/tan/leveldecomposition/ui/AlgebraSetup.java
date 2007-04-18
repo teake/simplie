@@ -51,6 +51,7 @@ public class AlgebraSetup extends javax.swing.JPanel
 		taCartanSubInvMatrix.setText(Globals.matrixToString(DynkinDiagram.cartanSubMatrix("co").inverse().times(Globals.coGroup.det), 1));
 		
 		dynkinDiagramPanel.repaint();
+		PanelDynkinDiagram.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Dynkin Diagram of " + Globals.getDynkinDiagramType(), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12)));
 	}
 	
 	/** This method is called from within the constructor to

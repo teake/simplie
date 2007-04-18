@@ -42,7 +42,7 @@
                   <KeyStroke key="Ctrl+O"/>
                 </Property>
                 <Property name="mnemonic" type="int" value="111"/>
-                <Property name="text" type="java.lang.String" value="Load algebra settings"/>
+                <Property name="label" type="java.lang.String" value="Load Dynkin diagram"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="MenuItemLoadAlgebraActionPerformed"/>
@@ -66,7 +66,7 @@
                   <KeyStroke key="Ctrl+S"/>
                 </Property>
                 <Property name="mnemonic" type="int" value="115"/>
-                <Property name="text" type="java.lang.String" value="Save algebra settings"/>
+                <Property name="label" type="java.lang.String" value="Save Dynkin diagram"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="MenuItemSaveAlgebraActionPerformed"/>
@@ -84,6 +84,10 @@
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="jMenuItemPrint">
               <Properties>
+                <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.editors.KeyStrokeEditor">
+                  <KeyStroke key="Ctrl+P"/>
+                </Property>
+                <Property name="mnemonic" type="int" value="112"/>
                 <Property name="text" type="java.lang.String" value="Print representation table"/>
               </Properties>
               <Events>

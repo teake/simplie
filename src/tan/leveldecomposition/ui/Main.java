@@ -10,6 +10,7 @@ import javax.swing.JTextField;
 import javax.swing.UIManager;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.*;
+import java.io.File;
 
 import tan.leveldecomposition.*;
 import tan.leveldecomposition.dynkindiagram.*;
@@ -100,7 +101,7 @@ public class Main extends javax.swing.JFrame
         MenuFile.setLabel("File");
         MenuItemLoadAlgebra.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.CTRL_MASK));
         MenuItemLoadAlgebra.setMnemonic('o');
-        MenuItemLoadAlgebra.setText("Load algebra settings");
+        MenuItemLoadAlgebra.setLabel("Load Dynkin diagram");
         MenuItemLoadAlgebra.addActionListener(new java.awt.event.ActionListener()
         {
             public void actionPerformed(java.awt.event.ActionEvent evt)
@@ -126,7 +127,7 @@ public class Main extends javax.swing.JFrame
 
         MenuItemSaveAlgebra.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
         MenuItemSaveAlgebra.setMnemonic('s');
-        MenuItemSaveAlgebra.setText("Save algebra settings");
+        MenuItemSaveAlgebra.setLabel("Save Dynkin diagram");
         MenuItemSaveAlgebra.addActionListener(new java.awt.event.ActionListener()
         {
             public void actionPerformed(java.awt.event.ActionEvent evt)
@@ -150,6 +151,8 @@ public class Main extends javax.swing.JFrame
 
         MenuFile.add(jSeparator1);
 
+        jMenuItemPrint.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P, java.awt.event.InputEvent.CTRL_MASK));
+        jMenuItemPrint.setMnemonic('p');
         jMenuItemPrint.setText("Print representation table");
         jMenuItemPrint.addActionListener(new java.awt.event.ActionListener()
         {
@@ -260,6 +263,7 @@ public class Main extends javax.swing.JFrame
 	{//GEN-HEADEREND:event_MenuItemSaveRootsActionPerformed
 		JFileChooser chooser = new JFileChooser("");
 		chooser.addChoosableFileFilter(rsFilter);
+		chooser.setSelectedFile(new File(Globals.group.type + "_height_" + Globals.group.constructedHeight));
 		chooser.setDialogTitle("Save root system");
 		int returnVal = chooser.showSaveDialog(this);
 		
@@ -321,6 +325,7 @@ public class Main extends javax.swing.JFrame
 	{//GEN-HEADEREND:event_MenuItemSaveAlgebraActionPerformed
 		JFileChooser chooser = new JFileChooser("");
 		chooser.addChoosableFileFilter(ddFilter);
+		chooser.setSelectedFile(new File(Globals.getDynkinDiagramType() + ".dd"));
 		chooser.setDialogTitle("Save Dynkin diagram");
 		int returnVal = chooser.showSaveDialog(this);
 		

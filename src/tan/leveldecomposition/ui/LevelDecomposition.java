@@ -91,6 +91,7 @@ public class LevelDecomposition extends javax.swing.JPanel
         cbMultiplicities = new javax.swing.JCheckBox();
         cbLocked = new javax.swing.JCheckBox();
         cbZeroMult = new javax.swing.JCheckBox();
+        cbFlipDynkinLabels = new javax.swing.JCheckBox();
 
         RepresentationPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Subalgebra Representations", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12)));
         representationsTable.setModel(new javax.swing.table.DefaultTableModel(
@@ -213,7 +214,7 @@ public class LevelDecomposition extends javax.swing.JPanel
         });
 
         cbMultiplicities.setSelected(true);
-        cbMultiplicities.setText("Calculate root multiplicities");
+        cbMultiplicities.setText("Calculate root & rep multiplicities");
         cbMultiplicities.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
         cbMultiplicities.setMargin(new java.awt.Insets(0, 0, 0, 0));
 
@@ -228,9 +229,14 @@ public class LevelDecomposition extends javax.swing.JPanel
             }
         });
 
-        cbZeroMult.setText("Show zero multiplicity");
+        cbZeroMult.setText("Show reps with zero multiplicity");
         cbZeroMult.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
         cbZeroMult.setMargin(new java.awt.Insets(0, 0, 0, 0));
+
+        cbFlipDynkinLabels.setSelected(true);
+        cbFlipDynkinLabels.setText("Flip Dynkin labels");
+        cbFlipDynkinLabels.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
+        cbFlipDynkinLabels.setMargin(new java.awt.Insets(0, 0, 0, 0));
 
         javax.swing.GroupLayout settingsPanelLayout = new javax.swing.GroupLayout(settingsPanel);
         settingsPanel.setLayout(settingsPanelLayout);
@@ -246,8 +252,9 @@ public class LevelDecomposition extends javax.swing.JPanel
                             .addComponent(signButtonNeg)
                             .addComponent(signButtonPos)))
                     .addComponent(cbMultiplicities)
-                    .addComponent(cbLocked)
-                    .addComponent(cbZeroMult))
+                    .addComponent(cbZeroMult)
+                    .addComponent(cbFlipDynkinLabels)
+                    .addComponent(cbLocked))
                 .addContainerGap(44, Short.MAX_VALUE))
         );
         settingsPanelLayout.setVerticalGroup(
@@ -262,9 +269,11 @@ public class LevelDecomposition extends javax.swing.JPanel
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(cbMultiplicities)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(cbLocked)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(cbZeroMult)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(cbFlipDynkinLabels)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(cbLocked)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -347,7 +356,14 @@ public class LevelDecomposition extends javax.swing.JPanel
 			Globals.scanning = true;
 			
 			/** Set up the scan */
-			autoScanner	= new CAutoLevelScanner(cbMultiplicities.isSelected(), cbZeroMult.isSelected(), tableModel, autoScanMinLevel.GetValue(),autoScanMaxLevel.GetValue());
+			autoScanner	= new CAutoLevelScanner(
+					cbMultiplicities.isSelected(),
+					cbZeroMult.isSelected(), 
+					cbFlipDynkinLabels.isSelected(), 
+					tableModel, 
+					autoScanMinLevel.GetValue(),
+					autoScanMaxLevel.GetValue()
+					);
 			autoScanner.addPropertyChangeListener(new PropertyChangeListener()
 			{
 				public void propertyChange(PropertyChangeEvent evt)
@@ -376,6 +392,7 @@ public class LevelDecomposition extends javax.swing.JPanel
     private tan.leveldecomposition.ui.reusable.UILevelTextfield autoScanMinLevel;
     private javax.swing.JProgressBar autoScanProgressBar;
     private javax.swing.JButton bAutoScan;
+    private javax.swing.JCheckBox cbFlipDynkinLabels;
     private javax.swing.JCheckBox cbLocked;
     private javax.swing.JCheckBox cbMultiplicities;
     private javax.swing.JCheckBox cbZeroMult;
