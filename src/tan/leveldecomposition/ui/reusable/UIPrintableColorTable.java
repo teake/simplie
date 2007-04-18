@@ -36,16 +36,19 @@ public class UIPrintableColorTable extends JTable
 	/** Creates a printable color table that automatically resizes its columns. */
 	public UIPrintableColorTable()
 	{
+		super.setShowGrid(false);
 	}
 	public void print(Graphics g)
 	{
 		printing = true;
 		try
 		{
+			super.setShowHorizontalLines(true);
 			super.print(g);
 		}
 		finally
 		{
+			super.setShowHorizontalLines(false);
 			printing = false;
 		}
 	}

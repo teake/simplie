@@ -41,7 +41,6 @@ public class LevelDecomposition extends javax.swing.JPanel
 		tableModel = (DefaultTableModel) representationsTable.getModel();
 		representationsTable.setAutoCreateRowSorter(true);
 		representationsTable.setModel(tableModel);
-		representationsTable.setShowGrid(false);
 		
 		SetSignConvention();
 	}
