@@ -66,6 +66,18 @@ public class Globals
 	 * Helper functions defined below
 	 **********************************/
 	
+	public static String getDecompositionType()
+	{
+		String output;
+				
+		output = subGroup.type;
+		if(Globals.disGroup.rank != 0)
+			output += " x " + disGroup.type;
+		output += " representations in " + group.type;
+		
+		return output;
+	}
+	
 	
 	public static int stringToInt(String string)
 	{

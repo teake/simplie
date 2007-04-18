@@ -188,6 +188,10 @@ public class CGroup
 					type = "E";
 			}
 		}
+		if(type == null)
+			type = "?";
+		else
+			type += rank;
 	}
 	
 	/**
@@ -611,7 +615,7 @@ public class CGroup
 					
 					newRoot = root.plus(simpleRoot);
 					
-					/** First check if didn't do this root before. */
+					/** First check if we didn't do this root before. */
 					if(rootCache.contains(newRoot))
 						continue;
 					else
