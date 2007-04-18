@@ -190,11 +190,20 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 		
 		if(multiplicities)
 		{
-			//TODO: also account for the other sign of LevelHelper
+			int k;
+			int l;
+			int[] heighestWeight;
+			int[] weight;
 			
 			for (int i = 0; i < reps.size(); i++)
 			{
-				repI = reps.get(i);
+				/** Reverse the order if the sign is positive */
+				if(LevelHelper.signConvention == 1)
+					k = reps.size() - i -1;
+				else
+					k = i;
+				
+				repI = reps.get(k);
 				
 				/** Get and set the root multiplicities */
 				CRoot root = Globals.group.getRoot(repI.rootVector);
@@ -211,15 +220,28 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 				outerSubMult = repI.getRootMult();
 				for (int j = 0; j < i; j++)
 				{
-					repJ = reps.get(j);
+					if(LevelHelper.signConvention == 1)
+						l = reps.size() - j - 1;
+					else
+						l = j;
+					
+					repJ = reps.get(l);
 					if(!Globals.sameArrays(repI.disLevels,repJ.disLevels))
 						continue;
 					if(repJ.length <= repI.length)
 						continue;
-					outerSubMult -= repJ.getOuterSubMult() * Globals.subGroup.weightMultiplicity(
-							Globals.flipIntArray(repJ.subDynkinLabels),
-							Globals.flipIntArray(repI.subDynkinLabels)
-							);
+					if(LevelHelper.signConvention == 1)
+					{
+						heighestWeight	= repJ.subDynkinLabels;
+						weight			= repI.subDynkinLabels;
+					}
+					else
+					{
+						// TODO: flipping the labels does not work in all cases! Implement proper lowest weight stuff
+						heighestWeight	= Globals.flipIntArray(repJ.subDynkinLabels);
+						weight			= Globals.flipIntArray(repI.subDynkinLabels);
+					}
+					outerSubMult -= repJ.getOuterSubMult() * Globals.subGroup.weightMultiplicity(heighestWeight, weight);
 				}
 				repI.setOuterSubMult(outerSubMult);
 				
@@ -227,7 +249,12 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 				outerMult = repI.getOuterSubMult();
 				for (int j = 0; j < i; j++)
 				{
-					repJ = reps.get(j);
+					if(LevelHelper.signConvention == 1)
+						l = reps.size() - j - 1;
+					else
+						l = j;
+					
+					repJ = reps.get(l);
 					/**
 					 * This representation can only be a weight of the disconnected representation
 					 * if the dynkin labels of the regular subalgebra are the same.
@@ -236,10 +263,18 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 						continue;
 					if(repJ.length <= repI.length)
 						continue;
-					outerMult -= repJ.getOuterMult() * Globals.disGroup.weightMultiplicity(
-							Globals.flipIntArray(repJ.disDynkinLabels),
-							Globals.flipIntArray(repI.disDynkinLabels)
-							);
+					if(LevelHelper.signConvention == 1)
+					{
+						heighestWeight	= repJ.disDynkinLabels;
+						weight			= repI.disDynkinLabels;
+					}
+					else
+					{
+						// TODO: flipping the labels does not work in all cases! Implement proper lowest weight stuff
+						heighestWeight	= Globals.flipIntArray(repJ.disDynkinLabels);
+						weight			= Globals.flipIntArray(repI.disDynkinLabels);
+					}
+					outerMult -= repJ.getOuterMult() * Globals.disGroup.weightMultiplicity(heighestWeight, weight);
 				}
 				repI.setOuterMult(outerMult);
 			}
@@ -252,12 +287,14 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 			if(multiplicities && !showZeroMult && rep.getOuterMult() == 0)
 				continue;
 			
-			numIndices	= 0;
-			
 			/** Calculate the number of indices of the subalgebra representation. */
+			numIndices	= 0;
 			for (int i = 0; i < rep.subDynkinLabels.length; i++)
 			{
-				numIndices += rep.subDynkinLabels[i] * (i+1);
+				int j = i;
+				if(LevelHelper.signConvention == 1)
+					j = rep.subDynkinLabels.length - i - 1;
+				numIndices += rep.subDynkinLabels[j] * (i+1);
 			}
 			
 			/** Add the data to the table */
