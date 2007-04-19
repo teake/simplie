@@ -7,6 +7,7 @@
 
 package tan.leveldecomposition;
 
+import tan.leveldecomposition.dynkindiagram.CDynkinDiagram;
 import tan.leveldecomposition.group.*;
 import Jama.Matrix;
 import java.util.ArrayList;
@@ -33,6 +34,8 @@ public class Globals
 	public static CGroup disGroup;
 	/** Global CGroup object for the non-level subgroup (which is equal to the direct product of subGroup x disGroup) */
 	public static CGroup coGroup;
+	/** Global CDynkinDiagram object */
+	public static CDynkinDiagram dd;
 	/** Are we performing a scan right now? */
 	public static boolean scanning;
 	
@@ -40,24 +43,18 @@ public class Globals
 	 * Singleton stuff
 	 **********************************/
 	
-	private static Globals _instance = null;
+	private static Globals _instance = new Globals();
 	
 	/** Private constructor */
 	private Globals()
 	{
 		scanning = false;
-	}
-	
-	private static synchronized void createInstance()
-	{
-		if(_instance == null)
-			_instance = new Globals();
+		dd = new CDynkinDiagram();
 	}
 	
 	/** Singleton containing 'global' variables. */
 	public static Globals getInstance()
 	{
-		if(_instance == null) createInstance();
 		return _instance;
 	}
 	

@@ -1,5 +1,5 @@
 /*
- * DynkinDiagram.java
+ * CDynkinDiagram.java
  *
  * Created on 8 maart 2007, 14:38
  *
@@ -14,35 +14,28 @@ import java.io.*;
 import Jama.Matrix;
 
 /**
- * Singleton class
  *
  * @author Teake Nutma
  */
-public class DynkinDiagram
+public class CDynkinDiagram
 {
-	private static DynkinDiagram _instance = new DynkinDiagram();
-	public static Vector<CDynkinNode>		nodes;
+	public Vector<CDynkinNode> nodes;
 	
 	/**
-	 * Creates a new instance of DynkinDiagram
+	 * Creates a new instance of CDynkinDiagram
 	 */
-	private DynkinDiagram()
+	public CDynkinDiagram()
 	{
 		nodes = new Vector<CDynkinNode>();
 	}
 	
-	public static DynkinDiagram getInstance()
-	{
-		return _instance;
-	}
-	
 	/** Clears the Dynkin diagram */
-	public static void Clear()
+	public void Clear()
 	{
 		nodes.clear();
 	}
 	
-	public static int rank()
+	public int rank()
 	{
 		return nodes.size();
 	}
@@ -51,7 +44,7 @@ public class DynkinDiagram
 	 * Fetches a node by its external label.
 	 * Returns null if the node is not found.
 	 */
-	private static CDynkinNode getNodeByLabel(int label)
+	private CDynkinNode getNodeByLabel(int label)
 	{
 		for (CDynkinNode node : nodes)
 		{
@@ -63,7 +56,7 @@ public class DynkinDiagram
 		return null;
 	}
 	
-	public static CDynkinNode getNodeByCoor(int x, int y)
+	public CDynkinNode getNodeByCoor(int x, int y)
 	{
 		for (CDynkinNode node : nodes)
 		{
@@ -76,7 +69,7 @@ public class DynkinDiagram
 	}
 	
 	/** Translates an index of the submatrix into an index of the full matrix */
-	public static int translateSub(int index)
+	public int translateSub(int index)
 	{
 		int subIndex = 0;
 		for(int i = 0; i < rank(); i++)
@@ -91,7 +84,7 @@ public class DynkinDiagram
 	}
 	
 	/** Translates a non-level index into an index of the full matrix */
-	public static int translateCo(int index)
+	public int translateCo(int index)
 	{
 		int subIndex = 0;
 		for(int i = 0; i < rank(); i++)
@@ -106,7 +99,7 @@ public class DynkinDiagram
 	}
 	
 	/** Translates a disconnected-index into an index of the full matrix */
-	public static int translateDis(int index)
+	public int translateDis(int index)
 	{
 		int subIndex = 0;
 		for(int i = 0; i < rank(); i++)
@@ -121,7 +114,7 @@ public class DynkinDiagram
 	}
 	
 	/** Translates a level-index to an index of the full matrix */
-	public static int translateLevel(int index)
+	public int translateLevel(int index)
 	{
 		int subIndex = 0;
 		for(int i = 0; i < rank(); i++)
@@ -136,7 +129,7 @@ public class DynkinDiagram
 	}
 	
 	/** Returns the Cartan matrix of the whole algebra. */
-	public static Matrix cartanMatrix()
+	public Matrix cartanMatrix()
 	{
 		refactor();
 		
@@ -169,7 +162,7 @@ public class DynkinDiagram
 	 * @param	type	The name of the subalgebra to get. Either "sub", "dis", or "co".
 	 * @return			The cartan matrix of the regular or deleted subalgebra.
 	 */
-	public static Matrix cartanSubMatrix(String type)
+	public Matrix cartanSubMatrix(String type)
 	{
 		if( !( type == "sub" || type == "dis" || type == "co") )
 			return null;
@@ -215,7 +208,7 @@ public class DynkinDiagram
 	}
 	
 	/** Returns the last label that was added. */
-	public static int lastLabel()
+	public int lastLabel()
 	{
 		int lastLabel = 0;
 		for (CDynkinNode node : nodes)
@@ -229,12 +222,12 @@ public class DynkinDiagram
 		return lastLabel;
 	}
 	
-	public static int nextFreeLabel()
+	public int nextFreeLabel()
 	{
 		return (lastLabel() + 1);
 	}
 	
-	public static boolean addNode(int x, int y)
+	public boolean addNode(int x, int y)
 	{
 		int newId = -1;
 		
@@ -252,7 +245,7 @@ public class DynkinDiagram
 		return true;
 	}
 	
-	public static void removeNode(CDynkinNode nodeToRemove)
+	public void removeNode(CDynkinNode nodeToRemove)
 	{
 		nodes.remove(nodeToRemove);
 		for(CDynkinNode node : nodes)
@@ -262,7 +255,7 @@ public class DynkinDiagram
 		
 	}
 	
-	public static void modifyConnection(int fromLabel, int toLabel, boolean add) // if add == false then remove
+	public void modifyConnection(int fromLabel, int toLabel, boolean add) // if add == false then remove
 	{
 		CDynkinNode fromNode	= getNodeByLabel(fromLabel);
 		CDynkinNode toNode		= getNodeByLabel(toLabel);
@@ -284,7 +277,7 @@ public class DynkinDiagram
 	}
 	
 	/** Reshapes the internal structure. */
-	private static void refactor()
+	private void refactor()
 	{
 		/** sort the nodes according to their label */
 		Collections.sort(nodes);
@@ -301,7 +294,7 @@ public class DynkinDiagram
 	 * Saves the dynkindiagram to file.
 	 * Returns true upon succes, false on failure.
 	 */
-	public static boolean saveTo(String filename)
+	public boolean saveTo(String filename)
 	{
 		filename.trim();
 		FileOutputStream fos	= null;
@@ -324,7 +317,7 @@ public class DynkinDiagram
 	 * Loads the dynkindiagram from a file.
 	 * Returns true on succes, false on failure.
 	 */
-	public static boolean loadFrom(String filename)
+	public boolean loadFrom(String filename)
 	{
 		filename.trim();
 		FileInputStream fis		= null;

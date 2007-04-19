@@ -44,14 +44,14 @@ public class CRepresentation implements Comparable<CRepresentation>
 		/** Construct the whole root vector */
 		this.rootVector	= new int[Globals.group.rank];
 		for (int i = 0; i < Globals.coGroup.rank; i++)
-			rootVector[DynkinDiagram.translateCo(i)] = coLevels[i];
+			rootVector[Globals.dd.translateCo(i)] = coLevels[i];
 		for (int i = 0; i < LevelHelper.levelRank; i++)
-			rootVector[DynkinDiagram.translateLevel(i)] = levels[i];
+			rootVector[Globals.dd.translateLevel(i)] = levels[i];
 		
 		/** Set the disconnected levels. */
 		this.disLevels = new int[Globals.disGroup.rank];
 		for (int i = 0; i < disLevels.length; i++)
-			disLevels[i] = rootVector[DynkinDiagram.translateDis(i)];
+			disLevels[i] = rootVector[Globals.dd.translateDis(i)];
 		
 		/** Calculate the height */
 		int tHeight = 0;
@@ -69,11 +69,11 @@ public class CRepresentation implements Comparable<CRepresentation>
 		this.subDynkinLabels	= new int[Globals.subGroup.rank];
 		this.disDynkinLabels	= new int[Globals.disGroup.rank];
 		for (int i = 0; i < dynkinLabels.length; i++)
-			translatedLabels[DynkinDiagram.translateCo(i)] = dynkinLabels[i];
+			translatedLabels[Globals.dd.translateCo(i)] = dynkinLabels[i];
 		for (int i = 0; i < disDynkinLabels.length; i++)
-			disDynkinLabels[i] = translatedLabels[DynkinDiagram.translateDis(i)];
+			disDynkinLabels[i] = translatedLabels[Globals.dd.translateDis(i)];
 		for (int i = 0; i < subDynkinLabels.length; i++)
-			subDynkinLabels[i] = translatedLabels[DynkinDiagram.translateSub(i)];
+			subDynkinLabels[i] = translatedLabels[Globals.dd.translateSub(i)];
 	}
 	
 	public void setOuterMult(long outerMult)

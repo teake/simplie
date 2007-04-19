@@ -60,12 +60,12 @@ public class DynkinDiagramPanel extends javax.swing.JPanel
 		Graphics2D g2 = (Graphics2D) g;
 		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
 		
-		for (CDynkinNode node : DynkinDiagram.nodes)
+		for (CDynkinNode node : Globals.dd.nodes)
 		{
 			for (int i = 0; i < node.numConnections(); i++)
 				paintConnection(node.getConnection(i), g2);
 		}
-		for (CDynkinNode node : DynkinDiagram.nodes)
+		for (CDynkinNode node : Globals.dd.nodes)
 			paintNode(node, g2);
 	}
 	
@@ -154,7 +154,7 @@ public class DynkinDiagramPanel extends javax.swing.JPanel
 		
 		int x = cTransInv(evt.getX());
 		int y = cTransInv(evt.getY());
-		CDynkinNode node = DynkinDiagram.getNodeByCoor(x,y);
+		CDynkinNode node = Globals.dd.getNodeByCoor(x,y);
 		
 		if(evt.getButton() == evt.BUTTON1 && !evt.isAltDown())
 		{
@@ -162,16 +162,16 @@ public class DynkinDiagramPanel extends javax.swing.JPanel
 			{
 				if(node == null)
 				{
-					int nextLabel = DynkinDiagram.nextFreeLabel();
-					int lastLabel = DynkinDiagram.lastLabel();
-					DynkinDiagram.addNode(x,y);
+					int nextLabel = Globals.dd.nextFreeLabel();
+					int lastLabel = Globals.dd.lastLabel();
+					Globals.dd.addNode(x,y);
 					if(evt.isShiftDown())
-						DynkinDiagram.modifyConnection(nextLabel,lastLabel,true);
+						Globals.dd.modifyConnection(nextLabel,lastLabel,true);
 				}
 			}
 			else
 			{
-				if(node != null) DynkinDiagram.removeNode(node);
+				if(node != null) Globals.dd.removeNode(node);
 			}
 		}
 		
@@ -196,9 +196,9 @@ public class DynkinDiagramPanel extends javax.swing.JPanel
 			else
 			{
 				if(evt.isControlDown())
-					DynkinDiagram.modifyConnection(node.label, connectionTo, false);
+					Globals.dd.modifyConnection(node.label, connectionTo, false);
 				else
-					DynkinDiagram.modifyConnection(node.label, connectionTo, true);
+					Globals.dd.modifyConnection(node.label, connectionTo, true);
 				stopAddConnection();
 			}
 		}

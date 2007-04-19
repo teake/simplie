@@ -32,12 +32,12 @@ public class AlgebraSetup extends javax.swing.JPanel
 	
 	public void Update()
 	{
-		if(Globals.group == null || !Globals.sameMatrices(DynkinDiagram.cartanMatrix(), Globals.group.cartanMatrix))
-			Globals.group	= new CGroup(DynkinDiagram.cartanMatrix());
+		if(Globals.group == null || !Globals.sameMatrices(Globals.dd.cartanMatrix(), Globals.group.cartanMatrix))
+			Globals.group	= new CGroup(Globals.dd.cartanMatrix());
 		
-		Globals.subGroup	= new CGroup(DynkinDiagram.cartanSubMatrix("sub"));
-		Globals.disGroup	= new CGroup(DynkinDiagram.cartanSubMatrix("dis"));
-		Globals.coGroup		= new CGroup(DynkinDiagram.cartanSubMatrix("co"));
+		Globals.subGroup	= new CGroup(Globals.dd.cartanSubMatrix("sub"));
+		Globals.disGroup	= new CGroup(Globals.dd.cartanSubMatrix("dis"));
+		Globals.coGroup		= new CGroup(Globals.dd.cartanSubMatrix("co"));
 		
 		algebraInfo.Update(Globals.group);
 		subAlgebraInfo.Update(Globals.subGroup);
@@ -46,9 +46,9 @@ public class AlgebraSetup extends javax.swing.JPanel
 	
 		TabbedPaneCartanMatrix.setTitleAt(2,"Co-algebra inverse * " + (Globals.coGroup.det));
 		
-		taCartanMatrix.setText(Globals.matrixToString(DynkinDiagram.cartanMatrix(), 0));
-		taCartanSubMatrix.setText(Globals.matrixToString(DynkinDiagram.cartanSubMatrix("co"), 0));
-		taCartanSubInvMatrix.setText(Globals.matrixToString(DynkinDiagram.cartanSubMatrix("co").inverse().times(Globals.coGroup.det), 1));
+		taCartanMatrix.setText(Globals.matrixToString(Globals.dd.cartanMatrix(), 0));
+		taCartanSubMatrix.setText(Globals.matrixToString(Globals.dd.cartanSubMatrix("co"), 0));
+		taCartanSubInvMatrix.setText(Globals.matrixToString(Globals.dd.cartanSubMatrix("co").inverse().times(Globals.coGroup.det), 1));
 		
 		dynkinDiagramPanel.repaint();
 		PanelDynkinDiagram.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Dynkin Diagram of " + Globals.getDynkinDiagramType(), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12)));

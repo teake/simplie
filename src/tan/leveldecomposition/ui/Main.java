@@ -60,9 +60,10 @@ public class Main extends javax.swing.JFrame
         levelDecomposition = new tan.leveldecomposition.ui.LevelDecomposition();
         MenuBar = new javax.swing.JMenuBar();
         MenuFile = new javax.swing.JMenu();
-        MenuItemLoadAlgebra = new javax.swing.JMenuItem();
+        MenuItemLoadDD = new javax.swing.JMenuItem();
+        MenuItemSaveDD = new javax.swing.JMenuItem();
+        jSeparator4 = new javax.swing.JSeparator();
         MenuItemLoadRoots = new javax.swing.JMenuItem();
-        MenuItemSaveAlgebra = new javax.swing.JMenuItem();
         MenuItemSaveRoots = new javax.swing.JMenuItem();
         jSeparator1 = new javax.swing.JSeparator();
         jMenuItemPrint = new javax.swing.JMenuItem();
@@ -99,21 +100,36 @@ public class Main extends javax.swing.JFrame
 
         MenuFile.setMnemonic('f');
         MenuFile.setLabel("File");
-        MenuItemLoadAlgebra.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.CTRL_MASK));
-        MenuItemLoadAlgebra.setMnemonic('o');
-        MenuItemLoadAlgebra.setLabel("Load Dynkin diagram");
-        MenuItemLoadAlgebra.addActionListener(new java.awt.event.ActionListener()
+        MenuItemLoadDD.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.CTRL_MASK));
+        MenuItemLoadDD.setMnemonic('o');
+        MenuItemLoadDD.setLabel("Load Dynkin diagram");
+        MenuItemLoadDD.addActionListener(new java.awt.event.ActionListener()
         {
             public void actionPerformed(java.awt.event.ActionEvent evt)
             {
-                MenuItemLoadAlgebraActionPerformed(evt);
+                MenuItemLoadDDActionPerformed(evt);
             }
         });
 
-        MenuFile.add(MenuItemLoadAlgebra);
+        MenuFile.add(MenuItemLoadDD);
+
+        MenuItemSaveDD.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
+        MenuItemSaveDD.setMnemonic('s');
+        MenuItemSaveDD.setLabel("Save Dynkin diagram");
+        MenuItemSaveDD.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                MenuItemSaveDDActionPerformed(evt);
+            }
+        });
+
+        MenuFile.add(MenuItemSaveDD);
+
+        MenuFile.add(jSeparator4);
 
         MenuItemLoadRoots.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_L, java.awt.event.InputEvent.CTRL_MASK));
-        MenuItemLoadRoots.setMnemonic('r');
+        MenuItemLoadRoots.setMnemonic('l');
         MenuItemLoadRoots.setText("Load root system");
         MenuItemLoadRoots.addActionListener(new java.awt.event.ActionListener()
         {
@@ -125,19 +141,8 @@ public class Main extends javax.swing.JFrame
 
         MenuFile.add(MenuItemLoadRoots);
 
-        MenuItemSaveAlgebra.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
-        MenuItemSaveAlgebra.setMnemonic('s');
-        MenuItemSaveAlgebra.setLabel("Save Dynkin diagram");
-        MenuItemSaveAlgebra.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
-                MenuItemSaveAlgebraActionPerformed(evt);
-            }
-        });
-
-        MenuFile.add(MenuItemSaveAlgebra);
-
+        MenuItemSaveRoots.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_R, java.awt.event.InputEvent.CTRL_MASK));
+        MenuItemSaveRoots.setMnemonic('r');
         MenuItemSaveRoots.setText("Save root system");
         MenuItemSaveRoots.addActionListener(new java.awt.event.ActionListener()
         {
@@ -321,8 +326,8 @@ public class Main extends javax.swing.JFrame
 				optionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_MenuItemHelpActionPerformed
 	
-	private void MenuItemSaveAlgebraActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_MenuItemSaveAlgebraActionPerformed
-	{//GEN-HEADEREND:event_MenuItemSaveAlgebraActionPerformed
+	private void MenuItemSaveDDActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_MenuItemSaveDDActionPerformed
+	{//GEN-HEADEREND:event_MenuItemSaveDDActionPerformed
 		JFileChooser chooser = new JFileChooser("");
 		chooser.addChoosableFileFilter(ddFilter);
 		chooser.setSelectedFile(new File(Globals.getDynkinDiagramType() + ".dd"));
@@ -337,12 +342,12 @@ public class Main extends javax.swing.JFrame
 			String fileURL = chooser.getSelectedFile().getAbsolutePath();
 			if(!ddFilter.accept(chooser.getSelectedFile()))
 				fileURL += ".dd";
-			DynkinDiagram.saveTo(fileURL);
+			Globals.dd.saveTo(fileURL);
 		}
-	}//GEN-LAST:event_MenuItemSaveAlgebraActionPerformed
+	}//GEN-LAST:event_MenuItemSaveDDActionPerformed
 	
-	private void MenuItemLoadAlgebraActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_MenuItemLoadAlgebraActionPerformed
-	{//GEN-HEADEREND:event_MenuItemLoadAlgebraActionPerformed
+	private void MenuItemLoadDDActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_MenuItemLoadDDActionPerformed
+	{//GEN-HEADEREND:event_MenuItemLoadDDActionPerformed
 		String fileURL;
 		JFileChooser chooser;
 		int returnVal;
@@ -358,41 +363,41 @@ public class Main extends javax.swing.JFrame
 		 * pre-pend the "file" protocol to the absolute path of the file.
 		 */
 			fileURL = chooser.getSelectedFile().getAbsolutePath();
-			DynkinDiagram.loadFrom(fileURL);
+			Globals.dd.loadFrom(fileURL);
 			algebraSetup.Update();
 		}
-	}//GEN-LAST:event_MenuItemLoadAlgebraActionPerformed
+	}//GEN-LAST:event_MenuItemLoadDDActionPerformed
 	
     private void MenuItemLoadE11ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_MenuItemLoadE11ActionPerformed
     {//GEN-HEADEREND:event_MenuItemLoadE11ActionPerformed
-		DynkinDiagram.Clear();
-		DynkinDiagram.addNode(2,0);
-		DynkinDiagram.addNode(0,1);
-		DynkinDiagram.addNode(1,1);
-		DynkinDiagram.addNode(2,1);
-		DynkinDiagram.addNode(3,1);
-		DynkinDiagram.addNode(4,1);
-		DynkinDiagram.addNode(5,1);
-		DynkinDiagram.addNode(6,1);
-		DynkinDiagram.addNode(7,1);
-		DynkinDiagram.addNode(8,1);
-		DynkinDiagram.addNode(9,1);
-		DynkinDiagram.modifyConnection(1,4,true);
-		DynkinDiagram.modifyConnection(2,3,true);
-		DynkinDiagram.modifyConnection(3,4,true);
-		DynkinDiagram.modifyConnection(4,5,true);
-		DynkinDiagram.modifyConnection(5,6,true);
-		DynkinDiagram.modifyConnection(6,7,true);
-		DynkinDiagram.modifyConnection(7,8,true);
-		DynkinDiagram.modifyConnection(8,9,true);
-		DynkinDiagram.modifyConnection(9,10,true);
-		DynkinDiagram.modifyConnection(10,11,true);
+		Globals.dd.Clear();
+		Globals.dd.addNode(2,0);
+		Globals.dd.addNode(0,1);
+		Globals.dd.addNode(1,1);
+		Globals.dd.addNode(2,1);
+		Globals.dd.addNode(3,1);
+		Globals.dd.addNode(4,1);
+		Globals.dd.addNode(5,1);
+		Globals.dd.addNode(6,1);
+		Globals.dd.addNode(7,1);
+		Globals.dd.addNode(8,1);
+		Globals.dd.addNode(9,1);
+		Globals.dd.modifyConnection(1,4,true);
+		Globals.dd.modifyConnection(2,3,true);
+		Globals.dd.modifyConnection(3,4,true);
+		Globals.dd.modifyConnection(4,5,true);
+		Globals.dd.modifyConnection(5,6,true);
+		Globals.dd.modifyConnection(6,7,true);
+		Globals.dd.modifyConnection(7,8,true);
+		Globals.dd.modifyConnection(8,9,true);
+		Globals.dd.modifyConnection(9,10,true);
+		Globals.dd.modifyConnection(10,11,true);
 		algebraSetup.Update();
     }//GEN-LAST:event_MenuItemLoadE11ActionPerformed
 	
     private void MenuItemClearActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_MenuItemClearActionPerformed
     {//GEN-HEADEREND:event_MenuItemClearActionPerformed
-		DynkinDiagram.Clear();
+		Globals.dd.Clear();
 		algebraSetup.Update();
     }//GEN-LAST:event_MenuItemClearActionPerformed
 	
@@ -433,10 +438,10 @@ public class Main extends javax.swing.JFrame
     private javax.swing.JMenuItem MenuItemClear;
     private javax.swing.JMenuItem MenuItemExit;
     private javax.swing.JMenuItem MenuItemHelp;
-    private javax.swing.JMenuItem MenuItemLoadAlgebra;
+    private javax.swing.JMenuItem MenuItemLoadDD;
     private javax.swing.JMenuItem MenuItemLoadE11;
     private javax.swing.JMenuItem MenuItemLoadRoots;
-    private javax.swing.JMenuItem MenuItemSaveAlgebra;
+    private javax.swing.JMenuItem MenuItemSaveDD;
     private javax.swing.JMenuItem MenuItemSaveRoots;
     private javax.swing.JTabbedPane TabbedPane;
     private tan.leveldecomposition.ui.AlgebraSetup algebraSetup;
@@ -444,6 +449,7 @@ public class Main extends javax.swing.JFrame
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
+    private javax.swing.JSeparator jSeparator4;
     private tan.leveldecomposition.ui.LevelDecomposition levelDecomposition;
     private javax.swing.JOptionPane optionPane;
     private javax.swing.JFrame popup;

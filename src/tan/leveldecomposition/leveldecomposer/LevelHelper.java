@@ -7,7 +7,7 @@
 
 package tan.leveldecomposition.leveldecomposer;
 
-import tan.leveldecomposition.dynkindiagram.DynkinDiagram;
+import tan.leveldecomposition.dynkindiagram.*;
 import tan.leveldecomposition.*;
 
 import Jama.Matrix;
@@ -92,7 +92,7 @@ public class LevelHelper
 		{
 			for(int j=0; j < levelRank; j++)
 			{
-				rootLength += subFactor * Globals.group.cartanMatrix[DynkinDiagram.translateLevel(i)][DynkinDiagram.translateLevel(j)] * levels[i] * levels[j];
+				rootLength += subFactor * Globals.group.cartanMatrix[Globals.dd.translateLevel(i)][Globals.dd.translateLevel(j)] * levels[i] * levels[j];
 			}
 		}
 		
@@ -127,7 +127,7 @@ public class LevelHelper
 			levelComponents[i] = 0;
 			for(int j=0; j < levelRank; j++)
 			{
-				levelComponents[i] += Globals.group.cartanMatrix[DynkinDiagram.translateCo(i)][DynkinDiagram.translateLevel(j)] * levels[j];
+				levelComponents[i] += Globals.group.cartanMatrix[Globals.dd.translateCo(i)][Globals.dd.translateLevel(j)] * levels[j];
 			}
 		}
 		return levelComponents;
