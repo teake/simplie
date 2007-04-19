@@ -50,13 +50,15 @@ public class CGroup
 	public boolean	finite;
 	/** The root system */
 	public CRootSystem rs;
+	/** The Weyl vector of the group */
+	public CWeight weylVector;
+	
 	
 	/*********************************
 	 * Private properties
 	 *********************************/
 	
-	/** The Weyl vector of the group */
-	private CWeight	weylVector;
+	private CHighestWeightRep hwRep;
 	
 	
 	/**********************************
@@ -202,8 +204,7 @@ public class CGroup
 	
 	/**
 	 * Determines the multiplicity of a weight that sits in the representation
-	 * given by heighestWeight. Basically an implementation of the Freudenthal
-	 * recursion formula.
+	 * given by heighestWeight. 
 	 *
 	 * @param	highestWeightLabels	The Dynkin labels of the highest weight of the representation.
 	 * @param	weightLabels		The Dynkin labels of the weight for which the multiplicity is calculated.
@@ -211,204 +212,14 @@ public class CGroup
 	 */
 	public long weightMultiplicity(int[] highestWeightLabels, int[] weightLabels)
 	{
-		System.out.println(
-				"Calculating the multiplicity of " + Globals.intArrayToString(weightLabels) +
-				" in " + Globals.intArrayToString(highestWeightLabels) + " of group " + type + ".");
-		fraction[]	rootHighest;
-		fraction[]	rootWeight;
-		int			wantedDepth;
-		CWeight		wantedWeight;
-		ArrayList<ArrayList> weightSystem;
-		
-		/** Preliminary checks */
-		if(!finite || highestWeightLabels.length != rank || weightLabels.length != rank)
-			return 0;
-		
-		rootHighest = weightToRoot(highestWeightLabels);
-		rootWeight	= weightToRoot(weightLabels);
-		
-		/** Calculate the depth of the weight */
-		wantedDepth = 0;
-		for (int i = 0; i < rank; i++)
-		{
-			fraction depthPart = rootHighest[i].minus(rootWeight[i]);
-			if(!depthPart.isInt())
-				/** Then weight is not part of the highest weight rep of 'highest weight' */
-				return 0;
-			wantedDepth += rootHighest[i].minus(rootWeight[i]).asInt();
-		}
-		if(wantedDepth <= 0)
-			/** We don't calculate the multiplicity of the highest weight itself */
-			return 0;
-		
-		wantedWeight = new CWeight(weightLabels);
-		
-		/** Construct the weight system down to the depth just calculated. */
-		weightSystem = constructWeightSystem(highestWeightLabels, wantedDepth);
-		
-		/** Fetch the weight we wanted and return its multiplicity */
-		ArrayList<CWeight> wantedWeights = weightSystem.get(wantedDepth);
-		int wantedIndex = wantedWeights.indexOf(wantedWeight);
-		if(wantedIndex == -1)
-			/** It's not here, return 0. */
-			return 0;
-		
-		return wantedWeights.get(wantedIndex).getMult();
+		hwRep = new CHighestWeightRep(this, highestWeightLabels);
+		return hwRep.weightMultiplicity(weightLabels);
 	}
 	
 	public void cancelEverything()
 	{
 		rs.cancelConstruction();
 	}
-	
-	/**********************************
-	 * Private methods
-	 **********************************/
-	
-	
-	private ArrayList<ArrayList> constructWeightSystem(int[] highestWeightLabels, int maxDepth)
-	{
-		ArrayList<ArrayList>	weightSystem;
-		ArrayList<CWeight>		zeroDepthWeight;
-		fraction				highestWeightFactor;
-		int						constructedDepth;
-		int						newDepth;
-		CWeight					highestWeight;
-		boolean					addedSomething;
-		int[]					newSubtractable;
-		
-		
-		/** First add the highest weight */
-		weightSystem	= new ArrayList<ArrayList>();
-		highestWeight	= new CWeight(highestWeightLabels);
-		zeroDepthWeight	= new ArrayList<CWeight>();
-		zeroDepthWeight.add(highestWeight);
-		
-		weightSystem.add(0,zeroDepthWeight);
-		constructedDepth = 0;
-		
-		/**
-		 * This factor appears in all denominators of the Freudenthal formula,
-		 * so calculate it once and for all.
-		 */
-		highestWeightFactor = innerProduct(highestWeight,highestWeight);
-		highestWeightFactor.add(innerProduct(highestWeight, weylVector).times(2));
-		
-		/** Do the construction. */
-		while(constructedDepth < maxDepth)
-		{
-			addedSomething	= false;
-			newDepth		= constructedDepth + 1;
-			
-			ArrayList<CWeight> prevDepthWeights = weightSystem.get(constructedDepth);
-			ArrayList<CWeight> thisDepthWeights = new ArrayList<CWeight>();
-			for(CWeight oldWeight : prevDepthWeights)
-			{
-				/** See if the we can subtract a simple root from this weight */
-				for (int i = 0; i < rank; i++)
-				{
-					if(oldWeight.getSimpRootSubtractable(i) > 0)
-					{
-						/** Ok we can. What are the new dynkin labels? */
-						int[] newDynkinLabels = new int[rank];
-						for (int j = 0; j < rank; j++)
-						{
-							newDynkinLabels[j] = oldWeight.dynkinLabels[j] - cartanMatrix[j][i];
-						}
-						CWeight newWeight = new CWeight(newDynkinLabels);
-						
-						/** How many times can we subtract a simple root from this weight? */
-						newSubtractable = oldWeight.getSimpRootSubtractable();
-						newSubtractable[i]--;
-						newWeight.setSimpRootSubtractable(newSubtractable);
-						
-						/** Only possibly increase simpRootSubtractable if this root is already present. */
-						int existingIndex = thisDepthWeights.indexOf(newWeight);
-						if(existingIndex != -1)
-						{
-							thisDepthWeights.get(existingIndex).setSimpRootSubtractable(newWeight.getSimpRootSubtractable());
-							continue;
-						}
-						
-						/** Set the depth and the multiplicity */
-						newWeight.setDepth(newDepth);
-						setWeightMult(weightSystem, newWeight, highestWeightFactor);
-						
-						/** And add it. */
-						thisDepthWeights.add(newWeight);
-						addedSomething = true;
-					}
-				}
-			}
-			
-			if(!addedSomething)
-				/** If we didn't add something we should break, avoiding infinite loops. */
-				break;
-			
-			weightSystem.add(newDepth, thisDepthWeights);
-			constructedDepth++;
-		}
-		
-		return weightSystem;
-	}
-	
-	private void setWeightMult(ArrayList<ArrayList> weightSystem, CWeight weight, fraction highestWeightFactor)
-	{
-		fraction	denominator;
-		long		numerator;
-		int			maxHeight;
-		
-		numerator = 0;
-		
-		/** First calculate the denominator */
-		denominator = highestWeightFactor.minus(innerProduct(weight,weight));
-		denominator.subtract(innerProduct(weight,weylVector).times(2));
-		
-		maxHeight = Math.min(weight.getDepth(), rs.size()-1);
-		
-		/** Now sum over all positive roots */
-		for (int height = 1; height <= maxHeight; height++)
-		{
-			Collection roots	= rs.get(height);
-			Iterator iterator	= roots.iterator();
-			int maxK = (int) Math.floor(weight.getDepth()/height);
-			while(iterator.hasNext())
-			{
-				CRoot root = (CRoot) iterator.next();
-				int rootNorm		= innerProduct(root,root);
-				int rootDotWeight	= innerProduct(weight,root);
-				for (int k = 1; k <= maxK; k++)
-				{
-					/** Construct the weight "lambda + k*alpha" */
-					int[] summedLabels = weight.dynkinLabels.clone();
-					for (int i = 0; i < rank; i++)
-					{
-						for (int j = 0; j < rank; j++)
-						{
-							summedLabels[i] += k * cartanMatrix[i][j] * root.vector[j];
-						}
-					}
-					CWeight summedWeight = new CWeight(summedLabels);
-					ArrayList<CWeight> summedWeights = weightSystem.get(weight.getDepth()-height*k);
-					int summedIndex = summedWeights.indexOf(summedWeight);
-					if(summedIndex == -1)
-						/** It's not a weight */
-						continue;
-					numerator += (k*rootNorm + rootDotWeight) * summedWeights.get(summedIndex).getMult();
-				}
-			}
-		}
-		fraction mult = new fraction(2 * numerator);
-		mult.divide(denominator);
-		if(!mult.isInt())
-		{
-			System.out.println("*WARNING*: fractional multplicity of weight " + weight);
-			System.out.println("*WARNING*: calculated mult: " + mult);
-		}
-		weight.setMult(2 * numerator / denominator.asInt());
-	}
-	
-	
 	
 	
 	/**
