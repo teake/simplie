@@ -20,7 +20,7 @@ import Jama.Matrix;
  */
 public class CGroup
 {
-	//TODO: convert rootSystem & weightSystem into classes of their own. 	
+	//TODO: convert rootSystem & weightSystem into classes of their own.
 	
 	/*********************************
 	 * Public properties
@@ -123,6 +123,35 @@ public class CGroup
 		/** Set a pointer to the inverse of the cartan matrix. */
 		this.qFormMatrix = cartanMatrixInv;
 		
+		/** Try to determine the group type */
+		// TODO: make this algorithm find more types
+		compareMatrix = Globals.regularMatrix(rank);
+		if(Globals.sameMatrices(compareMatrix,cartanMatrix))
+			type = "A";
+		else if(rank > 4)
+		{
+			compareMatrix.set(0,3,-1);
+			compareMatrix.set(3,0,-1);
+			compareMatrix.set(0,1,0);
+			compareMatrix.set(1,0,0);
+			if(Globals.sameMatrices(compareMatrix,cartanMatrix))
+				type = "E";
+			else
+			{
+				compareMatrix = Globals.regularMatrix(rank);
+				compareMatrix.set(rank-1,2,-1);
+				compareMatrix.set(2,rank-1,-1);
+				compareMatrix.set(rank-2,rank-1,0);
+				compareMatrix.set(rank-1,rank-2,0);
+				if(Globals.sameMatrices(compareMatrix,cartanMatrix))
+					type = "E";
+			}
+		}
+		if(type == null)
+			type = "?";
+		else
+			type += rank;
+		
 		rootSystem = new ArrayList<ArrayList>();
 		numPosRoots = 0;
 		numPosGenerators = 0;
@@ -163,35 +192,6 @@ public class CGroup
 		{
 			dimension	= "Infinite";
 		}
-		
-		/** Try to determine the group type */
-		// TODO: make this algorithm find more types
-		compareMatrix = Globals.regularMatrix(rank);
-		if(Globals.sameMatrices(compareMatrix,cartanMatrix))
-			type = "A";
-		else if(rank > 4)
-		{
-			compareMatrix.set(0,3,-1);
-			compareMatrix.set(3,0,-1);
-			compareMatrix.set(0,1,0);
-			compareMatrix.set(1,0,0);
-			if(Globals.sameMatrices(compareMatrix,cartanMatrix))
-				type = "E";
-			else
-			{
-				compareMatrix = Globals.regularMatrix(rank);
-				compareMatrix.set(rank-1,2,-1);
-				compareMatrix.set(2,rank-1,-1);
-				compareMatrix.set(rank-2,rank-1,0);
-				compareMatrix.set(rank-1,rank-2,0);
-				if(Globals.sameMatrices(compareMatrix,cartanMatrix))
-					type = "E";
-			}
-		}
-		if(type == null)
-			type = "?";
-		else
-			type += rank;
 	}
 	
 	/**
@@ -240,6 +240,9 @@ public class CGroup
 	 */
 	public long weightMultiplicity(int[] highestWeightLabels, int[] weightLabels)
 	{
+		System.out.println(
+				"Calculating the multiplicity of " + Globals.intArrayToString(weightLabels) +
+				" in " + Globals.intArrayToString(highestWeightLabels) + " of group " + type + ".");
 		fraction[]	rootHighest;
 		fraction[]	rootWeight;
 		int			wantedDepth;
@@ -557,8 +560,8 @@ public class CGroup
 		mult.divide(denominator);
 		if(!mult.isInt())
 		{
-			System.out.println("calculated mult: " + mult);
-			System.out.println(weight);
+			System.out.println("*WARNING*: fractional multplicity of weight " + weight);
+			System.out.println("*WARNING*: calculated mult: " + mult);
 		}
 		weight.setMult(2 * numerator / denominator.asInt());
 	}
@@ -592,6 +595,8 @@ public class CGroup
 			rootCache		= new ArrayList<CRoot>();
 			prevNumPosRoots = numPosRoots;
 			newHeight	    = constructedHeight + 1;
+			
+			System.out.println("Constructing roots of " + type + " of height " + newHeight + ".");
 			
 			/**
 			 * Try to add the simple roots to all the previous roots.
@@ -821,8 +826,8 @@ public class CGroup
 				root.coMult = coMult.plus(root.mult);
 				if(multiplicity.asDouble() != (double) multiplicity.asInt() )
 				{
-					System.out.println(root.toString());
-					System.out.println("actual mult: " + multiplicity.toString());
+					System.out.println("*WARNING*: fractional multiplicity of root " + root.toString());
+					System.out.println("*WARNING*: actual mult: " + multiplicity.toString());
 				}
 				
 			}

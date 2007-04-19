@@ -58,6 +58,7 @@ public class Main extends javax.swing.JFrame
         TabbedPane = new javax.swing.JTabbedPane();
         algebraSetup = new tan.leveldecomposition.ui.AlgebraSetup();
         levelDecomposition = new tan.leveldecomposition.ui.LevelDecomposition();
+        systemOutTextArea = new tan.leveldecomposition.ui.SystemOutTextArea();
         MenuBar = new javax.swing.JMenuBar();
         MenuFile = new javax.swing.JMenu();
         MenuItemLoadDD = new javax.swing.JMenuItem();
@@ -97,6 +98,8 @@ public class Main extends javax.swing.JFrame
         TabbedPane.addTab("Algebra Setup", algebraSetup);
 
         TabbedPane.addTab("Level Decomposition", levelDecomposition);
+
+        TabbedPane.addTab("Output messages", systemOutTextArea);
 
         MenuFile.setMnemonic('f');
         MenuFile.setLabel("File");
@@ -453,6 +456,7 @@ public class Main extends javax.swing.JFrame
     private tan.leveldecomposition.ui.LevelDecomposition levelDecomposition;
     private javax.swing.JOptionPane optionPane;
     private javax.swing.JFrame popup;
+    private tan.leveldecomposition.ui.SystemOutTextArea systemOutTextArea;
     // End of variables declaration//GEN-END:variables
 	
 }
