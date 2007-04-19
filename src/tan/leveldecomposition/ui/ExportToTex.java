@@ -20,7 +20,7 @@ import tan.leveldecomposition.ui.reusable.UIPrintableColorTable;
 
 /**
  *
- * @author  P221000
+ * @author  Teake Nutma
  */
 public class ExportToTex extends javax.swing.JPanel
 {
