@@ -19,6 +19,7 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeEvent;
 import javax.swing.SwingWorker;
 import java.text.MessageFormat;
+import tan.leveldecomposition.ui.reusable.UIPrintableColorTable;
 
 
 /**
@@ -29,6 +30,8 @@ public class LevelDecomposition extends javax.swing.JPanel
 {
 	DefaultTableModel	tableModel;
 	CAutoLevelScanner	autoScanner;
+	
+	public UIPrintableColorTable repTable;
 	
 	/** Creates new form LevelDecomposition */
 	public LevelDecomposition()
@@ -41,6 +44,8 @@ public class LevelDecomposition extends javax.swing.JPanel
 		tableModel = (DefaultTableModel) representationsTable.getModel();
 		representationsTable.setAutoCreateRowSorter(true);
 		representationsTable.setModel(tableModel);
+		
+		repTable = representationsTable;
 		
 		SetSignConvention();
 	}
@@ -101,7 +106,7 @@ public class LevelDecomposition extends javax.swing.JPanel
             },
             new String []
             {
-                "l", "p sub", "p dis", "m", "a^2", "d sub", "d dis", "mult", "mu", "nu", "h", "# ind"
+                "l", "p sub", "p dis", "m", "length", "d sub", "d dis", "mult", "mu", "nu", "h", "ind"
             }
         )
         {

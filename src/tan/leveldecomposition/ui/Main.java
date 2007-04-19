@@ -6,14 +6,17 @@
 
 package tan.leveldecomposition.ui;
 
+import javax.swing.Popup;
+import tan.leveldecomposition.*;
+import tan.leveldecomposition.dynkindiagram.*;
+
 import javax.swing.JTextField;
 import javax.swing.UIManager;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.*;
 import java.io.File;
 
-import tan.leveldecomposition.*;
-import tan.leveldecomposition.dynkindiagram.*;
+
 
 /**
  *
@@ -21,8 +24,8 @@ import tan.leveldecomposition.dynkindiagram.*;
  */
 public class Main extends javax.swing.JFrame
 {
-	FileFilter ddFilter;
-	FileFilter rsFilter;
+	private FileFilter ddFilter;
+	private FileFilter rsFilter;
 	
 	/** Creates new form LevelDecompositionUI */
 	public Main()
@@ -38,9 +41,11 @@ public class Main extends javax.swing.JFrame
 		}
 		initComponents();
 		
+		exportDialog.setLocation(100,100);
+		exportToTex.setup(exportDialog,levelDecomposition.repTable);
+		
 		ddFilter = new FileNameExtensionFilter("Dynkin diagram (*.dd)", "dd");
 		rsFilter = new FileNameExtensionFilter("Root system (*.rs)", "rs");
-		
 	}
 	
 	
@@ -55,6 +60,8 @@ public class Main extends javax.swing.JFrame
     {
         popup = new javax.swing.JFrame();
         optionPane = new javax.swing.JOptionPane();
+        exportDialog = new javax.swing.JDialog();
+        exportToTex = new tan.leveldecomposition.ui.ExportToTex();
         TabbedPane = new javax.swing.JTabbedPane();
         algebraSetup = new tan.leveldecomposition.ui.AlgebraSetup();
         levelDecomposition = new tan.leveldecomposition.ui.LevelDecomposition();
@@ -74,6 +81,8 @@ public class Main extends javax.swing.JFrame
         MenuItemClear = new javax.swing.JMenuItem();
         jSeparator2 = new javax.swing.JSeparator();
         MenuItemLoadE11 = new javax.swing.JMenuItem();
+        MenuTools = new javax.swing.JMenu();
+        MenuExportToTex = new javax.swing.JMenuItem();
         MenuHelp = new javax.swing.JMenu();
         MenuItemHelp = new javax.swing.JMenuItem();
         MenuItemAbout = new javax.swing.JMenuItem();
@@ -91,6 +100,20 @@ public class Main extends javax.swing.JFrame
         popupLayout.setVerticalGroup(
             popupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(optionPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+        );
+        exportDialog.setTitle("Export to TeX");
+        exportDialog.setMinimumSize(new java.awt.Dimension(171, 135));
+        exportDialog.setResizable(false);
+
+        javax.swing.GroupLayout exportDialogLayout = new javax.swing.GroupLayout(exportDialog.getContentPane());
+        exportDialog.getContentPane().setLayout(exportDialogLayout);
+        exportDialogLayout.setHorizontalGroup(
+            exportDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(exportToTex, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+        );
+        exportDialogLayout.setVerticalGroup(
+            exportDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(exportToTex, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -218,6 +241,23 @@ public class Main extends javax.swing.JFrame
 
         MenuBar.add(MenuEdit);
 
+        MenuTools.setMnemonic('t');
+        MenuTools.setText("Tools");
+        MenuExportToTex.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, java.awt.event.InputEvent.CTRL_MASK));
+        MenuExportToTex.setMnemonic('e');
+        MenuExportToTex.setText("Export to TeX");
+        MenuExportToTex.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                MenuExportToTexActionPerformed(evt);
+            }
+        });
+
+        MenuTools.add(MenuExportToTex);
+
+        MenuBar.add(MenuTools);
+
         MenuHelp.setMnemonic('h');
         MenuHelp.setText("Help");
         MenuItemHelp.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F1, 0));
@@ -261,6 +301,11 @@ public class Main extends javax.swing.JFrame
         );
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+	private void MenuExportToTexActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_MenuExportToTexActionPerformed
+	{//GEN-HEADEREND:event_MenuExportToTexActionPerformed
+		exportDialog.setVisible(true);
+	}//GEN-LAST:event_MenuExportToTexActionPerformed
 
 	private void jMenuItemPrintActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jMenuItemPrintActionPerformed
 	{//GEN-HEADEREND:event_jMenuItemPrintActionPerformed
@@ -435,6 +480,7 @@ public class Main extends javax.swing.JFrame
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuBar MenuBar;
     private javax.swing.JMenu MenuEdit;
+    private javax.swing.JMenuItem MenuExportToTex;
     private javax.swing.JMenu MenuFile;
     private javax.swing.JMenu MenuHelp;
     private javax.swing.JMenuItem MenuItemAbout;
@@ -446,8 +492,11 @@ public class Main extends javax.swing.JFrame
     private javax.swing.JMenuItem MenuItemLoadRoots;
     private javax.swing.JMenuItem MenuItemSaveDD;
     private javax.swing.JMenuItem MenuItemSaveRoots;
+    private javax.swing.JMenu MenuTools;
     private javax.swing.JTabbedPane TabbedPane;
     private tan.leveldecomposition.ui.AlgebraSetup algebraSetup;
+    private javax.swing.JDialog exportDialog;
+    private tan.leveldecomposition.ui.ExportToTex exportToTex;
     private javax.swing.JMenuItem jMenuItemPrint;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;

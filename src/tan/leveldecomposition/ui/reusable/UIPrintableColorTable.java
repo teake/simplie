@@ -7,6 +7,8 @@
 
 package tan.leveldecomposition.ui.reusable;
 
+import tan.leveldecomposition.*;
+
 import javax.swing.JTable;
 import javax.swing.SwingUtilities;
 import javax.swing.JFrame;
@@ -122,5 +124,49 @@ public class UIPrintableColorTable extends JTable
 				maxWidth = Math.max(tableColumn.getPreferredWidth(), maxWidth);
 			tableColumn.setPreferredWidth(  maxWidth );
 		}
+	}
+	
+	public String toTeX(boolean includeCaption)
+	{
+		String output = new String();
+		
+		/** Write the header. */
+		output += "\\begin{longtable}{";
+		for (int i = 0; i < super.getColumnCount(); i++)
+		{
+			output += "|r";
+		}
+		output += "|} \n";
+		if(includeCaption)
+			output += "\\caption{" + Globals.getDecompositionType() + "} \\\\ \n";
+		output += "\\hline \n";
+		for (int i = 0; i < super.getColumnCount(); i++)
+		{
+			output += super.getColumnName(i);
+			if(i != super.getColumnCount() - 1)
+				output += " & \n";
+			else
+				output += "\\\\ \n";
+		}
+		output += "\\hline \n";
+		
+		/** Write the content */
+		for (int i = 0; i < super.getRowCount(); i++)
+		{
+			for (int j = 0; j < super.getColumnCount(); j++)
+			{
+				output += super.getValueAt(i,j);
+				if(j != super.getColumnCount() - 1)
+					output += " & ";
+				else
+					output += "\\\\ \n";
+			}
+		}
+		
+		/** Write the footer */
+		output += "\\hline \n";
+		output += "\\end{longtable}";
+		
+		return output;
 	}
 }

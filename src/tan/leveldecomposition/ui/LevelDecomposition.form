@@ -92,14 +92,14 @@
                     <Column editable="false" title="p sub" type="java.lang.String"/>
                     <Column editable="false" title="p dis" type="java.lang.String"/>
                     <Column editable="false" title="m" type="java.lang.String"/>
-                    <Column editable="false" title="a^2" type="java.lang.Integer"/>
+                    <Column editable="false" title="length" type="java.lang.Integer"/>
                     <Column editable="false" title="d sub" type="java.lang.Long"/>
                     <Column editable="false" title="d dis" type="java.lang.Long"/>
                     <Column editable="false" title="mult" type="java.lang.Long"/>
                     <Column editable="false" title="mu" type="java.lang.Long"/>
                     <Column editable="false" title="nu" type="java.lang.Long"/>
                     <Column editable="false" title="h" type="java.lang.Integer"/>
-                    <Column editable="false" title="# ind" type="java.lang.Integer"/>
+                    <Column editable="false" title="ind" type="java.lang.Integer"/>
                   </Table>
                 </Property>
                 <Property name="columnSelectionAllowed" type="boolean" value="true"/>
