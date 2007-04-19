@@ -271,7 +271,7 @@ public class Main extends javax.swing.JFrame
 	{//GEN-HEADEREND:event_MenuItemSaveRootsActionPerformed
 		JFileChooser chooser = new JFileChooser("");
 		chooser.addChoosableFileFilter(rsFilter);
-		chooser.setSelectedFile(new File(Globals.group.type + "_height_" + Globals.group.constructedHeight));
+		chooser.setSelectedFile(new File(Globals.group.type + "_height_" + Globals.group.rs.constructedHeight()));
 		chooser.setDialogTitle("Save root system");
 		int returnVal = chooser.showSaveDialog(this);
 		
@@ -283,7 +283,7 @@ public class Main extends javax.swing.JFrame
 			String fileURL = chooser.getSelectedFile().getAbsolutePath();
 			if(!rsFilter.accept(chooser.getSelectedFile()))
 				fileURL += ".rs";
-			Globals.group.saveTo(fileURL);
+			Globals.group.rs.saveTo(fileURL);
 		}
 	}//GEN-LAST:event_MenuItemSaveRootsActionPerformed
 	
@@ -304,7 +304,7 @@ public class Main extends javax.swing.JFrame
 		 * pre-pend the "file" protocol to the absolute path of the file.
 		 */
 			fileURL = chooser.getSelectedFile().getAbsolutePath();
-			if(!Globals.group.loadFrom(fileURL))
+			if(!Globals.group.rs.loadFrom(fileURL))
 			{
 				optionPane.showMessageDialog(
 						popup,
