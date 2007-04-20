@@ -106,7 +106,7 @@ public class LevelDecomposition extends javax.swing.JPanel
             },
             new String []
             {
-                "l", "p sub", "p dis", "m", "length", "d sub", "d dis", "mult", "mu", "nu", "h", "ind"
+                "l", "p_s", "p_d", "m", "a^2", "d_s", "d_d", "mult", "mu", "nu", "h", "ind"
             }
         )
         {

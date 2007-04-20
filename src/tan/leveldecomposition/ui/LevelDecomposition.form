@@ -89,12 +89,12 @@
                 <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
                   <Table columnCount="12" rowCount="0">
                     <Column editable="false" title="l" type="java.lang.String"/>
-                    <Column editable="false" title="p sub" type="java.lang.String"/>
-                    <Column editable="false" title="p dis" type="java.lang.String"/>
+                    <Column editable="false" title="p_s" type="java.lang.String"/>
+                    <Column editable="false" title="p_d" type="java.lang.String"/>
                     <Column editable="false" title="m" type="java.lang.String"/>
-                    <Column editable="false" title="length" type="java.lang.Integer"/>
-                    <Column editable="false" title="d sub" type="java.lang.Long"/>
-                    <Column editable="false" title="d dis" type="java.lang.Long"/>
+                    <Column editable="false" title="a^2" type="java.lang.Integer"/>
+                    <Column editable="false" title="d_s" type="java.lang.Long"/>
+                    <Column editable="false" title="d_d" type="java.lang.Long"/>
                     <Column editable="false" title="mult" type="java.lang.Long"/>
                     <Column editable="false" title="mu" type="java.lang.Long"/>
                     <Column editable="false" title="nu" type="java.lang.Long"/>

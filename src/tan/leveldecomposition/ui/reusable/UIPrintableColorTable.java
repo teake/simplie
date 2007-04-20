@@ -126,13 +126,13 @@ public class UIPrintableColorTable extends JTable
 		}
 	}
 	
-	public String toTeX(boolean includeCaption)
+	public String toTeX(boolean includeCaption, int[] columns)
 	{
 		String output = new String();
 		
 		/** Write the header. */
 		output += "\\begin{longtable}{";
-		for (int i = 0; i < super.getColumnCount(); i++)
+		for (int i = 0; i < columns.length; i++)
 		{
 			output += "|r";
 		}
@@ -140,23 +140,30 @@ public class UIPrintableColorTable extends JTable
 		if(includeCaption)
 			output += "\\caption{" + Globals.getDecompositionType() + "} \\\\ \n";
 		output += "\\hline \n";
-		for (int i = 0; i < super.getColumnCount(); i++)
+		for (int i = 0; i < columns.length; i++)
 		{
-			output += super.getColumnName(i);
-			if(i != super.getColumnCount() - 1)
+			output += "\\multicolumn{1}{|c|}{$" +  super.getColumnName(columns[i]) + "$}";
+			if(i != columns.length - 1)
 				output += " & \n";
 			else
 				output += "\\\\ \n";
 		}
 		output += "\\hline \n";
+		output += "\\hline \n";
 		
 		/** Write the content */
+		Object oldLevel = super.getValueAt(0,0);
 		for (int i = 0; i < super.getRowCount(); i++)
 		{
-			for (int j = 0; j < super.getColumnCount(); j++)
+			if(!oldLevel.equals(super.getValueAt(i,0)))
 			{
-				output += super.getValueAt(i,j);
-				if(j != super.getColumnCount() - 1)
+				output += "\\hline \n";
+				oldLevel = super.getValueAt(i,0);
+			}
+			for (int j = 0; j < columns.length; j++)
+			{
+				output += super.getValueAt(i,columns[j]);
+				if(j != columns.length - 1)
 					output += " & ";
 				else
 					output += "\\\\ \n";
@@ -165,7 +172,7 @@ public class UIPrintableColorTable extends JTable
 		
 		/** Write the footer */
 		output += "\\hline \n";
-		output += "\\end{longtable}";
+		output += "\\end{longtable}\n";
 		
 		return output;
 	}

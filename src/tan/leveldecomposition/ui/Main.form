@@ -32,7 +32,7 @@
       <Properties>
         <Property name="title" type="java.lang.String" value="Export to TeX"/>
         <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-          <Dimension value="[171, 135]"/>
+          <Dimension value="[385, 310]"/>
         </Property>
         <Property name="resizable" type="boolean" value="false"/>
       </Properties>

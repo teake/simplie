@@ -6,7 +6,6 @@
 
 package tan.leveldecomposition.ui;
 
-import com.sun.javaws.jnl.JARDesc;
 import javax.swing.Popup;
 import tan.leveldecomposition.*;
 import tan.leveldecomposition.dynkindiagram.*;
@@ -45,6 +44,7 @@ public class Main extends javax.swing.JFrame
 		this.setLocation(20,20);
 		
 		systemOutputDialog.setLocation(100,100);
+		systemOutputDialog.setMinimumSize(new java.awt.Dimension(0,0));
 		exportDialog.setLocation(300,250);
 		exportToTex.setup(exportDialog,levelDecomposition.repTable);
 		
@@ -108,7 +108,7 @@ public class Main extends javax.swing.JFrame
             .addComponent(optionPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         exportDialog.setTitle("Export to TeX");
-        exportDialog.setMinimumSize(new java.awt.Dimension(171, 135));
+        exportDialog.setMinimumSize(new java.awt.Dimension(385, 310));
         exportDialog.setResizable(false);
 
         javax.swing.GroupLayout exportDialogLayout = new javax.swing.GroupLayout(exportDialog.getContentPane());

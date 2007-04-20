@@ -7,6 +7,8 @@
 
 package tan.leveldecomposition.dynkindiagram;
 
+import tan.leveldecomposition.*;
+
 import java.util.Vector;
 import java.util.Iterator;
 import java.util.Collections;
@@ -338,6 +340,57 @@ public class CDynkinDiagram
 			return false;
 		}
 		return true;
+	}
+	
+	public String toTeX(boolean includeCaption)
+	{
+		/** First determine the min and max values of x and y */
+		int xMin = Integer.MAX_VALUE;
+		int yMin = Integer.MAX_VALUE;
+		int xMax = 0;
+		int yMax = 0;
+		
+		for(CDynkinNode node : nodes)
+		{
+			xMin = Math.min(node.x,xMin);
+			yMin = Math.min(node.y,yMin);
+			xMax = Math.max(node.x,xMax);
+			yMax = Math.max(node.y,yMax);
+		}
+		
+		String output = new String();
+		
+		/** The header */
+		output += "\\begin{figure}\n";
+		output += "\\begin{center}\n";
+		output += "\\begin{pspicture}(" + xMin + "," + yMin + ")(" + xMax + "," + yMax + ")\n";
+		
+		/** The nodes and connections */
+		for(CDynkinNode node : nodes)
+		{
+			output += "\\cnode";
+			if(node.isDisconnected())
+				output += "[fillstyle=solid,fillcolor=lightgray]";
+			if(node.isLevel())
+				output += "[fillstyle=solid,fillcolor=black]";
+			output += "(" + node.x + "," + (yMax - node.y) + "){0.15}{N" + node.label + "} \n";
+			output += "\\nput{-60}{N" + node.label + "}{" + node.label + "}\n";
+			for (int i = 0; i < node.numConnections(); i++)
+			{
+				CDynkinConnection con = node.getConnection(i);
+				output += "\\ncline{-}{N" + con.fromNode.label + "}{N" + con.toNode.label + "}\n";
+			}
+		}
+		
+		
+		/** The footer */
+		output += "\\end{pspicture}\n";
+		output += "\\end{center}\n";
+		if(includeCaption)
+			output += "\\caption{Dynkin diagram of " + Globals.getDynkinDiagramType() + "}\n";
+		output += "\\end{figure}\n";
+		
+		return output;
 	}
 	
 }
