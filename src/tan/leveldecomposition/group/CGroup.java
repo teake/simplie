@@ -123,21 +123,6 @@ public class CGroup
 		}
 		weylVector = new CWeight(weylLabels);
 		
-		/** Set up the root system */
-		rs = new CRootSystem(this);
-		
-		/** Determine the dimension. */
-		if(det > 0 || rank == 0)
-		{
-			dim			= 2 * (int) rs.numPosGenerators() + rank;
-			dimension	= Globals.intToString(dim);
-		}
-		else
-		{
-			dim			= 0;
-			dimension	= "Infinite";
-		}
-		
 		/** Try to determine the group type */
 		// TODO: make this algorithm find more types
 		compareMatrix = Globals.regularMatrix(rank);
@@ -169,6 +154,21 @@ public class CGroup
 		else if(rank != 0)
 			tempType += rank;
 		type = tempType;
+		
+		/** Set up the root system */
+		rs = new CRootSystem(this);
+		
+		/** Determine the dimension. */
+		if(det > 0 || rank == 0)
+		{
+			dim			= 2 * (int) rs.numPosGenerators() + rank;
+			dimension	= Globals.intToString(dim);
+		}
+		else
+		{
+			dim			= 0;
+			dimension	= "Infinite";
+		}
 	}
 	
 	/**
