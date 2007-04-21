@@ -49,10 +49,13 @@ public class CRootSystem
 		numPosRoots			= 0;
 		numPosGenerators	= 0;
 		
-		/** Add the CSA to the root table */
+		if(rank==0)
+			return;
+		
+		/** Add the CSA to the root table. */
 		addRoot(new CRoot(rank));
 		
-		/** Add the simple roots to the root table and construct the Weyl vector */
+		/** Add the simple roots to the root table. */
 		for (int i = 0; i < rank; i++)
 		{
 			int[] rootVector = new int[rank];
@@ -70,9 +73,9 @@ public class CRootSystem
 		rootMultiples.add(0,new ArrayList<CRoot>());
 		rootMultiples.add(1,new ArrayList<CRoot>());
 		
+		/** If the group is finite, we can construct the root system to all heights. */
 		if(group.finite)
 			construct(0);
-		
 	}
 	
 	

@@ -28,30 +28,30 @@ public class CGroup
 	 *********************************/
 	
 	/** The Cartan matrix of the group. */
-	public int[][]  cartanMatrix;
+	public final int[][]  cartanMatrix;
 	/** The inverse of the cartan matrix. */
-	public fraction[][] cartanMatrixInv;
+	public final fraction[][] cartanMatrixInv;
 	/**
 	 * The quadratic form matrix. Because we only work with simply-laced algebras,
 	 * this is the same as the inverse of the cartan matrix.
 	 */
-	public fraction[][] qFormMatrix;
+	public final fraction[][] qFormMatrix;
 	/** The determinant of the Cartan Matrix. */
-	public int		det;
+	public final int		det;
 	/** The rank of the group. */
-	public int		rank;
+	public final int		rank;
 	/** The dimension of the group (i.e. the number of generators). Only set for finite groups. */
-	public int		dim;
+	public final int		dim;
 	/** String value of dim. "Infinite" if the group is infinite. */
-	public String	dimension;
+	public final String		dimension;
 	/** The type of the group (e.g. "A1", "E6", etc) */
-	public String	type;
+	public final String		type;
 	/** Boolean indicating whethet the group is finite or not. */
-	public boolean	finite;
+	public final boolean	finite;
 	/** The root system */
-	public CRootSystem rs;
+	public final CRootSystem rs;
 	/** The Weyl vector of the group */
-	public CWeight weylVector;
+	public final CWeight weylVector;
 	
 	
 	/*********************************
@@ -73,20 +73,28 @@ public class CGroup
 	public CGroup(Matrix cartanMatrix)
 	{
 		Matrix	compareMatrix;
+		String	tempType = null;
 		
 		/** Do some preliminary checks */
-		if(cartanMatrix.getColumnDimension() != cartanMatrix.getRowDimension())
-			return;
-		if(cartanMatrix.getColumnDimension() == 0)
+		if(cartanMatrix.getColumnDimension() != cartanMatrix.getRowDimension() || cartanMatrix.getColumnDimension() == 0)
 		{
-			type		= "Trivial";
-			dimension	= "0";
-			return;
+			rank	= 0;
+			det		= 0;
 		}
+		else
+		{
+			rank	= cartanMatrix.getColumnDimension();
+			det		= (int) Math.round(cartanMatrix.det());
+		}
+		if(det > 0)
+			finite = true;
+		else
+			finite = false;
 		
-		/** Set the rank, the cartan matrix, the determinant, and the finite property */
-		rank = cartanMatrix.getColumnDimension();
-		this.cartanMatrix = new int[rank][rank];
+		this.cartanMatrix		= new int[rank][rank];
+		this.cartanMatrixInv	= new fraction[rank][rank];
+		this.qFormMatrix		= this.cartanMatrixInv;
+		/** Set the cartan matrix */
 		for(int i=0; i<rank; i++)
 		{
 			for(int j=0; j<rank; j++)
@@ -94,12 +102,8 @@ public class CGroup
 				this.cartanMatrix[i][j] = (int) Math.round(cartanMatrix.get(i,j));
 			}
 		}
-		det    = (int) Math.round(cartanMatrix.det());
-		finite = (det > 0) ? true : false;
-		
 		/** Set the inverse of the Cartan matrix if possible. */
-		this.cartanMatrixInv = new fraction[rank][rank];
-		if(cartanMatrix.rank() == rank && det != 0)
+		if(rank != 0 && cartanMatrix.rank() == rank && det != 0)
 		{
 			Matrix cmInv = cartanMatrix.inverse();
 			for (int i = 0; i < rank; i++)
@@ -110,14 +114,37 @@ public class CGroup
 				}
 			}
 		}
-		/** Set a pointer to the inverse of the cartan matrix. */
-		this.qFormMatrix = cartanMatrixInv;
+		
+		/** Construct the Weyl vector */
+		int[] weylLabels = new int[rank];
+		for (int i = 0; i < rank; i++)
+		{
+			weylLabels[i] = 1;
+		}
+		weylVector = new CWeight(weylLabels);
+		
+		/** Set up the root system */
+		rs = new CRootSystem(this);
+		
+		/** Determine the dimension. */
+		if(det > 0 || rank == 0)
+		{
+			dim			= 2 * (int) rs.numPosGenerators() + rank;
+			dimension	= Globals.intToString(dim);
+		}
+		else
+		{
+			dim			= 0;
+			dimension	= "Infinite";
+		}
 		
 		/** Try to determine the group type */
 		// TODO: make this algorithm find more types
 		compareMatrix = Globals.regularMatrix(rank);
-		if(Globals.sameMatrices(compareMatrix,cartanMatrix))
-			type = "A";
+		if(rank == 0)
+			tempType = "Empty";
+		else if(Globals.sameMatrices(compareMatrix,cartanMatrix))
+			tempType = "A";
 		else if(rank > 4)
 		{
 			compareMatrix.set(0,3,-1);
@@ -125,7 +152,7 @@ public class CGroup
 			compareMatrix.set(0,1,0);
 			compareMatrix.set(1,0,0);
 			if(Globals.sameMatrices(compareMatrix,cartanMatrix))
-				type = "E";
+				tempType = "E";
 			else
 			{
 				compareMatrix = Globals.regularMatrix(rank);
@@ -134,37 +161,14 @@ public class CGroup
 				compareMatrix.set(rank-2,rank-1,0);
 				compareMatrix.set(rank-1,rank-2,0);
 				if(Globals.sameMatrices(compareMatrix,cartanMatrix))
-					type = "E";
+					tempType = "E";
 			}
 		}
-		if(type == null)
-			type = "?";
-		else
-			type += rank;
-		
-		
-		/** Construct the Weyl vector */
-		int[] weylLabels = new int[rank];
-		for (int i = 0; i < rank; i++)
-		{
-			
-			weylLabels[i] = 1;
-		}
-		weylVector = new CWeight(weylLabels);
-		
-		/** Set up the root system */
-		rs = new CRootSystem(this);
-		
-		/** If the group is finite, we can construct the root system to all heights. */
-		if(finite)
-		{
-			dim			= 2 * (int) rs.numPosGenerators() + rank;
-			dimension	= Globals.intToString(dim);
-		}
-		else
-		{
-			dimension	= "Infinite";
-		}
+		if(tempType == null)
+			tempType = "Unknown";
+		else if(rank != 0)
+			tempType += rank;
+		type = tempType;
 	}
 	
 	/**
@@ -204,7 +208,7 @@ public class CGroup
 	
 	/**
 	 * Determines the multiplicity of a weight that sits in the representation
-	 * given by heighestWeight. 
+	 * given by heighestWeight.
 	 *
 	 * @param	highestWeightLabels	The Dynkin labels of the highest weight of the representation.
 	 * @param	weightLabels		The Dynkin labels of the weight for which the multiplicity is calculated.
