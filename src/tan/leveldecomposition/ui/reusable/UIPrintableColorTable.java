@@ -130,6 +130,11 @@ public class UIPrintableColorTable extends JTable
 	{
 		String output = new String();
 		
+		if(super.getRowCount() == 0)
+		{
+			return output;
+		}
+		
 		/** Write the header. */
 		output += "\\begin{longtable}{";
 		for (int i = 0; i < columns.length; i++)
@@ -149,13 +154,12 @@ public class UIPrintableColorTable extends JTable
 				output += "\\\\ \n";
 		}
 		output += "\\hline \n";
-		output += "\\hline \n";
 		
 		/** Write the content */
-		Object oldLevel = super.getValueAt(0,0);
+		Object oldLevel = null;
 		for (int i = 0; i < super.getRowCount(); i++)
 		{
-			if(!oldLevel.equals(super.getValueAt(i,0)))
+			if(i == 0 || !oldLevel.equals(super.getValueAt(i,0)))
 			{
 				output += "\\hline \n";
 				oldLevel = super.getValueAt(i,0);

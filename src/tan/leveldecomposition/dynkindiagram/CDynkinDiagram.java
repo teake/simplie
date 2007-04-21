@@ -344,6 +344,11 @@ public class CDynkinDiagram
 	
 	public String toTeX(boolean includeCaption)
 	{
+		if(rank() == 0)
+		{
+			return "";
+		}
+		
 		/** First determine the min and max values of x and y */
 		int xMin = Integer.MAX_VALUE;
 		int yMin = Integer.MAX_VALUE;
