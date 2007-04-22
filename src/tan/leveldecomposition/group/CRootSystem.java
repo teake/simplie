@@ -48,6 +48,7 @@ public class CRootSystem
 		rootSystem			= new ArrayList<ArrayList>();
 		numPosRoots			= 0;
 		numPosGenerators	= 0;
+		constructedHeight	= 0;
 		
 		if(rank==0)
 			return;

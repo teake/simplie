@@ -46,8 +46,6 @@ public class LevelDecomposition extends javax.swing.JPanel
 		representationsTable.setModel(tableModel);
 		
 		repTable = representationsTable;
-		
-		SetSignConvention();
 	}
 	
 	public void printTable()
@@ -62,14 +60,6 @@ public class LevelDecomposition extends javax.swing.JPanel
 		{
 			e.printStackTrace();
 		}
-	}
-	
-	private void SetSignConvention()
-	{
-		if(signButtonPos.isSelected())
-			LevelHelper.setSignConvention(1);
-		else
-			LevelHelper.setSignConvention(-1);
 	}
 	
 	/** This method is called from within the constructor to
@@ -90,13 +80,11 @@ public class LevelDecomposition extends javax.swing.JPanel
         autoScanMinLevel = new tan.leveldecomposition.ui.reusable.UILevelTextfield();
         autoScanProgressBar = new javax.swing.JProgressBar();
         settingsPanel = new javax.swing.JPanel();
-        tfSign = new javax.swing.JLabel();
-        signButtonPos = new javax.swing.JRadioButton();
-        signButtonNeg = new javax.swing.JRadioButton();
-        cbMultiplicities = new javax.swing.JCheckBox();
+        cbRootMult = new javax.swing.JCheckBox();
         cbLocked = new javax.swing.JCheckBox();
         cbZeroMult = new javax.swing.JCheckBox();
         cbFlipDynkinLabels = new javax.swing.JCheckBox();
+        cbRepMult = new javax.swing.JCheckBox();
 
         RepresentationPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Subalgebra Representations", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12)));
         representationsTable.setModel(new javax.swing.table.DefaultTableModel(
@@ -106,7 +94,7 @@ public class LevelDecomposition extends javax.swing.JPanel
             },
             new String []
             {
-                "l", "p_s", "p_d", "m", "a^2", "d_s", "d_d", "mult", "mu", "nu", "h", "ind"
+                "l", "p_s", "p_d", "vector", "a^2", "d_s", "d_d", "mult", "mu", "nu", "h", "ind"
             }
         )
         {
@@ -138,13 +126,13 @@ public class LevelDecomposition extends javax.swing.JPanel
             RepresentationPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(RepresentationPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 284, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 508, Short.MAX_VALUE)
                 .addContainerGap())
         );
         RepresentationPanelLayout.setVerticalGroup(
             RepresentationPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(RepresentationPanelLayout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 345, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 187, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -191,37 +179,10 @@ public class LevelDecomposition extends javax.swing.JPanel
         );
 
         settingsPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Settings", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12)));
-        tfSign.setText("Sign convention:");
-
-        signButtonGroup.add(signButtonPos);
-        signButtonPos.setSelected(true);
-        signButtonPos.setText("p_i = + A_ij m^j");
-        signButtonPos.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
-        signButtonPos.setMargin(new java.awt.Insets(0, 0, 0, 0));
-        signButtonPos.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
-                signButtonPosActionPerformed(evt);
-            }
-        });
-
-        signButtonGroup.add(signButtonNeg);
-        signButtonNeg.setText("p_i = - A_ij m^j");
-        signButtonNeg.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
-        signButtonNeg.setMargin(new java.awt.Insets(0, 0, 0, 0));
-        signButtonNeg.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
-                signButtonNegActionPerformed(evt);
-            }
-        });
-
-        cbMultiplicities.setSelected(true);
-        cbMultiplicities.setText("Calculate root & rep multiplicities");
-        cbMultiplicities.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
-        cbMultiplicities.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        cbRootMult.setSelected(true);
+        cbRootMult.setText("Calculate root multiplicities");
+        cbRootMult.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
+        cbRootMult.setMargin(new java.awt.Insets(0, 0, 0, 0));
 
         cbLocked.setText("Lock maximum - minimum level");
         cbLocked.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
@@ -238,10 +199,14 @@ public class LevelDecomposition extends javax.swing.JPanel
         cbZeroMult.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
         cbZeroMult.setMargin(new java.awt.Insets(0, 0, 0, 0));
 
-        cbFlipDynkinLabels.setSelected(true);
         cbFlipDynkinLabels.setText("Flip Dynkin labels");
         cbFlipDynkinLabels.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
         cbFlipDynkinLabels.setMargin(new java.awt.Insets(0, 0, 0, 0));
+
+        cbRepMult.setSelected(true);
+        cbRepMult.setText("Calculate representation multiplicities");
+        cbRepMult.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
+        cbRepMult.setMargin(new java.awt.Insets(0, 0, 0, 0));
 
         javax.swing.GroupLayout settingsPanelLayout = new javax.swing.GroupLayout(settingsPanel);
         settingsPanel.setLayout(settingsPanelLayout);
@@ -250,36 +215,27 @@ public class LevelDecomposition extends javax.swing.JPanel
             .addGroup(settingsPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(settingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(settingsPanelLayout.createSequentialGroup()
-                        .addComponent(tfSign)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(settingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(signButtonNeg)
-                            .addComponent(signButtonPos)))
-                    .addComponent(cbMultiplicities)
+                    .addComponent(cbRootMult)
+                    .addComponent(cbRepMult)
                     .addComponent(cbZeroMult)
                     .addComponent(cbFlipDynkinLabels)
                     .addComponent(cbLocked))
-                .addContainerGap(44, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         settingsPanelLayout.setVerticalGroup(
             settingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(settingsPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(settingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(tfSign)
-                    .addComponent(signButtonPos))
+                .addComponent(cbRootMult)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(signButtonNeg)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(cbMultiplicities)
+                .addComponent(cbRepMult)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(cbZeroMult)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(cbFlipDynkinLabels)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(cbLocked)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(15, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -289,27 +245,27 @@ public class LevelDecomposition extends javax.swing.JPanel
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(settingsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(AutoScanPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(RepresentationPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(RepresentationPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(AutoScanPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(settingsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
-
-        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {AutoScanPanel, settingsPanel});
-
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(RepresentationPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(settingsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(AutoScanPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(AutoScanPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(settingsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(RepresentationPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
+
+        layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {AutoScanPanel, settingsPanel});
+
     }// </editor-fold>//GEN-END:initComponents
 	
     private void cbLockedStateChanged(javax.swing.event.ChangeEvent evt)//GEN-FIRST:event_cbLockedStateChanged
@@ -325,17 +281,7 @@ public class LevelDecomposition extends javax.swing.JPanel
 			autoScanMinLevel.LinkTo(null);
 		}
     }//GEN-LAST:event_cbLockedStateChanged
-	
-    private void signButtonNegActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_signButtonNegActionPerformed
-    {//GEN-HEADEREND:event_signButtonNegActionPerformed
-		SetSignConvention();
-    }//GEN-LAST:event_signButtonNegActionPerformed
-	
-    private void signButtonPosActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_signButtonPosActionPerformed
-    {//GEN-HEADEREND:event_signButtonPosActionPerformed
-		SetSignConvention();
-    }//GEN-LAST:event_signButtonPosActionPerformed
-	
+			
     private void bAutoScanActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_bAutoScanActionPerformed
     {//GEN-HEADEREND:event_bAutoScanActionPerformed
 		if(!(autoScanner == null || autoScanner.isDone()))
@@ -362,7 +308,8 @@ public class LevelDecomposition extends javax.swing.JPanel
 			
 			/** Set up the scan */
 			autoScanner	= new CAutoLevelScanner(
-					cbMultiplicities.isSelected(),
+					cbRootMult.isSelected(),
+					cbRepMult.isSelected(),
 					cbZeroMult.isSelected(), 
 					cbFlipDynkinLabels.isSelected(), 
 					tableModel, 
@@ -399,15 +346,13 @@ public class LevelDecomposition extends javax.swing.JPanel
     private javax.swing.JButton bAutoScan;
     private javax.swing.JCheckBox cbFlipDynkinLabels;
     private javax.swing.JCheckBox cbLocked;
-    private javax.swing.JCheckBox cbMultiplicities;
+    private javax.swing.JCheckBox cbRepMult;
+    private javax.swing.JCheckBox cbRootMult;
     private javax.swing.JCheckBox cbZeroMult;
     private javax.swing.JScrollPane jScrollPane1;
     private tan.leveldecomposition.ui.reusable.UIPrintableColorTable representationsTable;
     private javax.swing.JPanel settingsPanel;
     private javax.swing.ButtonGroup signButtonGroup;
-    private javax.swing.JRadioButton signButtonNeg;
-    private javax.swing.JRadioButton signButtonPos;
-    private javax.swing.JLabel tfSign;
     // End of variables declaration//GEN-END:variables
 	
 }

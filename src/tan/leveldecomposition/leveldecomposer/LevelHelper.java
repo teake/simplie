@@ -29,7 +29,6 @@ public class LevelHelper
 	 */
 	static int subFactor;
 	static int levelRank;
-	static int signConvention	= 1;
 	
 	/** The inverse of the Cartan matrix multiplied with the subFactor */
 	static int[][] S;
@@ -67,14 +66,6 @@ public class LevelHelper
 		}
 	}
 	
-	
-	public static void setSignConvention(int sign)
-	{
-		if(!(sign == 1 || sign == -1))
-			return;
-		signConvention = sign;
-	}
-	
 	/** Returns the actual root length times the subfactor */
 	public static int calculateRootLength(int[] levels, int[] dynkinLabels)
 	{
@@ -110,7 +101,7 @@ public class LevelHelper
 			rootLabels[i] = 0;
 			for(int j=0; j < Globals.coGroup.rank; j++)
 			{
-				rootLabels[i] += S[i][j] * ( signConvention * dynkinLabels[j] - levelComponents[j] );
+				rootLabels[i] += S[i][j] * ( dynkinLabels[j] - levelComponents[j] );
 			}
 		}
 		
