@@ -46,7 +46,7 @@ public class Main extends javax.swing.JFrame
 		systemOutputDialog.setLocation(100,100);
 		systemOutputDialog.setMinimumSize(new java.awt.Dimension(0,0));
 		exportDialog.setLocation(300,250);
-		exportToTex.setup(exportDialog,levelDecomposition.repTable);
+		exportToTex.setup(exportDialog,levelDecomposition.getRepTable());
 		
 		ddFilter = new FileNameExtensionFilter("Dynkin diagram (*.dd)", "dd");
 		rsFilter = new FileNameExtensionFilter("Root system (*.rs)", "rs");

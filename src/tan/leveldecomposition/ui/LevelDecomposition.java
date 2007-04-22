@@ -28,10 +28,8 @@ import tan.leveldecomposition.ui.reusable.UIPrintableColorTable;
  */
 public class LevelDecomposition extends javax.swing.JPanel
 {
-	DefaultTableModel	tableModel;
-	CAutoLevelScanner	autoScanner;
-	
-	public UIPrintableColorTable repTable;
+	private DefaultTableModel	tableModel;
+	private CAutoLevelScanner	autoScanner;
 	
 	/** Creates new form LevelDecomposition */
 	public LevelDecomposition()
@@ -44,8 +42,6 @@ public class LevelDecomposition extends javax.swing.JPanel
 		tableModel = (DefaultTableModel) representationsTable.getModel();
 		representationsTable.setAutoCreateRowSorter(true);
 		representationsTable.setModel(tableModel);
-		
-		repTable = representationsTable;
 	}
 	
 	public void printTable()
@@ -60,6 +56,11 @@ public class LevelDecomposition extends javax.swing.JPanel
 		{
 			e.printStackTrace();
 		}
+	}
+	
+	public UIPrintableColorTable getRepTable()
+	{
+		return representationsTable;
 	}
 	
 	/** This method is called from within the constructor to
