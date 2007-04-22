@@ -45,7 +45,7 @@ public class CRepresentation implements Comparable<CRepresentation>
 		this.rootVector	= new int[Globals.group.rank];
 		for (int i = 0; i < Globals.coGroup.rank; i++)
 			rootVector[Globals.dd.translateCo(i)] = coLevels[i];
-		for (int i = 0; i < LevelHelper.levelRank; i++)
+		for (int i = 0; i < levels.length; i++)
 			rootVector[Globals.dd.translateLevel(i)] = levels[i];
 		
 		/** Set the disconnected levels. */

@@ -9,6 +9,7 @@ package tan.leveldecomposition.leveldecomposer;
 
 import tan.leveldecomposition.dynkindiagram.*;
 import tan.leveldecomposition.group.*;
+import tan.leveldecomposition.math.*;
 import tan.leveldecomposition.*;
 
 import javax.swing.SwingWorker;
@@ -64,15 +65,15 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 		if(Globals.group.rank == Globals.coGroup.rank)
 			return null;
 		
-		LevelHelper.setup();
+		int levelRank = Globals.group.rank - Globals.coGroup.rank;
 		
 		int base	= maxLevel + 1 - minLevel;
-		long num	= (long) Math.pow(base, LevelHelper.levelRank);
+		long num	= (long) Math.pow(base, levelRank);
 		try
 		{
 			for (long i = 0; i < num; i++)
 			{
-				Scan(Globals.numberToVector(i,base,LevelHelper.levelRank,minLevel));
+				Scan(Globals.numberToVector(i,base,levelRank,minLevel));
 			}
 			
 		}
@@ -92,6 +93,12 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 			tableModel.addRow(rowData);
 		}
 	}
+	
+	
+	/********************************
+	 * Methods for scanning reps
+	 ********************************/
+	
 	
 	/** Scans all the possible highest weight representations at a given level */
 	public void Scan(int[] levels)
@@ -129,8 +136,8 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 	
 	private void LoopDynkinLabels(int[] levels, int[] dynkinLabels, int beginIndex, boolean scanFirst)
 	{
-		boolean allGoodIntegers;
-		int[]	coLevels;
+		boolean		allGoodIntegers;
+		fraction[]	coLevels;
 		
 		if (isCancelled())
 			return;
@@ -139,16 +146,16 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 		{
 			if(scanFirst)
 			{
-				int rootLength = LevelHelper.calculateRootLength(levels, dynkinLabels);
+				int rootLength = calculateRootLength(levels, dynkinLabels);
 				/** Only continue if the root length is not bigger than 2. */
-				if(LevelHelper.calculateRootLength(levels, dynkinLabels) <= 2 * LevelHelper.subFactor)
+				if(rootLength <= 2)
 				{
 					/** First check if all root components are integers and non-negative. */
-					coLevels  = LevelHelper.calculateCoLevels(levels, dynkinLabels);
+					coLevels  = calculateCoLevels(levels, dynkinLabels);
 					allGoodIntegers = true;
 					for (int i = 0; i < coLevels.length; i++)
 					{
-						if(coLevels[i] % LevelHelper.subFactor != 0 || coLevels[i] * levelSign < 0)
+						if(!coLevels[i].isInt() || coLevels[i].asDouble() * levelSign < 0)
 						{
 							allGoodIntegers = false;
 							break;
@@ -173,18 +180,25 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 		} while( !isCancelled() );
 	}
 	
-	private void addRepresentation(int[] levels, int[] dynkinLabels, int[] coLevels, int rootLength)
+	
+	
+	/********************************
+	 * Adding & processing reps
+	 ********************************/
+	
+	
+	private void addRepresentation(int[] levels, int[] dynkinLabels, fraction[] coLevels, int rootLength)
 	{
-		/** Divide all the root components by the subfactor. */
+		int[] newCoLevels = new int[coLevels.length];
 		for (int i = 0; i < coLevels.length; i++)
-			coLevels[i] = coLevels[i] / LevelHelper.subFactor;
+			newCoLevels[i] = coLevels[i].asInt();
 		
 		/** Add the representation. */
 		CRepresentation rep = new CRepresentation(
 				dynkinLabels,
 				levels,
-				coLevels,
-				rootLength / LevelHelper.subFactor
+				newCoLevels,
+				rootLength
 				);
 		reps.add(rep);
 	}
@@ -289,6 +303,72 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 			rowData[11] = numIndices;
 			publish(rowData);
 		}
+	}
+	
+	
+	
+	/********************************
+	 * Methods for representation 
+	 * calculation
+	 ********************************/
+	
+	/** Returns the actual root length */
+	public int calculateRootLength(int[] levels, int[] dynkinLabels)
+	{
+		int[] levelComponents = calculateLevelComponents(levels);
+		int rootLength = 0;
+		
+		for(int i=0; i < Globals.coGroup.rank; i++)
+		{
+			for(int j=0; j < Globals.coGroup.rank; j++)
+			{
+				rootLength += Globals.coGroup.cartanMatrixInv[i][j].times(
+						(dynkinLabels[i] * dynkinLabels[j]) - (levelComponents[i] * levelComponents[j]) ).asInt();
+			}
+		}
+		for(int i=0; i < levels.length; i++)
+		{
+			for(int j=0; j < levels.length; j++)
+			{
+				rootLength += Globals.group.cartanMatrix[Globals.dd.translateLevel(i)][Globals.dd.translateLevel(j)] * levels[i] * levels[j];
+			}
+		}
+		
+		return rootLength;
+	}
+	
+	/** Returns the levels of the co-algebra. */
+	public fraction[] calculateCoLevels(int[] levels, int[] dynkinLabels)
+	{
+		fraction[] coLevels		= new fraction[Globals.coGroup.rank];
+		int[] levelComponents	= calculateLevelComponents(levels);
+		
+		for(int i=0; i < coLevels.length; i++)
+		{
+			coLevels[i] = new fraction(0);
+			for(int j=0; j < Globals.coGroup.rank; j++)
+			{
+				coLevels[i].add(Globals.coGroup.cartanMatrixInv[i][j].times(dynkinLabels[j] - levelComponents[j]));
+			}
+		}
+		
+		return coLevels;
+	}
+	
+	/** Calculates the contraction of the levels with the Cartan matrix. */
+	public int[] calculateLevelComponents(int[] levels)
+	{
+		int[] levelComponents = new int[Globals.coGroup.rank];
+		
+		for(int i=0; i < levelComponents.length; i++)
+		{
+			levelComponents[i] = 0;
+			for(int j=0; j < levels.length; j++)
+			{
+				levelComponents[i] += Globals.group.cartanMatrix[Globals.dd.translateCo(i)][Globals.dd.translateLevel(j)] * levels[j];
+			}
+		}
+		return levelComponents;
 	}
 	
 }
