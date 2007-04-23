@@ -160,10 +160,11 @@ public class UIPrintableColorTable extends JTable
 		for (int i = 0; i < columns.length; i++)
 		{
 			output += "|";
-			for (int j = 0; j < multiColumns[i]; j++)
+			for (int j = 1; j < multiColumns[i]; j++)
 			{
-				output += "r";
+				output += "r@{\\ }";
 			}
+			output += "r";
 		}
 		for (int i = 0; i < extraColumns; i++)
 		{
@@ -212,7 +213,7 @@ public class UIPrintableColorTable extends JTable
 					else
 						output += super.getValueAt(i,columns[j]);
 				}
-
+				
 				if(j != totalColumns - 1)
 					output += " & ";
 				else
