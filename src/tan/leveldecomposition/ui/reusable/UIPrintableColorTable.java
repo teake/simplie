@@ -126,7 +126,7 @@ public class UIPrintableColorTable extends JTable
 		}
 	}
 	
-	public String toTeX(boolean includeCaption, int[] columns)
+	public String toTeX(boolean includeCaption, int[] columns, int extraColumns)
 	{
 		String output = new String();
 		
@@ -135,9 +135,37 @@ public class UIPrintableColorTable extends JTable
 			return output;
 		}
 		
+		int totalColumns = columns.length + extraColumns;
+		
+		/** First determine which columns we should split into multicolumns. */
+		int[] multiColumns = new int[columns.length];
+		for (int i = 0; i < columns.length; i++)
+		{
+			multiColumns[i] = 1;
+			Object data = super.getValueAt(0,columns[i]);
+			if(data.getClass() != String.class)
+				continue;
+			
+			String dataString = (String) data;
+			int offset = 0;
+			while(dataString.indexOf(" ",offset) != -1)
+			{
+				offset = dataString.indexOf(" ",offset) + 1;
+				multiColumns[i]++;
+			}
+		}
+		
 		/** Write the header. */
 		output += "\\begin{longtable}{";
 		for (int i = 0; i < columns.length; i++)
+		{
+			output += "|";
+			for (int j = 0; j < multiColumns[i]; j++)
+			{
+				output += "r";
+			}
+		}
+		for (int i = 0; i < extraColumns; i++)
 		{
 			output += "|r";
 		}
@@ -145,10 +173,18 @@ public class UIPrintableColorTable extends JTable
 		if(includeCaption)
 			output += "\\caption{" + Globals.getDecompositionType() + "} \\\\ \n";
 		output += "\\hline \n";
-		for (int i = 0; i < columns.length; i++)
+		for (int i = 0; i < totalColumns; i++)
 		{
-			output += "\\multicolumn{1}{|c|}{$" +  super.getColumnName(columns[i]) + "$}";
-			if(i != columns.length - 1)
+			output += "\\multicolumn{";
+			if(i < columns.length)
+				output += multiColumns[i];
+			else
+				output += "1";
+			output += "}{|c|}{$";
+			if(i < columns.length)
+				output +=  super.getColumnName(columns[i]);
+			output += "$}";
+			if(i != totalColumns - 1)
 				output += " & \n";
 			else
 				output += "\\\\ \n";
@@ -164,10 +200,20 @@ public class UIPrintableColorTable extends JTable
 				output += "\\hline \n";
 				oldLevel = super.getValueAt(i,0);
 			}
-			for (int j = 0; j < columns.length; j++)
+			for (int j = 0; j < totalColumns; j++)
 			{
-				output += super.getValueAt(i,columns[j]);
-				if(j != columns.length - 1)
+				if(j < columns.length)
+				{
+					if(multiColumns[j] > 1)
+					{
+						String dataString = (String) super.getValueAt(i,columns[j]);
+						output += dataString.replace(" ", " & ");
+					}
+					else
+						output += super.getValueAt(i,columns[j]);
+				}
+
+				if(j != totalColumns - 1)
 					output += " & ";
 				else
 					output += "\\\\ \n";

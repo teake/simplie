@@ -108,18 +108,18 @@ public class Main extends javax.swing.JFrame
             .addComponent(optionPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         exportDialog.setTitle("Export to TeX");
-        exportDialog.setMinimumSize(new java.awt.Dimension(385, 310));
+        exportDialog.setMinimumSize(new java.awt.Dimension(430, 316));
         exportDialog.setResizable(false);
 
         javax.swing.GroupLayout exportDialogLayout = new javax.swing.GroupLayout(exportDialog.getContentPane());
         exportDialog.getContentPane().setLayout(exportDialogLayout);
         exportDialogLayout.setHorizontalGroup(
             exportDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(exportToTex, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(exportToTex, javax.swing.GroupLayout.DEFAULT_SIZE, 430, Short.MAX_VALUE)
         );
         exportDialogLayout.setVerticalGroup(
             exportDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(exportToTex, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(exportToTex, javax.swing.GroupLayout.DEFAULT_SIZE, 292, Short.MAX_VALUE)
         );
         systemOutputDialog.setTitle("System output");
         systemOutputDialog.setMinimumSize(new java.awt.Dimension(360, 360));

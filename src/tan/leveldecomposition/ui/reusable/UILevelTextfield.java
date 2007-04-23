@@ -114,7 +114,7 @@ public class UILevelTextfield extends javax.swing.JPanel
         buttonMinus = new javax.swing.JButton();
 
         labelLevel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        labelLevel.setText("Level:");
+        labelLevel.setText("Label:");
 
         tfLevel.setText("0");
 

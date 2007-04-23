@@ -38,6 +38,7 @@ public class ExportToTex extends javax.swing.JPanel
 		initComponents();
 		texFilter = new FileNameExtensionFilter("LaTeX file (*.tex)", "tex");
 		clipboard = java.awt.Toolkit.getDefaultToolkit().getSystemClipboard();
+		tfExtraColumns.SetLabel("Extra columns");
 	}
 	
 	public void setup(JDialog parent, UIPrintableColorTable repTable)
@@ -75,6 +76,7 @@ public class ExportToTex extends javax.swing.JPanel
         rbFile = new javax.swing.JRadioButton();
         rbSout = new javax.swing.JRadioButton();
         rbClipboard = new javax.swing.JRadioButton();
+        tfExtraColumns = new tan.leveldecomposition.ui.reusable.UILevelTextfield();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         columnList = new javax.swing.JList();
@@ -131,6 +133,7 @@ public class ExportToTex extends javax.swing.JPanel
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(tfExtraColumns, javax.swing.GroupLayout.DEFAULT_SIZE, 197, Short.MAX_VALUE)
                     .addComponent(cbDD)
                     .addComponent(cbCaption)
                     .addComponent(cbReps)
@@ -141,7 +144,7 @@ public class ExportToTex extends javax.swing.JPanel
                             .addComponent(rbClipboard)
                             .addComponent(rbFile)
                             .addComponent(rbSout))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -152,7 +155,9 @@ public class ExportToTex extends javax.swing.JPanel
                 .addComponent(cbReps)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(cbCaption)
-                .addGap(20, 20, 20)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(tfExtraColumns, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(rbClipboard))
@@ -201,25 +206,26 @@ public class ExportToTex extends javax.swing.JPanel
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(export)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cancel))
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(cancel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 52, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(cancel)
-                            .addComponent(export)))
-                    .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(export)
+                            .addComponent(cancel))))
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -240,7 +246,7 @@ public class ExportToTex extends javax.swing.JPanel
 		if(cbDD.isSelected() && cbReps.isSelected())
 			output += "\n";
 		if(cbReps.isSelected())
-			output += repTable.toTeX(cbCaption.isSelected(),columnList.getSelectedIndices());
+			output += repTable.toTeX(cbCaption.isSelected(),columnList.getSelectedIndices(),Math.max(0,tfExtraColumns.GetValue()));
 		
 		if(rbFile.isSelected())
 		{
@@ -298,6 +304,7 @@ public class ExportToTex extends javax.swing.JPanel
     private javax.swing.JRadioButton rbClipboard;
     private javax.swing.JRadioButton rbFile;
     private javax.swing.JRadioButton rbSout;
+    private tan.leveldecomposition.ui.reusable.UILevelTextfield tfExtraColumns;
     // End of variables declaration//GEN-END:variables
 	
 }
