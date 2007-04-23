@@ -316,25 +316,25 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 	public int calculateRootLength(int[] levels, int[] dynkinLabels)
 	{
 		int[] levelComponents = calculateLevelComponents(levels);
-		int rootLength = 0;
+		fraction rootLength = new fraction(0);
 		
 		for(int i=0; i < Globals.coGroup.rank; i++)
 		{
 			for(int j=0; j < Globals.coGroup.rank; j++)
 			{
-				rootLength += Globals.coGroup.cartanMatrixInv[i][j].times(
-						(dynkinLabels[i] * dynkinLabels[j]) - (levelComponents[i] * levelComponents[j]) ).asInt();
+				rootLength.add( Globals.coGroup.cartanMatrixInv[i][j].times(
+						(dynkinLabels[i] * dynkinLabels[j]) - (levelComponents[i] * levelComponents[j]) ) );
 			}
 		}
 		for(int i=0; i < levels.length; i++)
 		{
 			for(int j=0; j < levels.length; j++)
 			{
-				rootLength += Globals.group.cartanMatrix[Globals.dd.translateLevel(i)][Globals.dd.translateLevel(j)] * levels[i] * levels[j];
+				rootLength.add( Globals.group.cartanMatrix[Globals.dd.translateLevel(i)][Globals.dd.translateLevel(j)] * levels[i] * levels[j] );
 			}
 		}
 		
-		return rootLength;
+		return rootLength.asInt();
 	}
 	
 	/** Returns the levels of the co-algebra. */
