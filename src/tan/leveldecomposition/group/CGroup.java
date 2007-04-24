@@ -217,7 +217,11 @@ public class CGroup
 	public long weightMultiplicity(int[] highestWeightLabels, int[] weightLabels)
 	{
 		hwRep = new CHighestWeightRep(this, highestWeightLabels);
-		return hwRep.weightMultiplicity(weightLabels);
+		CWeight weight = hwRep.getWeight(weightLabels);
+		if(weight != null)
+			return weight.getMult();
+		else
+			return 0;
 	}
 	
 	public void cancelEverything()
@@ -272,20 +276,19 @@ public class CGroup
 	}
 	
 	/**
-	 * Convert a weight to a root
+	 * Returns the height of a root.
 	 */
-	public fraction[] weightToRoot(int[] weight)
+	public int weightHeight(int[] weightLabels)
 	{
-		fraction[] rootVector = new fraction[rank];
+		fraction height = new fraction(0);
 		for (int i = 0; i < rank; i++)
 		{
-			rootVector[i] = new fraction(0);
 			for (int j = 0; j < rank; j++)
 			{
-				rootVector[i].add(cartanMatrixInv[i][j].times(weight[j]));
+				height.add(cartanMatrixInv[i][j].times(weightLabels[j]));
 			}
 		}
-		return rootVector;
+		return height.asInt();
 	}
 	
 }

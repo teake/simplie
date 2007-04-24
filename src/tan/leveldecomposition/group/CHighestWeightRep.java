@@ -26,6 +26,8 @@ public class CHighestWeightRep
 	private final int		rank;
 	/** The heighest weight of the representation. */
 	private final CWeight	highestWeight;
+	/** The hight of the highest root */
+	private final int		highestHeight;
 	/** A constant used in the Freudenthal formula. */
 	private final fraction	highestWeightFactor;
 	
@@ -58,6 +60,9 @@ public class CHighestWeightRep
 		/** Calculate a common factor in the freudenthal formula */
 		highestWeightFactor = group.innerProduct(highestWeight,highestWeight);
 		highestWeightFactor.add(group.innerProduct(highestWeight, group.weylVector).times(2));
+		
+		/** Calculate the height of the highest weight */
+		highestHeight = group.weightHeight(highestWeightLabels);
 	}
 	
 	public void cancelConstruction()
@@ -73,51 +78,35 @@ public class CHighestWeightRep
 	 * @param	weightLabels		The Dynkin labels of the weight for which the multiplicity is calculated.
 	 * @return						The multiplicity of the weight, 0 if something's wrong.
 	 */
-	public long weightMultiplicity(int[] weightLabels)
+	public CWeight getWeight(int[] weightLabels)
 	{
-		System.out.println(
-				"Calculating the multiplicity of " + Globals.intArrayToString(weightLabels) +
-				" in " + Globals.intArrayToString(highestWeight.dynkinLabels) + " of group " + group.type + ".");
-		
-		fraction[]	rootHighest;
-		fraction[]	rootWeight;
 		int			wantedDepth;
 		CWeight		wantedWeight;
 		
 		/** Preliminary checks */
 		if(!group.finite || weightLabels.length != rank)
-			return 0;
+			return null;
 		
-		rootHighest = group.weightToRoot(highestWeight.dynkinLabels);
-		rootWeight	= group.weightToRoot(weightLabels);
+		wantedDepth = highestHeight - group.weightHeight(weightLabels);
 		
-		/** Calculate the depth of the weight */
-		wantedDepth = 0;
-		for (int i = 0; i < rank; i++)
-		{
-			fraction depthPart = rootHighest[i].minus(rootWeight[i]);
-			if(!depthPart.isInt())
-				/** Then weight is not part of the highest weight rep of 'highest weight' */
-				return 0;
-			wantedDepth += rootHighest[i].minus(rootWeight[i]).asInt();
-		}
 		if(wantedDepth <= 0)
 			/** We don't calculate the multiplicity of the highest weight itself */
-			return 0;
+			return null;
 		
 		wantedWeight = new CWeight(weightLabels);
 		
 		/** Construct the weight system down to the depth just calculated. */
-		construct(wantedDepth);
+		if(wantedDepth > constructedDepth)
+			construct(wantedDepth);
 		
-		/** Fetch the weight we wanted and return its multiplicity */
+		/** Fetch the weight we wanted and return it. */
 		ArrayList<CWeight> wantedWeights = weightSystem.get(wantedDepth);
 		int wantedIndex = wantedWeights.indexOf(wantedWeight);
 		if(wantedIndex == -1)
 			/** It's not here, return 0. */
-			return 0;
+			return null;
 		
-		return wantedWeights.get(wantedIndex).getMult();
+		return wantedWeights.get(wantedIndex);
 	}
 	
 	
@@ -129,6 +118,10 @@ public class CHighestWeightRep
 		int[]	newSubtractable;
 		
 		cancelConstruction = false;
+		
+		System.out.println(
+				"Constructing highest weight rep " + Globals.intArrayToString(highestWeight.dynkinLabels) +
+				" to depth " + maxDepth + " of group " + group.type + ".");
 		
 		/** Do the construction. */
 		while(constructedDepth < maxDepth && !cancelConstruction)
