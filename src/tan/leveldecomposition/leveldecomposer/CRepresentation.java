@@ -114,9 +114,9 @@ public class CRepresentation implements Comparable<CRepresentation>
 		final int AFTER = 1;
 		
 		if(height > rep.height)
-			return BEFORE;
-		if(height < rep.height)
 			return AFTER;
+		if(height < rep.height)
+			return BEFORE;
 		
 		return EQUAL;
 	}
