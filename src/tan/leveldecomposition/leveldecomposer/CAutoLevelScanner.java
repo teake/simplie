@@ -230,7 +230,7 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 				repI = reps.get(k);
 				
 				/** Get and set the root multiplicities */
-				CRoot root = Globals.group.rs.getRoot(repI.rootVector);
+				CRoot root = Globals.group.rs.getRoot(repI.rootVector.clone());
 				if(root != null)
 					repI.setRootMult(root.mult);
 				else
@@ -270,7 +270,7 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 						l = reps.size() - j - 1;
 					else
 						l = j;
-					repJ = reps.get(j);
+					repJ = reps.get(l);
 					
 					/**
 					 * This representation can only be a weight of the disconnected representation
@@ -280,7 +280,7 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 						continue;
 					if(repJ.length <= repI.length)
 						continue;
-
+					
 					outerMult -= repJ.getOuterMult() * Globals.disGroup.weightMultiplicity(repJ.disDynkinLabels, repI.disDynkinLabels);
 				}
 				repI.setOuterMult(outerMult);

@@ -210,12 +210,12 @@ public class LevelDecomposition extends javax.swing.JPanel
         jLabel1.setText("Sign convention:");
 
         signButtonGroup.add(rbSignPos);
-        rbSignPos.setSelected(true);
         rbSignPos.setText("p_i = + A_ij m^j");
         rbSignPos.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
         rbSignPos.setMargin(new java.awt.Insets(0, 0, 0, 0));
 
         signButtonGroup.add(rbSignNeg);
+        rbSignNeg.setSelected(true);
         rbSignNeg.setText("p_i = - A_ij m^j");
         rbSignNeg.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
         rbSignNeg.setMargin(new java.awt.Insets(0, 0, 0, 0));

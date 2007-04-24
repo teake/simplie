@@ -43,7 +43,7 @@ public class CRepresentation implements Comparable<CRepresentation>
 		
 		/** Construct the whole root vector */
 		this.rootVector	= new int[Globals.group.rank];
-		for (int i = 0; i < Globals.coGroup.rank; i++)
+		for (int i = 0; i < coLevels.length; i++)
 			rootVector[Globals.dd.translateCo(i)] = coLevels[i];
 		for (int i = 0; i < levels.length; i++)
 			rootVector[Globals.dd.translateLevel(i)] = levels[i];
