@@ -129,6 +129,8 @@ public class CHighestWeightRep
 			addedSomething	= false;
 			newDepth		= constructedDepth + 1;
 			
+			System.out.println("... depth: " + newDepth);
+			
 			ArrayList<CWeight> prevDepthWeights = weightSystem.get(constructedDepth);
 			ArrayList<CWeight> thisDepthWeights = new ArrayList<CWeight>();
 			for(CWeight oldWeight : prevDepthWeights)
@@ -162,6 +164,9 @@ public class CHighestWeightRep
 						/** Set the depth and the multiplicity */
 						newWeight.setDepth(newDepth);
 						setWeightMult(newWeight);
+						if(newWeight.getMult() == 0)
+							//TODO: why am i getting zero multiplicities?
+							continue;
 						
 						/** And add it. */
 						thisDepthWeights.add(newWeight);

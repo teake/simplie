@@ -273,6 +273,7 @@ public class Main extends javax.swing.JFrame
 
         MenuTools.add(MenuExportToTex);
 
+        MenuShowOutput.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
         MenuShowOutput.setMnemonic('s');
         MenuShowOutput.setText("Show system output");
         MenuShowOutput.addActionListener(new java.awt.event.ActionListener()

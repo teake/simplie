@@ -269,6 +269,8 @@ public class CRootSystem
 		
 		cancelConstruction = false;
 		
+		System.out.println("Constructing roots of " + group.type + " to height " + maxHeight + ".");
+		
 		while(constructedHeight < maxHeight || maxHeight == 0)
 		{
 			prevRoots	    = rootSystem.get(constructedHeight);
@@ -276,7 +278,7 @@ public class CRootSystem
 			prevNumPosRoots = numPosRoots;
 			newHeight	    = constructedHeight + 1;
 			
-			System.out.println("Constructing roots of " + group.type + " of height " + newHeight + ".");
+			System.out.println("... height: " + newHeight);
 			
 			/**
 			 * Try to add the simple roots to all the previous roots.
@@ -442,12 +444,11 @@ public class CRootSystem
 				multiplicity.subtract(coMult);
 				root.mult	= multiplicity.asLong();
 				root.coMult = coMult.plus(root.mult);
-				if(multiplicity.asDouble() != (double) multiplicity.asInt() )
+				if(!multiplicity.isInt())
 				{
 					System.out.println("*WARNING*: fractional multiplicity of root " + root.toString());
 					System.out.println("*WARNING*: actual mult: " + multiplicity.toString());
 				}
-				
 			}
 			
 		}
