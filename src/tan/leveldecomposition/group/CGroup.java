@@ -206,24 +206,6 @@ public class CGroup
 		return dim.asLong();
 	}
 	
-	/**
-	 * Determines the multiplicity of a weight that sits in the representation
-	 * given by heighestWeight.
-	 *
-	 * @param	highestWeightLabels	The Dynkin labels of the highest weight of the representation.
-	 * @param	weightLabels		The Dynkin labels of the weight for which the multiplicity is calculated.
-	 * @return						The multiplicity of the weight, 0 if something's wrong.
-	 */
-	public long weightMultiplicity(int[] highestWeightLabels, int[] weightLabels)
-	{
-		hwRep = new CHighestWeightRep(this, highestWeightLabels);
-		CWeight weight = hwRep.getWeight(weightLabels);
-		if(weight != null)
-			return weight.getMult();
-		else
-			return 0;
-	}
-	
 	public void cancelEverything()
 	{
 		rs.cancelConstruction();

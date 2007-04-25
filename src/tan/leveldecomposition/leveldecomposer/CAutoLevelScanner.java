@@ -258,7 +258,7 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 					if(repJ.length <= repI.length)
 						continue;
 					
-					outerSubMult -= repJ.getOuterSubMult() * Globals.subGroup.weightMultiplicity(repJ.subDynkinLabels, repI.subDynkinLabels);
+					outerSubMult -= repJ.getOuterSubMult() * repJ.getSubWeightMult(repI.subDynkinLabels);
 				}
 				repI.setOuterSubMult(outerSubMult);
 				
@@ -281,7 +281,7 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 					if(repJ.length <= repI.length)
 						continue;
 					
-					outerMult -= repJ.getOuterMult() * Globals.disGroup.weightMultiplicity(repJ.disDynkinLabels, repI.disDynkinLabels);
+					outerMult -= repJ.getOuterMult() * repJ.getDisWeightMult(repI.disDynkinLabels);
 				}
 				repI.setOuterMult(outerMult);
 			}

@@ -9,6 +9,8 @@ package tan.leveldecomposition.leveldecomposer;
 
 import tan.leveldecomposition.*;
 import tan.leveldecomposition.dynkindiagram.*;
+import tan.leveldecomposition.group.CHighestWeightRep;
+import tan.leveldecomposition.group.CWeight;
 
 /**
  *
@@ -28,6 +30,9 @@ public class CRepresentation implements Comparable<CRepresentation>
 	private long outerSubMult;
 	private long outerMult;
 	private long rootMult;
+	
+	private final CHighestWeightRep disHwRep;
+	private final CHighestWeightRep subHwRep;
 	
 	
 	/** Creates a new instance of CRepresentation */
@@ -74,7 +79,30 @@ public class CRepresentation implements Comparable<CRepresentation>
 			disDynkinLabels[i] = translatedLabels[Globals.dd.translateDis(i)];
 		for (int i = 0; i < subDynkinLabels.length; i++)
 			subDynkinLabels[i] = translatedLabels[Globals.dd.translateSub(i)];
+		
+		/** Instantiate the highest weight reps */
+		subHwRep = new CHighestWeightRep(Globals.subGroup, subDynkinLabels);
+		disHwRep = new CHighestWeightRep(Globals.disGroup, disDynkinLabels);
 	}
+	
+	public long getSubWeightMult(int[] weightLabels)
+	{
+		CWeight weight = subHwRep.getWeight(weightLabels);
+		if(weight != null)
+			return weight.getMult();
+		else
+			return 0;
+	}
+	
+	public long getDisWeightMult(int[] weightLabels)
+	{
+		CWeight weight = disHwRep.getWeight(weightLabels);
+		if(weight != null)
+			return weight.getMult();
+		else
+			return 0;
+	}
+	
 	
 	public void setOuterMult(long outerMult)
 	{
