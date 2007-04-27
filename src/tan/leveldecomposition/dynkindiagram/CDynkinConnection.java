@@ -10,25 +10,36 @@ package tan.leveldecomposition.dynkindiagram;
 import java.io.Serializable;
 
 /**
+ * A class for storing connections between Dynkin nodes.
  *
- * @author Teake Nutma
+ * @see		CDynkinNode
+ * @author	Teake Nutma
  */
 public class CDynkinConnection implements Serializable
 {
+	/** The Dynkin node from which this connection points. */
 	public final CDynkinNode fromNode;
+	/** The Dynkin node to which this connection points. */
 	public final CDynkinNode toNode;
 	
-	/** possibly extend this for non-simpy laced cases */
-	// int laced;
-	// int pointingTo;
-	
-	/** Creates a new instance of CDynkinConnection */
+	/** 
+	 * Creates a new instance of CDynkinConnection
+	 *
+	 * @param	fromNode	The node from which this connection points.
+	 * @param	toNode		The node to which this connection points.
+	 */
 	public CDynkinConnection(CDynkinNode fromNode, CDynkinNode toNode)
 	{
 		this.fromNode	= fromNode;
 		this.toNode		= toNode;
 	}
 	
+	/** 
+	 * Checks if this connection is equal another connection.
+	 * The are the same both the fromNode and the toNode are the same.
+	 *
+	 * @param	obj		The object to be compared, which has to be a connection.
+	 */
 	public boolean equals(Object obj)
 	{
 		if(this == obj)

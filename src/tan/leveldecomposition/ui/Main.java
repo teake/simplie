@@ -453,7 +453,7 @@ public class Main extends javax.swing.JFrame
 	
     private void MenuItemLoadE11ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_MenuItemLoadE11ActionPerformed
     {//GEN-HEADEREND:event_MenuItemLoadE11ActionPerformed
-		Globals.dd.Clear();
+		Globals.dd.clear();
 		Globals.dd.addNode(2,0);
 		Globals.dd.addNode(0,1);
 		Globals.dd.addNode(1,1);
@@ -480,7 +480,7 @@ public class Main extends javax.swing.JFrame
 	
     private void MenuItemClearActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_MenuItemClearActionPerformed
     {//GEN-HEADEREND:event_MenuItemClearActionPerformed
-		Globals.dd.Clear();
+		Globals.dd.clear();
 		algebraSetup.Update();
     }//GEN-LAST:event_MenuItemClearActionPerformed
 	

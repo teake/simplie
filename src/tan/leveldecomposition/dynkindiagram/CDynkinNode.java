@@ -11,13 +11,13 @@ import java.util.ArrayList;
 import java.io.Serializable;
 
 /**
+ * A class for storing nodes within a Dynkin diagram.
  *
- * @author Teake Nutma
+ * @see		CDynkinDiagram
+ * @author	Teake Nutma
  */
 public class CDynkinNode implements Serializable, Comparable<CDynkinNode>
 {
-	/** The internal index of the node */
-	public final int id;
 	/** The x-coordinate of the node in the dynkin diagram */
 	public final int x;
 	/** The y-coordinate of the node in the dynkin diagram */
@@ -30,10 +30,16 @@ public class CDynkinNode implements Serializable, Comparable<CDynkinNode>
 	/** The internal list of connections the node has. */
 	private ArrayList<CDynkinConnection> connections;
 	
-	/** Creates a new instance of CDynkinNode */
-	public CDynkinNode(int id, int label, int x, int y)
+	/** 
+	 * Creates a new instance of CDynkinNode.
+	 * When instantiated, it is enabled.
+	 *
+	 * @param	label	The label of the node in the dynkin diagram.
+	 * @param	x		The x-coordinate of the node in the dynkin diagram.
+	 * @param	y		The y-coordinate of the node in the dynkin diagram.
+	 */
+	public CDynkinNode(int label, int x, int y)
 	{
-		this.id			= id;
 		this.label		= label;
 		this.enabled	= true;
 		this.x			= x;
@@ -45,6 +51,8 @@ public class CDynkinNode implements Serializable, Comparable<CDynkinNode>
 	/** 
 	 * The node is "disconnected" if it is part of the disconnected subalgebra,
 	 * i.e. the subalgebra that is disabled and has no connections to enabled nodes.
+	 *
+	 * @return	True is the node is disconnected, false otherwise.
 	 */
 	public boolean isDisconnected()
 	{
@@ -60,6 +68,8 @@ public class CDynkinNode implements Serializable, Comparable<CDynkinNode>
 	
 	/** 
 	 * The node is a "level node" if it is not enabled and not disconnected.
+	 *
+	 * @return	True is the node is a level node, false otherwise.
 	 */
 	public boolean isLevel()
 	{
@@ -87,7 +97,7 @@ public class CDynkinNode implements Serializable, Comparable<CDynkinNode>
 	}
 	
 	/** 
-	 * Removes a connections from this node to "toNode"
+	 * Removes a connection from this node to "toNode"
 	 *
 	 * @param	toNode	The node to which we should delete the connection.
 	 * @return			True if succesfull, false if there was no connection.		
@@ -122,7 +132,15 @@ public class CDynkinNode implements Serializable, Comparable<CDynkinNode>
 		return false;
 	}
 	
-	/** Compares nodes according to their position in the Dynkin diagram */
+	/** 
+	 * Compares nodes according to their position in the Dynkin diagram.
+	 * The nodes are sorted according to their position in the Dynkin diagram.
+	 *
+	 * @param	compareNode		The node to compare this one to.
+	 * @return					1 if this node comes after the other,
+	 *							0 if we cannot sort it,
+	 *							-1 if this nodes comes before the other.
+	 */
 	public int compareTo(CDynkinNode compareNode)
 	{
 		final int BEFORE = -1;
@@ -138,7 +156,10 @@ public class CDynkinNode implements Serializable, Comparable<CDynkinNode>
 		return EQUAL;
 	}
 	
-	/** Checks if connections are equal. */
+	/** 
+	 * Checks if nodes are equal.
+	 * @return		True if the nodes are equal, and false otherwise.
+	 */
 	public boolean equals(Object obj)
 	{
 		if(this == obj)
@@ -147,7 +168,7 @@ public class CDynkinNode implements Serializable, Comparable<CDynkinNode>
 		if((obj == null) || (obj.getClass() != this.getClass()))
 			return false;
 		CDynkinNode compareNode = (CDynkinNode) obj;
-		if(compareNode.id == id && compareNode.x == x && compareNode.y == y)
+		if(compareNode.x == x && compareNode.y == y)
 			return true;
 		else
 			return false;

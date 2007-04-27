@@ -105,8 +105,8 @@ public class CRoot implements Serializable
 	/**
 	 * Adds the root vector of "root" to this one and returns the corresponding new root.
 	 *
-	 * @param	CRoot	The root whose vector we should add to this one.
-	 * @return		A new root with summed vector.
+	 * @param	root	The root whose vector we should add to this one.
+	 * @return			A new root with summed vector.
 	 */
 	public CRoot plus(CRoot root)
 	{
@@ -121,8 +121,8 @@ public class CRoot implements Serializable
 	/**
 	 * Subtracts the root vector of "root" to this one and returns the corresponding new root.
 	 *
-	 * @param	CRoot	The root whose vector we should subtract from this one.
-	 * @return		A new root with subtracted vector.
+	 * @param	root	The root whose vector we should subtract from this one.
+	 * @return			A new root with subtracted vector.
 	 */
 	public CRoot minus(CRoot root)
 	{

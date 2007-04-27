@@ -11,8 +11,6 @@ import tan.leveldecomposition.dynkindiagram.CDynkinDiagram;
 import tan.leveldecomposition.group.*;
 import Jama.Matrix;
 import java.util.ArrayList;
-import java.math.BigDecimal;
-import java.text.DecimalFormat;
 
 /**
  * Singleton holding all 'global' variables
@@ -36,7 +34,7 @@ public class Globals
 	public static CGroup coGroup;
 	/** Global CDynkinDiagram object */
 	public static CDynkinDiagram dd;
-	/** Are we performing a scan right now? */
+	/** Boolean to indicate whether or not we are scanning right now. */
 	public static boolean scanning;
 	
 	/**********************************
@@ -52,7 +50,7 @@ public class Globals
 		dd = new CDynkinDiagram();
 	}
 	
-	/** Singleton containing 'global' variables. */
+	/** Singleton handler. */
 	public static Globals getInstance()
 	{
 		return _instance;
@@ -63,6 +61,13 @@ public class Globals
 	 * Helper functions defined below
 	 **********************************/
 	
+	/**
+	 * Returns a string representing the type of decomposition of the full group into
+	 * the regular subgroup and the disconnected subgroup.
+	 *
+	 * @return	String of the type "regular subgroup x disconnected subgroup representations in fullgroup".
+	 * @see		#getDynkinDiagramType
+	 */
 	public static String getDecompositionType()
 	{
 		String output;
@@ -75,6 +80,12 @@ public class Globals
 		return output;
 	}
 	
+	/**
+	 * Returns a string representing the regular subgroup and the disconnected subgroup of the full group.
+	 *
+	 * @return	String of the type "fullgroup as regular subgroup x disconnected subgroup".
+	 * @see		#getDecompositionType
+	 */
 	public static String getDynkinDiagramType()
 	{
 		String output;
@@ -88,6 +99,14 @@ public class Globals
 		return output;
 	}
 	
+	/**
+	 * Converts a string into an integer. If the string cannot be parsed into an integer,
+	 * it returns 0.
+	 *
+	 * @param	string	The string to convert into an integer.
+	 * @return			The integer value of the string.
+	 * @see				#intToString
+	 */
 	public static int stringToInt(String string)
 	{
 		int value;
@@ -102,13 +121,26 @@ public class Globals
 		return value;
 	}
 	
+	/**
+	 * Converts an integer into a string. 
+	 *
+	 * @param	x		The integer to convert to a string.
+	 * @return			A string representing the integer.
+	 * @see				#stringToInt
+	 */
 	public static String intToString(int x)
 	{
 		Integer value = new Integer(x);
 		return value.toString();
 	}
 	
-	
+	/**
+	 * Converts an array of integers integer into a single string.
+	 * The string will be delimited with spaces.
+	 *
+	 * @param	array	The array of integers to convert to a string.
+	 * @return			A string representing the array of integers.
+	 */
 	public static String intArrayToString(int[] array)
 	{
 		String output = new String();
@@ -121,21 +153,11 @@ public class Globals
 		return output;
 	}
 	
-	public static int[] flipIntArray(int[] array)
-	{
-		int[] output = new int[array.length];
-		for (int i = 0; i < array.length; i++)
-		{
-			output[i] = array[array.length - i - 1];
-		}
-		return output;
-	}
-	
 	/**
 	 * Returns the A_n cartan matrix of the given rank.
 	 *
-	 * @param	 rank	 The rank of the A_n matrix to be returned.
-	 * @return		 The A_n cartan matrix of the given rank.
+	 * @param	 rank	The rank of the A_n matrix to be returned.
+	 * @return			The A_n cartan matrix of the given rank.
 	 */
 	public static Matrix regularMatrix(int rank)
 	{
@@ -155,7 +177,7 @@ public class Globals
 	
 	/**
 	 * Compares two Matrices.
-	 * Appareantly Matrix.equals() isn't properly implemented ...
+	 * The matrices are the same if all their values are the same.
 	 *
 	 * @param	matrix1	The first matrix we compare against the second.
 	 * @param	matrix2	The second matrix we compare against the first.
@@ -181,7 +203,8 @@ public class Globals
 	}
 	
 	/**
-	 * Compares two Matrices.
+	 * Compares two matrices of integers.
+	 * The matrices are the same if all their values are the same.
 	 *
 	 * @param	matrix1	The first matrix we compare against the second.
 	 * @param	matrix2	The second matrix we compare against the first.
@@ -205,7 +228,9 @@ public class Globals
 	}
 	
 	/**
-	 * Compares two Matrices.
+	 * Compares a matrix of integers against a Matrix.
+	 * They are the same if the values of the Matrix cast to integers are the same
+	 * as those of the integer matrix.
 	 *
 	 * @param	matrix1	The first matrix we compare against the second.
 	 * @param	matrix2	The second matrix we compare against the first.
@@ -228,7 +253,14 @@ public class Globals
 		return true;
 	}
 	
-	
+	/** 
+	 * Compares two integer arrays.
+	 * The arrays are the same if all their are equal.
+	 *
+	 * @param	array1	The first array to compare against the second.
+	 * @param	array2	The second array to compare against the first.
+	 * @return			True if the arrays are the same, false otherwise.
+	 */
 	public static boolean sameArrays(int[] array1, int[] array2)
 	{
 		if(array1 == null || array2 == null)
@@ -244,7 +276,7 @@ public class Globals
 	}
 	
 	/**
-	 * Convert a decimal number to a vector of the given size in the given rank,
+	 * Convert a decimal number to a vector of the given size in the given basis,
 	 * with given offset.
 	 */
 	public static int[] numberToVector(long number, int base, int size, int offset)

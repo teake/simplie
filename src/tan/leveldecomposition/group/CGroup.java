@@ -176,8 +176,8 @@ public class CGroup
 	 * Dynkin labels associated to the given dynkinLabels.
 	 * Basically an implementation of Weyl's dimensionality formula.
 	 *
-	 * @param	dynkinLabels	The Dynkin labels of the representation.
-	 * @return					The dimension of the presentation, 0 if something's wrong.
+	 * @param	highestWeightLabels	The Dynkin labels of the representation.
+	 * @return						The dimension of the presentation, 0 if something's wrong.
 	 */
 	public long dimOfRep(int[] highestWeightLabels)
 	{

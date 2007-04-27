@@ -16,11 +16,15 @@ import java.io.*;
 import Jama.Matrix;
 
 /**
+ * A class representing (as of yet only simply-laced) Dynkin diagrams. 
+ * Any node within this diagram can be disabled in order to form regular subalgebras
+ * of the whole algebra, which in turn can be used for a level decomposition.
  *
  * @author Teake Nutma
  */
 public class CDynkinDiagram
 {
+	/** Vector containing all nodes of this diagram. */
 	public Vector<CDynkinNode> nodes;
 	
 	/**
@@ -31,12 +35,13 @@ public class CDynkinDiagram
 		nodes = new Vector<CDynkinNode>();
 	}
 	
-	/** Clears the Dynkin diagram */
-	public void Clear()
+	/** Clears the Dynkin diagram. That is, it deletes all nodes. */
+	public void clear()
 	{
 		nodes.clear();
 	}
 	
+	/** Returns the rank algebra associated to this diagram, i.e. the number of nodes. */
 	public int rank()
 	{
 		return nodes.size();
@@ -45,6 +50,9 @@ public class CDynkinDiagram
 	/**
 	 * Fetches a node by its external label.
 	 * Returns null if the node is not found.
+	 *
+	 * @param	label	The label of the node to fetch.
+	 * @return			The node itself.
 	 */
 	private CDynkinNode getNodeByLabel(int label)
 	{
@@ -58,6 +66,14 @@ public class CDynkinDiagram
 		return null;
 	}
 	
+	/** 
+	 * Fetches a nodes by its coordinates.
+	 * Returns null if the nodes is not found.
+	 *
+	 * @param	x	The x-coordinate of the node in the diagram.
+	 * @param	y	The y-coordinate of the node in the diagram.
+	 * @return		The node itself.
+	 */
 	public CDynkinNode getNodeByCoor(int x, int y)
 	{
 		for (CDynkinNode node : nodes)
@@ -159,10 +175,11 @@ public class CDynkinDiagram
 	}
 	
 	/**
-	 * Returns the Cartan matrix of one of the subalgebras
+	 * Returns the Cartan matrix of one of the subalgebras.
 	 *
 	 * @param	type	The name of the subalgebra to get. Either "sub", "dis", or "co".
-	 * @return			The cartan matrix of the regular or deleted subalgebra.
+	 * @return			The cartan matrix of the regular ("sub"),
+	 *					the disabled disconnect ("dis"), or the sub x dis ("co") subalgebra.
 	 */
 	public Matrix cartanSubMatrix(String type)
 	{
@@ -224,29 +241,37 @@ public class CDynkinDiagram
 		return lastLabel;
 	}
 	
+	/** 
+	 * The last label that was added, plus one.
+	 * @see		#lastLabel
+	 */
 	public int nextFreeLabel()
 	{
 		return (lastLabel() + 1);
 	}
 	
+	/**
+	 * Adds a node to the diagram on the specified coordinates.
+	 *
+	 * @param	x	The x-coordinate of the node in the diagram.
+	 * @param	y	The y-coordinate of the node in the diagram.
+	 * @return		True if succesfull, false if the node was already present.
+	 */
 	public boolean addNode(int x, int y)
 	{
-		int newId = -1;
-		
-		for (CDynkinNode node : nodes)
+		CDynkinNode newNode = new CDynkinNode( nextFreeLabel(), x, y);
+		if(nodes.contains(newNode))
 		{
-			if (newId < node.id)
-			{
-				newId = node.id;
-			}
+			return false;
 		}
-		newId++;
-		
-		CDynkinNode newNode = new CDynkinNode( newId, nextFreeLabel(), x, y);
-		nodes.add(newNode);
-		return true;
+		else
+		{
+			nodes.add(newNode);
+			return true;
+		}
 	}
 	
+	/** Removes a node from the diagram. */
 	public void removeNode(CDynkinNode nodeToRemove)
 	{
 		nodes.remove(nodeToRemove);
@@ -257,7 +282,14 @@ public class CDynkinDiagram
 		
 	}
 	
-	public void modifyConnection(int fromLabel, int toLabel, boolean add) // if add == false then remove
+	/** 
+	 * Adds or removes a connection.
+	 *
+	 * @param fromLabel		The label of the node from which the connection points.
+	 * @param toLabel		The label of the node to which the connection points.
+	 * @param add			True: add the connection. False: remove the connection.
+	 */
+	public void modifyConnection(int fromLabel, int toLabel, boolean add)
 	{
 		CDynkinNode fromNode	= getNodeByLabel(fromLabel);
 		CDynkinNode toNode		= getNodeByLabel(toLabel);
@@ -342,6 +374,7 @@ public class CDynkinDiagram
 		return true;
 	}
 	
+	/** Returns a string of LaTeX representing the diagram visually. */
 	public String toTeX(boolean includeCaption)
 	{
 		if(rank() == 0)
