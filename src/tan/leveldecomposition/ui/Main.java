@@ -454,27 +454,18 @@ public class Main extends javax.swing.JFrame
     private void MenuItemLoadE11ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_MenuItemLoadE11ActionPerformed
     {//GEN-HEADEREND:event_MenuItemLoadE11ActionPerformed
 		Globals.dd.clear();
-		Globals.dd.addNode(2,0);
-		Globals.dd.addNode(0,1);
-		Globals.dd.addNode(1,1);
-		Globals.dd.addNode(2,1);
-		Globals.dd.addNode(3,1);
-		Globals.dd.addNode(4,1);
-		Globals.dd.addNode(5,1);
-		Globals.dd.addNode(6,1);
-		Globals.dd.addNode(7,1);
-		Globals.dd.addNode(8,1);
-		Globals.dd.addNode(9,1);
-		Globals.dd.modifyConnection(1,4,true);
-		Globals.dd.modifyConnection(2,3,true);
-		Globals.dd.modifyConnection(3,4,true);
-		Globals.dd.modifyConnection(4,5,true);
-		Globals.dd.modifyConnection(5,6,true);
-		Globals.dd.modifyConnection(6,7,true);
-		Globals.dd.modifyConnection(7,8,true);
-		Globals.dd.modifyConnection(8,9,true);
-		Globals.dd.modifyConnection(9,10,true);
-		Globals.dd.modifyConnection(10,11,true);
+		CDynkinNode exceptional = Globals.dd.addNode(2,0,false);
+		Globals.dd.addNode(0,1,false);
+		Globals.dd.addNode(1,1,true);
+		CDynkinNode attach = Globals.dd.addNode(2,1,true);
+		Globals.dd.addNode(3,1,true);
+		Globals.dd.addNode(4,1,true);
+		Globals.dd.addNode(5,1,true);
+		Globals.dd.addNode(6,1,true);
+		Globals.dd.addNode(7,1,true);
+		Globals.dd.addNode(8,1,true);
+		Globals.dd.addNode(9,1,true);
+		Globals.dd.modifyConnection(exceptional, attach, true);
 		algebraSetup.Update();
     }//GEN-LAST:event_MenuItemLoadE11ActionPerformed
 	

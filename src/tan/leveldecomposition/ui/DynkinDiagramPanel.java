@@ -28,8 +28,8 @@ public class DynkinDiagramPanel extends javax.swing.JPanel
 	int offset;
 	Font font;
 	
-	boolean addingConnection;
-	int	    connectionTo;
+	boolean		addingConnection;
+	CDynkinNode connectionTo;
 	
 	AlgebraSetup algebraSetup;
 	
@@ -44,7 +44,7 @@ public class DynkinDiagramPanel extends javax.swing.JPanel
 		font	= new Font("Monospaced", Font.PLAIN, 12);
 		
 		addingConnection	= false;
-		connectionTo		= -1;
+		connectionTo		= null;
 		
 		this.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 	}
@@ -66,11 +66,12 @@ public class DynkinDiagramPanel extends javax.swing.JPanel
 			for (int i = 0; i < node.numConnections(); i++)
 				paintConnection(node.getConnection(i), g2);
 		}
+		int label = 1;
 		for (CDynkinNode node : Globals.dd.nodes)
-			paintNode(node, g2);
+			paintNode(node, label++, g2);
 	}
 	
-	private void paintNode(CDynkinNode node, Graphics2D g2)
+	private void paintNode(CDynkinNode node, int label, Graphics2D g2)
 	{
 		if(node.enabled)
 			g2.setColor(Color.WHITE);
@@ -84,7 +85,7 @@ public class DynkinDiagramPanel extends javax.swing.JPanel
 		g2.drawOval(cTrans(node.x), cTrans(node.y), radius, radius);
 		
 		g2.setFont(font);
-		g2.drawString(Globals.intToString(node.label), cTrans(node.x) + radius/2, cTrans(node.y) + radius + 15);
+		g2.drawString(Globals.intToString(label), cTrans(node.x) + radius/2, cTrans(node.y) + radius + 15);
 	}
 	
 	private void paintConnection(CDynkinConnection connection, Graphics2D g2)
@@ -105,16 +106,16 @@ public class DynkinDiagramPanel extends javax.swing.JPanel
 	{
 		return Math.round((coordinate - offset) / spacing);
 	}
-	private void startAddConnection(int label)
+	private void startAddConnection(CDynkinNode node)
 	{
 		addingConnection = true;
-		connectionTo = label;
+		connectionTo = node;
 		this.setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
 	}
 	private void stopAddConnection()
 	{
 		addingConnection = false;
-		connectionTo = -1;
+		connectionTo = null;
 		this.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 	}
 	/** This method is called from within the constructor to
@@ -163,11 +164,7 @@ public class DynkinDiagramPanel extends javax.swing.JPanel
 			{
 				if(node == null)
 				{
-					int nextLabel = Globals.dd.nextFreeLabel();
-					int lastLabel = Globals.dd.lastLabel();
-					Globals.dd.addNode(x,y);
-					if(evt.isShiftDown())
-						Globals.dd.modifyConnection(nextLabel,lastLabel,true);
+					Globals.dd.addNode(x,y,evt.isShiftDown());
 				}
 			}
 			else
@@ -192,14 +189,14 @@ public class DynkinDiagramPanel extends javax.swing.JPanel
 		{
 			if(!addingConnection)
 			{
-				startAddConnection(node.label);
+				startAddConnection(node);
 			}
 			else
 			{
 				if(evt.isControlDown())
-					Globals.dd.modifyConnection(node.label, connectionTo, false);
+					Globals.dd.modifyConnection(node, connectionTo, false);
 				else
-					Globals.dd.modifyConnection(node.label, connectionTo, true);
+					Globals.dd.modifyConnection(node, connectionTo, true);
 				stopAddConnection();
 			}
 		}

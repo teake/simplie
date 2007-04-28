@@ -16,7 +16,7 @@ import java.io.*;
 import Jama.Matrix;
 
 /**
- * A class representing (as of yet only simply-laced) Dynkin diagrams. 
+ * A class representing (as of yet only simply-laced) Dynkin diagrams.
  * Any node within this diagram can be disabled in order to form regular subalgebras
  * of the whole algebra, which in turn can be used for a level decomposition.
  *
@@ -48,25 +48,6 @@ public class CDynkinDiagram
 	}
 	
 	/**
-	 * Fetches a node by its external label.
-	 * Returns null if the node is not found.
-	 *
-	 * @param	label	The label of the node to fetch.
-	 * @return			The node itself.
-	 */
-	private CDynkinNode getNodeByLabel(int label)
-	{
-		for (CDynkinNode node : nodes)
-		{
-			if(node.label == label)
-			{
-				return node;
-			}
-		}
-		return null;
-	}
-	
-	/** 
 	 * Fetches a nodes by its coordinates.
 	 * Returns null if the nodes is not found.
 	 *
@@ -149,7 +130,7 @@ public class CDynkinDiagram
 	/** Returns the Cartan matrix of the whole algebra. */
 	public Matrix cartanMatrix()
 	{
-		refactor();
+		Collections.sort(nodes);
 		
 		/** Creates a rank x rank matrix filled with zeros. */
 		Matrix cartanMatrix = new Matrix(rank(),rank());
@@ -161,9 +142,11 @@ public class CDynkinDiagram
 		/** Set the off-diagonal parts. */
 		for (int i = 0; i < rank(); i++)
 		{
+			CDynkinNode nodeI = nodes.get(i);
 			for (int j = i + 1; j < rank(); j++)
 			{
-				if( getNodeByLabel(i+1).hasConnectionTo(j+1) || getNodeByLabel(j+1).hasConnectionTo(i+1) )
+				CDynkinNode nodeJ = nodes.get(j);
+				if( nodeI.hasConnectionTo(nodeJ) || nodeJ.hasConnectionTo(nodeI) )
 				{
 					cartanMatrix.set(i,j,-1);
 					cartanMatrix.set(j,i,-1);
@@ -226,48 +209,33 @@ public class CDynkinDiagram
 		return cartanSubMatrix;
 	}
 	
-	/** Returns the last label that was added. */
-	public int lastLabel()
-	{
-		int lastLabel = 0;
-		for (CDynkinNode node : nodes)
-		{
-			if(node.label > lastLabel)
-			{
-				lastLabel = node.label;
-			}
-		}
-		
-		return lastLabel;
-	}
-	
-	/** 
-	 * The last label that was added, plus one.
-	 * @see		#lastLabel
-	 */
-	public int nextFreeLabel()
-	{
-		return (lastLabel() + 1);
-	}
-	
 	/**
 	 * Adds a node to the diagram on the specified coordinates.
 	 *
-	 * @param	x	The x-coordinate of the node in the diagram.
-	 * @param	y	The y-coordinate of the node in the diagram.
-	 * @return		True if succesfull, false if the node was already present.
+	 * @param	x					The x-coordinate of the node in the diagram.
+	 * @param	y					The y-coordinate of the node in the diagram.
+	 * @param	connectionToLast	Boolean to indicate whether or not a connection should be made
+	 *								from this node to the last one added.
+	 * @return						The node that was added, null if no node was added.
 	 */
-	public boolean addNode(int x, int y)
+	public CDynkinNode addNode(int x, int y, boolean connectionToLast)
 	{
-		CDynkinNode newNode = new CDynkinNode( nextFreeLabel(), x, y);
+		CDynkinNode prevNode;
+		CDynkinNode newNode = new CDynkinNode(x, y);
+		
 		if(nodes.contains(newNode))
 		{
-			return false;
+			return null;
 		}
 		else
 		{
+			if(connectionToLast && rank() > 0)
+			{
+				prevNode = nodes.get(rank() - 1);
+				modifyConnection(prevNode, newNode, true);
+			}
 			nodes.add(newNode);
-			return true;
+			return newNode;
 		}
 	}
 	
@@ -282,18 +250,15 @@ public class CDynkinDiagram
 		
 	}
 	
-	/** 
+	/**
 	 * Adds or removes a connection.
 	 *
-	 * @param fromLabel		The label of the node from which the connection points.
-	 * @param toLabel		The label of the node to which the connection points.
+	 * @param fromNode		The node from which the connection points.
+	 * @param toNode		The node to which the connection points.
 	 * @param add			True: add the connection. False: remove the connection.
 	 */
-	public void modifyConnection(int fromLabel, int toLabel, boolean add)
+	public void modifyConnection(CDynkinNode fromNode, CDynkinNode toNode, boolean add)
 	{
-		CDynkinNode fromNode	= getNodeByLabel(fromLabel);
-		CDynkinNode toNode		= getNodeByLabel(toLabel);
-		
 		/* Do nothing if either one of the nodes is not found, or if both are the same */
 		if( fromNode == null || toNode == null || fromNode.equals(toNode) )
 			return;
@@ -307,20 +272,6 @@ public class CDynkinDiagram
 		{
 			fromNode.removeConnection(toNode);
 			toNode.removeConnection(fromNode);
-		}
-	}
-	
-	/** Reshapes the internal structure. */
-	private void refactor()
-	{
-		/** sort the nodes according to their label */
-		Collections.sort(nodes);
-		
-		/** Reset all the labels */
-		int label = 1;
-		for (CDynkinNode node : nodes)
-		{
-			node.label = label++;
 		}
 	}
 	
@@ -404,19 +355,23 @@ public class CDynkinDiagram
 		output += "\\begin{pspicture}(" + xMin + "," + yMin + ")(" + xMax + "," + yMax + ")\n";
 		
 		/** The nodes and connections */
-		for(CDynkinNode node : nodes)
+		for(int i = 0; i < rank(); i++)
 		{
+			CDynkinNode	node	= nodes.get(i);
+			int			labelI	= i + 1;
+			
 			output += "\\cnode";
 			if(node.isDisconnected())
 				output += "[fillstyle=solid,fillcolor=lightgray]";
 			if(node.isLevel())
 				output += "[fillstyle=solid,fillcolor=black]";
-			output += "(" + node.x + "," + (yMax - node.y) + "){0.15}{N" + node.label + "} \n";
-			output += "\\nput{-60}{N" + node.label + "}{" + node.label + "}\n";
-			for (int i = 0; i < node.numConnections(); i++)
+			output += "(" + node.x + "," + (yMax - node.y) + "){0.15}{N" + labelI + "} \n";
+			output += "\\nput{-60}{N" + labelI + "}{" + labelI + "}\n";
+			for (int j = 0; j < node.numConnections(); j++)
 			{
-				CDynkinConnection con = node.getConnection(i);
-				output += "\\ncline{-}{N" + con.fromNode.label + "}{N" + con.toNode.label + "}\n";
+				int labelJ = nodes.indexOf(node.getConnection(j).toNode);
+				if(labelI != labelJ)
+					output += "\\ncline{-}{N" + labelI + "}{N" + labelJ + "}\n";
 			}
 		}
 		

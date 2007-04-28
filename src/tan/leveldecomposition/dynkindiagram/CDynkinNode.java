@@ -22,8 +22,6 @@ public class CDynkinNode implements Serializable, Comparable<CDynkinNode>
 	public final int x;
 	/** The y-coordinate of the node in the dynkin diagram */
 	public final int y;
-	/** The label of the node in the dynkin diagram */
-	public int		label;
 	/** Is the node enabled or not? */
 	public boolean	enabled;
 	
@@ -34,13 +32,11 @@ public class CDynkinNode implements Serializable, Comparable<CDynkinNode>
 	 * Creates a new instance of CDynkinNode.
 	 * When instantiated, it is enabled.
 	 *
-	 * @param	label	The label of the node in the dynkin diagram.
 	 * @param	x		The x-coordinate of the node in the dynkin diagram.
 	 * @param	y		The y-coordinate of the node in the dynkin diagram.
 	 */
-	public CDynkinNode(int label, int x, int y)
+	public CDynkinNode(int x, int y)
 	{
-		this.label		= label;
 		this.enabled	= true;
 		this.x			= x;
 		this.y			= y;
@@ -121,12 +117,17 @@ public class CDynkinNode implements Serializable, Comparable<CDynkinNode>
 		return connections.get(index);
 	}
 	
-	/** Has this node a connection to the node with label "toLabel"? */
-	public boolean hasConnectionTo(int toLabel)
+	/** 
+	 * Checks if this node gas a connection to another specific node.
+	 *
+	 * @param toNode	The node to which this node should have connection.
+	 * @return			True if the connection exists, false otherwise.	 
+	 */
+	public boolean hasConnectionTo(CDynkinNode toNode)
 	{
 		for(CDynkinConnection connection : connections)
 		{
-			if(connection.toNode.label == toLabel)
+			if(connection.toNode.equals(toNode))
 				return true;
 		}
 		return false;
