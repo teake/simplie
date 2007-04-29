@@ -22,13 +22,13 @@ public class CDynkinNode implements Serializable, Comparable<CDynkinNode>
 	public final int x;
 	/** The y-coordinate of the node in the dynkin diagram */
 	public final int y;
-	/** Is the node enabled or not? */
-	public boolean	enabled;
 	
+	/** Is the node enabled or not? */
+	private boolean	enabled;
 	/** The internal list of connections the node has. */
 	private ArrayList<CDynkinConnection> connections;
 	
-	/** 
+	/**
 	 * Creates a new instance of CDynkinNode.
 	 * When instantiated, it is enabled.
 	 *
@@ -44,7 +44,23 @@ public class CDynkinNode implements Serializable, Comparable<CDynkinNode>
 		this.connections = new ArrayList<CDynkinConnection>();
 	}
 	
+	/**
+	 * Boolean indicating whether or not the node is enabled.
+	 */
+	public boolean isEnabled()
+	{
+		return enabled;
+	}
+	
 	/** 
+	 * Toggles a node from enabled <-> disabled.
+	 */
+	public void toggle()
+	{
+		enabled = !enabled;
+	}
+	
+	/**
 	 * The node is "disconnected" if it is part of the disconnected subalgebra,
 	 * i.e. the subalgebra that is disabled and has no connections to enabled nodes.
 	 *
@@ -62,7 +78,7 @@ public class CDynkinNode implements Serializable, Comparable<CDynkinNode>
 		return true;
 	}
 	
-	/** 
+	/**
 	 * The node is a "level node" if it is not enabled and not disconnected.
 	 *
 	 * @return	True is the node is a level node, false otherwise.
@@ -75,7 +91,7 @@ public class CDynkinNode implements Serializable, Comparable<CDynkinNode>
 			return false;
 	}
 	
-	/** 
+	/**
 	 * Adds a connection from this node to "toNode"
 	 *
 	 * @param	toNode	The node to which we should lay a connection
@@ -92,11 +108,11 @@ public class CDynkinNode implements Serializable, Comparable<CDynkinNode>
 		return true;
 	}
 	
-	/** 
+	/**
 	 * Removes a connection from this node to "toNode"
 	 *
 	 * @param	toNode	The node to which we should delete the connection.
-	 * @return			True if succesfull, false if there was no connection.		
+	 * @return			True if succesfull, false if there was no connection.
 	 */
 	public boolean removeConnection(CDynkinNode toNode)
 	{
@@ -117,11 +133,11 @@ public class CDynkinNode implements Serializable, Comparable<CDynkinNode>
 		return connections.get(index);
 	}
 	
-	/** 
+	/**
 	 * Checks if this node gas a connection to another specific node.
 	 *
 	 * @param toNode	The node to which this node should have connection.
-	 * @return			True if the connection exists, false otherwise.	 
+	 * @return			True if the connection exists, false otherwise.
 	 */
 	public boolean hasConnectionTo(CDynkinNode toNode)
 	{
@@ -133,7 +149,7 @@ public class CDynkinNode implements Serializable, Comparable<CDynkinNode>
 		return false;
 	}
 	
-	/** 
+	/**
 	 * Compares nodes according to their position in the Dynkin diagram.
 	 * The nodes are sorted according to their position in the Dynkin diagram.
 	 *
@@ -157,7 +173,7 @@ public class CDynkinNode implements Serializable, Comparable<CDynkinNode>
 		return EQUAL;
 	}
 	
-	/** 
+	/**
 	 * Checks if nodes are equal.
 	 * @return		True if the nodes are equal, and false otherwise.
 	 */

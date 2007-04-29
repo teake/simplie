@@ -13,6 +13,11 @@ import java.util.Vector;
 import java.util.Iterator;
 import java.util.Collections;
 import java.io.*;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.Color;
+import java.awt.Font;
 import Jama.Matrix;
 
 /**
@@ -25,14 +30,17 @@ import Jama.Matrix;
 public class CDynkinDiagram
 {
 	/** Vector containing all nodes of this diagram. */
-	public Vector<CDynkinNode> nodes;
+	private Vector<CDynkinNode> nodes;
+	/** Font for drawing the diagram */
+	private Font font;
 	
 	/**
 	 * Creates a new instance of CDynkinDiagram
 	 */
 	public CDynkinDiagram()
 	{
-		nodes = new Vector<CDynkinNode>();
+		nodes	= new Vector<CDynkinNode>();
+		font	= new Font("Monospaced", Font.PLAIN, 12);
 	}
 	
 	/** Clears the Dynkin diagram. That is, it deletes all nodes. */
@@ -74,7 +82,7 @@ public class CDynkinDiagram
 		for(int i = 0; i < rank(); i++)
 		{
 			CDynkinNode node = nodes.get(i);
-			if(node.enabled)
+			if(node.isEnabled())
 				subIndex++;
 			if(subIndex == index + 1)
 				return i;
@@ -175,7 +183,7 @@ public class CDynkinDiagram
 		
 		for (CDynkinNode node : nodes)
 		{
-			if((node.enabled && type == "sub")
+			if((node.isEnabled() && type == "sub")
 			|| (node.isDisconnected() && type == "dis")
 			|| (!node.isLevel() && type == "co") )
 			{
@@ -384,6 +392,64 @@ public class CDynkinDiagram
 		output += "\\end{figure}\n";
 		
 		return output;
+	}
+	
+	/** 
+	 * Draw the diagram onto a graphics component.
+	 *
+	 * @param	g		The graphics component onto which the diagram should be drawn.
+	 * @param	offset	The amount of spacing between the edges of the component and the diagram.
+	 * @param	spacing	The amount of spacing between each node.
+	 * @param	radius	The radius of each node.
+	 */
+	public void drawDiagram(Graphics g, int offset, int spacing, int radius)
+	{
+		Graphics2D g2 = (Graphics2D) g;
+		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
+		
+		for (CDynkinNode node : nodes)
+		{
+			for (int i = 0; i < node.numConnections(); i++)
+			{
+				CDynkinConnection connection = node.getConnection(i);
+				CDynkinNode node1 = connection.fromNode;
+				CDynkinNode node2 = connection.toNode;
+				if(node1 != null && node2 != null)
+				{
+					g2.drawLine(
+							spacing * node1.x + offset + radius/2,
+							spacing * node1.y + offset + radius/2,
+							spacing * node2.x + offset + radius/2,
+							spacing * node2.y + offset + radius/2);
+				}
+			}
+		}
+		for (int i = 0; i < rank(); i++)
+		{
+			CDynkinNode node = nodes.get(i);
+			
+			if(node.isEnabled())
+				g2.setColor(Color.WHITE);
+			else if(node.isDisconnected())
+				g2.setColor(Color.ORANGE);
+			else
+				g2.setColor(Color.GRAY);
+			g2.fillOval(
+					spacing * node.x + offset,
+					spacing * node.y + offset,
+					radius, radius);
+			
+			g2.setColor(Color.BLACK);
+			g2.drawOval(
+					spacing * node.x + offset,
+					spacing * node.y + offset,
+					radius, radius);
+			
+			g2.setFont(font);
+			g2.drawString(Globals.intToString(i+1),
+					spacing * node.x + offset + radius/2,
+					spacing * node.y + offset + radius + 15);
+		}
 	}
 	
 }

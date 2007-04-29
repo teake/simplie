@@ -21,8 +21,6 @@ import Jama.Matrix;
  */
 public class CGroup
 {
-	//TODO: convert rs & weightSystem into classes of their own.
-	
 	/*********************************
 	 * Public properties
 	 *********************************/

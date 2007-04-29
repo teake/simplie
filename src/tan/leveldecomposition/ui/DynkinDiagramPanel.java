@@ -9,12 +9,7 @@ package tan.leveldecomposition.ui;
 import tan.leveldecomposition.dynkindiagram.*;
 import tan.leveldecomposition.*;
 
-import java.util.Vector;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
-import java.awt.Color;
-import java.awt.Font;
 import java.awt.Cursor;
 
 /**
@@ -23,15 +18,14 @@ import java.awt.Cursor;
  */
 public class DynkinDiagramPanel extends javax.swing.JPanel
 {
-	int spacing;
-	int radius;
-	int offset;
-	Font font;
+	private int spacing;
+	private int radius;
+	private int offset;
 	
-	boolean		addingConnection;
-	CDynkinNode connectionTo;
+	private boolean		addingConnection;
+	private CDynkinNode connectionTo;
 	
-	AlgebraSetup algebraSetup;
+	private AlgebraSetup algebraSetup;
 	
 	/** Creates new form DynkinDiagramPanel */
 	public DynkinDiagramPanel()
@@ -41,7 +35,6 @@ public class DynkinDiagramPanel extends javax.swing.JPanel
 		spacing = 40;
 		radius	= 10;
 		offset	= 25;
-		font	= new Font("Monospaced", Font.PLAIN, 12);
 		
 		addingConnection	= false;
 		connectionTo		= null;
@@ -57,55 +50,9 @@ public class DynkinDiagramPanel extends javax.swing.JPanel
 	public void paintComponent(Graphics g)
 	{
 		super.paintComponent(g);
-		Graphics2D g2 = (Graphics2D) g;
-		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
-		
-		//TODO: moves this to CDynkinDiagram
-		for (CDynkinNode node : Globals.dd.nodes)
-		{
-			for (int i = 0; i < node.numConnections(); i++)
-				paintConnection(node.getConnection(i), g2);
-		}
-		int label = 1;
-		for (CDynkinNode node : Globals.dd.nodes)
-			paintNode(node, label++, g2);
+		Globals.dd.drawDiagram(g,offset,spacing,radius);
 	}
 	
-	private void paintNode(CDynkinNode node, int label, Graphics2D g2)
-	{
-		if(node.enabled)
-			g2.setColor(Color.WHITE);
-		else if(node.isDisconnected())
-			g2.setColor(Color.ORANGE);
-		else
-			g2.setColor(Color.GRAY);
-		g2.fillOval(cTrans(node.x), cTrans(node.y), radius, radius);
-		
-		g2.setColor(Color.BLACK);
-		g2.drawOval(cTrans(node.x), cTrans(node.y), radius, radius);
-		
-		g2.setFont(font);
-		g2.drawString(Globals.intToString(label), cTrans(node.x) + radius/2, cTrans(node.y) + radius + 15);
-	}
-	
-	private void paintConnection(CDynkinConnection connection, Graphics2D g2)
-	{
-		CDynkinNode node1 = connection.fromNode;
-		CDynkinNode node2 = connection.toNode;
-		if(node1 != null && node2 != null)
-		{
-			g2.drawLine(cTrans(node1.x) + radius/2,cTrans(node1.y) + radius/2, cTrans(node2.x) + radius/2,cTrans(node2.y) + radius/2);
-		}
-	}
-	
-	private int cTrans(int coordinate)
-	{
-		return spacing*coordinate + offset;
-	}
-	private int cTransInv(int coordinate)
-	{
-		return Math.round((coordinate - offset) / spacing);
-	}
 	private void startAddConnection(CDynkinNode node)
 	{
 		addingConnection = true;
@@ -150,27 +97,21 @@ public class DynkinDiagramPanel extends javax.swing.JPanel
 	
     private void formMouseReleased(java.awt.event.MouseEvent evt)//GEN-FIRST:event_formMouseReleased
     {//GEN-HEADEREND:event_formMouseReleased
-		/** Don't do anything while we are scanning. */
+		// Don't do anything while we are scanning.
 		if(Globals.scanning)
 			return;
 		
-		int x = cTransInv(evt.getX());
-		int y = cTransInv(evt.getY());
+		int x = Math.round((evt.getX() - offset) / spacing);
+		int y = Math.round((evt.getY() - offset) / spacing);
 		CDynkinNode node = Globals.dd.getNodeByCoor(x,y);
 		
+		// Left-mouse click: add or remove a node.
 		if(evt.getButton() == evt.BUTTON1 && !evt.isAltDown())
 		{
 			if(!evt.isControlDown())
-			{
-				if(node == null)
-				{
-					Globals.dd.addNode(x,y,evt.isShiftDown());
-				}
-			}
+				if(node == null) Globals.dd.addNode(x,y,evt.isShiftDown());
 			else
-			{
 				if(node != null) Globals.dd.removeNode(node);
-			}
 		}
 		
 		if(node == null)
@@ -180,11 +121,14 @@ public class DynkinDiagramPanel extends javax.swing.JPanel
 			return;
 		}
 		
+		// Middle mouse or alt+left: toggle a node.
 		if(evt.getButton() == evt.BUTTON2 || (evt.getButton() == evt.BUTTON1 && evt.isAltDown() ) )
 		{
 			stopAddConnection();
-			node.enabled = !node.enabled;
+			node.toggle();
 		}
+		
+		// Right-mouse: add or remove a connection.
 		if(evt.getButton() == evt.BUTTON3)
 		{
 			if(!addingConnection)
@@ -193,13 +137,11 @@ public class DynkinDiagramPanel extends javax.swing.JPanel
 			}
 			else
 			{
-				if(evt.isControlDown())
-					Globals.dd.modifyConnection(node, connectionTo, false);
-				else
-					Globals.dd.modifyConnection(node, connectionTo, true);
+				Globals.dd.modifyConnection(node, connectionTo, !evt.isControlDown());
 				stopAddConnection();
 			}
 		}
+		
 		algebraSetup.Update();
     }//GEN-LAST:event_formMouseReleased
 	
