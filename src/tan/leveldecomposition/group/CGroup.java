@@ -16,7 +16,10 @@ import java.text.DecimalFormat;
 import Jama.Matrix;
 
 /**
+ * Given a Cartan matrix, this class creates an object which has most properties of a simple Lie group:
+ * rank, dimension, and a root system, to name a few.
  *
+ * @see CRootSystem
  * @author Teake Nutma
  */
 public class CGroup
@@ -65,6 +68,7 @@ public class CGroup
 	
 	/**
 	 * Creates a new instance of CGroup.
+	 * If the group is finite, the whole rootsystem is constructed.
 	 *
 	 * @param cartanMatrix    The Cartan matrix from which to construct the group.
 	 */
@@ -73,7 +77,7 @@ public class CGroup
 		Matrix	compareMatrix;
 		String	tempType = null;
 		
-		/** Do some preliminary checks */
+		// Do some preliminary checks
 		if(cartanMatrix.getColumnDimension() != cartanMatrix.getRowDimension() || cartanMatrix.getColumnDimension() == 0)
 		{
 			rank	= 0;
@@ -92,7 +96,7 @@ public class CGroup
 		this.cartanMatrix		= new int[rank][rank];
 		this.cartanMatrixInv	= new fraction[rank][rank];
 		this.qFormMatrix		= this.cartanMatrixInv;
-		/** Set the cartan matrix */
+		// Set the cartan matrix
 		for(int i=0; i<rank; i++)
 		{
 			for(int j=0; j<rank; j++)
@@ -100,7 +104,7 @@ public class CGroup
 				this.cartanMatrix[i][j] = (int) Math.round(cartanMatrix.get(i,j));
 			}
 		}
-		/** Set the inverse of the Cartan matrix if possible. */
+		// Set the inverse of the Cartan matrix if possible.
 		if(rank != 0 && cartanMatrix.rank() == rank && det != 0)
 		{
 			Matrix cmInv = cartanMatrix.inverse();
@@ -113,7 +117,7 @@ public class CGroup
 			}
 		}
 		
-		/** Construct the Weyl vector */
+		// Construct the Weyl vector
 		int[] weylLabels = new int[rank];
 		for (int i = 0; i < rank; i++)
 		{
@@ -121,7 +125,7 @@ public class CGroup
 		}
 		weylVector = new CWeight(weylLabels);
 		
-		/** Try to determine the group type */
+		// Try to determine the group type
 		// TODO: make this algorithm find more types
 		compareMatrix = Globals.regularMatrix(rank);
 		if(rank == 0)
@@ -153,10 +157,10 @@ public class CGroup
 			tempType += rank;
 		type = tempType;
 		
-		/** Set up the root system */
+		// Set up the root system
 		rs = new CRootSystem(this);
 		
-		/** Determine the dimension. */
+		// Determine the dimension.
 		if(det > 0 || rank == 0)
 		{
 			dim			= 2 * (int) rs.numPosGenerators() + rank;
@@ -172,7 +176,7 @@ public class CGroup
 	/**
 	 * Determines the dimension of the representation defined by
 	 * Dynkin labels associated to the given dynkinLabels.
-	 * Basically an implementation of Weyl's dimensionality formula.
+	 * This is basically an implementation of Weyl's dimensionality formula.
 	 *
 	 * @param	highestWeightLabels	The Dynkin labels of the representation.
 	 * @return						The dimension of the presentation, 0 if something's wrong.
@@ -182,7 +186,7 @@ public class CGroup
 		fraction	dim;
 		CWeight		highestWeight;
 		
-		/** Preliminary checks. */
+		// Preliminary checks.
 		if(!finite || highestWeightLabels.length != rank)
 			return 0;
 		
@@ -204,6 +208,10 @@ public class CGroup
 		return dim.asLong();
 	}
 	
+	/**
+	 * Cancels every process going on,
+	 * which is currently only the construction of the rootsystem.
+	 */
 	public void cancelEverything()
 	{
 		rs.cancelConstruction();
@@ -256,7 +264,10 @@ public class CGroup
 	}
 	
 	/**
-	 * Returns the height of a root.
+	 * Calculate the height of a weight.
+	 *
+	 * @param	weightLabels	The dynkinlabels of the weight.
+	 * @return					The height of the weight.
 	 */
 	public int weightHeight(int[] weightLabels)
 	{

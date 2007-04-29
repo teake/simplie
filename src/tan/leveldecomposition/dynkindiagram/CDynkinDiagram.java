@@ -140,14 +140,14 @@ public class CDynkinDiagram
 	{
 		Collections.sort(nodes);
 		
-		/** Creates a rank x rank matrix filled with zeros. */
+		// Creates a rank x rank matrix filled with zeros.
 		Matrix cartanMatrix = new Matrix(rank(),rank());
 		
-		/** Set the diagonals to two. */
+		// Set the diagonals to two.
 		for(int i = 0; i < rank(); i++)
 			cartanMatrix.set(i,i,2);
 		
-		/** Set the off-diagonal parts. */
+		// Set the off-diagonal parts.
 		for (int i = 0; i < rank(); i++)
 		{
 			CDynkinNode nodeI = nodes.get(i);
@@ -193,7 +193,7 @@ public class CDynkinDiagram
 		Matrix cartanSubMatrix	= new Matrix(subRank,subRank);
 		Matrix cartanMatrix	= cartanMatrix();
 		
-		/** Copy the Cartan matrix elements into the submatrix. */
+		// Copy the Cartan matrix elements into the submatrix.
 		for(int i = 0; i < subRank; i++)
 		{
 			if(type == "sub")
@@ -267,7 +267,7 @@ public class CDynkinDiagram
 	 */
 	public void modifyConnection(CDynkinNode fromNode, CDynkinNode toNode, boolean add)
 	{
-		/* Do nothing if either one of the nodes is not found, or if both are the same */
+		// Do nothing if either one of the nodes is not found, or if both are the same.
 		if( fromNode == null || toNode == null || fromNode.equals(toNode) )
 			return;
 		
@@ -341,7 +341,7 @@ public class CDynkinDiagram
 			return "";
 		}
 		
-		/** First determine the min and max values of x and y */
+		// First determine the min and max values of x and y
 		int xMin = Integer.MAX_VALUE;
 		int yMin = Integer.MAX_VALUE;
 		int xMax = 0;
@@ -357,12 +357,12 @@ public class CDynkinDiagram
 		
 		String output = new String();
 		
-		/** The header */
+		// The header
 		output += "\\begin{figure}\n";
 		output += "\\begin{center}\n";
 		output += "\\begin{pspicture}(" + xMin + "," + yMin + ")(" + xMax + "," + yMax + ")\n";
 		
-		/** The nodes and connections */
+		// The nodes and connections
 		for(int i = 0; i < rank(); i++)
 		{
 			CDynkinNode	node	= nodes.get(i);
@@ -384,7 +384,7 @@ public class CDynkinDiagram
 		}
 		
 		
-		/** The footer */
+		// The footer
 		output += "\\end{pspicture}\n";
 		output += "\\end{center}\n";
 		if(includeCaption)

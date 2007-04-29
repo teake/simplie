@@ -109,9 +109,9 @@ public class DynkinDiagramPanel extends javax.swing.JPanel
 		if(evt.getButton() == evt.BUTTON1 && !evt.isAltDown())
 		{
 			if(!evt.isControlDown())
-				if(node == null) Globals.dd.addNode(x,y,evt.isShiftDown());
+				Globals.dd.addNode(x,y,evt.isShiftDown());
 			else
-				if(node != null) Globals.dd.removeNode(node);
+				Globals.dd.removeNode(node);
 		}
 		
 		if(node == null)
