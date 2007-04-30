@@ -4,7 +4,7 @@
  * Created on 13 maart 2007, 16:43
  */
 
-package tan.leveldecomposition.ui;
+package edu.rug.hep.simplie.ui;
 
 import edu.rug.hep.simplie.Globals;
 import edu.rug.hep.simplie.leveldecomposer.CAutoLevelScanner;
@@ -18,7 +18,7 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeEvent;
 import javax.swing.SwingWorker;
 import java.text.MessageFormat;
-import tan.leveldecomposition.ui.reusable.UIPrintableColorTable;
+import edu.rug.hep.simplie.ui.reusable.UIPrintableColorTable;
 
 
 /**
@@ -73,11 +73,11 @@ public class LevelDecomposition extends javax.swing.JPanel
         signButtonGroup = new javax.swing.ButtonGroup();
         RepresentationPanel = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        representationsTable = new tan.leveldecomposition.ui.reusable.UIPrintableColorTable();
+        representationsTable = new edu.rug.hep.simplie.ui.reusable.UIPrintableColorTable();
         AutoScanPanel = new javax.swing.JPanel();
         bAutoScan = new javax.swing.JButton();
-        autoScanMaxLevel = new tan.leveldecomposition.ui.reusable.UILevelTextfield();
-        autoScanMinLevel = new tan.leveldecomposition.ui.reusable.UILevelTextfield();
+        autoScanMaxLevel = new edu.rug.hep.simplie.ui.reusable.UILevelTextfield();
+        autoScanMinLevel = new edu.rug.hep.simplie.ui.reusable.UILevelTextfield();
         autoScanProgressBar = new javax.swing.JProgressBar();
         settingsPanel = new javax.swing.JPanel();
         cbRootMult = new javax.swing.JCheckBox();
@@ -359,8 +359,8 @@ public class LevelDecomposition extends javax.swing.JPanel
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel AutoScanPanel;
     private javax.swing.JPanel RepresentationPanel;
-    private tan.leveldecomposition.ui.reusable.UILevelTextfield autoScanMaxLevel;
-    private tan.leveldecomposition.ui.reusable.UILevelTextfield autoScanMinLevel;
+    private edu.rug.hep.simplie.ui.reusable.UILevelTextfield autoScanMaxLevel;
+    private edu.rug.hep.simplie.ui.reusable.UILevelTextfield autoScanMinLevel;
     private javax.swing.JProgressBar autoScanProgressBar;
     private javax.swing.JButton bAutoScan;
     private javax.swing.JCheckBox cbLocked;
@@ -371,7 +371,7 @@ public class LevelDecomposition extends javax.swing.JPanel
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JRadioButton rbSignNeg;
     private javax.swing.JRadioButton rbSignPos;
-    private tan.leveldecomposition.ui.reusable.UIPrintableColorTable representationsTable;
+    private edu.rug.hep.simplie.ui.reusable.UIPrintableColorTable representationsTable;
     private javax.swing.JPanel settingsPanel;
     private javax.swing.ButtonGroup signButtonGroup;
     // End of variables declaration//GEN-END:variables

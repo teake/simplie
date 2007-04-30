@@ -4,7 +4,7 @@
  * Created on 13 maart 2007, 15:05
  */
 
-package tan.leveldecomposition.ui;
+package edu.rug.hep.simplie.ui;
 
 import edu.rug.hep.simplie.Globals;
 import edu.rug.hep.simplie.group.CGroup;
@@ -57,11 +57,11 @@ public class AlgebraSetup extends javax.swing.JPanel
     {
         PanelDynkinDiagram = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        dynkinDiagramPanel = new tan.leveldecomposition.ui.DynkinDiagramPanel();
-        algebraInfo = new tan.leveldecomposition.ui.reusable.UIAlgebraInfo();
-        disAlgebraInfo = new tan.leveldecomposition.ui.reusable.UIAlgebraInfo();
-        subAlgebraInfo = new tan.leveldecomposition.ui.reusable.UIAlgebraInfo();
-        coAlgebraInfo = new tan.leveldecomposition.ui.reusable.UIAlgebraInfo();
+        dynkinDiagramPanel = new edu.rug.hep.simplie.ui.DynkinDiagramPanel();
+        algebraInfo = new edu.rug.hep.simplie.ui.reusable.UIAlgebraInfo();
+        disAlgebraInfo = new edu.rug.hep.simplie.ui.reusable.UIAlgebraInfo();
+        subAlgebraInfo = new edu.rug.hep.simplie.ui.reusable.UIAlgebraInfo();
+        coAlgebraInfo = new edu.rug.hep.simplie.ui.reusable.UIAlgebraInfo();
 
         PanelDynkinDiagram.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Dynkin Diagram", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12)));
 
@@ -121,12 +121,11 @@ public class AlgebraSetup extends javax.swing.JPanel
 	
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel PanelDynkinDiagram;
-    private tan.leveldecomposition.ui.reusable.UIAlgebraInfo algebraInfo;
-    private tan.leveldecomposition.ui.reusable.UIAlgebraInfo coAlgebraInfo;
-    private tan.leveldecomposition.ui.reusable.UIAlgebraInfo disAlgebraInfo;
-    private tan.leveldecomposition.ui.DynkinDiagramPanel dynkinDiagramPanel;
+    private edu.rug.hep.simplie.ui.reusable.UIAlgebraInfo algebraInfo;
+    private edu.rug.hep.simplie.ui.reusable.UIAlgebraInfo coAlgebraInfo;
+    private edu.rug.hep.simplie.ui.reusable.UIAlgebraInfo disAlgebraInfo;
+    private edu.rug.hep.simplie.ui.DynkinDiagramPanel dynkinDiagramPanel;
     private javax.swing.JScrollPane jScrollPane1;
-    private tan.leveldecomposition.ui.reusable.UIAlgebraInfo subAlgebraInfo;
+    private edu.rug.hep.simplie.ui.reusable.UIAlgebraInfo subAlgebraInfo;
     // End of variables declaration//GEN-END:variables
-	
 }

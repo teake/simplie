@@ -4,7 +4,7 @@
  * Created on 19 april 2007, 16:47
  */
 
-package tan.leveldecomposition.ui;
+package edu.rug.hep.simplie.ui;
 
 import edu.rug.hep.simplie.Globals;
 import java.awt.datatransfer.Clipboard;
@@ -18,7 +18,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
-import tan.leveldecomposition.ui.reusable.UIPrintableColorTable;
+import edu.rug.hep.simplie.ui.reusable.UIPrintableColorTable;
 
 
 /**
@@ -76,7 +76,7 @@ public class ExportToTex extends javax.swing.JPanel
         rbFile = new javax.swing.JRadioButton();
         rbSout = new javax.swing.JRadioButton();
         rbClipboard = new javax.swing.JRadioButton();
-        tfExtraColumns = new tan.leveldecomposition.ui.reusable.UILevelTextfield();
+        tfExtraColumns = new edu.rug.hep.simplie.ui.reusable.UILevelTextfield();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         columnList = new javax.swing.JList();
@@ -304,7 +304,7 @@ public class ExportToTex extends javax.swing.JPanel
     private javax.swing.JRadioButton rbClipboard;
     private javax.swing.JRadioButton rbFile;
     private javax.swing.JRadioButton rbSout;
-    private tan.leveldecomposition.ui.reusable.UILevelTextfield tfExtraColumns;
+    private edu.rug.hep.simplie.ui.reusable.UILevelTextfield tfExtraColumns;
     // End of variables declaration//GEN-END:variables
 	
 }

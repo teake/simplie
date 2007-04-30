@@ -4,7 +4,7 @@
  * Created on 19 april 2007, 11:12
  */
 
-package tan.leveldecomposition.ui;
+package edu.rug.hep.simplie.ui;
 
 import java.io.IOException;
 import java.io.OutputStream;

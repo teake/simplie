@@ -4,7 +4,7 @@
  * Created on 8 maart 2007, 12:28
  */
 
-package tan.leveldecomposition.ui;
+package edu.rug.hep.simplie.ui;
 
 import edu.rug.hep.simplie.Globals;
 import edu.rug.hep.simplie.dynkindiagram.CDynkinNode;
@@ -65,12 +65,12 @@ public class Main extends javax.swing.JFrame
         popup = new javax.swing.JFrame();
         optionPane = new javax.swing.JOptionPane();
         exportDialog = new javax.swing.JDialog();
-        exportToTex = new tan.leveldecomposition.ui.ExportToTex();
+        exportToTex = new edu.rug.hep.simplie.ui.ExportToTex();
         systemOutputDialog = new javax.swing.JDialog();
-        systemOutTextArea = new tan.leveldecomposition.ui.SystemOutTextArea();
+        systemOutTextArea = new edu.rug.hep.simplie.ui.SystemOutTextArea();
         TabbedPane = new javax.swing.JTabbedPane();
-        algebraSetup = new tan.leveldecomposition.ui.AlgebraSetup();
-        levelDecomposition = new tan.leveldecomposition.ui.LevelDecomposition();
+        algebraSetup = new edu.rug.hep.simplie.ui.AlgebraSetup();
+        levelDecomposition = new edu.rug.hep.simplie.ui.LevelDecomposition();
         MenuBar = new javax.swing.JMenuBar();
         MenuFile = new javax.swing.JMenu();
         MenuItemLoadDD = new javax.swing.JMenuItem();
@@ -521,18 +521,18 @@ public class Main extends javax.swing.JFrame
     private javax.swing.JMenuItem MenuShowOutput;
     private javax.swing.JMenu MenuTools;
     private javax.swing.JTabbedPane TabbedPane;
-    private tan.leveldecomposition.ui.AlgebraSetup algebraSetup;
+    private edu.rug.hep.simplie.ui.AlgebraSetup algebraSetup;
     private javax.swing.JDialog exportDialog;
-    private tan.leveldecomposition.ui.ExportToTex exportToTex;
+    private edu.rug.hep.simplie.ui.ExportToTex exportToTex;
     private javax.swing.JMenuItem jMenuItemPrint;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
     private javax.swing.JSeparator jSeparator4;
-    private tan.leveldecomposition.ui.LevelDecomposition levelDecomposition;
+    private edu.rug.hep.simplie.ui.LevelDecomposition levelDecomposition;
     private javax.swing.JOptionPane optionPane;
     private javax.swing.JFrame popup;
-    private tan.leveldecomposition.ui.SystemOutTextArea systemOutTextArea;
+    private edu.rug.hep.simplie.ui.SystemOutTextArea systemOutTextArea;
     private javax.swing.JDialog systemOutputDialog;
     // End of variables declaration//GEN-END:variables
 	

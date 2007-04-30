@@ -4,7 +4,7 @@
  * Created on 22 maart 2007, 10:01
  */
 
-package tan.leveldecomposition.ui.reusable;
+package edu.rug.hep.simplie.ui.reusable;
 
 import edu.rug.hep.simplie.Globals;
 import edu.rug.hep.simplie.group.CGroup;

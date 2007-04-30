@@ -4,7 +4,7 @@
  * Created on 20 maart 2007, 17:40
  */
 
-package tan.leveldecomposition.ui;
+package edu.rug.hep.simplie.ui;
 
 import edu.rug.hep.simplie.Globals;
 import edu.rug.hep.simplie.dynkindiagram.CDynkinNode;
