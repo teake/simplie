@@ -31,8 +31,10 @@ public class CDynkinDiagram
 {
 	/** Vector containing all nodes of this diagram. */
 	private Vector<CDynkinNode> nodes;
-	/** Font for drawing the diagram */
+	/** Font for drawing the diagram. */
 	private Font font;
+	/** The node that was added last. */
+	private CDynkinNode lastAddedNode;
 	
 	/**
 	 * Creates a new instance of CDynkinDiagram
@@ -41,6 +43,7 @@ public class CDynkinDiagram
 	{
 		nodes	= new Vector<CDynkinNode>();
 		font	= new Font("Monospaced", Font.PLAIN, 12);
+		lastAddedNode = null;
 	}
 	
 	/** Clears the Dynkin diagram. That is, it deletes all nodes. */
@@ -228,7 +231,6 @@ public class CDynkinDiagram
 	 */
 	public CDynkinNode addNode(int x, int y, boolean connectionToLast)
 	{
-		CDynkinNode prevNode;
 		CDynkinNode newNode = new CDynkinNode(x, y);
 		
 		if(nodes.contains(newNode))
@@ -237,12 +239,12 @@ public class CDynkinDiagram
 		}
 		else
 		{
-			if(connectionToLast && rank() > 0)
+			if(connectionToLast && lastAddedNode != null)
 			{
-				prevNode = nodes.get(rank() - 1);
-				modifyConnection(prevNode, newNode, true);
+				modifyConnection(lastAddedNode, newNode, true);
 			}
 			nodes.add(newNode);
+			lastAddedNode = newNode;
 			return newNode;
 		}
 	}
@@ -250,6 +252,10 @@ public class CDynkinDiagram
 	/** Removes a node from the diagram. */
 	public void removeNode(CDynkinNode nodeToRemove)
 	{
+		if(lastAddedNode.equals(nodeToRemove))
+		{
+			lastAddedNode = null;
+		}
 		nodes.remove(nodeToRemove);
 		for(CDynkinNode node : nodes)
 		{
