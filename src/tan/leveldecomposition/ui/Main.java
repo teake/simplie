@@ -136,7 +136,7 @@ public class Main extends javax.swing.JFrame
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Level decomposition");
+        setTitle("SimpLie");
         TabbedPane.addTab("Algebra Setup", algebraSetup);
 
         TabbedPane.addTab("Level Decomposition", levelDecomposition);
@@ -479,7 +479,7 @@ public class Main extends javax.swing.JFrame
     {//GEN-HEADEREND:event_MenuItemAboutActionPerformed
 		optionPane.showMessageDialog(
 				popup,
-				"Level Decomposition \n \n Teake Nutma \n t.a.nutma@rug.nl",
+				"SimpLie, a simple program for Lie algebras. \n \n Teake Nutma \n t.a.nutma@rug.nl",
 				"About",
 				optionPane.PLAIN_MESSAGE);
     }//GEN-LAST:event_MenuItemAboutActionPerformed
