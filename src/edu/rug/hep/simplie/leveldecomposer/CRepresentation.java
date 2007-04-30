@@ -5,12 +5,11 @@
  *
  */
 
-package tan.leveldecomposition.leveldecomposer;
+package edu.rug.hep.simplie.leveldecomposer;
 
-import tan.leveldecomposition.*;
-import tan.leveldecomposition.dynkindiagram.*;
-import tan.leveldecomposition.group.CHighestWeightRep;
-import tan.leveldecomposition.group.CWeight;
+import edu.rug.hep.simplie.Globals;
+import edu.rug.hep.simplie.group.CHighestWeightRep;
+import edu.rug.hep.simplie.group.CWeight;
 
 /**
  * A class for storing valid regular subalgebra representations.

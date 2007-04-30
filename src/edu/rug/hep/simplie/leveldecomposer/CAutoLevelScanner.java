@@ -5,12 +5,11 @@
  *
  */
 
-package tan.leveldecomposition.leveldecomposer;
+package edu.rug.hep.simplie.leveldecomposer;
 
-import tan.leveldecomposition.dynkindiagram.*;
-import tan.leveldecomposition.group.*;
-import tan.leveldecomposition.math.*;
-import tan.leveldecomposition.*;
+import edu.rug.hep.simplie.Globals;
+import edu.rug.hep.simplie.group.CRoot;
+import edu.rug.hep.simplie.math.fraction;
 
 import javax.swing.SwingWorker;
 import javax.swing.table.DefaultTableModel;

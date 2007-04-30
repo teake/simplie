@@ -6,8 +6,8 @@
 
 package tan.leveldecomposition.ui;
 
-import tan.leveldecomposition.dynkindiagram.*;
-import tan.leveldecomposition.*;
+import edu.rug.hep.simplie.Globals;
+import edu.rug.hep.simplie.dynkindiagram.CDynkinNode;
 
 import java.awt.Graphics;
 import java.awt.Cursor;

@@ -6,7 +6,7 @@
 
 package tan.leveldecomposition.ui.reusable;
 
-import tan.leveldecomposition.*;
+import edu.rug.hep.simplie.Globals;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;

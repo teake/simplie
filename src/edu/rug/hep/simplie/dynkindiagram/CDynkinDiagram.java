@@ -5,9 +5,9 @@
  *
  */
 
-package tan.leveldecomposition.dynkindiagram;
+package edu.rug.hep.simplie.dynkindiagram;
 
-import tan.leveldecomposition.*;
+import edu.rug.hep.simplie.Globals;
 
 import java.util.Vector;
 import java.util.Iterator;

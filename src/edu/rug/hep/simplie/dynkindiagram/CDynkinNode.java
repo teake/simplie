@@ -5,7 +5,7 @@
  *
  */
 
-package tan.leveldecomposition.dynkindiagram;
+package edu.rug.hep.simplie.dynkindiagram;
 
 import java.util.ArrayList;
 import java.io.Serializable;

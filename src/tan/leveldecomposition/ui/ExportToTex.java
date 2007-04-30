@@ -6,8 +6,8 @@
 
 package tan.leveldecomposition.ui;
 
+import edu.rug.hep.simplie.Globals;
 import java.awt.datatransfer.Clipboard;
-import tan.leveldecomposition.*;
 
 import javax.swing.JTable;
 import javax.swing.JDialog;

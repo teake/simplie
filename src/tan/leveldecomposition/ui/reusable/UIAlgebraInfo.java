@@ -6,8 +6,8 @@
 
 package tan.leveldecomposition.ui.reusable;
 
-import tan.leveldecomposition.*;
-import tan.leveldecomposition.group.*;
+import edu.rug.hep.simplie.Globals;
+import edu.rug.hep.simplie.group.CGroup;
 
 /**
  *

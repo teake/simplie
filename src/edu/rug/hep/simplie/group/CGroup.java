@@ -5,10 +5,10 @@
  *
  */
 
-package tan.leveldecomposition.group;
+package edu.rug.hep.simplie.group;
 
-import tan.leveldecomposition.*;
-import tan.leveldecomposition.math.*;
+import edu.rug.hep.simplie.Globals;
+import edu.rug.hep.simplie.math.fraction;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;

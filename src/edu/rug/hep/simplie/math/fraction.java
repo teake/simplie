@@ -5,7 +5,7 @@
  *
  */
 
-package tan.leveldecomposition.math;
+package edu.rug.hep.simplie.math;
 
 /**
  * Based on the fraction class written by Doug Lea, which is available

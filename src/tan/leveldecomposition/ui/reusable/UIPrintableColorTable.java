@@ -7,7 +7,7 @@
 
 package tan.leveldecomposition.ui.reusable;
 
-import tan.leveldecomposition.*;
+import edu.rug.hep.simplie.Globals;
 
 import javax.swing.JTable;
 import javax.swing.SwingUtilities;

@@ -6,9 +6,9 @@
 
 package tan.leveldecomposition.ui;
 
+import edu.rug.hep.simplie.Globals;
+import edu.rug.hep.simplie.dynkindiagram.CDynkinNode;
 import javax.swing.Popup;
-import tan.leveldecomposition.*;
-import tan.leveldecomposition.dynkindiagram.*;
 
 import javax.swing.JTextField;
 import javax.swing.UIManager;

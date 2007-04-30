@@ -6,9 +6,8 @@
 
 package tan.leveldecomposition.ui;
 
-import tan.leveldecomposition.dynkindiagram.*;
-import tan.leveldecomposition.group.*;
-import tan.leveldecomposition.*;
+import edu.rug.hep.simplie.Globals;
+import edu.rug.hep.simplie.group.CGroup;
 
 import Jama.Matrix.*;
 

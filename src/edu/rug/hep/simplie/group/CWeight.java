@@ -5,10 +5,9 @@
  *
  */
 
-package tan.leveldecomposition.group;
+package edu.rug.hep.simplie.group;
 
-import tan.leveldecomposition.math.*;
-import tan.leveldecomposition.*;
+import edu.rug.hep.simplie.Globals;
 
 /**
  * An object for storing weight information: 
