@@ -15,7 +15,7 @@ import java.util.Collection;
 import java.util.Iterator;
 
 /**
- * Given a group and a highest weight state, this class creates an object represeting
+ * Given a specific CGroup and a highest weight state, this class creates an object representing
  * the whole representation. Its main purpose is to determine weight multiplicities.
  *
  * @see CGroup

@@ -12,6 +12,8 @@ import tan.leveldecomposition.*;
 import java.io.Serializable;
 
 /**
+ * A class for storing root information: 
+ * the root vector, its (co-)multiplicity, and its height.
  *
  * @author Teake Nutma
  */
@@ -33,8 +35,8 @@ public class CRoot implements Serializable
 	/**
 	 * Creates a new instance of CRoot.
 	 *
-	 * @param	rootVector   Integer array representing the root vector
-	 *			     from which we should construct the root.
+	 * @param	rootVector	Integer array representing the root vector
+	 *						from which we should construct the root.
 	 */
 	public CRoot(int[] rootVector)
 	{
@@ -60,7 +62,8 @@ public class CRoot implements Serializable
 	}
 	
 	/**
-	 * Lazily determines the height of the root.
+	 * Returns the height of the root, 
+	 * that is the sum of the components of its vector.
 	 *
 	 * @return The height of the root.
 	 */
@@ -78,7 +81,7 @@ public class CRoot implements Serializable
 	}
 	
 	/**
-	 * Lazily determine the highest component of the root.
+	 * Returns the highest (biggest) component of the root vector.
 	 *
 	 * @return The highest component of the root.
 	 */
@@ -168,8 +171,6 @@ public class CRoot implements Serializable
 		}
 		return new CRoot(newVector);
 	}
-	
-	
 	
 	
 	/**

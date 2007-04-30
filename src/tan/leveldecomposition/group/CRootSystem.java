@@ -15,8 +15,10 @@ import java.util.Collection;
 import java.io.*;
 
 /**
+ * Given a specific CGroup, this class creates the corresponding root system.
  *
- * @author Teake Nutma
+ * @see		CGroup
+ * @author	Teake Nutma
  */
 public class CRootSystem
 {
@@ -53,10 +55,10 @@ public class CRootSystem
 		if(rank==0)
 			return;
 		
-		/** Add the CSA to the root table. */
+		// Add the CSA to the root table.
 		addRoot(new CRoot(rank));
 		
-		/** Add the simple roots to the root table. */
+		// Add the simple roots to the root table.
 		for (int i = 0; i < rank; i++)
 		{
 			int[] rootVector = new int[rank];
@@ -69,22 +71,23 @@ public class CRootSystem
 		simpleRoots = rootSystem.get(1);
 		constructedHeight = 1;
 		
-		/** Set the table of root multiples. */
+		// Set the table of root multiples.
 		rootMultiples = new ArrayList<ArrayList>();
 		rootMultiples.add(0,new ArrayList<CRoot>());
 		rootMultiples.add(1,new ArrayList<CRoot>());
 		
-		/** If the group is finite, we can construct the root system to all heights. */
+		// If the group is finite, we can construct the root system to all heights.
 		if(group.finite)
 			construct(0);
 	}
 	
-	
+	/** Cancels the construction of the rootsystem. */
 	public void cancelConstruction()
 	{
 		cancelConstruction = true;
 	}
 	
+	/** Represents the rootsystem in a string. */
 	public String toString()
 	{
 		String output = new String();
@@ -99,21 +102,33 @@ public class CRootSystem
 		return output;
 	}
 	
+	/** 
+	 * Returns the number of positive generators.
+	 * That is, the number of roots times their multiplicity, plus the rank.
+	 */
 	public long numPosGenerators()
 	{
 		return numPosGenerators;
 	}
 	
+	/** Returns the size of the root system, that is the height to which we have constructed so far + 1. */
 	public int size()
 	{
 		return rootSystem.size();
 	}
 	
+	/** Returns the height to which we so far have constructed the rootsystem. */
 	public int constructedHeight()
 	{
 		return constructedHeight;
 	}
 	
+	/** 
+	 * Returns the roots of a given height.
+	 *
+	 * @param	index	The height of the roots to get.
+	 * @return			A collection containing the roots of that height.
+	 */
 	public Collection get(int index)
 	{
 		return rootSystem.get(index);
@@ -127,7 +142,7 @@ public class CRootSystem
 	 */
 	public CRoot getRoot(int[] vector)
 	{
-		/** Dirty hack to check for negative roots. */
+		// Dirty hack to check for negative roots.
 		// TODO: implement this better.
 		for (int i = 0; i < vector.length; i++)
 		{
@@ -165,11 +180,11 @@ public class CRootSystem
 			return null;
 		}
 		
-		/** If we haven't constructed the root system this far, do so now. */
+		// If we haven't constructed the root system this far, do so now.
 		if(rootHeight > constructedHeight)
 			construct(rootHeight);
 		
-		/** Try to fetch the root. */
+		// Try to fetch the root.
 		if(rootSystem.size() > rootHeight)
 		{
 			roots = rootSystem.get(rootHeight);
@@ -215,7 +230,9 @@ public class CRootSystem
 	
 	/**
 	 * Loads the root system from a file.
-	 * Returns true on succes, false on failure.
+	 *
+	 * @param	filename	The file from which to load the root system.
+	 * @return				True on succes, false on failure.
 	 */
 	public boolean loadFrom(String filename)
 	{
@@ -280,19 +297,19 @@ public class CRootSystem
 			
 			System.out.println("... height: " + newHeight);
 			
-			/**
-			 * Try to add the simple roots to all the previous roots.
-			 * The main formula employed here is
-			 *
-			 *		<alpha, beta> = n_minus - n_plus ,
-			 *
-			 * where alpha and beta are roots.
-			 * For simple roots beta this reduces to
-			 *
-			 *		(alpha, beta) = n_minus - n_plus .
-			 *
-			 * If n_plus is positive, then alpha + beta is again a root.
-			 */
+			//
+			// Try to add the simple roots to all the previous roots.
+			// The main formula employed here is
+			//
+			//		<alpha, beta> = n_minus - n_plus ,
+			//
+			// where alpha and beta are roots.
+			// For simple roots beta this reduces to
+			//
+			//		(alpha, beta) = n_minus - n_plus .
+			//
+			// If n_plus is positive, then alpha + beta is again a root.
+			//
 			for(CRoot root : prevRoots)
 			{
 				for(CRoot simpleRoot : simpleRoots)
@@ -302,7 +319,7 @@ public class CRootSystem
 					
 					newRoot = root.plus(simpleRoot);
 					
-					/** First check if we didn't do this root before. */
+					// First check if we didn't do this root before.
 					if(rootCache.contains(newRoot))
 						continue;
 					else
@@ -311,16 +328,14 @@ public class CRootSystem
 					innerProduct = group.innerProduct(root,simpleRoot);
 					if(innerProduct < 0)
 					{
-						/**
-						 * n_plus is always positive, thus (root + simpleRoot) is a root
-						 * Add it to the root table.
-						 */
+						// n_plus is always positive, thus (root + simpleRoot) is a root.
+						// Add it to the root table.
 						addRoot(newRoot);
 					}
 					
 					if(innerProduct >= 0)
 					{
-						/** Iterate through the previous heights to obtain n_minus. */
+						// Iterate through the previous heights to obtain n_minus.
 						n_minus		= 0;
 						oldHeight	= constructedHeight - 1;
 						oldRoot		= getRoot(root.minus(simpleRoot), oldHeight);
@@ -329,7 +344,7 @@ public class CRootSystem
 							n_minus++;
 							if(n_minus > innerProduct)
 							{
-								/** n_plus is positive. */
+								// n_plus is positive.
 								addRoot(newRoot);
 								break;
 							}
@@ -344,14 +359,14 @@ public class CRootSystem
 			{
 				constructedHeight++;
 				
-				/**
-				 * Construct all the root multiples of this height
-				 */
+				//
+				// Construct all the root multiples of this height
+				//
 				ArrayList multiplesList	= new ArrayList<CRoot>();
 				ArrayList properList	= rootSystem.get(newHeight);
 				for (int i = 1; i < Math.floor(newHeight / 2) + 1; i++)
 				{
-					/** We're only interested in i's with zero divisor. */
+					// We're only interested in i's with zero divisor.
 					if(newHeight % i != 0)
 						continue;
 					int factor = newHeight / i;
@@ -359,10 +374,8 @@ public class CRootSystem
 					for(CRoot root : roots)
 					{
 						CRoot rootMultiple = root.times(factor);
-						/**
-						 * Don't add it if it's already in the 'proper' root list.
-						 * Else we would count this one double.
-						 */
+						// Don't add it if it's already in the 'proper' root list.
+						// Else we would count this one double.
 						if(properList.contains(rootMultiple))
 							continue;
 						rootMultiple.coMult	= coMult(rootMultiple,false);
@@ -374,7 +387,7 @@ public class CRootSystem
 			}
 			else
 			{
-				/** We did nothing, and thus reached the highest root */
+				// We did nothing, and thus reached the highest root.
 				break;
 			}
 		}
@@ -390,7 +403,7 @@ public class CRootSystem
 	{
 		ArrayList<CRoot> roots;
 		
-		/** Where should we add it, if we shoud add it at all? */
+		// Where should we add it, if we shoud add it at all?
 		if(rootSystem.size() > root.height())
 		{
 			roots = rootSystem.get(root.height());
@@ -403,7 +416,7 @@ public class CRootSystem
 			rootSystem.add(root.height(),roots);
 		}
 		
-		/** Add it to the table */
+		// Add it to the table.
 		roots.add(root);
 		
 		switch(root.height())
@@ -413,23 +426,25 @@ public class CRootSystem
 				return true;
 			case 1:
 			{
-				/** We don't need to calculate these for the simple roots. */
+				// We don't need to calculate these for the simple roots.
 				root.mult	= 1;
 				root.coMult	= new fraction(1);
 				break;
 			}
 			default:
 			{
-				/** Determine its c_mult minus the root multiplicity. */
+				// Determine its c_mult minus the root multiplicity.
 				fraction coMult = coMult(root,false);
 				
-				/**
-				 * Determine its multiplicity.
-				 *
-				 * We split the Peterson formula into two symmetric halves,
-				 * plus a remainder if the root height is even.
-				 * Note that this only works because the Cartan matrix is symmetric!
-				 */
+				//
+				// Determine its multiplicity.
+				//
+				// We split the Peterson formula into two symmetric halves,
+				// plus a remainder if the root height is even.
+				// Note that this only works because the Cartan matrix is symmetric!
+				//
+				
+				//TODO: possibly move this to CRoot
 				fraction multiplicity	= new fraction(0);
 				int halfHeight			= (int) Math.ceil(((float) root.height()) / 2);
 				for(int i = 1; i < halfHeight; i++)
@@ -453,7 +468,7 @@ public class CRootSystem
 			
 		}
 		
-		/** Increment numPosRoots */
+		// Increment numPosRoots.
 		numPosRoots++;
 		numPosGenerators += root.mult;
 		
@@ -467,7 +482,7 @@ public class CRootSystem
 	 * @param	root	The root whose co-multiplicity we should calculate.
 	 * @return			The co-multiplicity.
 	 */
-	// TODO : possible move this to CRoot.
+	// TODO : possibly move this to CRoot.
 	private fraction coMult(CRoot root, boolean includeRoot)
 	{
 		int offset		= ( includeRoot ) ? 1 : 2;

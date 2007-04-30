@@ -8,16 +8,15 @@
 package tan.leveldecomposition.math;
 
 /**
- *
- * @author Teake Nutma
- *
  * Based on the fraction class written by Doug Lea, which is available
  * in the EDU.oswego.cs.dl.util.concurrent.misc package.
  *
  * Changes from the original:
  * - Added a new constructor where the denominator is always 1.
  * - Added in-place methods for multiplying, dividing, adding and subtracting.
- * - Added asLong() & asInt() methods.
+ * - Added asLong() & asInt() methods.*
+ *
+ * @author Teake Nutma
  */
 
 public class fraction implements Cloneable, Comparable, java.io.Serializable
@@ -89,16 +88,19 @@ public class fraction implements Cloneable, Comparable, java.io.Serializable
 		return ((double)(numerator())) / ((double)(denominator()));
 	}
 	
+	/** Returns the fraction as a long, rounding it if necessary. */
 	public long asLong()
 	{
 		return Math.round(asDouble());
 	}
 	
+	/** Returns the fraction as an integer, rounding it if necessary. */
 	public int asInt()
 	{
 		return (int) asLong();
 	}
 	
+	/** Is the fraction an integer or not? */
 	public boolean isInt()
 	{
 		if(numerator() % denominator() == 0)
@@ -309,7 +311,6 @@ public class fraction implements Cloneable, Comparable, java.io.Serializable
 	 * return a number less, equal, or greater than zero
 	 * reflecting whether this fraction is less, equal or greater than n.
 	 */
-	
 	public int compareTo(long n)
 	{
 		long an = numerator();
