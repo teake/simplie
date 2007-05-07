@@ -17,8 +17,10 @@ import edu.rug.hep.simplie.Globals;
  */
 public class CWeight
 {
-	/** The dynkin labels of this weight */
+	/** The dynkin labels of this weight. */
 	public final int[] dynkinLabels;
+	/** Indicates whether this weight is domimant or not. */
+	public final boolean isDominant;
 	
 	/** Integer array indicating how many times we can subtract simple roots from this weight. */
 	private	int[]	simpRootSubtractable;
@@ -42,10 +44,15 @@ public class CWeight
 		this.multSet				= false;
 		this.depth					= 0;
 		this.simpRootSubtractable	= new int[dynkinLabels.length];
+		
+		boolean dominant = true;
 		for (int i = 0; i < dynkinLabels.length; i++)
 		{
 			simpRootSubtractable[i] = Math.max(dynkinLabels[i],0);
+			if(dynkinLabels[i] < 0)
+				dominant = false;
 		}
+		this.isDominant = dominant;
 	}
 	
 	/** Returns the multiplicity of the weight. */

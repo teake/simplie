@@ -282,4 +282,20 @@ public class CGroup
 		return height.asInt();
 	}
 	
+	/** 
+	 * Performs a simple Weyl reflection on the dynkin labels of a weight.
+	 *
+	 * @param	weightLabels	The dynkin labels of the weight.
+	 * @param	i				The index of the simple root with which we should reflect.
+	 * @return					The dynkin labels of the reflected weight.
+	 */	
+	public int[] simpWeylRefl(int[] weightLabels, int i)
+	{
+		int[] output = new int[weightLabels.length];
+		for (int j = 0; j < output.length; j++)
+		{
+			output[j] = weightLabels[j] - cartanMatrix[j][i] * weightLabels[i];
+		}
+		return output;
+	}
 }

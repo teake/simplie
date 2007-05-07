@@ -79,7 +79,7 @@ public class CHighestWeightRep
 	}
 	
 	/**
-	 * Fetch a weight by its dynkin labels. 
+	 * Fetch a weight by its dynkin labels.
 	 * Useful for getting a weight multiplicity.
 	 *
 	 * @param	weightLabels		The Dynkin labels of the weight for which the multiplicity is calculated.
@@ -96,8 +96,8 @@ public class CHighestWeightRep
 		
 		wantedDepth = highestHeight - group.weightHeight(weightLabels);
 		
-		if(wantedDepth <= 0)
-			// We don't calculate the multiplicity of the highest weight itself
+		if(wantedDepth < 0)
+			// Do not try to get a weight that is outside the weight system.
 			return null;
 		
 		wantedWeight = new CWeight(weightLabels);
@@ -114,6 +114,34 @@ public class CHighestWeightRep
 			return null;
 		
 		return wantedWeights.get(wantedIndex);
+	}
+	
+	/** 
+	 * Given the Dynkin labels of a non-dominant weight, this function
+	 * returns the dynkin labels of the weight after it has been
+	 * reflected into the dominant chamber.
+	 *
+	 * @param	weightLabels	The dynkin labels of the weight.
+	 * @return					The dynkin labels of the reflected dominant weight.
+	 */	
+	public int[] makeDominant(int[] weightLabels)
+	{
+		makeItSo:
+			while(true)
+			{
+			for (int i = 0; i < weightLabels.length; i++)
+			{
+				if(weightLabels[i] < 0)
+				{
+					weightLabels = group.simpWeylRefl(weightLabels, i);
+					break;
+				}
+				if(i == weightLabels.length - 1)
+					break makeItSo;
+			}
+			}
+		
+		return weightLabels;
 	}
 	
 	
@@ -170,10 +198,24 @@ public class CHighestWeightRep
 						
 						// Set the depth and the multiplicity
 						newWeight.setDepth(newDepth);
-						setWeightMult(newWeight);
-						if(newWeight.getMult() == 0)
-							//TODO: why am i getting zero multiplicities?
-							continue;
+						
+						// If the new weight is not dominant, we do not have to calculate its multiplicity.
+						// Just simply get the multiplicity of the closest dominant weight.
+						if(!newWeight.isDominant)
+						{
+							int[]	dominantLabels	= makeDominant(newWeight.dynkinLabels);
+							CWeight dominantWeight	= getWeight(dominantLabels);
+							if(dominantWeight != null)
+								newWeight.setMult(dominantWeight.getMult());
+							else
+								// If the closest dominant weight is not part of the root system,
+								// then the new weight also isn't part of the root system.
+								continue;
+						}
+						else
+						{
+							setWeightMult(newWeight);
+						}
 						
 						// And add it.
 						thisDepthWeights.add(newWeight);
@@ -192,8 +234,8 @@ public class CHighestWeightRep
 		
 	}
 	
-	/** 
-	 * Sets the multiplicity of a new weight. 
+	/**
+	 * Sets the multiplicity of a new weight.
 	 * Basically an implementation of the Freudenthal recursion formula.
 	 */
 	private void setWeightMult(CWeight weight)
@@ -251,4 +293,5 @@ public class CHighestWeightRep
 		}
 		weight.setMult(mult.asLong());
 	}
+	
 }
