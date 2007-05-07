@@ -24,10 +24,6 @@ public class CRepresentation implements Comparable<CRepresentation>
 	public final int[] rootVector;
 	/** The part of the rootvector corresponding to the level nodes. */
 	public final int[] levels;
-	/** The part of the rootvector corresponding to the regular subalgebra nodes. */
-	public final int[] coLevels;
-	/** The part of the rootvector corresponding to the disconnected disabled nodes. */
-	public final int[] disLevels;
 	
 	/** The full dynkinlabels of the highest weight state. */
 	public final int[] dynkinLabels;
@@ -41,13 +37,10 @@ public class CRepresentation implements Comparable<CRepresentation>
 	/** The height of the associated root. */
 	public final int height;
 	
-	private long outerSubMult;
 	private long outerMult;
 	private long rootMult;
 	
-	private final CHighestWeightRep disHwRep;
-	private final CHighestWeightRep subHwRep;
-	
+	private final CHighestWeightRep hwRep;
 	
 	/**
 	 * Creates a new instance of CRepresentation
@@ -61,10 +54,8 @@ public class CRepresentation implements Comparable<CRepresentation>
 	{
 		this.dynkinLabels	= dynkinLabels.clone();
 		this.levels			= levels.clone();
-		this.coLevels		= coLevels.clone();
 		this.length			= length;
 		this.rootMult		= 0;
-		this.outerSubMult	= 0;
 		this.outerMult		= 0;
 		
 		// Construct the whole root vector.
@@ -73,11 +64,6 @@ public class CRepresentation implements Comparable<CRepresentation>
 			rootVector[Globals.dd.translateCo(i)] = coLevels[i];
 		for (int i = 0; i < levels.length; i++)
 			rootVector[Globals.dd.translateLevel(i)] = levels[i];
-		
-		// Set the disconnected levels.
-		this.disLevels = new int[Globals.disGroup.rank];
-		for (int i = 0; i < disLevels.length; i++)
-			disLevels[i] = rootVector[Globals.dd.translateDis(i)];
 		
 		// Calculate the height.
 		int tHeight = 0;
@@ -99,71 +85,36 @@ public class CRepresentation implements Comparable<CRepresentation>
 		for (int i = 0; i < subDynkinLabels.length; i++)
 			subDynkinLabels[i] = translatedLabels[Globals.dd.translateSub(i)];
 		
-		// Instantiate the highest weight reps.
-		subHwRep = new CHighestWeightRep(Globals.subGroup, subDynkinLabels);
-		disHwRep = new CHighestWeightRep(Globals.disGroup, disDynkinLabels);
+		// Instantiate the highest weight rep.
+		hwRep = new CHighestWeightRep(Globals.coGroup, dynkinLabels);
 	}
 	
 	/**
 	 * Returns the multiplicity of a weight that sits in the representation
-	 * given by the subalgebra dynkin labels of this representation.
+	 * given by the dynkin labels of this representation.
 	 *
 	 * @param	weightLabels	The dynkinlabels of the weight we want to know the multiplicity of.
-	 * @return					Its multplicity, or 0 if it isn't weight in the subalgebra representation.
+	 * @return					Its multplicity, or 0 if it isn't weight in this representation.
 	 */
-	public long getSubWeightMult(int[] weightLabels)
+	public long getWeightMult(int[] weightLabels)
 	{
-		CWeight weight = subHwRep.getWeight(weightLabels);
+		CWeight weight = hwRep.getWeight(weightLabels);
 		if(weight != null)
 			return weight.getMult();
 		else
 			return 0;
 	}
-	
-	/**
-	 * Returns the multiplicity of a weight that sits in the representation
-	 * given by the disconnected disabled dynkin labels of this representation.
-	 *
-	 * @param	weightLabels	The dynkinlabels of the weight we want to know the multiplicity of.
-	 * @return					Its multplicity, or 0 if it isn't weight in the disconnected disabled representation.
-	 */
-	public long getDisWeightMult(int[] weightLabels)
-	{
-		CWeight weight = disHwRep.getWeight(weightLabels);
-		if(weight != null)
-			return weight.getMult();
-		else
-			return 0;
-	}
-	
-	/** Sets the final outer multiplicty of this representation. */
+
+	/** Sets the outer multiplicty of this representation. */
 	public void setOuterMult(long outerMult)
 	{
 		this.outerMult = outerMult;
 	}
 	
-	/** Gets the final outer multiplicity of this representation. */
+	/** Gets the outer multiplicity of this representation. */
 	public long getOuterMult()
 	{
 		return outerMult;
-	}
-	
-	/**
-	 * Sets the outer multiplicity of this representation, not taking its multiplicity
-	 * of being a weight in another disconnected disabled representation into account.
-	 */
-	public void setOuterSubMult(long outerSubMult)
-	{
-		this.outerSubMult = outerSubMult;
-	}
-	
-	/**
-	 * Gets the outer multiplicity of this representation, not taking its multiplicity
-	 * of being a weight in another disconnected disabled representation into account.
-	 */
-	public long getOuterSubMult()
-	{
-		return outerSubMult;
 	}
 	
 	/** Sets the multiplicity of the associated root in the full group. */

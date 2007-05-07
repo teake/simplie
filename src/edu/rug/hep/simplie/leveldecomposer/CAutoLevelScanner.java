@@ -228,7 +228,6 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 	private void processRepresentations()
 	{
 		int		numIndices;
-		long	outerSubMult;
 		long	outerMult;
 		CRepresentation repI;
 		CRepresentation repJ;
@@ -264,7 +263,7 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 					continue;
 				
 				// First the outer multiplicities of the regular subalgebra representation.
-				outerSubMult = repI.getRootMult();
+				outerMult = repI.getRootMult();
 				for (int j = 0; j < i; j++)
 				{
 					if(posSignConvention)
@@ -272,34 +271,11 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 					else
 						l = j;
 					repJ = reps.get(l);
-					
-					if(!Globals.sameArrays(repI.disLevels,repJ.disLevels))
-						continue;
+
 					if(repJ.length <= repI.length)
 						continue;
 					
-					outerSubMult -= repJ.getOuterSubMult() * repJ.getSubWeightMult(repI.subDynkinLabels);
-				}
-				repI.setOuterSubMult(outerSubMult);
-				
-				// And now the outer multiplicity of the disconnected subalgebra representation.
-				outerMult = repI.getOuterSubMult();
-				for (int j = 0; j < i; j++)
-				{
-					if(posSignConvention)
-						l = reps.size() - j - 1;
-					else
-						l = j;
-					repJ = reps.get(l);
-					
-					// This representation can only be a weight of the disconnected representation
-					// if the dynkin labels of the regular subalgebra are the same.
-					if(!Globals.sameArrays(repI.subDynkinLabels,repJ.subDynkinLabels))
-						continue;
-					if(repJ.length <= repI.length)
-						continue;
-					
-					outerMult -= repJ.getOuterMult() * repJ.getDisWeightMult(repI.disDynkinLabels);
+					outerMult -= repJ.getOuterMult() * repJ.getWeightMult(repI.dynkinLabels);
 				}
 				repI.setOuterMult(outerMult);
 			}
@@ -323,7 +299,7 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 			}
 			
 			// Add the data to the table.
-			Object[] rowData = new Object[12];
+			Object[] rowData = new Object[11];
 			rowData[0] = Globals.intArrayToString(rep.levels);
 			rowData[1] = Globals.intArrayToString(rep.subDynkinLabels);
 			rowData[2] = Globals.intArrayToString(rep.disDynkinLabels);
@@ -332,10 +308,9 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 			rowData[5] = (long) Globals.subGroup.dimOfRep(rep.subDynkinLabels);
 			rowData[6] = (long) Globals.disGroup.dimOfRep(rep.disDynkinLabels);
 			rowData[7] = rep.getRootMult();
-			rowData[8] = rep.getOuterSubMult();
-			rowData[9] = rep.getOuterMult();
-			rowData[10] = rep.height;
-			rowData[11] = numIndices;
+			rowData[8] = rep.getOuterMult();
+			rowData[9] = rep.height;
+			rowData[10] = numIndices;
 			publish(rowData);
 		}
 	}
