@@ -340,7 +340,7 @@ public class CDynkinDiagram
 	}
 	
 	/** Returns a string of LaTeX representing the diagram visually. */
-	public String toTeX(boolean includeCaption)
+	public String toTeX(boolean includeCaption, boolean includeLabels)
 	{
 		if(rank() == 0)
 		{
@@ -372,7 +372,7 @@ public class CDynkinDiagram
 		for(int i = 0; i < rank(); i++)
 		{
 			CDynkinNode	node	= nodes.get(i);
-			int			labelI	= i + 1;
+			int			labelI	= i;
 			
 			output += "\\cnode";
 			if(node.isDisconnected())
@@ -380,7 +380,8 @@ public class CDynkinDiagram
 			if(node.isLevel())
 				output += "[fillstyle=solid,fillcolor=black]";
 			output += "(" + node.x + "," + (yMax - node.y) + "){0.15}{N" + labelI + "} \n";
-			output += "\\nput{-60}{N" + labelI + "}{" + labelI + "}\n";
+			if(includeLabels)
+				output += "\\nput{-60}{N" + labelI + "}{" + labelI + "}\n";
 			for (int j = 0; j < node.numConnections(); j++)
 			{
 				int labelJ = nodes.indexOf(node.getConnection(j).toNode);
