@@ -50,6 +50,7 @@ public class CDynkinDiagram
 	public void clear()
 	{
 		nodes.clear();
+		lastAddedNode = null;
 	}
 	
 	/** Returns the rank algebra associated to this diagram, i.e. the number of nodes. */
@@ -347,6 +348,10 @@ public class CDynkinDiagram
 			return "";
 		}
 		
+		// Append a hashcode of this specific diagram to all the labels in the psfigure.
+		// This prevents multiple garbled psfigures on one page.
+		String hashCode = Globals.intToString(Globals.getDynkinDiagramType().hashCode());
+		
 		// First determine the min and max values of x and y
 		int xMin = Integer.MAX_VALUE;
 		int yMin = Integer.MAX_VALUE;
@@ -364,7 +369,7 @@ public class CDynkinDiagram
 		String output = new String();
 		
 		// The header
-		output += "\\begin{figure}\n";
+		output += "\\begin{figure}[h]\n";
 		output += "\\begin{center}\n";
 		output += "\\begin{pspicture}(" + xMin + "," + yMin + ")(" + xMax + "," + yMax + ")\n";
 		
@@ -379,14 +384,14 @@ public class CDynkinDiagram
 				output += "[fillstyle=solid,fillcolor=lightgray]";
 			if(node.isLevel())
 				output += "[fillstyle=solid,fillcolor=black]";
-			output += "(" + node.x + "," + (yMax - node.y) + "){0.15}{N" + labelI + "} \n";
+			output += "(" + node.x + "," + (yMax - node.y) + "){0.15}{N" + labelI + hashCode + "} \n";
 			if(includeLabels)
-				output += "\\nput{-60}{N" + labelI + "}{" + labelI + "}\n";
+				output += "\\nput{-60}{N" + labelI + hashCode + "}{" + labelI + "}\n";
 			for (int j = 0; j < node.numConnections(); j++)
 			{
 				int labelJ = nodes.indexOf(node.getConnection(j).toNode);
 				if(labelI != labelJ)
-					output += "\\ncline{-}{N" + labelI + "}{N" + labelJ + "}\n";
+					output += "\\ncline{-}{N" + labelI + hashCode + "}{N" + labelJ + hashCode + "}\n";
 			}
 		}
 		
