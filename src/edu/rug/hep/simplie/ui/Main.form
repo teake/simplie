@@ -40,17 +40,20 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Component id="exportToTex" alignment="0" pref="430" max="32767" attributes="0"/>
+              <Group type="102" alignment="0" attributes="0">
+                  <Component id="exportToTex" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="32767" attributes="0"/>
+              </Group>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Component id="exportToTex" alignment="0" pref="292" max="32767" attributes="0"/>
+              <Component id="exportToTex" alignment="0" pref="294" max="32767" attributes="0"/>
           </Group>
         </DimensionLayout>
       </Layout>
       <SubComponents>
-        <Component class="tan.leveldecomposition.ui.ExportToTex" name="exportToTex">
+        <Component class="edu.rug.hep.simplie.ui.ExportToTex" name="exportToTex">
         </Component>
       </SubComponents>
     </Container>
@@ -65,7 +68,7 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Component id="systemOutTextArea" alignment="0" pref="360" max="32767" attributes="0"/>
+              <Component id="systemOutTextArea" alignment="0" pref="410" max="32767" attributes="0"/>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">
@@ -75,7 +78,7 @@
         </DimensionLayout>
       </Layout>
       <SubComponents>
-        <Component class="tan.leveldecomposition.ui.SystemOutTextArea" name="systemOutTextArea">
+        <Component class="edu.rug.hep.simplie.ui.SystemOutTextArea" name="systemOutTextArea">
         </Component>
       </SubComponents>
     </Container>
@@ -212,6 +215,14 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="MenuExportToTexActionPerformed"/>
               </Events>
             </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="MenuExportRootSystem">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Export root system"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="MenuExportRootSystemActionPerformed"/>
+              </Events>
+            </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="MenuShowOutput">
               <Properties>
                 <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.editors.KeyStrokeEditor">
@@ -288,23 +299,26 @@
   </Layout>
   <SubComponents>
     <Container class="javax.swing.JTabbedPane" name="TabbedPane">
+      <AccessibilityProperties>
+        <Property name="AccessibleContext.accessibleName" type="java.lang.String" value=""/>
+      </AccessibilityProperties>
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout"/>
       <SubComponents>
-        <Component class="tan.leveldecomposition.ui.AlgebraSetup" name="algebraSetup">
+        <Component class="edu.rug.hep.simplie.ui.AlgebraSetup" name="algebraSetup">
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
-              <JTabbedPaneConstraints tabName="Algebra Setup">
-                <Property name="tabTitle" type="java.lang.String" value="Algebra Setup"/>
+              <JTabbedPaneConstraints tabName="Algebra setup">
+                <Property name="tabTitle" type="java.lang.String" value="Algebra setup"/>
               </JTabbedPaneConstraints>
             </Constraint>
           </Constraints>
         </Component>
-        <Component class="tan.leveldecomposition.ui.LevelDecomposition" name="levelDecomposition">
+        <Component class="edu.rug.hep.simplie.ui.LevelDecomposition" name="levelDecomposition">
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
-              <JTabbedPaneConstraints tabName="Level Decomposition">
-                <Property name="tabTitle" type="java.lang.String" value="Level Decomposition"/>
+              <JTabbedPaneConstraints tabName="Level decomposition">
+                <Property name="tabTitle" type="java.lang.String" value="Level decomposition"/>
               </JTabbedPaneConstraints>
             </Constraint>
           </Constraints>

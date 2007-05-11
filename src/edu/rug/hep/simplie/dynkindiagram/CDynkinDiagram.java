@@ -253,7 +253,7 @@ public class CDynkinDiagram
 	/** Removes a node from the diagram. */
 	public void removeNode(CDynkinNode nodeToRemove)
 	{
-		if(lastAddedNode.equals(nodeToRemove))
+		if(lastAddedNode != null && lastAddedNode.equals(nodeToRemove))
 		{
 			lastAddedNode = null;
 		}

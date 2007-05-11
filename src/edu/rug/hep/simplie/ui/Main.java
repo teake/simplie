@@ -88,6 +88,7 @@ public class Main extends javax.swing.JFrame
         MenuItemLoadE11 = new javax.swing.JMenuItem();
         MenuTools = new javax.swing.JMenu();
         MenuExportToTex = new javax.swing.JMenuItem();
+        MenuExportRootSystem = new javax.swing.JMenuItem();
         MenuShowOutput = new javax.swing.JMenuItem();
         MenuHelp = new javax.swing.JMenu();
         MenuItemHelp = new javax.swing.JMenuItem();
@@ -115,11 +116,13 @@ public class Main extends javax.swing.JFrame
         exportDialog.getContentPane().setLayout(exportDialogLayout);
         exportDialogLayout.setHorizontalGroup(
             exportDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(exportToTex, javax.swing.GroupLayout.DEFAULT_SIZE, 430, Short.MAX_VALUE)
+            .addGroup(exportDialogLayout.createSequentialGroup()
+                .addComponent(exportToTex, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         exportDialogLayout.setVerticalGroup(
             exportDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(exportToTex, javax.swing.GroupLayout.DEFAULT_SIZE, 292, Short.MAX_VALUE)
+            .addComponent(exportToTex, javax.swing.GroupLayout.DEFAULT_SIZE, 294, Short.MAX_VALUE)
         );
         systemOutputDialog.setTitle("System output");
         systemOutputDialog.setMinimumSize(new java.awt.Dimension(360, 360));
@@ -128,7 +131,7 @@ public class Main extends javax.swing.JFrame
         systemOutputDialog.getContentPane().setLayout(systemOutputDialogLayout);
         systemOutputDialogLayout.setHorizontalGroup(
             systemOutputDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(systemOutTextArea, javax.swing.GroupLayout.DEFAULT_SIZE, 360, Short.MAX_VALUE)
+            .addComponent(systemOutTextArea, javax.swing.GroupLayout.DEFAULT_SIZE, 410, Short.MAX_VALUE)
         );
         systemOutputDialogLayout.setVerticalGroup(
             systemOutputDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -137,9 +140,11 @@ public class Main extends javax.swing.JFrame
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("SimpLie");
-        TabbedPane.addTab("Algebra Setup", algebraSetup);
+        TabbedPane.addTab("Algebra setup", algebraSetup);
 
-        TabbedPane.addTab("Level Decomposition", levelDecomposition);
+        TabbedPane.addTab("Level decomposition", levelDecomposition);
+
+        TabbedPane.getAccessibleContext().setAccessibleName("");
 
         MenuFile.setMnemonic('f');
         MenuFile.setLabel("File");
@@ -273,6 +278,17 @@ public class Main extends javax.swing.JFrame
 
         MenuTools.add(MenuExportToTex);
 
+        MenuExportRootSystem.setText("Export root system");
+        MenuExportRootSystem.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                MenuExportRootSystemActionPerformed(evt);
+            }
+        });
+
+        MenuTools.add(MenuExportRootSystem);
+
         MenuShowOutput.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
         MenuShowOutput.setMnemonic('s');
         MenuShowOutput.setText("Show system output");
@@ -331,6 +347,23 @@ public class Main extends javax.swing.JFrame
         );
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+	private void MenuExportRootSystemActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_MenuExportRootSystemActionPerformed
+	{//GEN-HEADEREND:event_MenuExportRootSystemActionPerformed
+		JFileChooser chooser = new JFileChooser("");
+		chooser.setSelectedFile(new File(Globals.group.type + "_height_" + Globals.group.rs.constructedHeight() + ".csv"));
+		chooser.setDialogTitle("Export root system");
+		int returnVal = chooser.showSaveDialog(this);
+		
+		if ( returnVal == chooser.APPROVE_OPTION )
+		{
+		/* To create a URL for a file on the local file-system, we simply
+		 * pre-pend the "file" protocol to the absolute path of the file.
+		 */
+			String fileURL = chooser.getSelectedFile().getAbsolutePath();
+			Globals.group.rs.writeTxtFile(fileURL);
+		}
+	}//GEN-LAST:event_MenuExportRootSystemActionPerformed
 
 	private void MenuShowOutputActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_MenuShowOutputActionPerformed
 	{//GEN-HEADEREND:event_MenuShowOutputActionPerformed
@@ -506,6 +539,7 @@ public class Main extends javax.swing.JFrame
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuBar MenuBar;
     private javax.swing.JMenu MenuEdit;
+    private javax.swing.JMenuItem MenuExportRootSystem;
     private javax.swing.JMenuItem MenuExportToTex;
     private javax.swing.JMenu MenuFile;
     private javax.swing.JMenu MenuHelp;
