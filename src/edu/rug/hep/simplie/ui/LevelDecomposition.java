@@ -30,6 +30,8 @@ public class LevelDecomposition extends javax.swing.JPanel
 	private DefaultTableModel	tableModel;
 	private CAutoLevelScanner	autoScanner;
 	
+	private long startTime;
+	
 	/** Creates new form LevelDecomposition */
 	public LevelDecomposition()
 	{
@@ -343,11 +345,15 @@ public class LevelDecomposition extends javax.swing.JPanel
 						autoScanProgressBar.setIndeterminate(false);
 						autoScanProgressBar.setString("Idle");
 						Globals.scanning = false;
+						System.out.println("Finished level decomposition. Milliseconds: ");
+						System.out.println(System.currentTimeMillis() - startTime);
 					}
 				}
 			});
 			
 			/* Start the scan */
+			startTime = System.currentTimeMillis();
+			System.out.println("Starting level decomposition");
 			autoScanner.execute();
 		}
     }//GEN-LAST:event_bAutoScanActionPerformed

@@ -12,7 +12,10 @@ import edu.rug.hep.simplie.math.fraction;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.io.*;
+
+import javolution.util.FastList;
 
 /**
  * Given a specific CGroup, this class creates the corresponding root system.
@@ -31,11 +34,11 @@ public class CRootSystem
 	/** The number of positive generators constructed so far. */
 	private long numPosGenerators;
 	/** The table containing all the (positive) roots. */
-	private ArrayList<ArrayList> rootSystem;
+	private ArrayList<FastList> rootSystem;
 	/** The table containing all the multiples of roots that aren't roots themselves (used in the Peterson formula). */
-	private ArrayList<ArrayList> rootMultiples;
+	private ArrayList<FastList> rootMultiples;
 	/** The simple roots. */
-	private ArrayList<CRoot> simpleRoots;
+	private FastList<CRoot> simpleRoots;
 	/** The height up to and included to which we constructed the root system. */
 	private int constructedHeight;
 	/** Boolean to indicate whether the root system construction should be canceled */
@@ -47,7 +50,7 @@ public class CRootSystem
 		this.group	= group;
 		this.rank	= group.rank;
 		
-		rootSystem			= new ArrayList<ArrayList>();
+		rootSystem			= new ArrayList<FastList>();
 		numPosRoots			= 0;
 		numPosGenerators	= 0;
 		constructedHeight	= 0;
@@ -72,9 +75,9 @@ public class CRootSystem
 		constructedHeight = 1;
 		
 		// Set the table of root multiples.
-		rootMultiples = new ArrayList<ArrayList>();
-		rootMultiples.add(0,new ArrayList<CRoot>());
-		rootMultiples.add(1,new ArrayList<CRoot>());
+		rootMultiples = new ArrayList<FastList>();
+		rootMultiples.add(0,new FastList<CRoot>());
+		rootMultiples.add(1,new FastList<CRoot>());
 		
 		// If the group is finite, we can construct the root system to all heights.
 		if(group.finite)
@@ -93,7 +96,7 @@ public class CRootSystem
 		String output = new String();
 		for (int i = 0; i < rootSystem.size(); i++)
 		{
-			ArrayList<CRoot> roots = rootSystem.get(i);
+			FastList<CRoot> roots = rootSystem.get(i);
 			for(CRoot root : roots)
 			{
 				output += "Index: " + i + ", " + root + "\n";
@@ -172,7 +175,7 @@ public class CRootSystem
 	 */
 	public CRoot getRoot(CRoot rootToGet, int rootHeight)
 	{
-		ArrayList<CRoot> roots;
+		FastList<CRoot> roots;
 		int		 index;
 		
 		if(rootHeight < 0)
@@ -249,8 +252,8 @@ public class CRootSystem
 				constructedHeight	= in.readInt();
 				numPosRoots			= in.readLong();
 				numPosGenerators	= in.readLong();
-				rootSystem			= (ArrayList<ArrayList>) in.readObject();
-				rootMultiples		= (ArrayList<ArrayList>) in.readObject();
+				rootSystem			= (ArrayList<FastList>) in.readObject();
+				rootMultiples		= (ArrayList<FastList>) in.readObject();
 			}
 			else
 			{
@@ -278,7 +281,7 @@ public class CRootSystem
 			PrintWriter out = new PrintWriter(new FileWriter(filename));
 			for (int i = 0; i < rootSystem.size(); i++)
 			{
-				ArrayList<CRoot> roots = rootSystem.get(i);
+				FastList<CRoot> roots = rootSystem.get(i);
 				for(CRoot root : roots)
 				{
 					out.println(root);
@@ -301,8 +304,8 @@ public class CRootSystem
 	 */
 	private void construct(int maxHeight)
 	{
-		ArrayList<CRoot> prevRoots;
-		ArrayList<CRoot> rootCache;
+		FastList<CRoot> prevRoots;
+		FastList<CRoot> rootCache;
 		CRoot	oldRoot;
 		CRoot	newRoot;
 		long	prevNumPosRoots;
@@ -318,7 +321,7 @@ public class CRootSystem
 		while(constructedHeight < maxHeight || maxHeight == 0)
 		{
 			prevRoots	    = rootSystem.get(constructedHeight);
-			rootCache		= new ArrayList<CRoot>();
+			rootCache		= new FastList<CRoot>();
 			prevNumPosRoots = numPosRoots;
 			newHeight	    = constructedHeight + 1;
 			
@@ -389,15 +392,15 @@ public class CRootSystem
 				//
 				// Construct all the root multiples of this height
 				//
-				ArrayList multiplesList	= new ArrayList<CRoot>();
-				ArrayList properList	= rootSystem.get(newHeight);
+				FastList multiplesList	= new FastList<CRoot>();
+				FastList properList	= rootSystem.get(newHeight);
 				for (int i = 1; i < Math.floor(newHeight / 2) + 1; i++)
 				{
 					// We're only interested in i's with zero divisor.
 					if(newHeight % i != 0)
 						continue;
 					int factor = newHeight / i;
-					ArrayList<CRoot> roots = rootSystem.get(i);
+					FastList<CRoot> roots = rootSystem.get(i);
 					for(CRoot root : roots)
 					{
 						CRoot rootMultiple = root.times(factor);
@@ -428,7 +431,7 @@ public class CRootSystem
 	 */
 	private boolean addRoot(CRoot root)
 	{
-		ArrayList<CRoot> roots;
+		FastList<CRoot> roots;
 		
 		// Where should we add it, if we shoud add it at all?
 		if(rootSystem.size() > root.height())
@@ -439,7 +442,7 @@ public class CRootSystem
 		}
 		else
 		{
-			roots = new ArrayList<CRoot>();
+			roots = new FastList<CRoot>();
 			rootSystem.add(root.height(),roots);
 		}
 		
@@ -540,13 +543,13 @@ public class CRootSystem
 	 */
 	private fraction petersonPart(CRoot root, int height)
 	{
-		ArrayList<CRoot> betas	= rootSystem.get(height);
-		ArrayList<CRoot> gammas	= rootSystem.get(root.height() - height);
+		FastList<CRoot> betas	= rootSystem.get(height);
+		FastList<CRoot> gammas	= rootSystem.get(root.height() - height);
 		
 		fraction multiplicity = petersonSubPart(root, betas, gammas);
 		
-		ArrayList<CRoot> betaMultiples	= rootMultiples.get(height);
-		ArrayList<CRoot> gammaMultiples	= rootMultiples.get(root.height() - height);
+		FastList<CRoot> betaMultiples	= rootMultiples.get(height);
+		FastList<CRoot> gammaMultiples	= rootMultiples.get(root.height() - height);
 		
 		multiplicity.add(petersonSubPart(root,betaMultiples,gammaMultiples));
 		multiplicity.add(petersonSubPart(root,betas,gammaMultiples));
@@ -555,7 +558,7 @@ public class CRootSystem
 		return multiplicity;
 	}
 	
-	private fraction petersonSubPart(CRoot root, ArrayList<CRoot> list1, ArrayList<CRoot> list2)
+	private fraction petersonSubPart(CRoot root, FastList<CRoot> list1, FastList<CRoot> list2)
 	{
 		fraction multiplicity = new fraction(0);
 		for(CRoot beta : list1)
