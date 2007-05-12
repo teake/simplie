@@ -12,8 +12,6 @@ import edu.rug.hep.simplie.math.fraction;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.io.*;
 
 /**
@@ -275,31 +273,15 @@ public class CRootSystem
 	 */
 	public void writeTxtFile(String filename)
 	{
-		HashSet points = new HashSet<String>();
-		int step = (int) Math.floor(rank / 2);
 		try
 		{
 			PrintWriter out = new PrintWriter(new FileWriter(filename));
-			Iterator it = points.iterator();
 			for (int i = 0; i < rootSystem.size(); i++)
 			{
 				ArrayList<CRoot> roots = rootSystem.get(i);
 				for(CRoot root : roots)
 				{
-					int[] point = new int[2];
-					for (int j = 0; j < 2; j++)
-					{
-						point[j] = 0;
-						for (int k = 0; k < step; k++)
-						{
-							point[j] += root.vector[j*step+k] * root.vector[j*step+k];
-						}
-					}
-					String value = point[0] + "," + point[1];
-					if(points.add(value))
-					{
-						out.println("\\cnode(" + value + "){0.3}{x" + point[0] + "y" + point[1] + "}");
-					}
+					out.println(root);
 				}
 			}
 			out.close();

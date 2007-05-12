@@ -351,7 +351,7 @@ public class Main extends javax.swing.JFrame
 	private void MenuExportRootSystemActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_MenuExportRootSystemActionPerformed
 	{//GEN-HEADEREND:event_MenuExportRootSystemActionPerformed
 		JFileChooser chooser = new JFileChooser("");
-		chooser.setSelectedFile(new File(Globals.group.type + "_height_" + Globals.group.rs.constructedHeight() + ".csv"));
+		chooser.setSelectedFile(new File(Globals.group.type + "_height_" + Globals.group.rs.constructedHeight() + ".txt"));
 		chooser.setDialogTitle("Export root system");
 		int returnVal = chooser.showSaveDialog(this);
 		
