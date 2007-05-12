@@ -16,6 +16,7 @@ import java.util.Iterator;
 import java.io.*;
 
 import javolution.util.FastList;
+import javolution.util.FastSet;
 
 /**
  * Given a specific CGroup, this class creates the corresponding root system.
@@ -34,9 +35,9 @@ public class CRootSystem
 	/** The number of positive generators constructed so far. */
 	private long numPosGenerators;
 	/** The table containing all the (positive) roots. */
-	private ArrayList<FastList> rootSystem;
+	private FastList<FastList> rootSystem;
 	/** The table containing all the multiples of roots that aren't roots themselves (used in the Peterson formula). */
-	private ArrayList<FastList> rootMultiples;
+	private FastList<FastList> rootMultiples;
 	/** The simple roots. */
 	private FastList<CRoot> simpleRoots;
 	/** The height up to and included to which we constructed the root system. */
@@ -50,7 +51,7 @@ public class CRootSystem
 		this.group	= group;
 		this.rank	= group.rank;
 		
-		rootSystem			= new ArrayList<FastList>();
+		rootSystem			= new FastList<FastList>();
 		numPosRoots			= 0;
 		numPosGenerators	= 0;
 		constructedHeight	= 0;
@@ -75,7 +76,7 @@ public class CRootSystem
 		constructedHeight = 1;
 		
 		// Set the table of root multiples.
-		rootMultiples = new ArrayList<FastList>();
+		rootMultiples = new FastList<FastList>();
 		rootMultiples.add(0,new FastList<CRoot>());
 		rootMultiples.add(1,new FastList<CRoot>());
 		
@@ -252,8 +253,8 @@ public class CRootSystem
 				constructedHeight	= in.readInt();
 				numPosRoots			= in.readLong();
 				numPosGenerators	= in.readLong();
-				rootSystem			= (ArrayList<FastList>) in.readObject();
-				rootMultiples		= (ArrayList<FastList>) in.readObject();
+				rootSystem			= (FastList<FastList>) in.readObject();
+				rootMultiples		= (FastList<FastList>) in.readObject();
 			}
 			else
 			{
@@ -305,7 +306,7 @@ public class CRootSystem
 	private void construct(int maxHeight)
 	{
 		FastList<CRoot> prevRoots;
-		FastList<CRoot> rootCache;
+		FastSet<CRoot> rootCache;
 		CRoot	oldRoot;
 		CRoot	newRoot;
 		long	prevNumPosRoots;
@@ -321,7 +322,7 @@ public class CRootSystem
 		while(constructedHeight < maxHeight || maxHeight == 0)
 		{
 			prevRoots	    = rootSystem.get(constructedHeight);
-			rootCache		= new FastList<CRoot>();
+			rootCache		= new FastSet<CRoot>();
 			prevNumPosRoots = numPosRoots;
 			newHeight	    = constructedHeight + 1;
 			
@@ -350,10 +351,8 @@ public class CRootSystem
 					newRoot = root.plus(simpleRoot);
 					
 					// First check if we didn't do this root before.
-					if(rootCache.contains(newRoot))
+					if(!rootCache.add(newRoot))
 						continue;
-					else
-						rootCache.add(newRoot);
 					
 					innerProduct = group.innerProduct(root,simpleRoot);
 					if(innerProduct < 0)
