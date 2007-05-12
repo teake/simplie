@@ -10,9 +10,7 @@ package edu.rug.hep.simplie.group;
 import edu.rug.hep.simplie.Globals;
 import edu.rug.hep.simplie.math.fraction;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 import java.io.*;
 
 import javolution.util.FastList;

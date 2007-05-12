@@ -10,9 +10,11 @@ package edu.rug.hep.simplie.group;
 import edu.rug.hep.simplie.Globals;
 import edu.rug.hep.simplie.math.fraction;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+
+import javolution.util.FastList;
+import javolution.util.FastCollection.Record;
 
 /**
  * Given a specific CGroup and a highest weight state, this class creates an object representing
@@ -36,7 +38,7 @@ public class CHighestWeightRep
 	private final fraction	highestWeightFactor;
 	
 	/** The internal table containing the weights. */
-	private ArrayList<ArrayList> weightSystem;
+	private FastList<FastList> weightSystem;
 	/** Integer specifying how deep we constructed the weight system. */
 	private int		constructedDepth;
 	/** Cancel the construction or not? */
@@ -50,15 +52,15 @@ public class CHighestWeightRep
 	 */
 	public CHighestWeightRep(CGroup group, int[] highestWeightLabels)
 	{
-		ArrayList zeroDepthWeight;
+		FastList zeroDepthWeight;
 		
 		this.group	= group;
 		this.rank	= group.rank;
 		
 		// Add the highest weight (construct to depth 0)
-		weightSystem	= new ArrayList<ArrayList>();
+		weightSystem	= new FastList<FastList>();
 		highestWeight	= new CWeight(highestWeightLabels);
-		zeroDepthWeight = new ArrayList<CWeight>();
+		zeroDepthWeight = new FastList<CWeight>();
 		zeroDepthWeight.add(highestWeight);
 		
 		weightSystem.add(0,zeroDepthWeight);
@@ -107,7 +109,7 @@ public class CHighestWeightRep
 			construct(wantedDepth);
 		
 		// Fetch the weight we wanted and return it.
-		ArrayList<CWeight> wantedWeights = weightSystem.get(wantedDepth);
+		FastList<CWeight> wantedWeights = weightSystem.get(wantedDepth);
 		int wantedIndex = wantedWeights.indexOf(wantedWeight);
 		if(wantedIndex == -1)
 			// It's not here, return 0.
@@ -151,6 +153,7 @@ public class CHighestWeightRep
 		int		newDepth;
 		boolean	addedSomething;
 		int[]	newSubtractable;
+		CWeight	oldWeight;
 		
 		cancelConstruction = false;
 		
@@ -166,10 +169,11 @@ public class CHighestWeightRep
 			
 			System.out.println("... depth: " + newDepth);
 			
-			ArrayList<CWeight> prevDepthWeights = weightSystem.get(constructedDepth);
-			ArrayList<CWeight> thisDepthWeights = new ArrayList<CWeight>();
-			for(CWeight oldWeight : prevDepthWeights)
+			FastList<CWeight> prevDepthWeights = weightSystem.get(constructedDepth);
+			FastList<CWeight> thisDepthWeights = new FastList<CWeight>();
+			for (Record r = prevDepthWeights.head(), end = prevDepthWeights.tail(); (r = r.getNext()) != end;)
 			{
+				oldWeight = prevDepthWeights.valueOf(r);
 				// See if the we can subtract a simple root from this weight.
 				for (int i = 0; i < rank; i++)
 				{
@@ -275,7 +279,7 @@ public class CHighestWeightRep
 						}
 					}
 					CWeight summedWeight = new CWeight(summedLabels);
-					ArrayList<CWeight> summedWeights = weightSystem.get(weight.getDepth()-height*k);
+					FastList<CWeight> summedWeights = weightSystem.get(weight.getDepth()-height*k);
 					int summedIndex = summedWeights.indexOf(summedWeight);
 					if(summedIndex == -1)
 						// It's not a weight
