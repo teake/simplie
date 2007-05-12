@@ -17,6 +17,7 @@ import java.io.*;
 
 import javolution.util.FastList;
 import javolution.util.FastSet;
+import javolution.util.FastCollection.Record;
 
 /**
  * Given a specific CGroup, this class creates the corresponding root system.
@@ -98,12 +99,39 @@ public class CRootSystem
 		for (int i = 0; i < rootSystem.size(); i++)
 		{
 			FastList<CRoot> roots = rootSystem.get(i);
-			for(CRoot root : roots)
+			for (Record r = roots.head(), end = roots.tail(); (r = r.getNext()) != end;)
 			{
-				output += "Index: " + i + ", " + root + "\n";
+				output += "Index: " + i + ", " + roots.valueOf(r) + "\n";
 			}
 		}
 		return output;
+	}
+	
+	/**
+	 * Writes the root system constructed thus far to a text file.
+	 *
+	 * @param	filename	The file to which to save the data.
+	 */
+	public void writeTxtFile(String filename)
+	{
+		try
+		{
+			PrintWriter out = new PrintWriter(new FileWriter(filename));
+			for (int i = 0; i < rootSystem.size(); i++)
+			{
+				FastList<CRoot> roots = rootSystem.get(i);
+				for (Record r = roots.head(), end = roots.tail(); (r = r.getNext()) != end;)
+				{
+					out.println(roots.valueOf(r));
+				}
+			}
+			out.close();
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+		
 	}
 	
 	/**
@@ -271,33 +299,6 @@ public class CRootSystem
 	}
 	
 	/**
-	 * Writes the root system constructed thus far to a text file.
-	 *
-	 * @param	filename	The file to which to save the data.
-	 */
-	public void writeTxtFile(String filename)
-	{
-		try
-		{
-			PrintWriter out = new PrintWriter(new FileWriter(filename));
-			for (int i = 0; i < rootSystem.size(); i++)
-			{
-				FastList<CRoot> roots = rootSystem.get(i);
-				for(CRoot root : roots)
-				{
-					out.println(root);
-				}
-			}
-			out.close();
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
-		
-	}
-	
-	/**
 	 * Construct the root system up to the given height.
 	 *
 	 * @param maxHeight	The height up to and including which we should construct the root system.
@@ -307,6 +308,8 @@ public class CRootSystem
 	{
 		FastList<CRoot> prevRoots;
 		FastSet<CRoot> rootCache;
+		CRoot	root;
+		CRoot	simpleRoot;
 		CRoot	oldRoot;
 		CRoot	newRoot;
 		long	prevNumPosRoots;
@@ -341,10 +344,12 @@ public class CRootSystem
 			//
 			// If n_plus is positive, then alpha + beta is again a root.
 			//
-			for(CRoot root : prevRoots)
+			for (Record r1 = prevRoots.head(), end1 = prevRoots.tail(); (r1 = r1.getNext()) != end1;)
 			{
-				for(CRoot simpleRoot : simpleRoots)
+				root = prevRoots.valueOf(r1);
+				for (Record r2 = simpleRoots.head(), end2 = simpleRoots.tail(); (r2 = r2.getNext()) != end2;)
 				{
+					simpleRoot = simpleRoots.valueOf(r2);
 					if(cancelConstruction)
 						return;
 					
@@ -400,8 +405,9 @@ public class CRootSystem
 						continue;
 					int factor = newHeight / i;
 					FastList<CRoot> roots = rootSystem.get(i);
-					for(CRoot root : roots)
+					for (Record r = roots.head(), end = roots.tail(); (r = r.getNext()) != end;)
 					{
+						root = roots.valueOf(r);
 						CRoot rootMultiple = root.times(factor);
 						// Don't add it if it's already in the 'proper' root list.
 						// Else we would count this one double.
@@ -560,11 +566,15 @@ public class CRootSystem
 	private fraction petersonSubPart(CRoot root, FastList<CRoot> list1, FastList<CRoot> list2)
 	{
 		fraction multiplicity = new fraction(0);
-		for(CRoot beta : list1)
+		CRoot beta;
+		CRoot gamma;
+		for (Record r1 = list1.head(), end1 = list1.tail(); (r1 = r1.getNext()) != end1;)
 		{
+			beta = list1.valueOf(r1);
 			innerRootLoop:
-				for(CRoot gamma : list2)
+				for (Record r2 = list2.head(), end2 = list2.tail(); (r2 = r2.getNext()) != end2;)
 				{
+					gamma = list2.valueOf(r2);
 					for (int i = 0; i < rank; i++)
 					{
 						if(beta.vector[i] + gamma.vector[i] != root.vector[i])
