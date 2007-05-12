@@ -22,10 +22,14 @@ public class DynkinDiagramPanel extends javax.swing.JPanel
 	private int radius;
 	private int offset;
 	
+	private boolean		modifyingConnection;
 	private boolean		addingConnection;
 	private CDynkinNode connectionTo;
 	
 	private AlgebraSetup algebraSetup;
+	
+	private int contextX;
+	private int contextY;
 	
 	/** Creates new form DynkinDiagramPanel */
 	public DynkinDiagramPanel()
@@ -36,10 +40,12 @@ public class DynkinDiagramPanel extends javax.swing.JPanel
 		radius	= 10;
 		offset	= 25;
 		
-		addingConnection	= false;
+		modifyingConnection	= false;
 		connectionTo		= null;
 		
 		this.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		
+		contextX = contextY = 0;
 	}
 	
 	public void Initialize(AlgebraSetup algebraSetup)
@@ -53,15 +59,18 @@ public class DynkinDiagramPanel extends javax.swing.JPanel
 		Globals.dd.drawDiagram(g,offset,spacing,radius);
 	}
 	
-	private void startAddConnection(CDynkinNode node)
+	private void startModifyConnection(CDynkinNode node)
 	{
-		addingConnection = true;
+		if(node == null)
+			return;
+		
+		modifyingConnection = true;
 		connectionTo = node;
 		this.setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
 	}
-	private void stopAddConnection()
+	private void stopModifyConnection()
 	{
-		addingConnection = false;
+		modifyingConnection = false;
 		connectionTo = null;
 		this.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 	}
@@ -73,6 +82,82 @@ public class DynkinDiagramPanel extends javax.swing.JPanel
     // <editor-fold defaultstate="collapsed" desc=" Generated Code ">//GEN-BEGIN:initComponents
     private void initComponents()
     {
+        contextMenu = new javax.swing.JPopupMenu();
+        menuAddNode = new javax.swing.JMenuItem();
+        menuToggleNode = new javax.swing.JMenuItem();
+        menuRemoveNode = new javax.swing.JMenuItem();
+        jSeparator1 = new javax.swing.JSeparator();
+        menuAddConnection = new javax.swing.JMenu();
+        menuAddSingleConnection = new javax.swing.JMenuItem();
+        menuAddDoubleConnection = new javax.swing.JMenuItem();
+        menuAddTripleConnection = new javax.swing.JMenuItem();
+        menuRemoveConnection = new javax.swing.JMenuItem();
+
+        menuAddNode.setText("Add node");
+        menuAddNode.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                menuAddNodeActionPerformed(evt);
+            }
+        });
+
+        contextMenu.add(menuAddNode);
+
+        menuToggleNode.setText("Toggle node");
+        menuToggleNode.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                menuToggleNodeActionPerformed(evt);
+            }
+        });
+
+        contextMenu.add(menuToggleNode);
+
+        menuRemoveNode.setText("Remove node");
+        menuRemoveNode.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                menuRemoveNodeActionPerformed(evt);
+            }
+        });
+
+        contextMenu.add(menuRemoveNode);
+
+        contextMenu.add(jSeparator1);
+
+        menuAddConnection.setText("Add connection");
+        menuAddSingleConnection.setText("Single");
+        menuAddSingleConnection.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                menuAddSingleConnectionActionPerformed(evt);
+            }
+        });
+
+        menuAddConnection.add(menuAddSingleConnection);
+
+        menuAddDoubleConnection.setText("Double");
+        menuAddConnection.add(menuAddDoubleConnection);
+
+        menuAddTripleConnection.setText("Triple");
+        menuAddConnection.add(menuAddTripleConnection);
+
+        contextMenu.add(menuAddConnection);
+
+        menuRemoveConnection.setText("Remove connection");
+        menuRemoveConnection.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                menuRemoveConnectionActionPerformed(evt);
+            }
+        });
+
+        contextMenu.add(menuRemoveConnection);
 
         setBackground(new java.awt.Color(255, 255, 255));
         addMouseListener(new java.awt.event.MouseAdapter()
@@ -87,13 +172,45 @@ public class DynkinDiagramPanel extends javax.swing.JPanel
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 138, Short.MAX_VALUE)
+            .addGap(0, 289, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 90, Short.MAX_VALUE)
+            .addGap(0, 112, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
+
+	private void menuToggleNodeActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_menuToggleNodeActionPerformed
+	{//GEN-HEADEREND:event_menuToggleNodeActionPerformed
+		CDynkinNode node = Globals.dd.getNodeByCoor(contextX, contextY);
+		if(node!=null)
+			node.toggle();
+		algebraSetup.Update();
+	}//GEN-LAST:event_menuToggleNodeActionPerformed
+
+	private void menuRemoveConnectionActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_menuRemoveConnectionActionPerformed
+	{//GEN-HEADEREND:event_menuRemoveConnectionActionPerformed
+		addingConnection = false;
+		startModifyConnection(Globals.dd.getNodeByCoor(contextX, contextY));
+	}//GEN-LAST:event_menuRemoveConnectionActionPerformed
+	
+	private void menuAddSingleConnectionActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_menuAddSingleConnectionActionPerformed
+	{//GEN-HEADEREND:event_menuAddSingleConnectionActionPerformed
+		addingConnection = true;
+		startModifyConnection(Globals.dd.getNodeByCoor(contextX, contextY));
+	}//GEN-LAST:event_menuAddSingleConnectionActionPerformed
+	
+	private void menuRemoveNodeActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_menuRemoveNodeActionPerformed
+	{//GEN-HEADEREND:event_menuRemoveNodeActionPerformed
+		Globals.dd.removeNode(Globals.dd.getNodeByCoor(contextX, contextY));
+		algebraSetup.Update();
+	}//GEN-LAST:event_menuRemoveNodeActionPerformed
+	
+	private void menuAddNodeActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_menuAddNodeActionPerformed
+	{//GEN-HEADEREND:event_menuAddNodeActionPerformed
+		Globals.dd.addNode(contextX, contextY, false);
+		algebraSetup.Update();
+	}//GEN-LAST:event_menuAddNodeActionPerformed
 	
     private void formMouseReleased(java.awt.event.MouseEvent evt)//GEN-FIRST:event_formMouseReleased
     {//GEN-HEADEREND:event_formMouseReleased
@@ -103,43 +220,30 @@ public class DynkinDiagramPanel extends javax.swing.JPanel
 		
 		int x = Math.round((evt.getX() - offset) / spacing);
 		int y = Math.round((evt.getY() - offset) / spacing);
-		CDynkinNode node = Globals.dd.getNodeByCoor(x,y);
 		
-		// Left-mouse click: add or remove a node.
-		if(evt.getButton() == evt.BUTTON1 && !evt.isAltDown())
+		if(evt.getButton() == evt.BUTTON3)
 		{
-			if(!evt.isControlDown())
-				Globals.dd.addNode(x,y,evt.isShiftDown());
-			else
-				Globals.dd.removeNode(node);
-		}
-		
-		if(node == null)
-		{
-			stopAddConnection();
-			algebraSetup.Update();
+			contextX = x;
+			contextY = y;
+			contextMenu.show(this,evt.getX(),evt.getY());
 			return;
 		}
+		
+		CDynkinNode node = Globals.dd.getNodeByCoor(x,y);
+		if(node == null)
+			return;
 		
 		// Middle mouse or alt+left: toggle a node.
 		if(evt.getButton() == evt.BUTTON2 || (evt.getButton() == evt.BUTTON1 && evt.isAltDown() ) )
 		{
-			stopAddConnection();
+			stopModifyConnection();
 			node.toggle();
 		}
 		
-		// Right-mouse: add or remove a connection.
-		if(evt.getButton() == evt.BUTTON3)
+		if(modifyingConnection)
 		{
-			if(!addingConnection)
-			{
-				startAddConnection(node);
-			}
-			else
-			{
-				Globals.dd.modifyConnection(node, connectionTo, !evt.isControlDown());
-				stopAddConnection();
-			}
+			Globals.dd.modifyConnection(node, connectionTo, addingConnection);
+			stopModifyConnection();
 		}
 		
 		algebraSetup.Update();
@@ -147,6 +251,16 @@ public class DynkinDiagramPanel extends javax.swing.JPanel
 	
 	
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPopupMenu contextMenu;
+    private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JMenu menuAddConnection;
+    private javax.swing.JMenuItem menuAddDoubleConnection;
+    private javax.swing.JMenuItem menuAddNode;
+    private javax.swing.JMenuItem menuAddSingleConnection;
+    private javax.swing.JMenuItem menuAddTripleConnection;
+    private javax.swing.JMenuItem menuRemoveConnection;
+    private javax.swing.JMenuItem menuRemoveNode;
+    private javax.swing.JMenuItem menuToggleNode;
     // End of variables declaration//GEN-END:variables
 	
 }
