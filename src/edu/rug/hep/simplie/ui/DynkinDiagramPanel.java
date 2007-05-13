@@ -24,6 +24,7 @@ public class DynkinDiagramPanel extends javax.swing.JPanel
 	
 	private boolean		modifyingConnection;
 	private boolean		addingConnection;
+	private int			connectionLaced;
 	private CDynkinNode connectionTo;
 	
 	private AlgebraSetup algebraSetup;
@@ -139,9 +140,25 @@ public class DynkinDiagramPanel extends javax.swing.JPanel
         menuAddConnection.add(menuAddSingleConnection);
 
         menuAddDoubleConnection.setText("Double");
+        menuAddDoubleConnection.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                menuAddDoubleConnectionActionPerformed(evt);
+            }
+        });
+
         menuAddConnection.add(menuAddDoubleConnection);
 
         menuAddTripleConnection.setText("Triple");
+        menuAddTripleConnection.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                menuAddTripleConnectionActionPerformed(evt);
+            }
+        });
+
         menuAddConnection.add(menuAddTripleConnection);
 
         contextMenu.add(menuAddConnection);
@@ -178,6 +195,20 @@ public class DynkinDiagramPanel extends javax.swing.JPanel
         );
     }// </editor-fold>//GEN-END:initComponents
 
+	private void menuAddTripleConnectionActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_menuAddTripleConnectionActionPerformed
+	{//GEN-HEADEREND:event_menuAddTripleConnectionActionPerformed
+		addingConnection = true;
+		connectionLaced = 3;
+		startModifyConnection(Globals.dd.getNodeByCoor(contextX, contextY));
+	}//GEN-LAST:event_menuAddTripleConnectionActionPerformed
+
+	private void menuAddDoubleConnectionActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_menuAddDoubleConnectionActionPerformed
+	{//GEN-HEADEREND:event_menuAddDoubleConnectionActionPerformed
+		addingConnection = true;
+		connectionLaced = 2;
+		startModifyConnection(Globals.dd.getNodeByCoor(contextX, contextY));
+	}//GEN-LAST:event_menuAddDoubleConnectionActionPerformed
+
 	private void menuToggleNodeActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_menuToggleNodeActionPerformed
 	{//GEN-HEADEREND:event_menuToggleNodeActionPerformed
 		CDynkinNode node = Globals.dd.getNodeByCoor(contextX, contextY);
@@ -195,6 +226,7 @@ public class DynkinDiagramPanel extends javax.swing.JPanel
 	private void menuAddSingleConnectionActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_menuAddSingleConnectionActionPerformed
 	{//GEN-HEADEREND:event_menuAddSingleConnectionActionPerformed
 		addingConnection = true;
+		connectionLaced = 1;
 		startModifyConnection(Globals.dd.getNodeByCoor(contextX, contextY));
 	}//GEN-LAST:event_menuAddSingleConnectionActionPerformed
 	
@@ -240,7 +272,7 @@ public class DynkinDiagramPanel extends javax.swing.JPanel
 		
 		if(modifyingConnection)
 		{
-			Globals.dd.modifyConnection(node, connectionTo, 1, addingConnection);
+			Globals.dd.modifyConnection(node, connectionTo, connectionLaced, addingConnection);
 			stopModifyConnection();
 		}
 		

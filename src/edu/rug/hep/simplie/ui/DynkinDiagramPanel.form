@@ -47,11 +47,17 @@
               <Properties>
                 <Property name="text" type="java.lang.String" value="Double"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="menuAddDoubleConnectionActionPerformed"/>
+              </Events>
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="menuAddTripleConnection">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Triple"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="menuAddTripleConnectionActionPerformed"/>
+              </Events>
             </MenuItem>
           </SubComponents>
         </Menu>
