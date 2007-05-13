@@ -23,10 +23,12 @@ public class CDynkinNode implements Serializable, Comparable<CDynkinNode>
 	/** The y-coordinate of the node in the dynkin diagram */
 	public final int y;
 	
+	/** The external label */
+	private int label;
 	/** Is the node enabled or not? */
 	private boolean	enabled;
-	/** The internal list of connections the node has. */
-	private ArrayList<CDynkinConnection> connections;
+	/** The internal list of nodes to which this node has connections. */
+	private ArrayList<CDynkinNode> connectionsTo;
 	
 	/**
 	 * Creates a new instance of CDynkinNode.
@@ -40,8 +42,19 @@ public class CDynkinNode implements Serializable, Comparable<CDynkinNode>
 		this.enabled	= true;
 		this.x			= x;
 		this.y			= y;
+		this.label		= 1;
 		
-		this.connections = new ArrayList<CDynkinConnection>();
+		this.connectionsTo = new ArrayList<CDynkinNode>();
+	}
+	
+	public int getLabel()
+	{
+		return label;
+	}
+
+	public void setLabel(int label)
+	{
+		this.label = label;
 	}
 	
 	/**
@@ -70,9 +83,9 @@ public class CDynkinNode implements Serializable, Comparable<CDynkinNode>
 	{
 		if(enabled)
 			return false;
-		for(CDynkinConnection conn : connections)
+		for(CDynkinNode toNode : connectionsTo)
 		{
-			if(conn.toNode.enabled)
+			if(toNode.enabled)
 				return false;
 		}
 		return true;
@@ -99,11 +112,10 @@ public class CDynkinNode implements Serializable, Comparable<CDynkinNode>
 	 */
 	public boolean addConnection(CDynkinNode toNode)
 	{
-		CDynkinConnection newConn = new CDynkinConnection(this,toNode);
-		if(connections.contains(newConn))
+		if(connectionsTo.contains(toNode))
 			return false;
 		else
-			connections.add(newConn);
+			connectionsTo.add(toNode);
 		
 		return true;
 	}
@@ -116,21 +128,7 @@ public class CDynkinNode implements Serializable, Comparable<CDynkinNode>
 	 */
 	public boolean removeConnection(CDynkinNode toNode)
 	{
-		CDynkinConnection oldConn = new CDynkinConnection(this,toNode);
-		return connections.remove(oldConn);
-	}
-	
-	/** The number of connections this node has. */
-	public int numConnections()
-	{
-		return connections.size();
-	}
-	
-	/** Returns the index'th connection of this node. */
-	public CDynkinConnection getConnection(int index)
-	{
-		//TODO: perhaps return a clone.
-		return connections.get(index);
+		return connectionsTo.remove(toNode);
 	}
 	
 	/**
@@ -141,12 +139,7 @@ public class CDynkinNode implements Serializable, Comparable<CDynkinNode>
 	 */
 	public boolean hasConnectionTo(CDynkinNode toNode)
 	{
-		for(CDynkinConnection connection : connections)
-		{
-			if(connection.toNode.equals(toNode))
-				return true;
-		}
-		return false;
+		return connectionsTo.contains(toNode);
 	}
 	
 	/**

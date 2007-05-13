@@ -43,8 +43,6 @@ public class DynkinDiagramPanel extends javax.swing.JPanel
 		modifyingConnection	= false;
 		connectionTo		= null;
 		
-		this.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		
 		contextX = contextY = 0;
 	}
 	
@@ -66,13 +64,13 @@ public class DynkinDiagramPanel extends javax.swing.JPanel
 		
 		modifyingConnection = true;
 		connectionTo = node;
-		this.setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
+		this.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 	}
 	private void stopModifyConnection()
 	{
 		modifyingConnection = false;
 		connectionTo = null;
-		this.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 	}
 	/** This method is called from within the constructor to
 	 * initialize the form.
@@ -242,7 +240,7 @@ public class DynkinDiagramPanel extends javax.swing.JPanel
 		
 		if(modifyingConnection)
 		{
-			Globals.dd.modifyConnection(node, connectionTo, addingConnection);
+			Globals.dd.modifyConnection(node, connectionTo, 1, addingConnection);
 			stopModifyConnection();
 		}
 		

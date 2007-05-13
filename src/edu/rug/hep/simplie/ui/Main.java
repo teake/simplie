@@ -498,7 +498,7 @@ public class Main extends javax.swing.JFrame
 		Globals.dd.addNode(7,1,true);
 		Globals.dd.addNode(8,1,true);
 		Globals.dd.addNode(9,1,true);
-		Globals.dd.modifyConnection(exceptional, attach, true);
+		Globals.dd.modifyConnection(exceptional, attach, 1, true);
 		algebraSetup.Update();
     }//GEN-LAST:event_MenuItemLoadE11ActionPerformed
 	

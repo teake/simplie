@@ -31,6 +31,8 @@ public class CDynkinDiagram
 {
 	/** Vector containing all nodes of this diagram. */
 	private Vector<CDynkinNode> nodes;
+	/** Vector containing all connections of this diagram */
+	private Vector<CDynkinConnection> connections;
 	/** Font for drawing the diagram. */
 	private Font font;
 	/** The node that was added last. */
@@ -41,8 +43,9 @@ public class CDynkinDiagram
 	 */
 	public CDynkinDiagram()
 	{
-		nodes	= new Vector<CDynkinNode>();
-		font	= new Font("Monospaced", Font.PLAIN, 12);
+		nodes		= new Vector<CDynkinNode>();
+		connections	= new Vector<CDynkinConnection>();
+		font		= new Font("Monospaced", Font.PLAIN, 12);
 		lastAddedNode = null;
 	}
 	
@@ -50,6 +53,7 @@ public class CDynkinDiagram
 	public void clear()
 	{
 		nodes.clear();
+		connections.clear();
 		lastAddedNode = null;
 	}
 	
@@ -142,8 +146,6 @@ public class CDynkinDiagram
 	/** Returns the Cartan matrix of the whole algebra. */
 	public Matrix cartanMatrix()
 	{
-		Collections.sort(nodes);
-		
 		// Creates a rank x rank matrix filled with zeros.
 		Matrix cartanMatrix = new Matrix(rank(),rank());
 		
@@ -152,18 +154,13 @@ public class CDynkinDiagram
 			cartanMatrix.set(i,i,2);
 		
 		// Set the off-diagonal parts.
-		for (int i = 0; i < rank(); i++)
+		for (CDynkinConnection connection : connections)
 		{
-			CDynkinNode nodeI = nodes.get(i);
-			for (int j = i + 1; j < rank(); j++)
-			{
-				CDynkinNode nodeJ = nodes.get(j);
-				if( nodeI.hasConnectionTo(nodeJ) || nodeJ.hasConnectionTo(nodeI) )
-				{
-					cartanMatrix.set(i,j,-1);
-					cartanMatrix.set(j,i,-1);
-				}
-			}
+			int i		= connection.fromNode.getLabel() - 1;
+			int j		= connection.toNode.getLabel() - 1;
+			int value	= connection.laced * -1;
+			cartanMatrix.set(i,j,value);
+			cartanMatrix.set(j,i,value);
 		}
 		
 		return cartanMatrix;
@@ -242,10 +239,11 @@ public class CDynkinDiagram
 		{
 			if(connectionToLast && lastAddedNode != null)
 			{
-				modifyConnection(lastAddedNode, newNode, true);
+				modifyConnection(lastAddedNode, newNode, 1, true);
 			}
 			nodes.add(newNode);
 			lastAddedNode = newNode;
+			sort();
 			return newNode;
 		}
 	}
@@ -262,7 +260,17 @@ public class CDynkinDiagram
 		{
 			node.removeConnection(nodeToRemove);
 		}
-		
+		Iterator it = connections.iterator();
+		while(it.hasNext())
+		{
+			CDynkinConnection connection = (CDynkinConnection) it.next();
+			if(connection.fromNode.equals(nodeToRemove)
+			|| connection.toNode.equals(nodeToRemove) )
+			{
+				it.remove();
+			}
+		}
+		sort();
 	}
 	
 	/**
@@ -272,19 +280,23 @@ public class CDynkinDiagram
 	 * @param toNode		The node to which the connection points.
 	 * @param add			True: add the connection. False: remove the connection.
 	 */
-	public void modifyConnection(CDynkinNode fromNode, CDynkinNode toNode, boolean add)
+	public void modifyConnection(CDynkinNode fromNode, CDynkinNode toNode, int laced, boolean add)
 	{
 		// Do nothing if either one of the nodes is not found, or if both are the same.
 		if( fromNode == null || toNode == null || fromNode.equals(toNode) )
 			return;
 		
-		if(add)
+		CDynkinConnection connection = new CDynkinConnection(fromNode, toNode, laced);
+		
+		if(add && !connections.contains(connection))
 		{
+			connections.add(connection);
 			fromNode.addConnection(toNode);
 			toNode.addConnection(fromNode);
 		}
 		else
 		{
+			connections.remove(connection);
 			fromNode.removeConnection(toNode);
 			toNode.removeConnection(fromNode);
 		}
@@ -374,25 +386,23 @@ public class CDynkinDiagram
 		output += "\\begin{pspicture}(" + xMin + "," + yMin + ")(" + xMax + "," + yMax + ")\n";
 		
 		// The nodes and connections
-		for(int i = 0; i < rank(); i++)
+		for(CDynkinNode node : nodes)
 		{
-			CDynkinNode	node	= nodes.get(i);
-			int			labelI	= i;
-			
 			output += "\\cnode";
 			if(node.isDisconnected())
 				output += "[fillstyle=solid,fillcolor=lightgray]";
 			if(node.isLevel())
 				output += "[fillstyle=solid,fillcolor=black]";
-			output += "(" + node.x + "," + (yMax - node.y) + "){0.15}{N" + labelI + hashCode + "} \n";
+			output += "(" + node.x + "," + (yMax - node.y) + "){0.15}{N" + node.getLabel() + hashCode + "} \n";
 			if(includeLabels)
-				output += "\\nput{-60}{N" + labelI + hashCode + "}{" + labelI + "}\n";
-			for (int j = 0; j < node.numConnections(); j++)
-			{
-				int labelJ = nodes.indexOf(node.getConnection(j).toNode);
-				if(labelI != labelJ)
-					output += "\\ncline{-}{N" + labelI + hashCode + "}{N" + labelJ + hashCode + "}\n";
-			}
+				output += "\\nput{-60}{N" + node.getLabel() + hashCode + "}{" + node.getLabel() + "}\n";
+		}
+		
+		for(CDynkinConnection connection : connections)
+		{
+			output += "\\ncline{-}"
+					+ "{N" + connection.fromNode.getLabel() + hashCode + "}"
+					+ "{N" + connection.toNode.getLabel() + hashCode + "}\n";
 		}
 		
 		
@@ -406,7 +416,7 @@ public class CDynkinDiagram
 		return output;
 	}
 	
-	/** 
+	/**
 	 * Draw the diagram onto a graphics component.
 	 *
 	 * @param	g		The graphics component onto which the diagram should be drawn.
@@ -419,27 +429,18 @@ public class CDynkinDiagram
 		Graphics2D g2 = (Graphics2D) g;
 		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
 		
+		for (CDynkinConnection connection : connections)
+		{
+			CDynkinNode node1 = connection.fromNode;
+			CDynkinNode node2 = connection.toNode;
+			g2.drawLine(
+					spacing * node1.x + offset + radius/2,
+					spacing * node1.y + offset + radius/2,
+					spacing * node2.x + offset + radius/2,
+					spacing * node2.y + offset + radius/2);
+		}
 		for (CDynkinNode node : nodes)
 		{
-			for (int i = 0; i < node.numConnections(); i++)
-			{
-				CDynkinConnection connection = node.getConnection(i);
-				CDynkinNode node1 = connection.fromNode;
-				CDynkinNode node2 = connection.toNode;
-				if(node1 != null && node2 != null)
-				{
-					g2.drawLine(
-							spacing * node1.x + offset + radius/2,
-							spacing * node1.y + offset + radius/2,
-							spacing * node2.x + offset + radius/2,
-							spacing * node2.y + offset + radius/2);
-				}
-			}
-		}
-		for (int i = 0; i < rank(); i++)
-		{
-			CDynkinNode node = nodes.get(i);
-			
 			if(node.isEnabled())
 				g2.setColor(Color.WHITE);
 			else if(node.isDisconnected())
@@ -458,10 +459,18 @@ public class CDynkinDiagram
 					radius, radius);
 			
 			g2.setFont(font);
-			g2.drawString(Globals.intToString(i+1),
+			g2.drawString(Globals.intToString(node.getLabel()),
 					spacing * node.x + offset + radius/2,
 					spacing * node.y + offset + radius + 15);
 		}
 	}
 	
+	private void sort()
+	{
+		Collections.sort(nodes);
+		for(int i = 0; i < rank(); i++)
+		{
+			nodes.get(i).setLabel(i+1);
+		}
+	}
 }
