@@ -16,6 +16,7 @@ import javax.swing.table.DefaultTableModel;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 
 
 /**
@@ -38,6 +39,9 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 	
 	private int levelSign;
 	private ArrayList<CRepresentation> reps;
+	
+	/** Comparator to sort all possible levels */
+	private Comparator levelComparator;
 	
 	/**
 	 * Creates a new instance of CAutoLevelScanner.
@@ -72,6 +76,32 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 		this.posSignConvention = posSignConvention;
 		
 		this.levelSign = 0;
+		
+		// This comparator sort levels according to their squared sum.
+		this.levelComparator = new Comparator<int[]>()
+		{
+			public int compare(int[] level1, int[] level2)
+			{
+				final int BEFORE = -1;
+				final int EQUAL = 0;
+				final int AFTER = 1;
+				
+				if(level1.length != level2.length)
+					return EQUAL;
+				
+				int sum1 = 0;
+				int sum2 = 0;
+				for (int i = 0; i < level1.length; i++)
+				{
+					sum1 += level1[i] * level1[i];
+					sum2 += level2[i] * level2[i];
+				}
+				if(sum1 > sum2) return AFTER;
+				if(sum1 < sum2) return BEFORE;
+				
+				return EQUAL;
+			}
+		};
 	}
 	
 	@Override
@@ -86,13 +116,22 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 		int levelRank = Globals.group.rank - Globals.coGroup.rank;
 		
 		int base	= maxLevel + 1 - minLevel;
-		// How many possibilities of level combinaties are there?
-		long num	= (long) Math.pow(base, levelRank);
+		// How many possibilities of level combinations are there?
+		int num	= (int) Math.pow(base, levelRank);
 		try
 		{
-			for (long i = 0; i < num; i++)
+			// Sort the levels.
+			ArrayList levels = new ArrayList<int[]>();
+			for (int i = 0; i < num; i++)
 			{
-				Scan(Globals.numberToVector(i,base,levelRank,minLevel));
+				levels.add(Globals.numberToVector(i,base,levelRank,minLevel));
+			}
+			Collections.sort(levels,levelComparator);
+			
+			// Perform the scan.
+			for (int i = 0; i < levels.size(); i++)
+			{
+				Scan((int[]) levels.get(i));
 			}
 			
 		}
@@ -271,7 +310,7 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 					else
 						l = j;
 					repJ = reps.get(l);
-
+					
 					if(repJ.length <= repI.length)
 						continue;
 					

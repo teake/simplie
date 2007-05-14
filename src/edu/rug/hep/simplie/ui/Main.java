@@ -86,6 +86,7 @@ public class Main extends javax.swing.JFrame
         MenuItemClear = new javax.swing.JMenuItem();
         jSeparator2 = new javax.swing.JSeparator();
         MenuItemLoadE11 = new javax.swing.JMenuItem();
+        MenuItemLoadD8very = new javax.swing.JMenuItem();
         MenuTools = new javax.swing.JMenu();
         MenuExportToTex = new javax.swing.JMenuItem();
         MenuExportRootSystem = new javax.swing.JMenuItem();
@@ -261,6 +262,18 @@ public class Main extends javax.swing.JFrame
 
         MenuEdit.add(MenuItemLoadE11);
 
+        MenuItemLoadD8very.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F10, java.awt.event.InputEvent.SHIFT_MASK));
+        MenuItemLoadD8very.setText("D_8+++ preset");
+        MenuItemLoadD8very.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                MenuItemLoadD8veryActionPerformed(evt);
+            }
+        });
+
+        MenuEdit.add(MenuItemLoadD8very);
+
         MenuBar.add(MenuEdit);
 
         MenuTools.setMnemonic('t');
@@ -347,6 +360,25 @@ public class Main extends javax.swing.JFrame
         );
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+	private void MenuItemLoadD8veryActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_MenuItemLoadD8veryActionPerformed
+	{//GEN-HEADEREND:event_MenuItemLoadD8veryActionPerformed
+		Globals.dd.clear();
+		CDynkinNode lastRegular = Globals.dd.addNode(3,0,false);
+		CDynkinNode endPoint	= Globals.dd.addNode(7,0,false);
+		Globals.dd.addNode(0,1,false);
+		Globals.dd.addNode(1,1,true);
+		Globals.dd.addNode(2,1,true);
+		CDynkinNode attachReg = Globals.dd.addNode(3,1,true);
+		Globals.dd.addNode(4,1,true);
+		Globals.dd.addNode(5,1,true);
+		Globals.dd.addNode(6,1,true);
+		CDynkinNode attachEnd = Globals.dd.addNode(7,1,true);
+		Globals.dd.addNode(8,1,true);
+		Globals.dd.modifyConnection(lastRegular, attachReg, 1, true);
+		Globals.dd.modifyConnection(endPoint, attachEnd, 1, true);
+		algebraSetup.Update();
+	}//GEN-LAST:event_MenuItemLoadD8veryActionPerformed
 
 	private void MenuExportRootSystemActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_MenuExportRootSystemActionPerformed
 	{//GEN-HEADEREND:event_MenuExportRootSystemActionPerformed
@@ -547,6 +579,7 @@ public class Main extends javax.swing.JFrame
     private javax.swing.JMenuItem MenuItemClear;
     private javax.swing.JMenuItem MenuItemExit;
     private javax.swing.JMenuItem MenuItemHelp;
+    private javax.swing.JMenuItem MenuItemLoadD8very;
     private javax.swing.JMenuItem MenuItemLoadDD;
     private javax.swing.JMenuItem MenuItemLoadE11;
     private javax.swing.JMenuItem MenuItemLoadRoots;
