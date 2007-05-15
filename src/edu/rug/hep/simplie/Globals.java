@@ -11,6 +11,8 @@ import edu.rug.hep.simplie.dynkindiagram.CDynkinDiagram;
 import edu.rug.hep.simplie.group.CGroup;
 import Jama.Matrix;
 import java.util.ArrayList;
+import java.lang.Runtime;
+import org.omg.SendingContext.RunTime;
 
 /**
  * Singleton holding all 'global' variables
@@ -36,6 +38,8 @@ public class Globals
 	public static CDynkinDiagram dd;
 	/** Boolean to indicate whether or not we are scanning right now. */
 	public static boolean scanning;
+	/** The number of cpus avaible for the application */
+	public static int numCPUs;
 	
 	/**********************************
 	 * Singleton stuff
@@ -48,6 +52,7 @@ public class Globals
 	{
 		scanning = false;
 		dd = new CDynkinDiagram();
+		numCPUs = Runtime.getRuntime().availableProcessors();
 	}
 	
 	/** Singleton handler. */

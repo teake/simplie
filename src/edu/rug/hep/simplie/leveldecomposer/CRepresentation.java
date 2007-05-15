@@ -37,6 +37,9 @@ public class CRepresentation implements Comparable<CRepresentation>
 	/** The height of the associated root. */
 	public final int height;
 	
+	/** The number of indices */
+	public final int numIndices;
+	
 	private long outerMult;
 	private long rootMult;
 	
@@ -50,7 +53,7 @@ public class CRepresentation implements Comparable<CRepresentation>
 	 * @param	coLevels		The part of the rootvector corresponding to the regular subalgebra nodes.
 	 * @param	length			The length of the associated root (i.e. the innerproduct with itself).
 	 */
-	public CRepresentation(int[] dynkinLabels, int[] levels, int[] coLevels, int length)
+	public CRepresentation(int[] dynkinLabels, int[] levels, int[] coLevels, int length, boolean posSignConvention)
 	{
 		this.dynkinLabels	= dynkinLabels.clone();
 		this.levels			= levels.clone();
@@ -87,6 +90,17 @@ public class CRepresentation implements Comparable<CRepresentation>
 		
 		// Instantiate the highest weight rep.
 		hwRep = new CHighestWeightRep(Globals.coGroup, dynkinLabels);
+		
+		// Calculate the number of indices.
+		int tempNumIndices = 0;
+		for (int i = 0; i < subDynkinLabels.length; i++)
+		{
+			int j = i;
+			if(posSignConvention)
+				j = subDynkinLabels.length - i - 1;
+			tempNumIndices += subDynkinLabels[j] * (i+1);
+		}
+		numIndices = tempNumIndices;
 	}
 	
 	/**
@@ -104,7 +118,7 @@ public class CRepresentation implements Comparable<CRepresentation>
 		else
 			return 0;
 	}
-
+	
 	/** Sets the outer multiplicty of this representation. */
 	public void setOuterMult(long outerMult)
 	{

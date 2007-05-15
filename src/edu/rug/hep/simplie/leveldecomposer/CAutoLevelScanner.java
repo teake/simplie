@@ -31,6 +31,7 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 	private final boolean calcRootMult;
 	private final boolean calcRepMult;
 	private final boolean showZeroMult;
+	private final boolean showExotic;
 	private final int minLevel;
 	private final int maxLevel;
 	private final int signConvention;
@@ -38,7 +39,8 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 	private final DefaultTableModel tableModel;
 	
 	private int levelSign;
-	private ArrayList<CRepresentation> reps;
+	
+	private int[] levelOneIndices;
 	
 	/** Comparator to sort all possible levels */
 	private Comparator levelComparator;
@@ -53,6 +55,7 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 	 *								This again will take longer.
 	 * @param	showZeroMult		In case this and the above two parameters are true,
 	 *								representations with zero multiplicity will not be shown.
+	 * @param	showExotic			If true, show exotic fields with more indices than the space-time dimension.
 	 * @param	tableModel			The DefaultTableModel in which the results of the scan should be put.
 	 * @param	minLevel			The minimum value of the levels.
 	 * @param	maxLevel			The maximum value of the levels.
@@ -62,6 +65,7 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 			boolean calcRootMult,
 			boolean calcRepMult,
 			boolean showZeroMult,
+			boolean showExotic,
 			DefaultTableModel tableModel,
 			int minLevel,
 			int maxLevel)
@@ -72,12 +76,19 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 		this.calcRootMult	= calcRootMult;
 		this.calcRepMult	= calcRepMult;
 		this.showZeroMult	= showZeroMult;
+		this.showExotic		= showExotic;
 		this.signConvention = posSignConvention ? 1 : -1;
 		this.posSignConvention = posSignConvention;
 		
 		this.levelSign = 0;
 		
-		// This comparator sort levels according to their squared sum.
+		this.levelOneIndices = new int[Globals.group.rank - Globals.coGroup.rank];
+		for (int i = 0; i < levelOneIndices.length; i++)
+		{
+			levelOneIndices[i] = 0;
+		}
+		
+		// This comparator sorts levels according to their squared sum.
 		this.levelComparator = new Comparator<int[]>()
 		{
 			public int compare(int[] level1, int[] level2)
@@ -107,33 +118,65 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 	@Override
 	public Void doInBackground()
 	{
+		ArrayList<CRepresentation> repContainer;
+		ArrayList<CRepresentation> levelOneReps;
+		
+		ArrayList<int[]> levels;
+		
+		int levelRank;
+		int base;
+		int num;
+		
+		int[] levelOne;
+		int[] tempLevelOneIndices;
+		
 		// Some preliminary checks.
 		if(minLevel > maxLevel)
 			return null;
 		if(Globals.group.rank == Globals.coGroup.rank)
 			return null;
 		
-		int levelRank = Globals.group.rank - Globals.coGroup.rank;
-		
-		int base	= maxLevel + 1 - minLevel;
 		// How many possibilities of level combinations are there?
-		int num	= (int) Math.pow(base, levelRank);
+		levelRank	= Globals.group.rank - Globals.coGroup.rank;
+		base		= maxLevel + 1 - minLevel;
+		num			= (int) Math.pow(base, levelRank);
 		try
 		{
 			// Sort the levels.
-			ArrayList levels = new ArrayList<int[]>();
+			levels = new ArrayList<int[]>();
 			for (int i = 0; i < num; i++)
 			{
 				levels.add(Globals.numberToVector(i,base,levelRank,minLevel));
 			}
 			Collections.sort(levels,levelComparator);
 			
+			// Calculate the level one reps
+			tempLevelOneIndices = new int[levelRank];
+			for (int i = 0; i < levelRank; i++)
+			{
+				tempLevelOneIndices[i]	= Integer.MAX_VALUE;
+				levelOneReps			= new ArrayList<CRepresentation>();
+				levelOne				= new int[levelRank];
+				for (int j = 0; j < levelRank; j++)
+				{
+					levelOne[j] = (i == j) ? 1 : 0;
+				}
+				Scan(levelOne, levelOneReps);
+				for(CRepresentation levelOneRep : levelOneReps)
+				{
+					tempLevelOneIndices[i] = Math.min(levelOneRep.numIndices, tempLevelOneIndices[i]);
+				}
+			}
+			System.out.println(Globals.intArrayToString(tempLevelOneIndices));
+			levelOneIndices = tempLevelOneIndices;
+			
 			// Perform the scan.
 			for (int i = 0; i < levels.size(); i++)
 			{
-				Scan((int[]) levels.get(i));
+				repContainer = new ArrayList<CRepresentation>();
+				Scan((int[]) levels.get(i), repContainer);
+				processRepresentations(repContainer);
 			}
-			
 		}
 		catch (Exception e)
 		{
@@ -160,7 +203,7 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 	
 	
 	/** Scans all the possible highest weight representations at a given level */
-	private void Scan(int[] levels)
+	private void Scan(int[] levels, ArrayList<CRepresentation> repContainer)
 	{
 		// Are the levels all positive or all negative?
 		levelSign = 0;
@@ -181,6 +224,24 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 		if(negative)
 			levelSign = -1;
 		
+		// Calculate the minimum number of indices at this level
+		int minNumIndices = 0;
+		for (int i = 0; i < levels.length; i++)
+		{
+			minNumIndices += levels[i] * levelOneIndices[i];
+		}
+		
+		// Don't scan this level if the number of indices exceeds the number of dimensions
+		// and we don't want to scan for exotic fields.
+		if(!showExotic && minNumIndices > (Globals.subGroup.rank + 1) )
+		{
+			System.out.print("Skipping levels " + Globals.intArrayToString(levels));
+			System.out.println(", number of indices too large: " + minNumIndices);
+			return;
+		}
+
+		System.out.println("Scanning levels " + Globals.intArrayToString(levels));
+		
 		// Set up the Dynkin labels
 		int[] dynkinLabels = new int[Globals.coGroup.rank];
 		for (int i = 0; i < dynkinLabels.length; i++)
@@ -188,13 +249,11 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 			dynkinLabels[i] = 0;
 		}
 		
-		reps = new ArrayList<CRepresentation>();
-		LoopDynkinLabels(levels, dynkinLabels, 0, true);
-		processRepresentations();
+		LoopDynkinLabels(levels, dynkinLabels, 0, true, repContainer);
 	}
 	
 	/** Loops through every possible dynkin label. */
-	private void LoopDynkinLabels(int[] levels, int[] dynkinLabels, int beginIndex, boolean scanFirst)
+	private void LoopDynkinLabels(int[] levels, int[] dynkinLabels, int beginIndex, boolean scanFirst, ArrayList<CRepresentation> repContainer)
 	{
 		boolean		allGoodIntegers;
 		fraction[]	coLevels;
@@ -224,7 +283,7 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 					// If we found a valid representation, add it.
 					if(allGoodIntegers)
 					{
-						addRepresentation(levels, dynkinLabels, coLevels, rootLength);
+						addRepresentation(levels, dynkinLabels, coLevels, rootLength, repContainer);
 					}
 				}
 				else
@@ -234,7 +293,7 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 				}
 			}
 			if(beginIndex + 1 < dynkinLabels.length)
-				LoopDynkinLabels(levels, dynkinLabels.clone(), beginIndex + 1, false);
+				LoopDynkinLabels(levels, dynkinLabels.clone(), beginIndex + 1, false, repContainer);
 			dynkinLabels[beginIndex]++;
 			scanFirst = true;
 		} while( !isCancelled() );
@@ -247,7 +306,7 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 	 ********************************/
 	
 	/** Adds a new valid representation to "reps" */
-	private void addRepresentation(int[] levels, int[] dynkinLabels, fraction[] coLevels, int rootLength)
+	private void addRepresentation(int[] levels, int[] dynkinLabels, fraction[] coLevels, int rootLength, ArrayList<CRepresentation> repContainer)
 	{
 		int[] newCoLevels = new int[coLevels.length];
 		for (int i = 0; i < coLevels.length; i++)
@@ -258,34 +317,34 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 				dynkinLabels,
 				levels,
 				newCoLevels,
-				rootLength
+				rootLength,
+				posSignConvention
 				);
-		reps.add(rep);
+		repContainer.add(rep);
 	}
 	
 	/** Processes all the representations contained in "reps" */
-	private void processRepresentations()
+	private void processRepresentations(ArrayList<CRepresentation> repContainer)
 	{
-		int		numIndices;
-		long	outerMult;
+		long outerMult;
 		CRepresentation repI;
 		CRepresentation repJ;
 		
-		Collections.sort(reps);
+		Collections.sort(repContainer);
 		
 		if(calcRootMult)
 		{
 			int k;
 			int l;
 			
-			for (int i = 0; i < reps.size(); i++)
+			for (int i = 0; i < repContainer.size(); i++)
 			{
 				// Reverse the order if the sign is positive.
 				if(posSignConvention)
-					k = reps.size() - i - 1;
+					k = repContainer.size() - i - 1;
 				else
 					k = i;
-				repI = reps.get(k);
+				repI = repContainer.get(k);
 				
 				// Get and set the root multiplicities.
 				CRoot root = Globals.group.rs.getRoot(repI.rootVector.clone());
@@ -306,10 +365,10 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 				for (int j = 0; j < i; j++)
 				{
 					if(posSignConvention)
-						l = reps.size() - j - 1;
+						l = repContainer.size() - j - 1;
 					else
 						l = j;
-					repJ = reps.get(l);
+					repJ = repContainer.get(l);
 					
 					if(repJ.length <= repI.length)
 						continue;
@@ -321,21 +380,11 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 		}
 		
 		// Publish the representations to the output table.
-		for(CRepresentation rep : reps)
+		for(CRepresentation rep : repContainer)
 		{
 			// Don't add this representation if is has zero outer multplicity and we don't display zero mults.
 			if(calcRootMult && calcRepMult && !showZeroMult && rep.getOuterMult() == 0)
 				continue;
-			
-			// Calculate the number of indices of the subalgebra representation.
-			numIndices	= 0;
-			for (int i = 0; i < rep.subDynkinLabels.length; i++)
-			{
-				int j = i;
-				if(posSignConvention)
-					j = rep.subDynkinLabels.length - i - 1;
-				numIndices += rep.subDynkinLabels[j] * (i+1);
-			}
 			
 			// Add the data to the table.
 			Object[] rowData = new Object[11];
@@ -349,7 +398,7 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 			rowData[7] = rep.getRootMult();
 			rowData[8] = rep.getOuterMult();
 			rowData[9] = rep.height;
-			rowData[10] = numIndices;
+			rowData[10] = rep.numIndices;
 			publish(rowData);
 		}
 	}

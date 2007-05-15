@@ -364,16 +364,16 @@ public class Main extends javax.swing.JFrame
 	private void MenuItemLoadD8veryActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_MenuItemLoadD8veryActionPerformed
 	{//GEN-HEADEREND:event_MenuItemLoadD8veryActionPerformed
 		Globals.dd.clear();
-		CDynkinNode lastRegular = Globals.dd.addNode(3,0,false);
-		CDynkinNode endPoint	= Globals.dd.addNode(7,0,false);
+		CDynkinNode lastRegular = Globals.dd.addNode(5,0,false);
+		CDynkinNode endPoint	= Globals.dd.addNode(1,0,false);
 		Globals.dd.addNode(0,1,false);
-		Globals.dd.addNode(1,1,true);
+		CDynkinNode attachEnd = Globals.dd.addNode(1,1,true);
 		Globals.dd.addNode(2,1,true);
-		CDynkinNode attachReg = Globals.dd.addNode(3,1,true);
+		Globals.dd.addNode(3,1,true);
 		Globals.dd.addNode(4,1,true);
-		Globals.dd.addNode(5,1,true);
+		CDynkinNode attachReg = Globals.dd.addNode(5,1,true);
 		Globals.dd.addNode(6,1,true);
-		CDynkinNode attachEnd = Globals.dd.addNode(7,1,true);
+		Globals.dd.addNode(7,1,true);
 		Globals.dd.addNode(8,1,true);
 		Globals.dd.modifyConnection(lastRegular, attachReg, 1, true);
 		Globals.dd.modifyConnection(endPoint, attachEnd, 1, true);
