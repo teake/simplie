@@ -151,24 +151,26 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 			Collections.sort(levels,levelComparator);
 			
 			// Calculate the level one reps
-			tempLevelOneIndices = new int[levelRank];
-			for (int i = 0; i < levelRank; i++)
+			if(!showExotic)
 			{
-				tempLevelOneIndices[i]	= Integer.MAX_VALUE;
-				levelOneReps			= new ArrayList<CRepresentation>();
-				levelOne				= new int[levelRank];
-				for (int j = 0; j < levelRank; j++)
+				tempLevelOneIndices = new int[levelRank];
+				for (int i = 0; i < levelRank; i++)
 				{
-					levelOne[j] = (i == j) ? 1 : 0;
+					tempLevelOneIndices[i]	= Integer.MAX_VALUE;
+					levelOneReps			= new ArrayList<CRepresentation>();
+					levelOne				= new int[levelRank];
+					for (int j = 0; j < levelRank; j++)
+					{
+						levelOne[j] = (i == j) ? 1 : 0;
+					}
+					Scan(levelOne, levelOneReps);
+					for(CRepresentation levelOneRep : levelOneReps)
+					{
+						tempLevelOneIndices[i] = Math.min(levelOneRep.numIndices, tempLevelOneIndices[i]);
+					}
 				}
-				Scan(levelOne, levelOneReps);
-				for(CRepresentation levelOneRep : levelOneReps)
-				{
-					tempLevelOneIndices[i] = Math.min(levelOneRep.numIndices, tempLevelOneIndices[i]);
-				}
+				levelOneIndices = tempLevelOneIndices;
 			}
-			System.out.println(Globals.intArrayToString(tempLevelOneIndices));
-			levelOneIndices = tempLevelOneIndices;
 			
 			// Perform the scan.
 			for (int i = 0; i < levels.size(); i++)
@@ -239,7 +241,7 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 			System.out.println(", number of indices too large: " + minNumIndices);
 			return;
 		}
-
+		
 		System.out.println("Scanning levels " + Globals.intArrayToString(levels));
 		
 		// Set up the Dynkin labels
