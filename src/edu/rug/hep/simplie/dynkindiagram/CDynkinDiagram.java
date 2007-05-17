@@ -8,6 +8,7 @@
 package edu.rug.hep.simplie.dynkindiagram;
 
 import edu.rug.hep.simplie.Globals;
+import edu.rug.hep.simplie.ui.shapes.*;
 
 import java.util.Vector;
 import java.util.Iterator;
@@ -15,6 +16,9 @@ import java.util.Collections;
 import java.io.*;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Shape;
+import java.awt.Point;
+import java.awt.geom.Line2D;
 import java.awt.RenderingHints;
 import java.awt.Color;
 import java.awt.Font;
@@ -433,11 +437,21 @@ public class CDynkinDiagram
 		{
 			CDynkinNode node1 = connection.fromNode;
 			CDynkinNode node2 = connection.toNode;
-			g2.drawLine(
-					spacing * node1.x + offset + radius/2,
-					spacing * node1.y + offset + radius/2,
-					spacing * node2.x + offset + radius/2,
-					spacing * node2.y + offset + radius/2);
+			Shape line;
+			Point begin	= new Point(spacing * node1.x + offset + radius/2, spacing * node1.y + offset + radius/2);
+			Point end	= new Point(spacing * node2.x + offset + radius/2, spacing * node2.y + offset + radius/2);
+			switch(connection.laced)
+			{
+				case 3:
+					line = new TripleLine(begin,end,radius);
+					break;
+				case 2:
+					line = new DoubleLine(begin,end,radius/2);
+					break;
+				default:
+					line = new Line2D.Double(begin,end);
+			}
+			g2.draw(line);
 		}
 		for (CDynkinNode node : nodes)
 		{
