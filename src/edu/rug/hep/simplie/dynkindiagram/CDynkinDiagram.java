@@ -443,10 +443,10 @@ public class CDynkinDiagram
 			switch(connection.laced)
 			{
 				case 3:
-					line = new TripleLine(begin,end,radius);
+					line = new LinesWithArrow(begin,end,3,radius/3);
 					break;
 				case 2:
-					line = new DoubleLine(begin,end,radius/2);
+					line = new LinesWithArrow(begin,end,2,radius/2);
 					break;
 				default:
 					line = new Line2D.Double(begin,end);
