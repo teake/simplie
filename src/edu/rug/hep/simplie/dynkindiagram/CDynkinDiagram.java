@@ -162,9 +162,8 @@ public class CDynkinDiagram
 		{
 			int i		= connection.fromNode.getLabel() - 1;
 			int j		= connection.toNode.getLabel() - 1;
-			int value	= connection.laced * -1;
-			cartanMatrix.set(i,j,value);
-			cartanMatrix.set(j,i,value);
+			cartanMatrix.set(i,j,-1);
+			cartanMatrix.set(j,i,-1*connection.laced);
 		}
 		
 		return cartanMatrix;

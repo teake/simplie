@@ -79,9 +79,11 @@ public class CRootSystem
 		rootMultiples.add(0,new FastList<CRoot>());
 		rootMultiples.add(1,new FastList<CRoot>());
 		
+		/*
 		// If the group is finite, we can construct the root system to all heights.
 		if(group.finite)
 			construct(0);
+		 */
 	}
 	
 	/** Cancels the construction of the rootsystem. */
