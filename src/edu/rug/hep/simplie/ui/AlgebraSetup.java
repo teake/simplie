@@ -8,6 +8,7 @@ package edu.rug.hep.simplie.ui;
 
 import edu.rug.hep.simplie.Globals;
 import edu.rug.hep.simplie.group.CGroup;
+import edu.rug.hep.simplie.dynkindiagram.*;
 
 import Jama.Matrix.*;
 
@@ -15,35 +16,28 @@ import Jama.Matrix.*;
  *
  * @author  Teake Nutma
  */
-public class AlgebraSetup extends javax.swing.JPanel
+public class AlgebraSetup extends javax.swing.JPanel implements DiagramListener
 {
 	/** Creates new form LevelDecompositionUI */
 	public AlgebraSetup()
 	{
 		initComponents();
+		Globals.dd.addListener(this);
 		dynkinDiagramPanel.Initialize(this);
-		Update();
+		//Update();
 		algebraInfo.SetTitle("Full algebra");
 		subAlgebraInfo.SetTitle("Regular subalgebra");
 		disAlgebraInfo.SetTitle("Disconnected subalgebra");
 		coAlgebraInfo.SetTitle("Co-subalgebra (regular x disconnected)");
 	}
 	
-	public void Update()
+	public void diagramChanged()
 	{
-		if(Globals.group == null || !Globals.sameMatrices(Globals.dd.cartanMatrix(), Globals.group.cartanMatrix))
-			Globals.group	= new CGroup(Globals.dd.cartanMatrix());
-		
-		Globals.subGroup	= new CGroup(Globals.dd.cartanSubMatrix("sub"));
-		Globals.disGroup	= new CGroup(Globals.dd.cartanSubMatrix("dis"));
-		Globals.coGroup		= new CGroup(Globals.dd.cartanSubMatrix("co"));
-		
 		algebraInfo.Update(Globals.group);
 		subAlgebraInfo.Update(Globals.subGroup);
 		disAlgebraInfo.Update(Globals.disGroup);
 		coAlgebraInfo.Update(Globals.coGroup);
 	
-		dynkinDiagramPanel.repaint();
 		PanelDynkinDiagram.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Dynkin Diagram of " + Globals.getDynkinDiagramType(), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12)));
 	}
 	

@@ -7,7 +7,7 @@
 package edu.rug.hep.simplie.ui;
 
 import edu.rug.hep.simplie.Globals;
-import edu.rug.hep.simplie.dynkindiagram.CDynkinNode;
+import edu.rug.hep.simplie.dynkindiagram.*;
 
 import java.awt.Graphics;
 import java.awt.Cursor;
@@ -16,7 +16,7 @@ import java.awt.Cursor;
  *
  * @author  Teake Nutma
  */
-public class DynkinDiagramPanel extends javax.swing.JPanel
+public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramListener
 {
 	private int spacing;
 	private int radius;
@@ -36,6 +36,7 @@ public class DynkinDiagramPanel extends javax.swing.JPanel
 	public DynkinDiagramPanel()
 	{
 		initComponents();
+		Globals.dd.addListener(this);
 		
 		spacing = 40;
 		radius	= 5;
@@ -45,6 +46,11 @@ public class DynkinDiagramPanel extends javax.swing.JPanel
 		connectionTo		= null;
 		
 		contextX = contextY = 0;
+	}
+	
+	public void diagramChanged()
+	{
+		this.repaint();
 	}
 	
 	public void Initialize(AlgebraSetup algebraSetup)
@@ -212,9 +218,7 @@ public class DynkinDiagramPanel extends javax.swing.JPanel
 	private void menuToggleNodeActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_menuToggleNodeActionPerformed
 	{//GEN-HEADEREND:event_menuToggleNodeActionPerformed
 		CDynkinNode node = Globals.dd.getNodeByCoor(contextX, contextY);
-		if(node!=null)
-			node.toggle();
-		algebraSetup.Update();
+		Globals.dd.toggleNode(node);
 	}//GEN-LAST:event_menuToggleNodeActionPerformed
 
 	private void menuRemoveConnectionActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_menuRemoveConnectionActionPerformed
@@ -233,13 +237,11 @@ public class DynkinDiagramPanel extends javax.swing.JPanel
 	private void menuRemoveNodeActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_menuRemoveNodeActionPerformed
 	{//GEN-HEADEREND:event_menuRemoveNodeActionPerformed
 		Globals.dd.removeNode(Globals.dd.getNodeByCoor(contextX, contextY));
-		algebraSetup.Update();
 	}//GEN-LAST:event_menuRemoveNodeActionPerformed
 	
 	private void menuAddNodeActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_menuAddNodeActionPerformed
 	{//GEN-HEADEREND:event_menuAddNodeActionPerformed
 		Globals.dd.addNode(contextX, contextY, false);
-		algebraSetup.Update();
 	}//GEN-LAST:event_menuAddNodeActionPerformed
 	
     private void formMouseReleased(java.awt.event.MouseEvent evt)//GEN-FIRST:event_formMouseReleased
@@ -267,7 +269,7 @@ public class DynkinDiagramPanel extends javax.swing.JPanel
 		if(evt.getButton() == evt.BUTTON2 || (evt.getButton() == evt.BUTTON1 && evt.isAltDown() ) )
 		{
 			stopModifyConnection();
-			node.toggle();
+			Globals.dd.toggleNode(node);
 		}
 		
 		if(modifyingConnection)
@@ -275,8 +277,6 @@ public class DynkinDiagramPanel extends javax.swing.JPanel
 			Globals.dd.modifyConnection(node, connectionTo, connectionLaced, addingConnection);
 			stopModifyConnection();
 		}
-		
-		algebraSetup.Update();
     }//GEN-LAST:event_formMouseReleased
 	
 	

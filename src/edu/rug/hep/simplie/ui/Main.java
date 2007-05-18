@@ -70,6 +70,7 @@ public class Main extends javax.swing.JFrame
         systemOutTextArea = new edu.rug.hep.simplie.ui.SystemOutTextArea();
         TabbedPane = new javax.swing.JTabbedPane();
         algebraSetup = new edu.rug.hep.simplie.ui.AlgebraSetup();
+        algebraInfo1 = new edu.rug.hep.simplie.ui.AlgebraInfo();
         levelDecomposition = new edu.rug.hep.simplie.ui.LevelDecomposition();
         MenuBar = new javax.swing.JMenuBar();
         MenuFile = new javax.swing.JMenu();
@@ -142,6 +143,8 @@ public class Main extends javax.swing.JFrame
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("SimpLie");
         TabbedPane.addTab("Algebra setup", algebraSetup);
+
+        TabbedPane.addTab("Algebra info", algebraInfo1);
 
         TabbedPane.addTab("Level decomposition", levelDecomposition);
 
@@ -356,7 +359,7 @@ public class Main extends javax.swing.JFrame
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(TabbedPane, javax.swing.GroupLayout.DEFAULT_SIZE, 507, Short.MAX_VALUE)
+            .addComponent(TabbedPane, javax.swing.GroupLayout.DEFAULT_SIZE, 524, Short.MAX_VALUE)
         );
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -377,7 +380,6 @@ public class Main extends javax.swing.JFrame
 		Globals.dd.addNode(8,1,true);
 		Globals.dd.modifyConnection(lastRegular, attachReg, 1, true);
 		Globals.dd.modifyConnection(endPoint, attachEnd, 1, true);
-		algebraSetup.Update();
 	}//GEN-LAST:event_MenuItemLoadD8veryActionPerformed
 
 	private void MenuExportRootSystemActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_MenuExportRootSystemActionPerformed
@@ -512,7 +514,6 @@ public class Main extends javax.swing.JFrame
 		 */
 			fileURL = chooser.getSelectedFile().getAbsolutePath();
 			Globals.dd.loadFrom(fileURL);
-			algebraSetup.Update();
 		}
 	}//GEN-LAST:event_MenuItemLoadDDActionPerformed
 	
@@ -531,13 +532,11 @@ public class Main extends javax.swing.JFrame
 		Globals.dd.addNode(8,1,true);
 		Globals.dd.addNode(9,1,true);
 		Globals.dd.modifyConnection(exceptional, attach, 1, true);
-		algebraSetup.Update();
     }//GEN-LAST:event_MenuItemLoadE11ActionPerformed
 	
     private void MenuItemClearActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_MenuItemClearActionPerformed
     {//GEN-HEADEREND:event_MenuItemClearActionPerformed
 		Globals.dd.clear();
-		algebraSetup.Update();
     }//GEN-LAST:event_MenuItemClearActionPerformed
 	
     private void MenuItemAboutActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_MenuItemAboutActionPerformed
@@ -588,6 +587,7 @@ public class Main extends javax.swing.JFrame
     private javax.swing.JMenuItem MenuShowOutput;
     private javax.swing.JMenu MenuTools;
     private javax.swing.JTabbedPane TabbedPane;
+    private edu.rug.hep.simplie.ui.AlgebraInfo algebraInfo1;
     private edu.rug.hep.simplie.ui.AlgebraSetup algebraSetup;
     private javax.swing.JDialog exportDialog;
     private edu.rug.hep.simplie.ui.ExportToTex exportToTex;

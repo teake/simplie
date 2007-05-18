@@ -41,6 +41,8 @@ public class CDynkinDiagram
 	private Font font;
 	/** The node that was added last. */
 	private CDynkinNode lastAddedNode;
+	/** The internal list of listeners */
+	private Vector<DiagramListener> listeners;
 	
 	/**
 	 * Creates a new instance of CDynkinDiagram
@@ -50,7 +52,13 @@ public class CDynkinDiagram
 		nodes		= new Vector<CDynkinNode>();
 		connections	= new Vector<CDynkinConnection>();
 		font		= new Font("Monospaced", Font.PLAIN, 12);
-		lastAddedNode = null;
+		lastAddedNode	= null;
+		listeners		= new Vector<DiagramListener>();
+	}
+	
+	public void addListener(DiagramListener listener)
+	{
+		listeners.add(listener);
 	}
 	
 	/** Clears the Dynkin diagram. That is, it deletes all nodes. */
@@ -246,8 +254,17 @@ public class CDynkinDiagram
 			}
 			nodes.add(newNode);
 			lastAddedNode = newNode;
-			sort();
+			update();
 			return newNode;
+		}
+	}
+	
+	public void toggleNode(CDynkinNode node)
+	{
+		if(node != null && nodes.contains(node))
+		{
+			node.toggle();
+			update();
 		}
 	}
 	
@@ -273,7 +290,7 @@ public class CDynkinDiagram
 				it.remove();
 			}
 		}
-		sort();
+		update();
 	}
 	
 	/**
@@ -303,6 +320,8 @@ public class CDynkinDiagram
 			fromNode.removeConnection(toNode);
 			toNode.removeConnection(fromNode);
 		}
+		
+		update();
 	}
 	
 	/**
@@ -319,6 +338,7 @@ public class CDynkinDiagram
 			fos = new FileOutputStream(filename);
 			out = new ObjectOutputStream(fos);
 			out.writeObject(nodes);
+			out.writeObject(connections);
 			out.close();
 		}
 		catch(IOException ex)
@@ -342,7 +362,9 @@ public class CDynkinDiagram
 			fis		= new FileInputStream(filename);
 			in		= new ObjectInputStream(fis);
 			nodes	= (Vector<CDynkinNode>) in.readObject();
+			connections = (Vector<CDynkinConnection>) in.readObject();
 			in.close();
+			update();
 		}
 		catch(IOException ex)
 		{
@@ -478,12 +500,16 @@ public class CDynkinDiagram
 		}
 	}
 	
-	private void sort()
+	private void update()
 	{
 		Collections.sort(nodes);
 		for(int i = 0; i < rank(); i++)
 		{
 			nodes.get(i).setLabel(i+1);
+		}
+		for(DiagramListener listener : listeners)
+		{
+			listener.diagramChanged();
 		}
 	}
 }

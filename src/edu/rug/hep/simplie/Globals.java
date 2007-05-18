@@ -7,7 +7,7 @@
 
 package edu.rug.hep.simplie;
 
-import edu.rug.hep.simplie.dynkindiagram.CDynkinDiagram;
+import edu.rug.hep.simplie.dynkindiagram.*;
 import edu.rug.hep.simplie.group.CGroup;
 import Jama.Matrix;
 import java.util.ArrayList;
@@ -19,7 +19,7 @@ import org.omg.SendingContext.RunTime;
  *
  * @author Teake Nutma
  */
-public class Globals
+public class Globals implements DiagramListener
 {
 	
 	/**********************************
@@ -50,9 +50,11 @@ public class Globals
 	/** Private constructor */
 	private Globals()
 	{
-		scanning = false;
 		dd = new CDynkinDiagram();
-		numCPUs = Runtime.getRuntime().availableProcessors();
+		dd.addListener(this);
+		
+		scanning	= false;
+		numCPUs		= Runtime.getRuntime().availableProcessors();
 	}
 	
 	/** Singleton handler. */
@@ -61,6 +63,16 @@ public class Globals
 		return _instance;
 	}
 	
+	
+	public void diagramChanged()
+	{
+		if(group == null || !sameMatrices(dd.cartanMatrix(), group.cartanMatrix))
+			group = new CGroup(dd.cartanMatrix());
+		
+		subGroup	= new CGroup(dd.cartanSubMatrix("sub"));
+		disGroup	= new CGroup(dd.cartanSubMatrix("dis"));
+		coGroup		= new CGroup(dd.cartanSubMatrix("co"));
+	}
 	
 	/**********************************
 	 * Helper functions defined below
@@ -127,7 +139,7 @@ public class Globals
 	}
 	
 	/**
-	 * Converts an integer into a string. 
+	 * Converts an integer into a string.
 	 *
 	 * @param	x		The integer to convert to a string.
 	 * @return			A string representing the integer.
@@ -258,7 +270,7 @@ public class Globals
 		return true;
 	}
 	
-	/** 
+	/**
 	 * Compares two integer arrays.
 	 * The arrays are the same if all their are equal.
 	 *
