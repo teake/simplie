@@ -438,15 +438,15 @@ public class CDynkinDiagram
 			CDynkinNode node1 = connection.fromNode;
 			CDynkinNode node2 = connection.toNode;
 			Shape line;
-			Point begin	= new Point(spacing * node1.x + offset + radius/2, spacing * node1.y + offset + radius/2);
-			Point end	= new Point(spacing * node2.x + offset + radius/2, spacing * node2.y + offset + radius/2);
+			Point begin	= new Point(spacing * node1.x + offset + radius, spacing * node1.y + offset + radius);
+			Point end	= new Point(spacing * node2.x + offset + radius, spacing * node2.y + offset + radius);
 			switch(connection.laced)
 			{
 				case 3:
-					line = new LinesWithArrow(begin,end,3,radius/3);
+					line = new LinesWithArrow(begin,end,3,2*radius);
 					break;
 				case 2:
-					line = new LinesWithArrow(begin,end,2,radius/2);
+					line = new LinesWithArrow(begin,end,2,2*radius);
 					break;
 				default:
 					line = new Line2D.Double(begin,end);
@@ -464,18 +464,18 @@ public class CDynkinDiagram
 			g2.fillOval(
 					spacing * node.x + offset,
 					spacing * node.y + offset,
-					radius, radius);
+					2*radius, 2*radius);
 			
 			g2.setColor(Color.BLACK);
 			g2.drawOval(
 					spacing * node.x + offset,
 					spacing * node.y + offset,
-					radius, radius);
+					2*radius, 2*radius);
 			
 			g2.setFont(font);
 			g2.drawString(Globals.intToString(node.getLabel()),
-					spacing * node.x + offset + radius/2,
-					spacing * node.y + offset + radius + 15);
+					spacing * node.x + offset + 2*radius,
+					spacing * node.y + offset + 2*radius + 10);
 		}
 	}
 	

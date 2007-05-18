@@ -38,7 +38,7 @@ public class DynkinDiagramPanel extends javax.swing.JPanel
 		initComponents();
 		
 		spacing = 40;
-		radius	= 10;
+		radius	= 5;
 		offset	= 25;
 		
 		modifyingConnection	= false;
