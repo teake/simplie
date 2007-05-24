@@ -67,6 +67,7 @@ public class CDynkinDiagram
 		nodes.clear();
 		connections.clear();
 		lastAddedNode = null;
+		update();
 	}
 	
 	/** Returns the rank algebra associated to this diagram, i.e. the number of nodes. */

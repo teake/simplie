@@ -12,7 +12,8 @@ import edu.rug.hep.simplie.group.CGroup;
 import Jama.Matrix;
 import java.util.ArrayList;
 import java.lang.Runtime;
-import org.omg.SendingContext.RunTime;
+import java.text.DecimalFormat;
+import java.math.BigDecimal;
 
 /**
  * Singleton holding all 'global' variables
@@ -316,6 +317,69 @@ public class Globals implements DiagramListener
 			vector[i] = 0 + offset;
 		}
 		return vector;
+	}
+	
+	/**
+	 * Takes a matrix and returns it as a string,
+	 * with all entries formatted to have the given decimal plates.
+	 *
+	 * @param	matrix			 The matrix to be formatted to a string.
+	 * @param	decimalPlates	 The number of decimals each entry will have.
+	 * @return					 A string representing the matrix.
+	 */
+	public static String matrixToString(Matrix matrix, int decimalPlates)
+	{
+		/** Set up the decimal format for double -> string parsing */
+		String dfPattern = new String("0");
+		for (int i = 0; i < decimalPlates; i++)
+		{
+			if(i==0) dfPattern += ".";
+			dfPattern += "0";
+		}
+		DecimalFormat df = new DecimalFormat( dfPattern );
+		
+		double biggestEntry = 0;
+		String stringMatrix = new String("");
+		
+		if(matrix.getRowDimension() > 0 && matrix.getColumnDimension() > 0)
+		{
+			/** Determine the biggest entry first for the whitespacing */
+			for(int i = 0; i < matrix.getRowDimension(); i++)
+			{
+				for(int j = 0; j < matrix.getColumnDimension(); j++)
+				{
+					if(Math.abs(matrix.get(i,j)) > biggestEntry)
+						biggestEntry = Math.abs(matrix.get(i,j));
+				}
+			}
+			int biggestSize = (int) Math.floor(Math.log10(biggestEntry));
+			
+			for(int i = 0; i < matrix.getRowDimension(); i++)
+			{
+				for(int j = 0; j < matrix.getColumnDimension(); j++)
+				{
+					/** Round it properly */
+					BigDecimal bd   = new BigDecimal(matrix.get(i,j));
+					bd				= bd.setScale(decimalPlates,BigDecimal.ROUND_HALF_UP);
+					double entry	= bd.doubleValue();
+					
+					/** Append the correct amount of whitespace */
+					if(entry >= 0)
+						stringMatrix += " "; // for the spacing of the minus signs
+					int entrySize = Math.max( (int) Math.floor(Math.log10(Math.abs(entry))), 0 );
+					for(int k=0; k<biggestSize - entrySize; k++)
+					{
+						stringMatrix += " ";
+					}
+					
+					/** Format it correctly */
+					stringMatrix += df.format(entry);
+					stringMatrix += " ";
+				}
+				stringMatrix += "\n";
+			}
+		}
+		return stringMatrix;
 	}
 	
 }

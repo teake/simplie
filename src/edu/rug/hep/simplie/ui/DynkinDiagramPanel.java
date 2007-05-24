@@ -25,7 +25,7 @@ public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramLis
 	private boolean		modifyingConnection;
 	private boolean		addingConnection;
 	private int			connectionLaced;
-	private CDynkinNode connectionTo;
+	private CDynkinNode connectionFrom;
 	
 	private AlgebraSetup algebraSetup;
 	
@@ -43,7 +43,7 @@ public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramLis
 		offset	= 25;
 		
 		modifyingConnection	= false;
-		connectionTo		= null;
+		connectionFrom		= null;
 		
 		contextX = contextY = 0;
 	}
@@ -69,14 +69,14 @@ public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramLis
 		if(node == null)
 			return;
 		
-		modifyingConnection = true;
-		connectionTo = node;
+		modifyingConnection	= true;
+		connectionFrom		= node;
 		this.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 	}
 	private void stopModifyConnection()
 	{
 		modifyingConnection = false;
-		connectionTo = null;
+		connectionFrom		= null;
 		this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 	}
 	/** This method is called from within the constructor to
@@ -274,7 +274,7 @@ public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramLis
 		
 		if(modifyingConnection)
 		{
-			Globals.dd.modifyConnection(node, connectionTo, connectionLaced, addingConnection);
+			Globals.dd.modifyConnection(connectionFrom, node, connectionLaced, addingConnection);
 			stopModifyConnection();
 		}
     }//GEN-LAST:event_formMouseReleased

@@ -30,9 +30,9 @@ public class LinesWithArrow implements Shape
 			shape.lineTo(x1 + length, y1+(i*spacing)-width/2);
 		}
 		
-		shape.moveTo(x1 + length/2 + width/5, y1 - width);
-		shape.lineTo(x1 + length/2 - width/5, y1);
-		shape.lineTo(x1 + length/2 + width/5, y1 + width);
+		shape.moveTo(x1 + length/2 - width/5, y1 - width);
+		shape.lineTo(x1 + length/2 + width/5, y1);
+		shape.lineTo(x1 + length/2 - width/5, y1 + width);
 		
 		double rad = this.calcAngle(x1,y1,x2,y2);
 		shape.transform(AffineTransform.getRotateInstance(rad,x1,y1));

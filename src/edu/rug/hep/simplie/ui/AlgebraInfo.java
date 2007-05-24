@@ -29,6 +29,7 @@ public class AlgebraInfo extends javax.swing.JPanel implements DiagramListener
 	public void diagramChanged()
 	{
 		smallInfo.Update(Globals.group);
+		cartanMatrix.setText(Globals.matrixToString(Globals.dd.cartanMatrix(),0));
 	}
 	
 	/** This method is called from within the constructor to
