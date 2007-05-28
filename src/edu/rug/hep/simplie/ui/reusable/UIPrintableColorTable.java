@@ -39,6 +39,7 @@ public class UIPrintableColorTable extends JTable
 	public UIPrintableColorTable()
 	{
 		super.setShowGrid(false);
+		super.setAutoCreateRowSorter(true);
 	}
 	public void print(Graphics g)
 	{

@@ -41,8 +41,6 @@ public class LevelDecomposition extends javax.swing.JPanel
 		autoScanMaxLevel.SetLabel("Maximum level:");
 		
 		tableModel = (DefaultTableModel) representationsTable.getModel();
-		representationsTable.setAutoCreateRowSorter(true);
-		representationsTable.setModel(tableModel);
 	}
 	
 	public void printTable()

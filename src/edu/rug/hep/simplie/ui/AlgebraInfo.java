@@ -10,6 +10,9 @@ import edu.rug.hep.simplie.dynkindiagram.DiagramListener;
 import edu.rug.hep.simplie.group.*;
 import edu.rug.hep.simplie.*;
 
+import javax.swing.table.*;
+import java.util.Collection;
+import java.util.Iterator;
 
 
 /**
@@ -17,19 +20,46 @@ import edu.rug.hep.simplie.*;
  * @author  teake
  */
 public class AlgebraInfo extends javax.swing.JPanel implements DiagramListener
-{	
+{
+	private DefaultTableModel tableModel;
+	
 	/** Creates new form AlgebraInfo */
 	public AlgebraInfo()
 	{
 		initComponents();
 		Globals.dd.addListener(this);
-
+		tableModel = (DefaultTableModel) rootTable.getModel();
 	}
 	
 	public void diagramChanged()
 	{
 		smallInfo.Update(Globals.group);
 		cartanMatrix.setText(Globals.matrixToString(Globals.dd.cartanMatrix(),0));
+		fillRootTable();
+	}
+	
+	
+	private void fillRootTable()
+	{
+		/** Clear the table. */
+		tableModel.setRowCount(0);
+		
+		for (int i = 0; i < Globals.group.rs.size(); i++)
+		{
+			Collection roots	= Globals.group.rs.get(i);
+			Iterator iterator	= roots.iterator();
+			while (iterator.hasNext())
+			{
+				CRoot root = (CRoot) iterator.next();
+				Object[] rowData = new Object[5];
+				rowData[0] = Globals.intArrayToString(root.vector);
+				rowData[1] = 0;
+				rowData[2] = root.mult;
+				rowData[3] = root.coMult;
+				rowData[4] = root.height();
+				tableModel.addRow(rowData);
+			}
+		}
 	}
 	
 	/** This method is called from within the constructor to
@@ -40,11 +70,15 @@ public class AlgebraInfo extends javax.swing.JPanel implements DiagramListener
     // <editor-fold defaultstate="collapsed" desc=" Generated Code ">//GEN-BEGIN:initComponents
     private void initComponents()
     {
+        smallInfo = new edu.rug.hep.simplie.ui.reusable.UIAlgebraInfo();
+        jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         cartanMatrix = new javax.swing.JTextArea();
-        smallInfo = new edu.rug.hep.simplie.ui.reusable.UIAlgebraInfo();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        rootTable = new edu.rug.hep.simplie.ui.reusable.UIPrintableColorTable();
 
+        jTabbedPane1.setMinimumSize(new java.awt.Dimension(0, 0));
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Cartan matrix", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12)));
         cartanMatrix.setColumns(20);
         cartanMatrix.setRows(5);
@@ -56,15 +90,51 @@ public class AlgebraInfo extends javax.swing.JPanel implements DiagramListener
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 305, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 520, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 271, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 434, Short.MAX_VALUE)
                 .addContainerGap())
         );
+        jTabbedPane1.addTab("Matrices", jPanel1);
+
+        rootTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][]
+            {
+
+            },
+            new String []
+            {
+                "Vector", "Length", "Multiplicity", "CoMultiplicity", "Height"
+            }
+        )
+        {
+            Class[] types = new Class []
+            {
+                java.lang.String.class, java.lang.Integer.class, java.lang.Long.class, java.lang.Long.class, java.lang.Integer.class
+            };
+            boolean[] canEdit = new boolean []
+            {
+                false, false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex)
+            {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex)
+            {
+                return canEdit [columnIndex];
+            }
+        });
+        rootTable.setColumnSelectionAllowed(true);
+        jScrollPane2.setViewportView(rootTable);
+
+        jTabbedPane1.addTab("Roots", jScrollPane2);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -72,19 +142,19 @@ public class AlgebraInfo extends javax.swing.JPanel implements DiagramListener
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(smallInfo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 557, Short.MAX_VALUE)
+                    .addComponent(smallInfo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(smallInfo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(35, Short.MAX_VALUE))
+                .addComponent(smallInfo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 497, Short.MAX_VALUE)
+                .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 	
@@ -93,6 +163,9 @@ public class AlgebraInfo extends javax.swing.JPanel implements DiagramListener
     private javax.swing.JTextArea cartanMatrix;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTabbedPane jTabbedPane1;
+    private edu.rug.hep.simplie.ui.reusable.UIPrintableColorTable rootTable;
     private edu.rug.hep.simplie.ui.reusable.UIAlgebraInfo smallInfo;
     // End of variables declaration//GEN-END:variables
 	
