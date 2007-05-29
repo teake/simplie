@@ -7,7 +7,7 @@
 package edu.rug.hep.simplie.ui;
 
 import edu.rug.hep.simplie.Globals;
-import edu.rug.hep.simplie.dynkindiagram.CDynkinNode;
+import edu.rug.hep.simplie.dynkindiagram.*;
 import javax.swing.Popup;
 
 import javax.swing.JTextField;
@@ -22,7 +22,7 @@ import java.io.File;
  *
  * @author  Teake Nutma
  */
-public class Main extends javax.swing.JFrame
+public class Main extends javax.swing.JFrame implements DiagramListener
 {
 	private FileFilter ddFilter;
 	private FileFilter rsFilter;
@@ -50,6 +50,13 @@ public class Main extends javax.swing.JFrame
 		
 		ddFilter = new FileNameExtensionFilter("Dynkin diagram (*.dd)", "dd");
 		rsFilter = new FileNameExtensionFilter("Root system (*.rs)", "rs");
+		
+		Globals.dd.addListener(this);
+	}
+	
+	public void diagramChanged()
+	{
+		algebraInfo.setGroup(Globals.group);
 	}
 	
 	
@@ -70,7 +77,7 @@ public class Main extends javax.swing.JFrame
         systemOutTextArea = new edu.rug.hep.simplie.ui.SystemOutTextArea();
         TabbedPane = new javax.swing.JTabbedPane();
         algebraSetup = new edu.rug.hep.simplie.ui.AlgebraSetup();
-        algebraInfo1 = new edu.rug.hep.simplie.ui.AlgebraInfo();
+        algebraInfo = new edu.rug.hep.simplie.ui.AlgebraInfo();
         levelDecomposition = new edu.rug.hep.simplie.ui.LevelDecomposition();
         MenuBar = new javax.swing.JMenuBar();
         MenuFile = new javax.swing.JMenu();
@@ -144,7 +151,7 @@ public class Main extends javax.swing.JFrame
         setTitle("SimpLie");
         TabbedPane.addTab("Algebra setup", algebraSetup);
 
-        TabbedPane.addTab("Algebra info", algebraInfo1);
+        TabbedPane.addTab("Algebra info", algebraInfo);
 
         TabbedPane.addTab("Level decomposition", levelDecomposition);
 
@@ -355,11 +362,11 @@ public class Main extends javax.swing.JFrame
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(TabbedPane, javax.swing.GroupLayout.DEFAULT_SIZE, 567, Short.MAX_VALUE)
+            .addComponent(TabbedPane, javax.swing.GroupLayout.DEFAULT_SIZE, 609, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(TabbedPane, javax.swing.GroupLayout.DEFAULT_SIZE, 524, Short.MAX_VALUE)
+            .addComponent(TabbedPane, javax.swing.GroupLayout.DEFAULT_SIZE, 489, Short.MAX_VALUE)
         );
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -587,7 +594,7 @@ public class Main extends javax.swing.JFrame
     private javax.swing.JMenuItem MenuShowOutput;
     private javax.swing.JMenu MenuTools;
     private javax.swing.JTabbedPane TabbedPane;
-    private edu.rug.hep.simplie.ui.AlgebraInfo algebraInfo1;
+    private edu.rug.hep.simplie.ui.AlgebraInfo algebraInfo;
     private edu.rug.hep.simplie.ui.AlgebraSetup algebraSetup;
     private javax.swing.JDialog exportDialog;
     private edu.rug.hep.simplie.ui.ExportToTex exportToTex;

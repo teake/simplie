@@ -141,6 +141,14 @@ public class CRootSystem
 		return numPosGenerators;
 	}
 	
+	/** 
+	 * Returns the number of postive roots.
+	 */
+	public long numPosRoots()
+	{
+		return numPosRoots;
+	}
+	
 	/** Returns the size of the root system, that is the height to which we have constructed so far + 1. */
 	public int size()
 	{

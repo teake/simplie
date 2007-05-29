@@ -9,6 +9,8 @@ package edu.rug.hep.simplie;
 
 import edu.rug.hep.simplie.dynkindiagram.*;
 import edu.rug.hep.simplie.group.CGroup;
+import edu.rug.hep.simplie.math.*;
+
 import Jama.Matrix;
 import java.util.ArrayList;
 import java.lang.Runtime;
@@ -317,6 +319,33 @@ public class Globals implements DiagramListener
 			vector[i] = 0 + offset;
 		}
 		return vector;
+	}
+	
+	public static String matrixToString(int[][] matrix, int decimalPlates)
+	{
+		Matrix newMatrix = new Matrix(matrix.length, matrix.length);
+		for (int i = 0; i < matrix.length; i++)
+		{
+			for (int j = 0; j < matrix.length; j++)
+			{
+				newMatrix.set(i,j,matrix[i][j]);
+			}
+		}
+		return matrixToString(newMatrix,decimalPlates);
+	}
+	
+
+	public static String matrixToString(fraction[][] matrix, int decimalPlates)
+	{
+		Matrix newMatrix = new Matrix(matrix.length, matrix.length);
+		for (int i = 0; i < matrix.length; i++)
+		{
+			for (int j = 0; j < matrix.length; j++)
+			{
+				newMatrix.set(i,j,matrix[i][j].asDouble());
+			}
+		}
+		return matrixToString(newMatrix,decimalPlates);
 	}
 	
 	/**
