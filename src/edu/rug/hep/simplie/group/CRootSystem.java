@@ -141,7 +141,7 @@ public class CRootSystem
 		return numPosGenerators;
 	}
 	
-	/** 
+	/**
 	 * Returns the number of postive roots.
 	 */
 	public long numPosRoots()
@@ -419,7 +419,7 @@ public class CRootSystem
 						// Else we would count this one double.
 						if(properList.contains(rootMultiple))
 							continue;
-						rootMultiple.coMult	= coMult(rootMultiple,false);
+						rootMultiple.coMult	= calculateCoMult(rootMultiple,false);
 						multiplesList.add(rootMultiple);
 					}
 				}
@@ -474,37 +474,12 @@ public class CRootSystem
 			}
 			default:
 			{
-				// Determine its c_mult minus the root multiplicity.
-				fraction coMult = coMult(root,false);
+				// TODO: possibly move this to CRoot
+				// Determine its coMult minus the root multiplicity.
+				fraction coMult = calculateCoMult(root,false);
 				
-				//
-				// Determine its multiplicity.
-				//
-				// We split the Peterson formula into two symmetric halves,
-				// plus a remainder if the root height is even.
-				// Note that this only works because the Cartan matrix is symmetric!
-				//
-				
-				//TODO: possibly move this to CRoot
-				fraction multiplicity	= new fraction(0);
-				int halfHeight			= (int) Math.ceil(((float) root.height()) / 2);
-				for(int i = 1; i < halfHeight; i++)
-					multiplicity.add(petersonPart(root, i));
-				
-				multiplicity.multiply(2);
-				
-				if(root.height() % 2 == 0)
-					multiplicity.add(petersonPart(root, root.height() / 2));
-				
-				multiplicity.divide( group.innerProduct(root,root) - (2 * root.height() ) );
-				multiplicity.subtract(coMult);
-				root.mult	= multiplicity.asLong();
+				root.mult	= calculateMult(root,coMult);
 				root.coMult = coMult.plus(root.mult);
-				if(!multiplicity.isInt())
-				{
-					System.out.println("*WARNING*: fractional multiplicity of root " + root.toString());
-					System.out.println("*WARNING*: actual mult: " + multiplicity.toString());
-				}
 			}
 			
 		}
@@ -516,6 +491,14 @@ public class CRootSystem
 		return true;
 	}
 	
+	
+	
+	/********************************
+	 * Multiplicity functions below *
+	 ********************************/
+	
+	
+	
 	/**
 	 * Calculates the "co-multiplicity", i.e. the fractional sum of multiplicities
 	 * of all fractional roots. Used in the Peterson formula.
@@ -523,8 +506,7 @@ public class CRootSystem
 	 * @param	root	The root whose co-multiplicity we should calculate.
 	 * @return			The co-multiplicity.
 	 */
-	// TODO : possibly move this to CRoot.
-	private fraction coMult(CRoot root, boolean includeRoot)
+	private fraction calculateCoMult(CRoot root, boolean includeRoot)
 	{
 		int offset		= ( includeRoot ) ? 1 : 2;
 		fraction coMult	= new fraction(0);
@@ -542,6 +524,44 @@ public class CRootSystem
 			}
 		}
 		return coMult;
+	}
+	
+	/** 
+	 * Calculates the multiplicity of a root.
+	 * Based on the Peterson formula. Note that it is necessary to give the co-multiplicity
+	 * in advance.
+	 *
+	 * @param	root	The root whose multiplicity is calculated.
+	 * @param	coMult	The co-multiplicity of that root.
+	 * @return			The multiplicity of the root.
+	 */	
+	private long calculateMult(CRoot root, fraction coMult)
+	{		
+		fraction multiplicity	= new fraction(0);
+		
+		// We split the Peterson formula into two symmetric halves,
+		// plus a remainder if the root height is even.
+		// Note that this only works because the Cartan matrix is symmetric!
+		
+		int halfHeight = (int) Math.ceil(((float) root.height()) / 2);
+		for(int i = 1; i < halfHeight; i++)
+			multiplicity.add(petersonPart(root, i));
+		
+		multiplicity.multiply(2);
+		
+		if(root.height() % 2 == 0)
+			multiplicity.add(petersonPart(root, root.height() / 2));
+		
+		multiplicity.divide( group.innerProduct(root,root) - (2 * root.height() ) );
+		multiplicity.subtract(coMult);
+		
+		if(!multiplicity.isInt())
+		{
+			System.out.println("*WARNING*: fractional multiplicity of root " + root.toString());
+			System.out.println("*WARNING*: actual mult: " + multiplicity.toString());
+		}
+		
+		return multiplicity.asLong();		
 	}
 	
 	/**
