@@ -12,7 +12,7 @@ import edu.rug.hep.simplie.math.fraction;
 import java.io.Serializable;
 
 /**
- * A class for storing root information: 
+ * A class for storing root information:
  * the root vector, its (co-)multiplicity, and its height.
  *
  * @author Teake Nutma
@@ -62,7 +62,7 @@ public class CRoot implements Serializable
 	}
 	
 	/**
-	 * Returns the height of the root, 
+	 * Returns the height of the root,
 	 * that is the sum of the components of its vector.
 	 *
 	 * @return The height of the root.
@@ -197,6 +197,23 @@ public class CRoot implements Serializable
 		}
 		
 		return true;
+	}
+	
+	/** Returns a hashcode based on the vector of the root. */
+	public int hashCode()
+	{
+		int hash = 0;
+		int len = vector.length;
+		for ( int i=0; i<len; i++ )
+		{
+			hash <<= 1;
+			if ( hash < 0 )
+			{
+				hash |= 1;
+			}
+			hash ^= vector[ i ];
+		}
+		return hash;
 	}
 	
 	/** Overrides default toString method */
