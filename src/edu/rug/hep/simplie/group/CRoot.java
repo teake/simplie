@@ -8,7 +8,7 @@
 package edu.rug.hep.simplie.group;
 
 import edu.rug.hep.simplie.Globals;
-import edu.rug.hep.simplie.math.*;
+import edu.rug.hep.simplie.math.fraction;
 import java.io.Serializable;
 
 /**
@@ -23,7 +23,6 @@ public class CRoot implements Serializable
 	
 	/** The root vector. */
 	public final int[] vector;
-	public final IntVector vec;
 	/** The root multiplicity. */
 	public long	mult;
 	/** Sum over multiplicities of roots that are fractionals of this one (used in Peterson's formula). */
@@ -41,8 +40,7 @@ public class CRoot implements Serializable
 	 */
 	public CRoot(int[] rootVector)
 	{
-		vec		= new IntVector(rootVector);
-		vector	= vec.vector;
+		vector	= rootVector.clone();
 		mult	= 0;
 	}
 	
@@ -53,8 +51,11 @@ public class CRoot implements Serializable
 	 */
 	public CRoot(int rank)
 	{
-		vec		= new IntVector(rank);
-		vector	= vec.vector;
+		vector = new int[rank];
+		for (int i = 0; i < rank; i++)
+		{
+			vector[i] = 0;
+		}
 		height	= 0;
 		highest = 0;
 		mult	= 0;
@@ -186,14 +187,23 @@ public class CRoot implements Serializable
 		
 		CRoot compareRoot = (CRoot) obj;
 		
-		return compareRoot.vec.equals(this.vec);
+		if(vector.length != compareRoot.vector.length)
+			return false;
+		
+		for (int i = 0; i < vector.length; i++)
+		{
+			if(vector[i] != compareRoot.vector[i])
+				return false;
+		}
+		
+		return true;
 	}
 	
 	/** Overrides default toString method */
 	public String toString()
 	{
 		String output = "height: " + height() +
-				", vector: " + vec.toString() +
+				", vector: " + Globals.intArrayToString(vector) +
 				", mult: " + mult;
 		
 		if(coMult != null)
