@@ -463,23 +463,28 @@ public class CRootSystem
 		switch(root.height())
 		{
 			case 0:
-				root.mult = rank;
+				root.mult	= rank;
+				root.coMult = new fraction(0);
+				root.norm	= 0;
 				return true;
 			case 1:
 			{
 				// We don't need to calculate these for the simple roots.
 				root.mult	= 1;
 				root.coMult	= new fraction(1);
+				root.norm	= 2;
 				break;
 			}
 			default:
 			{
 				// TODO: possibly move this to CRoot
+				
 				// Determine its coMult minus the root multiplicity.
 				fraction coMult = calculateCoMult(root,false);
 				
 				root.mult	= calculateMult(root,coMult);
 				root.coMult = coMult.plus(root.mult);
+				root.norm	= group.innerProduct(root,root);
 			}
 			
 		}

@@ -63,7 +63,7 @@ public class AlgebraInfo extends javax.swing.JPanel
 				CRoot root = (CRoot) iterator.next();
 				Object[] rowData = new Object[5];
 				rowData[0] = Globals.intArrayToString(root.vector);
-				rowData[1] = 0;
+				rowData[1] = root.norm;
 				rowData[2] = root.mult;
 				rowData[3] = root.coMult;
 				rowData[4] = root.height();
@@ -173,7 +173,7 @@ public class AlgebraInfo extends javax.swing.JPanel
             },
             new String []
             {
-                "Vector", "Length", "Multiplicity", "CoMultiplicity", "Height"
+                "Vector", "Norm", "Multiplicity", "CoMultiplicity", "Height"
             }
         )
         {
