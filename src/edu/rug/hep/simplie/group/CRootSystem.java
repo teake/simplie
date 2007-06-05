@@ -25,6 +25,9 @@ import javolution.util.FastCollection.Record;
  */
 public class CRootSystem
 {
+	/** Vector containing the norm of the simple roots divided by two. */
+	public final int[] simpleRootNorms;
+	
 	/** The group of which this is the rootsystem. */
 	private final CGroup group;
 	/** The rank of the group of which this is the rootsystem. */
@@ -54,6 +57,7 @@ public class CRootSystem
 		numPosRoots			= 0;
 		numPosGenerators	= 0;
 		constructedHeight	= 0;
+		simpleRootNorms		= new int[rank];
 		
 		if(rank==0)
 			return;
@@ -73,15 +77,17 @@ public class CRootSystem
 		}
 		simpleRoots = rootSystem.get(1);
 		constructedHeight = 1;
+
+		for (int i = 0; i < rank; i++)
+		{
+			// The norm of the simple roots are always a multiple of 2.
+			simpleRootNorms[i] = simpleRoots.get(i).norm / 2;
+		}
 		
 		// Set the table of root multiples.
 		rootMultiples = new FastList<FastList>();
 		rootMultiples.add(0,new FastList<CRoot>());
 		rootMultiples.add(1,new FastList<CRoot>());
-		
-		// If the group is finite, we can construct the root system to all heights.
-		if(group.finite)
-			construct(0);
 	}
 	
 	/** Cancels the construction of the rootsystem. */
@@ -167,7 +173,7 @@ public class CRootSystem
 	 * @param	index	The height of the roots to get.
 	 * @return			A collection containing the roots of that height.
 	 */
-	public Collection get(int index)
+	public Collection<CRoot> get(int index)
 	{
 		return rootSystem.get(index);
 	}
@@ -310,7 +316,7 @@ public class CRootSystem
 	 * @param maxHeight	The height up to and including which we should construct the root system.
 	 *					Construct the whole root system if maxHeight == 0.
 	 */
-	private void construct(int maxHeight)
+	public void construct(int maxHeight)
 	{
 		FastList<CRoot> prevRoots;
 		FastSet<CRoot> rootCache;

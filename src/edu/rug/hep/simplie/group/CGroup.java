@@ -55,13 +55,6 @@ public class CGroup
 	public final CWeight weylVector;
 	
 	
-	/*********************************
-	 * Private properties
-	 *********************************/
-	
-	private CHighestWeightRep hwRep;
-	
-	
 	/**********************************
 	 * Public methods
 	 **********************************/
@@ -157,7 +150,7 @@ public class CGroup
 			tempType += rank;
 		type = tempType;
 		
-		// Set up the root system
+		// Set up the root system.
 		rs = new CRootSystem(this);
 		
 		// Determine the dimension.
@@ -171,6 +164,11 @@ public class CGroup
 			dim			= 0;
 			dimension	= "Infinite";
 		}
+		
+		// If the group is finite, we can construct the root system to all heights.
+		if(finite)
+			rs.construct(0);
+		
 	}
 	
 	/**
@@ -228,7 +226,7 @@ public class CGroup
 		{
 			for (int j = 0; j < rank; j++)
 			{
-				result += cartanMatrix[i][j] * root1.vector[i] * root2.vector[j];
+				result += cartanMatrix[i][j] * root1.vector[i] * root2.vector[j] * rs.simpleRootNorms[j];
 			}
 		}
 		return result;
@@ -282,13 +280,13 @@ public class CGroup
 		return height.asInt();
 	}
 	
-	/** 
+	/**
 	 * Performs a simple Weyl reflection on the dynkin labels of a weight.
 	 *
 	 * @param	weightLabels	The dynkin labels of the weight.
 	 * @param	i				The index of the simple root with which we should reflect.
 	 * @return					The dynkin labels of the reflected weight.
-	 */	
+	 */
 	public int[] simpWeylRefl(int[] weightLabels, int i)
 	{
 		int[] output = new int[weightLabels.length];
