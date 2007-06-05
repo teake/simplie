@@ -30,7 +30,8 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 {
 	private final boolean calcRootMult;
 	private final boolean calcRepMult;
-	private final boolean showZeroMult;
+	private final boolean showZeroMultRoot;
+	private final boolean showZeroMultRep;
 	private final boolean showExotic;
 	private final int minLevel;
 	private final int maxLevel;
@@ -64,7 +65,8 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 			boolean posSignConvention,
 			boolean calcRootMult,
 			boolean calcRepMult,
-			boolean showZeroMult,
+			boolean showZeroMultRoot,
+			boolean showZeroMultRep,
 			boolean showExotic,
 			DefaultTableModel tableModel,
 			int minLevel,
@@ -75,7 +77,8 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 		this.maxLevel		= maxLevel;
 		this.calcRootMult	= calcRootMult;
 		this.calcRepMult	= calcRepMult;
-		this.showZeroMult	= showZeroMult;
+		this.showZeroMultRoot	= showZeroMultRoot;
+		this.showZeroMultRep	= showZeroMultRep;
 		this.showExotic		= showExotic;
 		this.signConvention = posSignConvention ? 1 : -1;
 		this.posSignConvention = posSignConvention;
@@ -384,8 +387,12 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 		// Publish the representations to the output table.
 		for(CRepresentation rep : repContainer)
 		{
-			// Don't add this representation if is has zero outer multplicity and we don't display zero mults.
-			if(calcRootMult && calcRepMult && !showZeroMult && rep.getOuterMult() == 0)
+			// Don't add this representation if its root has zero multiplicity and we don't show those
+			if(calcRootMult && !showZeroMultRoot && rep.getRootMult() == 0)
+				continue;
+			
+			// Don't add this representation if it has zero outer multplicity and we don't display zero mults.
+			if(calcRootMult && calcRepMult && !showZeroMultRep && rep.getOuterMult() == 0)
 				continue;
 			
 			// Add the data to the table.

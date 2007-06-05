@@ -82,12 +82,13 @@ public class LevelDecomposition extends javax.swing.JPanel
         cbLocked = new javax.swing.JCheckBox();
         settingsPanel = new javax.swing.JPanel();
         cbRootMult = new javax.swing.JCheckBox();
-        cbZeroMult = new javax.swing.JCheckBox();
+        cbZeroMultRep = new javax.swing.JCheckBox();
         cbRepMult = new javax.swing.JCheckBox();
         jLabel1 = new javax.swing.JLabel();
         rbSignPos = new javax.swing.JRadioButton();
         rbSignNeg = new javax.swing.JRadioButton();
         cbExotic = new javax.swing.JCheckBox();
+        cbZeroMultRoot = new javax.swing.JCheckBox();
 
         RepresentationPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Subalgebra Representations", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12)));
         representationsTable.setModel(new javax.swing.table.DefaultTableModel(
@@ -135,7 +136,7 @@ public class LevelDecomposition extends javax.swing.JPanel
         RepresentationPanelLayout.setVerticalGroup(
             RepresentationPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(RepresentationPanelLayout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 212, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 191, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -183,7 +184,7 @@ public class LevelDecomposition extends javax.swing.JPanel
             AutoScanPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, AutoScanPanelLayout.createSequentialGroup()
                 .addComponent(cbLocked)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
                 .addComponent(autoScanMaxLevel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(autoScanMinLevel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -200,9 +201,10 @@ public class LevelDecomposition extends javax.swing.JPanel
         cbRootMult.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
         cbRootMult.setMargin(new java.awt.Insets(0, 0, 0, 0));
 
-        cbZeroMult.setText("Show reps with zero multiplicity");
-        cbZeroMult.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
-        cbZeroMult.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        cbZeroMultRep.setSelected(true);
+        cbZeroMultRep.setText("Show reps with zero outer multiplicity");
+        cbZeroMultRep.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
+        cbZeroMultRep.setMargin(new java.awt.Insets(0, 0, 0, 0));
 
         cbRepMult.setSelected(true);
         cbRepMult.setText("Calculate representation multiplicities");
@@ -227,6 +229,10 @@ public class LevelDecomposition extends javax.swing.JPanel
         cbExotic.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
         cbExotic.setMargin(new java.awt.Insets(0, 0, 0, 0));
 
+        cbZeroMultRoot.setText("Show roots with zero multiplicity");
+        cbZeroMultRoot.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
+        cbZeroMultRoot.setMargin(new java.awt.Insets(0, 0, 0, 0));
+
         javax.swing.GroupLayout settingsPanelLayout = new javax.swing.GroupLayout(settingsPanel);
         settingsPanel.setLayout(settingsPanelLayout);
         settingsPanelLayout.setHorizontalGroup(
@@ -240,9 +246,10 @@ public class LevelDecomposition extends javax.swing.JPanel
                         .addGroup(settingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(rbSignNeg)
                             .addComponent(rbSignPos)))
-                    .addComponent(cbZeroMult)
                     .addComponent(cbRootMult)
                     .addComponent(cbRepMult)
+                    .addComponent(cbZeroMultRoot)
+                    .addComponent(cbZeroMultRep)
                     .addComponent(cbExotic))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -259,7 +266,9 @@ public class LevelDecomposition extends javax.swing.JPanel
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(cbRepMult)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(cbZeroMult)
+                .addComponent(cbZeroMultRoot)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(cbZeroMultRep)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(cbExotic)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -284,15 +293,12 @@ public class LevelDecomposition extends javax.swing.JPanel
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(AutoScanPanel, 0, 158, Short.MAX_VALUE)
+                    .addComponent(AutoScanPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(settingsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(RepresentationPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
-
-        layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {AutoScanPanel, settingsPanel});
-
     }// </editor-fold>//GEN-END:initComponents
 	
     private void cbLockedStateChanged(javax.swing.event.ChangeEvent evt)//GEN-FIRST:event_cbLockedStateChanged
@@ -338,7 +344,8 @@ public class LevelDecomposition extends javax.swing.JPanel
 					rbSignPos.isSelected(),
 					cbRootMult.isSelected(),
 					cbRepMult.isSelected(),
-					cbZeroMult.isSelected(),
+					cbZeroMultRoot.isSelected(),
+					cbZeroMultRep.isSelected(),
 					cbExotic.isSelected(),
 					tableModel, 
 					autoScanMinLevel.GetValue(),
@@ -380,7 +387,8 @@ public class LevelDecomposition extends javax.swing.JPanel
     private javax.swing.JCheckBox cbLocked;
     private javax.swing.JCheckBox cbRepMult;
     private javax.swing.JCheckBox cbRootMult;
-    private javax.swing.JCheckBox cbZeroMult;
+    private javax.swing.JCheckBox cbZeroMultRep;
+    private javax.swing.JCheckBox cbZeroMultRoot;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JRadioButton rbSignNeg;
