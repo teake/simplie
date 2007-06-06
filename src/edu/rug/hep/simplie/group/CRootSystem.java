@@ -11,6 +11,7 @@ import edu.rug.hep.simplie.Globals;
 import edu.rug.hep.simplie.math.fraction;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.io.*;
 
 import javolution.util.FastList;
@@ -83,9 +84,110 @@ public class CRootSystem
 			CRoot simpleRoot	= new CRoot(rootVector);
 			simpleRoot.mult		= 1;
 			simpleRoot.coMult	= new fraction(1);
-			simpleRoot.norm		= 2;
+			simpleRoot.norm		= 0; // these will be set later on.
 			simpleRoots.add(simpleRoot);
 		}
+		// Set the root norms for every disconnected piece.
+		while(true)
+		{
+			int shortIndex = -1;
+			
+			// Grab the first simple root that hasn't been set yet.
+			for (int i = 0; i < rank; i++)
+			{
+				CRoot simpleRoot = simpleRoots.get(i);
+				if(simpleRoot.norm == 0)
+				{
+					shortIndex = i;
+					break;
+				}
+			}
+			
+			// Are we done?
+			if(shortIndex == -1)
+				break;
+			
+			// If we're still here then we're not done.
+			// First detect all the simple roots in this piece.
+			HashSet<Integer> connectedRoots = new HashSet<Integer>();
+			connectedRoots.add(shortIndex);
+			while(true)
+			{
+				int addIndex = -1;
+				// Try to see if this piece has connections to roots we've missed so far.
+				loopToBreak:
+					for(Integer index : connectedRoots)
+					{
+						for (int i = 0; i < rank; i++)
+						{
+							if(index != i && group.cartanMatrix[i][index] != 0)
+							{
+								if(!connectedRoots.contains(i))
+								{
+									addIndex = i;
+									break loopToBreak;
+								}
+							}
+						}
+					}
+					
+				if(addIndex != -1)
+					connectedRoots.add(addIndex);
+				else
+					break;
+			}
+			
+			// Find the shortest root of this piece.
+			for (Integer i : connectedRoots)
+			{
+				for (Integer j : connectedRoots)
+				{
+					if(i != j && group.cartanMatrix[i][j] != 0 && group.cartanMatrix[shortIndex][j] != 0)
+					{
+						double currentCoef	= group.cartanMatrix[shortIndex][j] / group.cartanMatrix[j][shortIndex];
+						double newCoef		= group.cartanMatrix[i][j] / group.cartanMatrix[j][i];
+						if(newCoef < currentCoef)
+						{
+							shortIndex = j;
+						}
+					}
+				}
+			}
+			
+			// First set the norm for the shortest root.
+			CRoot shortestRoot = simpleRoots.get(shortIndex);
+			shortestRoot.norm = 2;
+			
+			// And now for the others.
+			while(true)
+			{
+				boolean didSomething = false;
+				for (Integer i : connectedRoots)
+				{
+					CRoot rootI = simpleRoots.get(i);
+					if(rootI.norm == 0)
+						continue;
+					
+					for(Integer j : connectedRoots)
+					{
+						CRoot rootJ = simpleRoots.get(j);
+						if(rootJ.norm != 0)
+							continue;
+						if(i!=j && group.cartanMatrix[i][j] != 0)
+						{
+							int coefficient = group.cartanMatrix[j][i] / group.cartanMatrix[i][j];
+							rootJ.norm = coefficient * rootI.norm;
+							didSomething = true;
+						}
+					}
+				}
+				if(!didSomething)
+					break;
+			}
+			
+			
+		}
+		
 		rootSystem.add(1,simpleRoots);
 		
 		// And we've constructed to height 1.
@@ -96,7 +198,7 @@ public class CRootSystem
 			// The norm of the simple roots are always a multiple of 2.
 			simpleRootNorms[i] = simpleRoots.get(i).norm / 2;
 		}
-		
+		System.out.println(Globals.intArrayToString(simpleRootNorms));
 		// Set the table of root multiples.
 		rootMultiples = new FastList<FastList>();
 		rootMultiples.add(0,new FastList<CRoot>());

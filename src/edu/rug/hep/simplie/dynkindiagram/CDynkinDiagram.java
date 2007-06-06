@@ -307,16 +307,6 @@ public class CDynkinDiagram
 		if( fromNode == null || toNode == null || fromNode.equals(toNode) )
 			return;
 		
-		if(laced > 1)
-		{
-			// Only allow one non-simply laced connection.
-			for(CDynkinConnection conn : connections)
-			{
-				if(conn.laced > 1)
-					return;
-			}
-		}
-		
 		CDynkinConnection connection = new CDynkinConnection(fromNode, toNode, laced);
 		
 		if(add && !connections.contains(connection))
