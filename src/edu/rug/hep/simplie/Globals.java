@@ -342,8 +342,9 @@ public class Globals implements DiagramListener
 		{
 			for (int j = 0; j < matrix.length; j++)
 			{
-				double value = matrix[i][j] == null ? 0 : matrix[i][j].asDouble();
-				newMatrix.set(i,j,value);
+				if(matrix[i][j] == null)
+					return "";
+				newMatrix.set(i,j,matrix[i][j].asDouble());
 			}
 		}
 		return matrixToString(newMatrix,decimalPlates);

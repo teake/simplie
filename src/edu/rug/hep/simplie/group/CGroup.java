@@ -170,8 +170,8 @@ public class CGroup
 		}
 		
 		// If the group is finite, we can construct the root system to all heights.
-		//if(finite)
-			//rs.construct(0);
+		if(finite)
+			rs.construct(0);
 		
 	}
 	
