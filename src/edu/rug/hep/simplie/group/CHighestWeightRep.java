@@ -26,14 +26,14 @@ import javolution.util.FastCollection.Record;
  */
 public class CHighestWeightRep
 {
+	/** The height of the highest height. */
+	public final int		highestHeight;
 	/** The group of which this is a weight system. */
 	private final CGroup	group;
 	/** The rank of the group of which this is a weight system. */
 	private final int		rank;
 	/** The heighest weight of the representation. */
 	private final CWeight	highestWeight;
-	/** The hight of the highest root */
-	private final int		highestHeight;
 	/** A constant used in the Freudenthal formula. */
 	private final fraction	highestWeightFactor;
 	

@@ -396,7 +396,7 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 				continue;
 			
 			// Add the data to the table.
-			Object[] rowData = new Object[11];
+			Object[] rowData = new Object[12];
 			rowData[0] = Globals.intArrayToString(rep.levels);
 			rowData[1] = Globals.intArrayToString(rep.subDynkinLabels);
 			rowData[2] = Globals.intArrayToString(rep.disDynkinLabels);
@@ -407,7 +407,8 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 			rowData[7] = rep.getRootMult();
 			rowData[8] = rep.getOuterMult();
 			rowData[9] = rep.height;
-			rowData[10] = rep.numIndices;
+			rowData[10] = posSignConvention ? rep.height : rep.height + 2 * rep.weightHeight;
+			rowData[11] = rep.numIndices;
 			publish(rowData);
 		}
 	}

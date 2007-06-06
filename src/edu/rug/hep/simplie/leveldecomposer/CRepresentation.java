@@ -36,6 +36,8 @@ public class CRepresentation implements Comparable<CRepresentation>
 	public final int length;
 	/** The height of the associated root. */
 	public final int height;
+	/** The height of the highest weight state */
+	public final int weightHeight;
 	
 	/** The number of indices */
 	public final int numIndices;
@@ -90,6 +92,7 @@ public class CRepresentation implements Comparable<CRepresentation>
 		
 		// Instantiate the highest weight rep.
 		hwRep = new CHighestWeightRep(Globals.coGroup, dynkinLabels);
+		weightHeight = hwRep.highestHeight;
 		
 		// Calculate the number of indices.
 		int tempNumIndices = 0;
