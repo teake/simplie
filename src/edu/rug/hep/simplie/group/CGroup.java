@@ -88,25 +88,14 @@ public class CGroup
 		
 		this.cartanMatrix		= new int[rank][rank];
 		this.cartanMatrixInv	= new fraction[rank][rank];
-		this.qFormMatrix		= this.cartanMatrixInv;
+		this.qFormMatrix		= new fraction[rank][rank];
+		
 		// Set the cartan matrix
 		for(int i=0; i<rank; i++)
 		{
 			for(int j=0; j<rank; j++)
 			{
 				this.cartanMatrix[i][j] = (int) Math.round(cartanMatrix.get(i,j));
-			}
-		}
-		// Set the inverse of the Cartan matrix if possible.
-		if(rank != 0 && cartanMatrix.rank() == rank && det != 0)
-		{
-			Matrix cmInv = cartanMatrix.inverse();
-			for (int i = 0; i < rank; i++)
-			{
-				for (int j = 0; j < rank; j++)
-				{
-					cartanMatrixInv[i][j] = new fraction( Math.round( det * cmInv.get(i,j) ), det);
-				}
 			}
 		}
 		
@@ -152,6 +141,21 @@ public class CGroup
 		
 		// Set up the root system.
 		rs = new CRootSystem(this);
+		
+		// Set the inverse of the Cartan matrix and the quadratic form matrix if possible.
+		if(rank != 0 && cartanMatrix.rank() == rank && det != 0)
+		{
+			Matrix cmInv = cartanMatrix.inverse();
+			for (int i = 0; i < rank; i++)
+			{
+				for (int j = 0; j < rank; j++)
+				{
+					cartanMatrixInv[i][j]	= new fraction( Math.round( det * cmInv.get(i,j) ), det);
+					qFormMatrix[i][j]		= cartanMatrixInv[i][j].times(rs.simpleRootNorms[i]);
+				}
+			}
+			
+		}
 		
 		// Determine the dimension.
 		if(det > 0 || rank == 0)
