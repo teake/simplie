@@ -50,26 +50,6 @@ public class AlgebraInfo extends javax.swing.JPanel
 		
 		cartanMatrix.setText(Globals.matrixToString(group.cartanMatrix,0));
 		cartanMatrixInverse.setText(Globals.matrixToString(group.cartanMatrixInv,1));
-		
-		/** Clear and fill the table. */
-		tableModel.setRowCount(0);
-		
-		for (int i = 0; i < Globals.group.rs.size(); i++)
-		{
-			Collection roots	= Globals.group.rs.get(i);
-			Iterator iterator	= roots.iterator();
-			while (iterator.hasNext())
-			{
-				CRoot root = (CRoot) iterator.next();
-				Object[] rowData = new Object[5];
-				rowData[0] = Globals.intArrayToString(root.vector);
-				rowData[1] = root.norm;
-				rowData[2] = root.mult;
-				rowData[3] = root.coMult;
-				rowData[4] = root.height();
-				tableModel.addRow(rowData);
-			}
-		}
 	}
 	
 	/** This method is called from within the constructor to
@@ -81,7 +61,7 @@ public class AlgebraInfo extends javax.swing.JPanel
     private void initComponents()
     {
         smallInfo = new edu.rug.hep.simplie.ui.reusable.UIAlgebraInfo();
-        jTabbedPane1 = new javax.swing.JTabbedPane();
+        tabbedPane = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -96,8 +76,9 @@ public class AlgebraInfo extends javax.swing.JPanel
         jLabel2 = new javax.swing.JLabel();
         numPosRoots = new javax.swing.JLabel();
         constructedHeight = new javax.swing.JLabel();
+        fillRootTable = new javax.swing.JButton();
 
-        jTabbedPane1.setMinimumSize(new java.awt.Dimension(0, 0));
+        tabbedPane.setMinimumSize(new java.awt.Dimension(0, 0));
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Cartan matrix", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12)));
         cartanMatrix.setColumns(20);
         cartanMatrix.setEditable(false);
@@ -164,7 +145,7 @@ public class AlgebraInfo extends javax.swing.JPanel
                     .addComponent(jPanel4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
-        jTabbedPane1.addTab("Matrices", jPanel1);
+        tabbedPane.addTab("Matrices", jPanel1);
 
         rootTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][]
@@ -199,7 +180,7 @@ public class AlgebraInfo extends javax.swing.JPanel
         rootTable.setColumnSelectionAllowed(true);
         jScrollPane2.setViewportView(rootTable);
 
-        jTabbedPane1.addTab("Roots", jScrollPane2);
+        tabbedPane.addTab("Roots", jScrollPane2);
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Roots info", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12)));
         jLabel1.setText("Constructed height:");
@@ -223,7 +204,7 @@ public class AlgebraInfo extends javax.swing.JPanel
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(constructedHeight)
                     .addComponent(numPosRoots))
-                .addContainerGap(125, Short.MAX_VALUE))
+                .addContainerGap(69, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -239,6 +220,15 @@ public class AlgebraInfo extends javax.swing.JPanel
                 .addContainerGap(78, Short.MAX_VALUE))
         );
 
+        fillRootTable.setText("Fill root table");
+        fillRootTable.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                fillRootTableActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -246,31 +236,64 @@ public class AlgebraInfo extends javax.swing.JPanel
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 550, Short.MAX_VALUE)
+                    .addComponent(tabbedPane, javax.swing.GroupLayout.DEFAULT_SIZE, 550, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(smallInfo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(fillRootTable)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(smallInfo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(smallInfo, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(fillRootTable))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 275, Short.MAX_VALUE)
+                .addComponent(tabbedPane, javax.swing.GroupLayout.DEFAULT_SIZE, 275, Short.MAX_VALUE)
                 .addContainerGap())
         );
+
+        layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jPanel2, smallInfo});
+
     }// </editor-fold>//GEN-END:initComponents
+	
+	private void fillRootTableActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_fillRootTableActionPerformed
+	{//GEN-HEADEREND:event_fillRootTableActionPerformed
+		// Set the focus to the root table.
+		tabbedPane.setSelectedIndex(1);
+		
+		// Clear and fill the table.
+		tableModel.setRowCount(0);
+		
+		for (int i = 0; i < Globals.group.rs.size(); i++)
+		{
+			Collection roots	= Globals.group.rs.get(i);
+			Iterator iterator	= roots.iterator();
+			while (iterator.hasNext())
+			{
+				CRoot root = (CRoot) iterator.next();
+				Object[] rowData = new Object[5];
+				rowData[0] = Globals.intArrayToString(root.vector);
+				rowData[1] = root.norm;
+				rowData[2] = root.mult;
+				rowData[3] = root.coMult;
+				rowData[4] = root.height();
+				tableModel.addRow(rowData);
+			}
+		}
+	}//GEN-LAST:event_fillRootTableActionPerformed
 	
 	
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextArea cartanMatrix;
     private javax.swing.JTextArea cartanMatrixInverse;
     private javax.swing.JLabel constructedHeight;
+    private javax.swing.JButton fillRootTable;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
@@ -280,10 +303,10 @@ public class AlgebraInfo extends javax.swing.JPanel
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JLabel numPosRoots;
     private edu.rug.hep.simplie.ui.reusable.UIPrintableColorTable rootTable;
     private edu.rug.hep.simplie.ui.reusable.UIAlgebraInfo smallInfo;
+    private javax.swing.JTabbedPane tabbedPane;
     // End of variables declaration//GEN-END:variables
 	
 }
