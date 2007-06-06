@@ -63,9 +63,16 @@ public class CRootSystem
 			return;
 		
 		// Add the CSA to the root table.
-		addRoot(new CRoot(rank));
+		FastList<CRoot> csa = new FastList<CRoot>();
+		CRoot csaRoot	= new CRoot(rank);
+		csaRoot.mult	= rank;
+		csaRoot.coMult	= new fraction(0);
+		csaRoot.norm	= 0;
+		csa.add(csaRoot);
+		rootSystem.add(0,csa);
 		
 		// Add the simple roots to the root table.
+		simpleRoots = new FastList<CRoot>();
 		for (int i = 0; i < rank; i++)
 		{
 			int[] rootVector = new int[rank];
@@ -73,11 +80,17 @@ public class CRootSystem
 			{
 				rootVector[j] = ( i == j) ? 1 : 0;
 			}
-			addRoot(new CRoot(rootVector));
+			CRoot simpleRoot	= new CRoot(rootVector);
+			simpleRoot.mult		= 1;
+			simpleRoot.coMult	= new fraction(1);
+			simpleRoot.norm		= 2;
+			simpleRoots.add(simpleRoot);
 		}
-		simpleRoots = rootSystem.get(1);
+		rootSystem.add(1,simpleRoots);
+		
+		// And we've constructed to height 1.
 		constructedHeight = 1;
-
+		
 		for (int i = 0; i < rank; i++)
 		{
 			// The norm of the simple roots are always a multiple of 2.
@@ -463,41 +476,21 @@ public class CRootSystem
 			rootSystem.add(root.height(),roots);
 		}
 		
-		// Add it to the table.
-		roots.add(root);
+		// TODO: possibly move this to CRoot
 		
-		switch(root.height())
-		{
-			case 0:
-				root.mult	= rank;
-				root.coMult = new fraction(0);
-				root.norm	= 0;
-				return true;
-			case 1:
-			{
-				// We don't need to calculate these for the simple roots.
-				root.mult	= 1;
-				root.coMult	= new fraction(1);
-				root.norm	= 2;
-				break;
-			}
-			default:
-			{
-				// TODO: possibly move this to CRoot
-				
-				// Determine its coMult minus the root multiplicity.
-				fraction coMult = calculateCoMult(root,false);
-				
-				root.mult	= calculateMult(root,coMult);
-				root.coMult = coMult.plus(root.mult);
-				root.norm	= group.innerProduct(root,root);
-			}
-			
-		}
+		// Determine its coMult minus the root multiplicity.
+		fraction coMult = calculateCoMult(root,false);
+		
+		root.mult	= calculateMult(root,coMult);
+		root.coMult = coMult.plus(root.mult);
+		root.norm	= group.innerProduct(root,root);
 		
 		// Increment numPosRoots.
 		numPosRoots++;
 		numPosGenerators += root.mult;
+		
+		// Add finally it to the table.
+		roots.add(root);
 		
 		return true;
 	}
@@ -537,7 +530,7 @@ public class CRootSystem
 		return coMult;
 	}
 	
-	/** 
+	/**
 	 * Calculates the multiplicity of a root.
 	 * Based on the Peterson formula. Note that it is necessary to give the co-multiplicity
 	 * in advance.
@@ -545,9 +538,9 @@ public class CRootSystem
 	 * @param	root	The root whose multiplicity is calculated.
 	 * @param	coMult	The co-multiplicity of that root.
 	 * @return			The multiplicity of the root.
-	 */	
+	 */
 	private long calculateMult(CRoot root, fraction coMult)
-	{		
+	{
 		fraction multiplicity	= new fraction(0);
 		
 		// We split the Peterson formula into two symmetric halves,
@@ -572,7 +565,7 @@ public class CRootSystem
 			System.out.println("*WARNING*: actual mult: " + multiplicity.toString());
 		}
 		
-		return multiplicity.asLong();		
+		return multiplicity.asLong();
 	}
 	
 	/**
