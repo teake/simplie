@@ -107,37 +107,8 @@ public class CGroup
 		}
 		weylVector = new CWeight(weylLabels);
 		
-		// Try to determine the group type
-		// TODO: make this algorithm find more types
-		compareMatrix = Globals.regularMatrix(rank);
-		if(rank == 0)
-			tempType = "Empty";
-		else if(Globals.sameMatrices(compareMatrix,cartanMatrix))
-			tempType = "A";
-		else if(rank > 4)
-		{
-			compareMatrix.set(0,3,-1);
-			compareMatrix.set(3,0,-1);
-			compareMatrix.set(0,1,0);
-			compareMatrix.set(1,0,0);
-			if(Globals.sameMatrices(compareMatrix,cartanMatrix))
-				tempType = "E";
-			else
-			{
-				compareMatrix = Globals.regularMatrix(rank);
-				compareMatrix.set(rank-1,2,-1);
-				compareMatrix.set(2,rank-1,-1);
-				compareMatrix.set(rank-2,rank-1,0);
-				compareMatrix.set(rank-1,rank-2,0);
-				if(Globals.sameMatrices(compareMatrix,cartanMatrix))
-					tempType = "E";
-			}
-		}
-		if(tempType == null)
-			tempType = "Unknown";
-		else if(rank != 0)
-			tempType += rank;
-		type = tempType;
+		// Detect the type of Lie group.
+		type = detectType(cartanMatrix);
 		
 		// Set up the root system.
 		rs = new CRootSystem(this);
@@ -173,6 +144,50 @@ public class CGroup
 		//if(finite)
 			//rs.construct(0);
 		
+	}
+	
+	/** 
+	 * Given a Cartan matrix, this methods tries to determine the type
+	 * of the group associated to that matrix.
+	 *
+	 * @param	cartanMatrix	The Cartan matrix of which the type is to be determined.
+	 * @return					The type of the Lie group, e.g. "A10", or "E6".
+	 */
+	public String detectType(Matrix cartanMatrix)
+	{
+		String type = null;
+		
+		// TODO: make this algorithm find more types
+		Matrix compareMatrix = Globals.regularMatrix(rank);
+		if(rank == 0)
+			type = "Empty";
+		else if(Globals.sameMatrices(compareMatrix,cartanMatrix))
+			type = "A";
+		else if(rank > 4)
+		{
+			compareMatrix.set(0,3,-1);
+			compareMatrix.set(3,0,-1);
+			compareMatrix.set(0,1,0);
+			compareMatrix.set(1,0,0);
+			if(Globals.sameMatrices(compareMatrix,cartanMatrix))
+				type = "E";
+			else
+			{
+				compareMatrix = Globals.regularMatrix(rank);
+				compareMatrix.set(rank-1,2,-1);
+				compareMatrix.set(2,rank-1,-1);
+				compareMatrix.set(rank-2,rank-1,0);
+				compareMatrix.set(rank-1,rank-2,0);
+				if(Globals.sameMatrices(compareMatrix,cartanMatrix))
+					type = "E";
+			}
+		}
+		if(type == null)
+			type = "Unknown";
+		else if(rank != 0)
+			type += rank;
+		
+		return type;
 	}
 	
 	/**
