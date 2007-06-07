@@ -11,7 +11,9 @@ import edu.rug.hep.simplie.Globals;
 import edu.rug.hep.simplie.math.fraction;
 
 import java.util.Collection;
-import java.util.HashSet;
+import java.util.Vector;
+import java.util.Comparator;
+import java.util.Collections;
 import java.io.*;
 
 import javolution.util.FastList;
@@ -24,7 +26,7 @@ import javolution.util.FastCollection.Record;
  * @see		CGroup
  * @author	Teake Nutma
  */
-public class CRootSystem
+public class CRootSystem implements Comparator<Integer>
 {
 	/** Vector containing the norm of the simple roots divided by two. */
 	public final int[] simpleRootNorms;
@@ -109,7 +111,7 @@ public class CRootSystem
 			
 			// If we're still here then we're not done.
 			// First detect all the simple roots in this piece.
-			HashSet<Integer> connectedRoots = new HashSet<Integer>();
+			Vector<Integer> connectedRoots = new Vector<Integer>();
 			connectedRoots.add(shortIndex);
 			while(true)
 			{
@@ -131,28 +133,15 @@ public class CRootSystem
 						}
 					}
 					
-				if(addIndex != -1)
-					connectedRoots.add(addIndex);
-				else
-					break;
+					if(addIndex != -1)
+						connectedRoots.add(addIndex);
+					else
+						break;
 			}
 			
 			// Find the shortest root of this piece.
-			for (Integer i : connectedRoots)
-			{
-				for (Integer j : connectedRoots)
-				{
-					if(i != j && group.cartanMatrix[i][j] != 0 && group.cartanMatrix[shortIndex][j] != 0)
-					{
-						double currentCoef	= group.cartanMatrix[shortIndex][j] / group.cartanMatrix[j][shortIndex];
-						double newCoef		= group.cartanMatrix[i][j] / group.cartanMatrix[j][i];
-						if(newCoef < currentCoef)
-						{
-							shortIndex = j;
-						}
-					}
-				}
-			}
+			Collections.sort(connectedRoots,this);
+			shortIndex = connectedRoots.get(0);
 			
 			// First set the norm for the shortest root.
 			CRoot shortestRoot = simpleRoots.get(shortIndex);
@@ -205,6 +194,35 @@ public class CRootSystem
 		rootMultiples.add(1,new FastList<CRoot>());
 	}
 	
+	/** 
+	 * Compares the simple roots according to their norm.
+	 * The shorter simple roots first, the longer later.
+	 *
+	 * @param	i	The index of the first simple root.
+	 * @param	j	The index of the second simple root.
+	 */
+	public int compare(Integer i, Integer j)
+	{
+		final int BEFORE = -1;
+		final int EQUAL = 0;
+		final int AFTER = 1;
+		
+		if(i == j)
+			return EQUAL;
+		
+		if(group.cartanMatrix[i][j] == 0)
+			return EQUAL;
+		
+		double coefficient = group.cartanMatrix[i][j] / group.cartanMatrix[j][i];
+		
+		if(coefficient < 1)
+			return BEFORE;
+		if(coefficient > 1)
+			return AFTER;
+		
+		return EQUAL;
+	}
+		
 	/** Cancels the construction of the rootsystem. */
 	public void cancelConstruction()
 	{
