@@ -316,6 +316,9 @@ public class AlgebraInfo extends javax.swing.JPanel
 		// Set the focus to the root table.
 		tabbedPane.setSelectedIndex(1);
 		
+		if(group == null)
+			return;
+		
 		// Clear and fill the table.
 		tableModel.setRowCount(0);
 		
