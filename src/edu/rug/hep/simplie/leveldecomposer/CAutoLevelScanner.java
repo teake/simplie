@@ -26,7 +26,7 @@ import java.util.Comparator;
  * @see		Globals
  * @author	Teake Nutma
  */
-public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
+public class CAutoLevelScanner extends SwingWorker<Void,Object[]> implements Comparator<int[]>
 {
 	private final boolean calcRootMult;
 	private final boolean calcRepMult;
@@ -42,9 +42,6 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 	private int levelSign;
 	
 	private int[] levelOneIndices;
-	
-	/** Comparator to sort all possible levels */
-	private Comparator levelComparator;
 	
 	/**
 	 * Creates a new instance of CAutoLevelScanner.
@@ -91,31 +88,29 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 			levelOneIndices[i] = 0;
 		}
 		
-		// This comparator sorts levels according to their squared sum.
-		this.levelComparator = new Comparator<int[]>()
+	}
+	
+	/** This comparator sorts levels according to their squared sum. */
+	public int compare(int[] level1, int[] level2)
+	{
+		final int BEFORE = -1;
+		final int EQUAL = 0;
+		final int AFTER = 1;
+		
+		if(level1.length != level2.length)
+			return EQUAL;
+		
+		int sum1 = 0;
+		int sum2 = 0;
+		for (int i = 0; i < level1.length; i++)
 		{
-			public int compare(int[] level1, int[] level2)
-			{
-				final int BEFORE = -1;
-				final int EQUAL = 0;
-				final int AFTER = 1;
-				
-				if(level1.length != level2.length)
-					return EQUAL;
-				
-				int sum1 = 0;
-				int sum2 = 0;
-				for (int i = 0; i < level1.length; i++)
-				{
-					sum1 += level1[i] * level1[i];
-					sum2 += level2[i] * level2[i];
-				}
-				if(sum1 > sum2) return AFTER;
-				if(sum1 < sum2) return BEFORE;
-				
-				return EQUAL;
-			}
-		};
+			sum1 += level1[i] * level1[i];
+			sum2 += level2[i] * level2[i];
+		}
+		if(sum1 > sum2) return AFTER;
+		if(sum1 < sum2) return BEFORE;
+		
+		return EQUAL;
 	}
 	
 	@Override
@@ -151,7 +146,7 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 			{
 				levels.add(Globals.numberToVector(i,base,levelRank,minLevel));
 			}
-			Collections.sort(levels,levelComparator);
+			Collections.sort(levels,this);
 			
 			// Calculate the level one reps
 			if(!showExotic)

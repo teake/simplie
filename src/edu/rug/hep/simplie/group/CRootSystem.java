@@ -187,7 +187,7 @@ public class CRootSystem implements Comparator<Integer>
 			// The norm of the simple roots are always a multiple of 2.
 			simpleRootNorms[i] = simpleRoots.get(i).norm / 2;
 		}
-		System.out.println(Globals.intArrayToString(simpleRootNorms));
+		
 		// Set the table of root multiples.
 		rootMultiples = new FastList<FastList>();
 		rootMultiples.add(0,new FastList<CRoot>());
