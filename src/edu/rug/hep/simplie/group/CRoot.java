@@ -223,6 +223,7 @@ public class CRoot implements Serializable
 	{
 		String output = "height: " + height() +
 				", vector: " + Globals.intArrayToString(vector) +
+				", norm: " + norm +
 				", mult: " + mult;
 		
 		if(coMult != null)

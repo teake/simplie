@@ -26,7 +26,7 @@ import javolution.util.FastCollection.Record;
  * @see		CGroup
  * @author	Teake Nutma
  */
-public class CRootSystem implements Comparator<Integer>
+public class CRootSystem
 {
 	/** Vector containing the norm of the simple roots divided by two. */
 	public final int[] simpleRootNorms;
@@ -89,10 +89,11 @@ public class CRootSystem implements Comparator<Integer>
 			simpleRoot.norm		= 0; // these will be set later on.
 			simpleRoots.add(simpleRoot);
 		}
+		
 		// Set the root norms for every disconnected piece.
 		while(true)
 		{
-			int shortIndex = -1;
+			int startIndex = -1;
 			
 			// Grab the first simple root that hasn't been set yet.
 			for (int i = 0; i < rank; i++)
@@ -100,80 +101,61 @@ public class CRootSystem implements Comparator<Integer>
 				CRoot simpleRoot = simpleRoots.get(i);
 				if(simpleRoot.norm == 0)
 				{
-					shortIndex = i;
+					startIndex = i;
 					break;
 				}
 			}
 			
 			// Are we done?
-			if(shortIndex == -1)
+			if(startIndex == -1)
 				break;
 			
 			// If we're still here then we're not done.
 			// First detect all the simple roots in this piece.
-			Vector<Integer> connectedRoots = new Vector<Integer>();
-			connectedRoots.add(shortIndex);
+			Vector<CNormHelper> piece = new Vector<CNormHelper>();
+			piece.add(new CNormHelper(startIndex,1));
 			while(true)
 			{
-				int addIndex = -1;
+				CNormHelper add	 = null;
+				CNormHelper from = null;
 				// Try to see if this piece has connections to roots we've missed so far.
 				loopToBreak:
-					for(Integer index : connectedRoots)
+					for(CNormHelper nh : piece)
 					{
+						from = nh;
 						for (int i = 0; i < rank; i++)
 						{
-							if(index != i && group.cartanMatrix[i][index] != 0)
+							if(nh.index != i && group.cartanMatrix[i][nh.index] != 0)
 							{
-								if(!connectedRoots.contains(i))
+								CNormHelper normHelper = new CNormHelper(i,1);
+								if(!piece.contains(normHelper))
 								{
-									addIndex = i;
+									add = normHelper;
 									break loopToBreak;
 								}
 							}
 						}
 					}
 					
-					if(addIndex != -1)
-						connectedRoots.add(addIndex);
+					if(add != null)
+					{
+						double norm = from.norm * group.cartanMatrix[add.index][from.index] / group.cartanMatrix[from.index][add.index];
+						piece.add(new CNormHelper(add.index,norm));
+					}
 					else
 						break;
 			}
 			
-			// Find the shortest root of this piece.
-			Collections.sort(connectedRoots,this);
-			shortIndex = connectedRoots.get(0);
+			Collections.sort(piece);
 			
-			// First set the norm for the shortest root.
-			CRoot shortestRoot = simpleRoots.get(shortIndex);
-			shortestRoot.norm = 2;
-			
-			// And now for the others.
-			while(true)
+			Integer	shortIndex	= piece.get(0).index;
+			CRoot	shortRoot	= simpleRoots.get(shortIndex);
+			double	coefficient	= 2 / piece.get(0).norm;
+			for(CNormHelper nh : piece)
 			{
-				boolean didSomething = false;
-				for (Integer i : connectedRoots)
-				{
-					CRoot rootI = simpleRoots.get(i);
-					if(rootI.norm == 0)
-						continue;
-					
-					for(Integer j : connectedRoots)
-					{
-						CRoot rootJ = simpleRoots.get(j);
-						if(rootJ.norm != 0)
-							continue;
-						if(i!=j && group.cartanMatrix[i][j] != 0)
-						{
-							int coefficient = group.cartanMatrix[j][i] / group.cartanMatrix[i][j];
-							rootJ.norm = coefficient * rootI.norm;
-							didSomething = true;
-						}
-					}
-				}
-				if(!didSomething)
-					break;
+				CRoot root = simpleRoots.get(nh.index);
+				root.norm = (int) Math.round(nh.norm * coefficient);
 			}
-			
 			
 		}
 		
@@ -194,35 +176,7 @@ public class CRootSystem implements Comparator<Integer>
 		rootMultiples.add(1,new FastList<CRoot>());
 	}
 	
-	/** 
-	 * Compares the simple roots according to their norm.
-	 * The shorter simple roots first, the longer later.
-	 *
-	 * @param	i	The index of the first simple root.
-	 * @param	j	The index of the second simple root.
-	 */
-	public int compare(Integer i, Integer j)
-	{
-		final int BEFORE = -1;
-		final int EQUAL = 0;
-		final int AFTER = 1;
-		
-		if(i == j)
-			return EQUAL;
-		
-		if(group.cartanMatrix[i][j] == 0)
-			return EQUAL;
-		
-		double coefficient = group.cartanMatrix[i][j] / group.cartanMatrix[j][i];
-		
-		if(coefficient < 1)
-			return BEFORE;
-		if(coefficient > 1)
-			return AFTER;
-		
-		return EQUAL;
-	}
-		
+
 	/** Cancels the construction of the rootsystem. */
 	public void cancelConstruction()
 	{
