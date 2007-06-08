@@ -113,19 +113,30 @@ public class CGroup
 		// Set up the root system.
 		rs = new CRootSystem(this);
 		
+		
+		Matrix symCartanMatrix = new Matrix(rank,rank);
+		for (int i = 0; i < rank; i++)
+		{
+			for (int j = 0; j < rank; j++)
+			{
+				symCartanMatrix.set(i,j,cartanMatrix.get(i,j)/rs.simpleRootNorms[j]);
+			}
+		}
+		System.out.println(Globals.matrixToString(symCartanMatrix.inverse(),2));
+		
 		// Set the inverse of the Cartan matrix and the quadratic form matrix if possible.
 		if(rank != 0 && cartanMatrix.rank() == rank && det != 0)
 		{
 			Matrix cmInv = cartanMatrix.inverse();
+			Matrix qForm = symCartanMatrix.inverse();
 			for (int i = 0; i < rank; i++)
 			{
 				for (int j = 0; j < rank; j++)
 				{
 					cartanMatrixInv[i][j]	= new fraction( Math.round( det * cmInv.get(i,j) ), det);
-					qFormMatrix[i][j]		= cartanMatrixInv[i][j].times(rs.simpleRootNorms[i]);
+					qFormMatrix[i][j]		= cartanMatrixInv[i][j].dividedBy(rs.simpleRootNorms[j]);
 				}
 			}
-			
 		}
 		
 		// Determine the dimension.
@@ -142,11 +153,11 @@ public class CGroup
 		
 		// If the group is finite, we can construct the root system to all heights.
 		//if(finite)
-			//rs.construct(0);
+		//rs.construct(0);
 		
 	}
 	
-	/** 
+	/**
 	 * Given a Cartan matrix, this methods tries to determine the type
 	 * of the group associated to that matrix.
 	 *
