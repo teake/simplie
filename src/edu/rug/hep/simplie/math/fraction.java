@@ -13,6 +13,7 @@ package edu.rug.hep.simplie.math;
  *
  * Changes from the original:
  * - Added a new constructor where the denominator is always 1.
+ * - Added a new constructor for doubles.
  * - Added in-place methods for multiplying, dividing, adding and subtracting.
  * - Added asLong() & asInt() methods.*
  *
@@ -67,6 +68,25 @@ public class fraction implements Cloneable, Comparable, java.io.Serializable
 	{
 		numerator	= f.numerator();
 		denominator	= f.denominator();
+	}
+	
+	/** 
+	 * Create a fraction from a double. 
+	 * The double has to be rational (i.e. x = y / z, with y,z integers),
+	 * or else this constructor might take a while to complete.
+	 */
+	public fraction(double x)
+	{
+		long den = 1;
+		while(true)
+		{
+			double remainder =  (den * x) % 1;
+			if(remainder < 0.01 || remainder > 0.99 )
+				break;
+			den++;
+		}
+		numerator	= Math.round(den * x);
+		denominator = den;
 	}
 	
 	public String toString()

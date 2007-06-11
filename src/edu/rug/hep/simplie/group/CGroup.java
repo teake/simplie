@@ -31,11 +31,17 @@ public class CGroup
 	/** The Cartan matrix of the group. */
 	public final int[][]  cartanMatrix;
 	/** The symmetrized Cartan matrix (the inverse of the quadratic form matrix) */
-	public final int[][] symCartanMatrix;
+	public final fraction[][] symCartanMatrix;
 	/** The inverse of the cartan matrix. */
 	public final fraction[][] cartanMatrixInv;
 	/** The quadratic form matrix (the inverse of the symmetrized Cartan matrix) */
 	public final fraction[][] qFormMatrix;
+	
+	/** 
+	 * Note that the the symmetrized Cartan matrix is not the same as 
+	 * the one in Fuchs & Schweigert, because they use the normalization 
+	 * a^2 = 2 for the *longest* root, and I use it for the *shortest* root.
+	 */
 	
 	/** The determinant of the Cartan Matrix. */
 	public final int		det;
@@ -87,6 +93,7 @@ public class CGroup
 			finite = false;
 		
 		this.cartanMatrix		= new int[rank][rank];
+		this.symCartanMatrix	= new fraction[rank][rank];
 		this.cartanMatrixInv	= new fraction[rank][rank];
 		this.qFormMatrix		= new fraction[rank][rank];
 		
@@ -113,21 +120,19 @@ public class CGroup
 		// Set up the root system.
 		rs = new CRootSystem(this);
 		
-		
+		// Now that the simple roots have been created, we can set the symmetrized Cartan matrix.
 		Matrix symCartanMatrix = new Matrix(rank,rank);
-		this.symCartanMatrix = new int[rank][rank];
 		for (int i = 0; i < rank; i++)
 		{
 			for (int j = 0; j < rank; j++)
 			{
-				symCartanMatrix.set(i,j,cartanMatrix.get(i,j)/rs.simpleRootNorms[j]);
-				this.symCartanMatrix[i][j] = this.cartanMatrix[i][j] * rs.simpleRootNorms[j];
+				symCartanMatrix.set(i,j,cartanMatrix.get(i,j) / rs.simpleRootNorms[i]);
+				this.symCartanMatrix[i][j] = new fraction(this.cartanMatrix[i][j], rs.simpleRootNorms[i]);
 			}
 		}
-		System.out.println(Globals.matrixToString(symCartanMatrix.inverse(),2));
 		
 		// Set the inverse of the Cartan matrix and the quadratic form matrix if possible.
-		if(rank != 0 && cartanMatrix.rank() == rank && det != 0)
+		if(rank != 0 && cartanMatrix.rank() == rank)
 		{
 			Matrix cmInv = cartanMatrix.inverse();
 			Matrix qForm = symCartanMatrix.inverse();
@@ -135,8 +140,8 @@ public class CGroup
 			{
 				for (int j = 0; j < rank; j++)
 				{
-					cartanMatrixInv[i][j]	= new fraction( Math.round( det * cmInv.get(i,j) ), det);
-					qFormMatrix[i][j]		= cartanMatrixInv[i][j].dividedBy(rs.simpleRootNorms[j]);
+					cartanMatrixInv[i][j]	= new fraction(cmInv.get(i,j));
+					qFormMatrix[i][j]		= new fraction(qForm.get(i,j));
 				}
 			}
 		}
