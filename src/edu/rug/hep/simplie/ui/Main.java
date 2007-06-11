@@ -379,7 +379,7 @@ public class Main extends javax.swing.JFrame implements DiagramListener
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(TabbedPane, javax.swing.GroupLayout.DEFAULT_SIZE, 489, Short.MAX_VALUE)
+            .addComponent(TabbedPane, javax.swing.GroupLayout.DEFAULT_SIZE, 526, Short.MAX_VALUE)
         );
         pack();
     }// </editor-fold>//GEN-END:initComponents

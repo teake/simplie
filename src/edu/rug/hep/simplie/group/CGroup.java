@@ -30,13 +30,13 @@ public class CGroup
 	
 	/** The Cartan matrix of the group. */
 	public final int[][]  cartanMatrix;
+	/** The symmetrized Cartan matrix (the inverse of the quadratic form matrix) */
+	public final int[][] symCartanMatrix;
 	/** The inverse of the cartan matrix. */
 	public final fraction[][] cartanMatrixInv;
-	/**
-	 * The quadratic form matrix. Because we only work with simply-laced algebras,
-	 * this is the same as the inverse of the cartan matrix.
-	 */
+	/** The quadratic form matrix (the inverse of the symmetrized Cartan matrix) */
 	public final fraction[][] qFormMatrix;
+	
 	/** The determinant of the Cartan Matrix. */
 	public final int		det;
 	/** The rank of the group. */
@@ -115,11 +115,13 @@ public class CGroup
 		
 		
 		Matrix symCartanMatrix = new Matrix(rank,rank);
+		this.symCartanMatrix = new int[rank][rank];
 		for (int i = 0; i < rank; i++)
 		{
 			for (int j = 0; j < rank; j++)
 			{
 				symCartanMatrix.set(i,j,cartanMatrix.get(i,j)/rs.simpleRootNorms[j]);
+				this.symCartanMatrix[i][j] = this.cartanMatrix[i][j] * rs.simpleRootNorms[j];
 			}
 		}
 		System.out.println(Globals.matrixToString(symCartanMatrix.inverse(),2));
