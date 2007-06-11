@@ -235,11 +235,13 @@ public class CDynkinDiagram
 	 *
 	 * @param	x					The x-coordinate of the node in the diagram.
 	 * @param	y					The y-coordinate of the node in the diagram.
-	 * @param	connectionToLast	Boolean to indicate whether or not a connection should be made
-	 *								from this node to the last one added.
+	 * @param	connectionToLast	Integer indicating whether or not a connection should be made
+	 *								from this node to the last one added. If it equals zero, then 
+	 *								a connection won't be made. If it is bigger than zero it represents 
+	 *								the lacing of the connection.
 	 * @return						The node that was added, null if no node was added.
 	 */
-	public CDynkinNode addNode(int x, int y, boolean connectionToLast)
+	public CDynkinNode addNode(int x, int y, int connectionToLast)
 	{
 		CDynkinNode newNode = new CDynkinNode(x, y);
 		
@@ -249,9 +251,9 @@ public class CDynkinDiagram
 		}
 		else
 		{
-			if(connectionToLast && lastAddedNode != null)
+			if(connectionToLast > 0 && lastAddedNode != null)
 			{
-				modifyConnection(lastAddedNode, newNode, 1, true);
+				modifyConnection(lastAddedNode, newNode, connectionToLast, true);
 			}
 			nodes.add(newNode);
 			lastAddedNode = newNode;

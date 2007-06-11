@@ -93,6 +93,7 @@ public class Main extends javax.swing.JFrame implements DiagramListener
         MenuEdit = new javax.swing.JMenu();
         MenuItemClear = new javax.swing.JMenuItem();
         jSeparator2 = new javax.swing.JSeparator();
+        MenuItemLoadG2 = new javax.swing.JMenuItem();
         MenuItemLoadE11 = new javax.swing.JMenuItem();
         MenuItemLoadD8very = new javax.swing.JMenuItem();
         MenuTools = new javax.swing.JMenu();
@@ -260,6 +261,18 @@ public class Main extends javax.swing.JFrame implements DiagramListener
 
         MenuEdit.add(jSeparator2);
 
+        MenuItemLoadG2.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F2, java.awt.event.InputEvent.SHIFT_MASK));
+        MenuItemLoadG2.setText("G_2 preset");
+        MenuItemLoadG2.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                MenuItemLoadG2ActionPerformed(evt);
+            }
+        });
+
+        MenuEdit.add(MenuItemLoadG2);
+
         MenuItemLoadE11.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F11, java.awt.event.InputEvent.SHIFT_MASK));
         MenuItemLoadE11.setText("E_11 preset");
         MenuItemLoadE11.addActionListener(new java.awt.event.ActionListener()
@@ -371,20 +384,27 @@ public class Main extends javax.swing.JFrame implements DiagramListener
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+	private void MenuItemLoadG2ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_MenuItemLoadG2ActionPerformed
+	{//GEN-HEADEREND:event_MenuItemLoadG2ActionPerformed
+		Globals.dd.clear();
+		Globals.dd.addNode(0,0,0);
+		Globals.dd.addNode(1,0,3);
+	}//GEN-LAST:event_MenuItemLoadG2ActionPerformed
+
 	private void MenuItemLoadD8veryActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_MenuItemLoadD8veryActionPerformed
 	{//GEN-HEADEREND:event_MenuItemLoadD8veryActionPerformed
 		Globals.dd.clear();
-		CDynkinNode lastRegular = Globals.dd.addNode(5,0,false);
-		CDynkinNode endPoint	= Globals.dd.addNode(1,0,false);
-		Globals.dd.addNode(0,1,false);
-		CDynkinNode attachEnd = Globals.dd.addNode(1,1,true);
-		Globals.dd.addNode(2,1,true);
-		Globals.dd.addNode(3,1,true);
-		Globals.dd.addNode(4,1,true);
-		CDynkinNode attachReg = Globals.dd.addNode(5,1,true);
-		Globals.dd.addNode(6,1,true);
-		Globals.dd.addNode(7,1,true);
-		Globals.dd.addNode(8,1,true);
+		CDynkinNode lastRegular = Globals.dd.addNode(5,0,0);
+		CDynkinNode endPoint	= Globals.dd.addNode(1,0,0);
+		Globals.dd.addNode(0,1,0);
+		CDynkinNode attachEnd = Globals.dd.addNode(1,1,1);
+		Globals.dd.addNode(2,1,1);
+		Globals.dd.addNode(3,1,1);
+		Globals.dd.addNode(4,1,1);
+		CDynkinNode attachReg = Globals.dd.addNode(5,1,1);
+		Globals.dd.addNode(6,1,1);
+		Globals.dd.addNode(7,1,1);
+		Globals.dd.addNode(8,1,1);
 		Globals.dd.modifyConnection(lastRegular, attachReg, 1, true);
 		Globals.dd.modifyConnection(endPoint, attachEnd, 1, true);
 	}//GEN-LAST:event_MenuItemLoadD8veryActionPerformed
@@ -527,17 +547,17 @@ public class Main extends javax.swing.JFrame implements DiagramListener
     private void MenuItemLoadE11ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_MenuItemLoadE11ActionPerformed
     {//GEN-HEADEREND:event_MenuItemLoadE11ActionPerformed
 		Globals.dd.clear();
-		CDynkinNode exceptional = Globals.dd.addNode(2,0,false);
-		Globals.dd.addNode(0,1,false);
-		Globals.dd.addNode(1,1,true);
-		CDynkinNode attach = Globals.dd.addNode(2,1,true);
-		Globals.dd.addNode(3,1,true);
-		Globals.dd.addNode(4,1,true);
-		Globals.dd.addNode(5,1,true);
-		Globals.dd.addNode(6,1,true);
-		Globals.dd.addNode(7,1,true);
-		Globals.dd.addNode(8,1,true);
-		Globals.dd.addNode(9,1,true);
+		CDynkinNode exceptional = Globals.dd.addNode(2,0,0);
+		Globals.dd.addNode(0,1,0);
+		Globals.dd.addNode(1,1,1);
+		CDynkinNode attach = Globals.dd.addNode(2,1,1);
+		Globals.dd.addNode(3,1,1);
+		Globals.dd.addNode(4,1,1);
+		Globals.dd.addNode(5,1,1);
+		Globals.dd.addNode(6,1,1);
+		Globals.dd.addNode(7,1,1);
+		Globals.dd.addNode(8,1,1);
+		Globals.dd.addNode(9,1,1);
 		Globals.dd.modifyConnection(exceptional, attach, 1, true);
     }//GEN-LAST:event_MenuItemLoadE11ActionPerformed
 	
@@ -588,6 +608,7 @@ public class Main extends javax.swing.JFrame implements DiagramListener
     private javax.swing.JMenuItem MenuItemLoadD8very;
     private javax.swing.JMenuItem MenuItemLoadDD;
     private javax.swing.JMenuItem MenuItemLoadE11;
+    private javax.swing.JMenuItem MenuItemLoadG2;
     private javax.swing.JMenuItem MenuItemLoadRoots;
     private javax.swing.JMenuItem MenuItemSaveDD;
     private javax.swing.JMenuItem MenuItemSaveRoots;

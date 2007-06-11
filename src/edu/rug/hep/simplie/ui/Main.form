@@ -184,6 +184,17 @@
             </MenuItem>
             <MenuItem class="javax.swing.JSeparator" name="jSeparator2">
             </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="MenuItemLoadG2">
+              <Properties>
+                <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.editors.KeyStrokeEditor">
+                  <KeyStroke key="Shift+F2"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="G_2 preset"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="MenuItemLoadG2ActionPerformed"/>
+              </Events>
+            </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="MenuItemLoadE11">
               <Properties>
                 <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.editors.KeyStrokeEditor">

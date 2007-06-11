@@ -241,7 +241,7 @@ public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramLis
 	
 	private void menuAddNodeActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_menuAddNodeActionPerformed
 	{//GEN-HEADEREND:event_menuAddNodeActionPerformed
-		Globals.dd.addNode(contextX, contextY, false);
+		Globals.dd.addNode(contextX, contextY, 0);
 	}//GEN-LAST:event_menuAddNodeActionPerformed
 	
     private void formMouseReleased(java.awt.event.MouseEvent evt)//GEN-FIRST:event_formMouseReleased
