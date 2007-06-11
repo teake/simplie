@@ -37,9 +37,9 @@ public class CGroup
 	/** The quadratic form matrix (the inverse of the symmetrized Cartan matrix) */
 	public final fraction[][] qFormMatrix;
 	
-	/** 
-	 * Note that the the symmetrized Cartan matrix is not the same as 
-	 * the one in Fuchs & Schweigert, because they use the normalization 
+	/**
+	 * Note that the the symmetrized Cartan matrix is not the same as
+	 * the one in Fuchs & Schweigert, because they use the normalization
 	 * a^2 = 2 for the *longest* root, and I use it for the *shortest* root.
 	 */
 	
@@ -146,6 +146,10 @@ public class CGroup
 			}
 		}
 		
+		// If the group is finite, we can construct the root system to all heights.
+		if(finite)
+			rs.construct(0);
+		
 		// Determine the dimension.
 		if(det > 0 || rank == 0)
 		{
@@ -158,9 +162,6 @@ public class CGroup
 			dimension	= "Infinite";
 		}
 		
-		// If the group is finite, we can construct the root system to all heights.
-		//if(finite)
-		//rs.construct(0);
 		
 	}
 	

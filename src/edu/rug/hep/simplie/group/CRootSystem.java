@@ -437,10 +437,6 @@ public class CRootSystem
 			//		<alpha, beta> = n_minus - n_plus ,
 			//
 			// where alpha and beta are roots.
-			// For simple roots beta this reduces to
-			//
-			//		(alpha, beta) = n_minus - n_plus .
-			//
 			// If n_plus is positive, then alpha + beta is again a root.
 			//
 			for (Record r1 = prevRoots.head(), end1 = prevRoots.tail(); (r1 = r1.getNext()) != end1;)
@@ -465,6 +461,11 @@ public class CRootSystem
 						// Add it to the root table.
 						addRoot(newRoot);
 					}
+					
+					// Multiply by 2 and divide by the norm of the simple root
+					// to get the correct value.
+					// Because this is equal to (n_minus - n_plus), it is always an integer.
+					innerProduct = innerProduct * 2 / simpleRoot.norm;
 					
 					if(innerProduct >= 0)
 					{
