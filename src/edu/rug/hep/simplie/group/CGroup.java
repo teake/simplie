@@ -30,10 +30,12 @@ public class CGroup
 	public final int[][] A;
 	/** The symmetrized Cartan matrix (the inverse of the quadratic form matrix) */
 	public final fraction[][] symA;
-	/** The metric on the root space. */
-	public final int[][] B;
 	/** The inverse of the cartan matrix. */
 	public final fraction[][] invA;
+	/** The metric on the root space. */
+	public final int[][] B;
+	/** The inverse of the metric on the root space. */
+	public final fraction[][] invB;
 	/** The quadratic form matrix, which acts as a metric on the weight space. */
 	public final fraction[][] G;
 	
@@ -69,23 +71,23 @@ public class CGroup
 	 * Creates a new instance of CGroup.
 	 * If the group is finite, the whole rootsystem is constructed.
 	 *
-	 * @param cartanMatrix    The Cartan matrix from which to construct the group.
+	 * @param A    The Cartan matrix from which to construct the group.
 	 */
-	public CGroup(Matrix cartanMatrix)
+	public CGroup(Matrix A)
 	{
 		Matrix	compareMatrix;
 		String	tempType = null;
 		
 		// Do some preliminary checks
-		if(cartanMatrix.getColumnDimension() != cartanMatrix.getRowDimension() || cartanMatrix.getColumnDimension() == 0)
+		if(A.getColumnDimension() != A.getRowDimension() || A.getColumnDimension() == 0)
 		{
 			rank	= 0;
 			det		= 0;
 		}
 		else
 		{
-			rank	= cartanMatrix.getColumnDimension();
-			det		= (int) Math.round(cartanMatrix.det());
+			rank	= A.getColumnDimension();
+			det		= (int) Math.round(A.det());
 		}
 		if(det > 0)
 			finite = true;
@@ -96,6 +98,7 @@ public class CGroup
 		this.B		= new int[rank][rank];
 		this.symA	= new fraction[rank][rank];
 		this.invA	= new fraction[rank][rank];
+		this.invB	= new fraction[rank][rank];
 		this.G		= new fraction[rank][rank];
 		
 		// Set the cartan matrix
@@ -103,7 +106,7 @@ public class CGroup
 		{
 			for(int j=0; j<rank; j++)
 			{
-				this.A[i][j] = (int) Math.round(cartanMatrix.get(i,j));
+				this.A[i][j] = (int) Math.round(A.get(i,j));
 			}
 		}
 		
@@ -116,7 +119,7 @@ public class CGroup
 		rho = new CWeight(weylLabels);
 		
 		// Detect the type of Lie group.
-		type = detectType(cartanMatrix);
+		type = detectType(A);
 		
 		// Set up the root system.
 		rs = new CRootSystem(this);
@@ -124,28 +127,32 @@ public class CGroup
 		// Now that the simple roots have been created,
 		// we can set the symmetrized Cartan matrix
 		// and the metric on the root space.
-		Matrix symCartanMatrix = new Matrix(rank,rank);
+		Matrix symA = new Matrix(rank,rank);
+		Matrix B	= new Matrix(rank,rank);
 		for (int i = 0; i < rank; i++)
 		{
 			for (int j = 0; j < rank; j++)
 			{
-				symCartanMatrix.set(i,j,cartanMatrix.get(i,j) / rs.simpleRootNorms[i]);
 				this.symA[i][j] = new fraction(this.A[i][j], rs.simpleRootNorms[i]);
 				this.B[i][j]	= this.A[i][j] * rs.simpleRootNorms[j];
+				symA.set(i,j,this.symA[i][j].asDouble());
+				B.set(i,j,this.B[i][j]);
 			}
 		}
 		
 		// Set the inverse of the Cartan matrix and the quadratic form matrix if possible.
-		if(rank != 0 && cartanMatrix.rank() == rank)
+		if(rank != 0 && A.rank() == rank)
 		{
-			Matrix cmInv = cartanMatrix.inverse();
-			Matrix qForm = symCartanMatrix.inverse();
+			Matrix invA	= A.inverse();
+			Matrix invB	= B.inverse();
+			Matrix G	= symA.inverse();
 			for (int i = 0; i < rank; i++)
 			{
 				for (int j = 0; j < rank; j++)
 				{
-					invA[i][j]	= new fraction(cmInv.get(i,j));
-					G[i][j]		= new fraction(qForm.get(i,j));
+					this.invA[i][j]	= new fraction(invA.get(i,j));
+					this.invB[i][j]	= new fraction(invB.get(i,j));
+					this.G[i][j]	= new fraction(G.get(i,j));
 				}
 			}
 		}
