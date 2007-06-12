@@ -51,8 +51,9 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]> implements Com
 	 * @param	calcRootMult		If true, the multiplicity of the roots will be calculate. This will take longer.
 	 * @param	calcRepMult			If true, the multiplicity of the subalgebra representations will be calculated.
 	 *								This again will take longer.
-	 * @param	showZeroMult		In case this and the above two parameters are true,
-	 *								representations with zero multiplicity will not be shown.
+	 * @param	showZeroMultRoot	Indicates wethere or not to show reps that correspond to non-existing roots.
+	 * @param	showZeroMultRep		In case this and the above two parameters are true,
+	 *								representations with zero outer multiplicity will not be shown.
 	 * @param	showExotic			If true, show exotic fields with more indices than the space-time dimension.
 	 * @param	tableModel			The DefaultTableModel in which the results of the scan should be put.
 	 * @param	minLevel			The minimum value of the levels.
@@ -266,8 +267,8 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]> implements Com
 			if(scanFirst)
 			{
 				int rootLength = calculateRootLength(levels, dynkinLabels);
-				// Only continue if the root length is not bigger than 2.
-				if(rootLength <= 2)
+				// Only continue if the root length is not bigger than the maximum root length.
+				if(rootLength <= Globals.group.rs.maxNorm)
 				{
 					// First check if all root components are integers and non-negative.
 					coLevels  = calculateCoLevels(levels, dynkinLabels);

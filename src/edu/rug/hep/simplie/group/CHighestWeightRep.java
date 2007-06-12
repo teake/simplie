@@ -26,7 +26,7 @@ import javolution.util.FastCollection.Record;
  */
 public class CHighestWeightRep
 {
-	/** The height of the highest height. */
+	/** The height of the highest weight. */
 	public final int		highestHeight;
 	/** The group of which this is a weight system. */
 	private final CGroup	group;
@@ -157,6 +157,7 @@ public class CHighestWeightRep
 		
 		cancelConstruction = false;
 		
+		// Print some info to sout.
 		System.out.println(
 				"Constructing highest weight rep " + Globals.intArrayToString(highestWeight.dynkinLabels) +
 				" to depth " + maxDepth + " of group " + group.type + ".");
@@ -167,6 +168,7 @@ public class CHighestWeightRep
 			addedSomething	= false;
 			newDepth		= constructedDepth + 1;
 			
+			// Print some info to sout.
 			System.out.println("... depth: " + newDepth);
 			
 			FastList<CWeight> prevDepthWeights = weightSystem.get(constructedDepth);
@@ -218,7 +220,7 @@ public class CHighestWeightRep
 						}
 						else
 						{
-							setWeightMult(newWeight);
+							newWeight.setMult(calculateMult(newWeight));
 						}
 						
 						// And add it.
@@ -242,7 +244,7 @@ public class CHighestWeightRep
 	 * Sets the multiplicity of a new weight.
 	 * Basically an implementation of the Freudenthal recursion formula.
 	 */
-	private void setWeightMult(CWeight weight)
+	private long calculateMult(CWeight weight)
 	{
 		fraction	denominator;
 		long		numerator;
@@ -265,7 +267,6 @@ public class CHighestWeightRep
 			while(iterator.hasNext())
 			{
 				CRoot root = (CRoot) iterator.next();
-				int rootNorm		= group.innerProduct(root,root);
 				int rootDotWeight	= group.innerProduct(weight,root);
 				for (int k = 1; k <= maxK; k++)
 				{
@@ -284,7 +285,7 @@ public class CHighestWeightRep
 					if(summedIndex == -1)
 						// It's not a weight
 						continue;
-					numerator += (k*rootNorm + rootDotWeight) * summedWeights.get(summedIndex).getMult();
+					numerator += (k*root.norm + rootDotWeight) * summedWeights.get(summedIndex).getMult();
 				}
 			}
 		}
@@ -295,7 +296,7 @@ public class CHighestWeightRep
 			System.out.println("*WARNING*: fractional multplicity of weight " + weight);
 			System.out.println("*WARNING*: calculated mult: " + mult);
 		}
-		weight.setMult(mult.asLong());
+		return mult.asLong();
 	}
 	
 }

@@ -30,9 +30,11 @@ public class CGroup
 	public final int[][] A;
 	/** The symmetrized Cartan matrix (the inverse of the quadratic form matrix) */
 	public final fraction[][] symA;
+	/** The metric on the root space. */
+	public final int[][] B;
 	/** The inverse of the cartan matrix. */
 	public final fraction[][] invA;
-	/** The quadratic form matrix (the inverse of the symmetrized Cartan matrix) */
+	/** The quadratic form matrix, which acts as a metric on the weight space. */
 	public final fraction[][] G;
 	
 	/**
@@ -91,6 +93,7 @@ public class CGroup
 			finite = false;
 		
 		this.A		= new int[rank][rank];
+		this.B		= new int[rank][rank];
 		this.symA	= new fraction[rank][rank];
 		this.invA	= new fraction[rank][rank];
 		this.G		= new fraction[rank][rank];
@@ -117,11 +120,10 @@ public class CGroup
 		
 		// Set up the root system.
 		rs = new CRootSystem(this);
-		// If the group is finite, we can construct the root system to all heights.
-		if(finite)
-			rs.construct(0);
 		
-		// Now that the simple roots have been created, we can set the symmetrized Cartan matrix.
+		// Now that the simple roots have been created,
+		// we can set the symmetrized Cartan matrix
+		// and the metric on the root space.
 		Matrix symCartanMatrix = new Matrix(rank,rank);
 		for (int i = 0; i < rank; i++)
 		{
@@ -129,6 +131,7 @@ public class CGroup
 			{
 				symCartanMatrix.set(i,j,cartanMatrix.get(i,j) / rs.simpleRootNorms[i]);
 				this.symA[i][j] = new fraction(this.A[i][j], rs.simpleRootNorms[i]);
+				this.B[i][j]	= this.A[i][j] * rs.simpleRootNorms[j];
 			}
 		}
 		
@@ -146,6 +149,10 @@ public class CGroup
 				}
 			}
 		}
+		
+		// If the group is finite, we can construct the root system to all heights.
+		if(finite)
+			rs.construct(0);
 		
 		// Determine the dimension.
 		if(det > 0 || rank == 0)
@@ -253,7 +260,7 @@ public class CGroup
 	
 	/**
 	 * Calculate the innerproduct between two roots.
-	 * 
+	 *
 	 * @param	root1	Root alpha.
 	 * @param	root2	Root beta.
 	 * @return			The innerproduct (alpha, beta), which is an integer.
@@ -265,7 +272,7 @@ public class CGroup
 		{
 			for (int j = 0; j < rank; j++)
 			{
-				result += A[i][j] * root1.vector[i] * root2.vector[j] * rs.simpleRootNorms[j];
+				result += B[i][j] * root1.vector[i] * root2.vector[j];
 			}
 		}
 		return result;
@@ -273,7 +280,7 @@ public class CGroup
 	
 	/**
 	 * Calculate the innerproduct between two weights.
-	 * 
+	 *
 	 * @param	weight1		Weight lambda.
 	 * @param	weight2		Weight mu.
 	 * @return				The innerproduct (lambda,mu).
@@ -294,7 +301,7 @@ public class CGroup
 	/**
 	 * Calculate the innerproduct between a weight and a root.
 	 * This is the same as the action of the weight on the root, and vice versa.
-	 * 
+	 *
 	 * @param	weight	Weight lambda.
 	 * @param	root	Root alpha.
 	 * @return			The innerproduct (lambda,alpha) = lambda(alpha) = alpha(lambda),
@@ -312,7 +319,7 @@ public class CGroup
 	
 	/**
 	 * Calculate the action of the Weyl vector on a root.
-	 * 
+	 *
 	 * @param	root	Root alpha.
 	 * @return			rho(alhpa), with rho the Weyl vector of this group.
 	 */
@@ -321,7 +328,7 @@ public class CGroup
 		int result = 0;
 		for (int i = 0; i < rank; i++)
 		{
-			result += root.vector[i] * rs.simpleRootNorms[i];			
+			result += root.vector[i] * rs.simpleRootNorms[i];
 		}
 		return result;
 	}

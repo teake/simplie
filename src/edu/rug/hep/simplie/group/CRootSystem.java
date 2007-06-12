@@ -29,6 +29,8 @@ public class CRootSystem
 {
 	/** Vector containing the norm of the simple roots divided by two. */
 	public final int[] simpleRootNorms;
+	/** The maximum root norm. */
+	public final int maxNorm;
 	
 	/** The group of which this is the rootsystem. */
 	private final CGroup group;
@@ -62,7 +64,10 @@ public class CRootSystem
 		simpleRootNorms		= new int[rank];
 		
 		if(rank==0)
+		{
+			maxNorm = 0;
 			return;
+		}
 		
 		// Add the CSA to the root table.
 		FastList<CRoot> csa = new FastList<CRoot>();
@@ -90,6 +95,8 @@ public class CRootSystem
 		}
 		
 		// Set the root norms for every disconnected piece.
+		// Set the highest norm simultaneously.
+		int tempMaxNorm = 0;
 		while(true)
 		{
 			int startIndex = -1;
@@ -154,9 +161,11 @@ public class CRootSystem
 			{
 				CRoot root = simpleRoots.get(nh.index);
 				root.norm = (int) Math.round(nh.norm * coefficient);
+				tempMaxNorm = Math.max(tempMaxNorm, root.norm);
 			}
 			
 		}
+		maxNorm = tempMaxNorm;
 		
 		rootSystem.add(1,simpleRoots);
 		numPosGenerators	= rank;
