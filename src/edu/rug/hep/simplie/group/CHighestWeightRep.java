@@ -183,7 +183,7 @@ public class CHighestWeightRep
 						int[] newDynkinLabels = new int[rank];
 						for (int j = 0; j < rank; j++)
 						{
-							newDynkinLabels[j] = oldWeight.dynkinLabels[j] - group.cartanMatrix[j][i];
+							newDynkinLabels[j] = oldWeight.dynkinLabels[j] - group.A[j][i];
 						}
 						CWeight newWeight = new CWeight(newDynkinLabels);
 						
@@ -275,7 +275,7 @@ public class CHighestWeightRep
 					{
 						for (int j = 0; j < rank; j++)
 						{
-							summedLabels[i] += k * group.cartanMatrix[i][j] * root.vector[j];
+							summedLabels[i] += k * group.A[i][j] * root.vector[j];
 						}
 					}
 					CWeight summedWeight = new CWeight(summedLabels);

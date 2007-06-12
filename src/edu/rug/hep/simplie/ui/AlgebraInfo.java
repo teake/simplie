@@ -48,10 +48,10 @@ public class AlgebraInfo extends javax.swing.JPanel
 		constructedHeight.setText(Globals.intToString(group.rs.constructedHeight()));
 		numPosRoots.setText(Globals.intToString((int) group.rs.numPosRoots()));
 		
-		cartanMatrix.setText(Globals.matrixToString(group.cartanMatrix,0));
-		symCartanMatrix.setText(Globals.matrixToString(group.symCartanMatrix,1));
-		cartanMatrixInverse.setText(Globals.matrixToString(group.cartanMatrixInv,1));
-		qFormMatrix.setText(Globals.matrixToString(group.qFormMatrix,1));
+		cartanMatrix.setText(Globals.matrixToString(group.A,0));
+		symCartanMatrix.setText(Globals.matrixToString(group.symA,1));
+		cartanMatrixInverse.setText(Globals.matrixToString(group.invA,1));
+		qFormMatrix.setText(Globals.matrixToString(group.G,1));
 	}
 	
 	/** This method is called from within the constructor to

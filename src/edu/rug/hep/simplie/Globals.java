@@ -69,7 +69,7 @@ public class Globals implements DiagramListener
 	
 	public void diagramChanged()
 	{
-		if(group == null || !sameMatrices(dd.cartanMatrix(), group.cartanMatrix))
+		if(group == null || !sameMatrices(dd.cartanMatrix(), group.A))
 			group = new CGroup(dd.cartanMatrix());
 		
 		subGroup	= new CGroup(dd.cartanSubMatrix("sub"));

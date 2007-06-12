@@ -29,13 +29,13 @@ public class CGroup
 	 *********************************/
 	
 	/** The Cartan matrix of the group. */
-	public final int[][]  cartanMatrix;
+	public final int[][]  A;
 	/** The symmetrized Cartan matrix (the inverse of the quadratic form matrix) */
-	public final fraction[][] symCartanMatrix;
+	public final fraction[][] symA;
 	/** The inverse of the cartan matrix. */
-	public final fraction[][] cartanMatrixInv;
+	public final fraction[][] invA;
 	/** The quadratic form matrix (the inverse of the symmetrized Cartan matrix) */
-	public final fraction[][] qFormMatrix;
+	public final fraction[][] G;
 	
 	/**
 	 * Note that the the symmetrized Cartan matrix is not the same as
@@ -92,17 +92,17 @@ public class CGroup
 		else
 			finite = false;
 		
-		this.cartanMatrix		= new int[rank][rank];
-		this.symCartanMatrix	= new fraction[rank][rank];
-		this.cartanMatrixInv	= new fraction[rank][rank];
-		this.qFormMatrix		= new fraction[rank][rank];
+		this.A		= new int[rank][rank];
+		this.symA	= new fraction[rank][rank];
+		this.invA	= new fraction[rank][rank];
+		this.G		= new fraction[rank][rank];
 		
 		// Set the cartan matrix
 		for(int i=0; i<rank; i++)
 		{
 			for(int j=0; j<rank; j++)
 			{
-				this.cartanMatrix[i][j] = (int) Math.round(cartanMatrix.get(i,j));
+				this.A[i][j] = (int) Math.round(cartanMatrix.get(i,j));
 			}
 		}
 		
@@ -119,6 +119,9 @@ public class CGroup
 		
 		// Set up the root system.
 		rs = new CRootSystem(this);
+		// If the group is finite, we can construct the root system to all heights.
+		if(finite)
+			rs.construct(0);
 		
 		// Now that the simple roots have been created, we can set the symmetrized Cartan matrix.
 		Matrix symCartanMatrix = new Matrix(rank,rank);
@@ -127,7 +130,7 @@ public class CGroup
 			for (int j = 0; j < rank; j++)
 			{
 				symCartanMatrix.set(i,j,cartanMatrix.get(i,j) / rs.simpleRootNorms[i]);
-				this.symCartanMatrix[i][j] = new fraction(this.cartanMatrix[i][j], rs.simpleRootNorms[i]);
+				this.symA[i][j] = new fraction(this.A[i][j], rs.simpleRootNorms[i]);
 			}
 		}
 		
@@ -140,15 +143,11 @@ public class CGroup
 			{
 				for (int j = 0; j < rank; j++)
 				{
-					cartanMatrixInv[i][j]	= new fraction(cmInv.get(i,j));
-					qFormMatrix[i][j]		= new fraction(qForm.get(i,j));
+					invA[i][j]	= new fraction(cmInv.get(i,j));
+					G[i][j]		= new fraction(qForm.get(i,j));
 				}
 			}
 		}
-		
-		// If the group is finite, we can construct the root system to all heights.
-		if(finite)
-			rs.construct(0);
 		
 		// Determine the dimension.
 		if(det > 0 || rank == 0)
@@ -264,7 +263,7 @@ public class CGroup
 		{
 			for (int j = 0; j < rank; j++)
 			{
-				result += cartanMatrix[i][j] * root1.vector[i] * root2.vector[j] * rs.simpleRootNorms[j];
+				result += A[i][j] * root1.vector[i] * root2.vector[j] * rs.simpleRootNorms[j];
 			}
 		}
 		return result;
@@ -280,7 +279,7 @@ public class CGroup
 		{
 			for (int j = 0; j < rank; j++)
 			{
-				result.add( qFormMatrix[i][j].times(weight1.dynkinLabels[i] * weight2.dynkinLabels[j]) );
+				result.add( G[i][j].times(weight1.dynkinLabels[i] * weight2.dynkinLabels[j]) );
 			}
 		}
 		return result;
@@ -312,7 +311,7 @@ public class CGroup
 		{
 			for (int j = 0; j < rank; j++)
 			{
-				height.add(cartanMatrixInv[i][j].times(weightLabels[j]));
+				height.add(invA[i][j].times(weightLabels[j]));
 			}
 		}
 		return height.asInt();
@@ -330,7 +329,7 @@ public class CGroup
 		int[] output = new int[weightLabels.length];
 		for (int j = 0; j < output.length; j++)
 		{
-			output[j] = weightLabels[j] - cartanMatrix[j][i] * weightLabels[i];
+			output[j] = weightLabels[j] - A[j][i] * weightLabels[i];
 		}
 		return output;
 	}

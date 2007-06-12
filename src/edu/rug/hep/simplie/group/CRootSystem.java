@@ -125,7 +125,7 @@ public class CRootSystem
 						from = nh;
 						for (int i = 0; i < rank; i++)
 						{
-							if(nh.index != i && group.cartanMatrix[i][nh.index] != 0)
+							if(nh.index != i && group.A[i][nh.index] != 0)
 							{
 								CNormHelper normHelper = new CNormHelper(i,1);
 								if(!piece.contains(normHelper))
@@ -139,7 +139,7 @@ public class CRootSystem
 					
 					if(add != null)
 					{
-						double norm = from.norm * group.cartanMatrix[add.index][from.index] / group.cartanMatrix[from.index][add.index];
+						double norm = from.norm * group.A[add.index][from.index] / group.A[from.index][add.index];
 						piece.add(new CNormHelper(add.index,norm));
 					}
 					else
@@ -160,6 +160,8 @@ public class CRootSystem
 		}
 		
 		rootSystem.add(1,simpleRoots);
+		numPosGenerators	= rank;
+		numPosRoots			= rank;
 		
 		// And we've constructed to height 1.
 		constructedHeight = 1;
@@ -343,7 +345,7 @@ public class CRootSystem
 		{
 			fos = new FileOutputStream(filename);
 			out = new ObjectOutputStream(fos);
-			out.writeObject(group.cartanMatrix);
+			out.writeObject(group.A);
 			out.writeInt(constructedHeight);
 			out.writeLong(numPosRoots);
 			out.writeLong(numPosGenerators);
@@ -375,7 +377,7 @@ public class CRootSystem
 			fis = new FileInputStream(filename);
 			in	= new ObjectInputStream(fis);
 			int[][] savedCM	= (int[][]) in.readObject();
-			if(Globals.sameMatrices(savedCM, group.cartanMatrix))
+			if(Globals.sameMatrices(savedCM, group.A))
 			{
 				constructedHeight	= in.readInt();
 				numPosRoots			= in.readLong();
@@ -620,7 +622,6 @@ public class CRootSystem
 		
 		// We split the Peterson formula into two symmetric halves,
 		// plus a remainder if the root height is even.
-		// Note that this only works because the Cartan matrix is symmetric!
 		
 		int halfHeight = (int) Math.ceil(((float) root.height()) / 2);
 		for(int i = 1; i < halfHeight; i++)

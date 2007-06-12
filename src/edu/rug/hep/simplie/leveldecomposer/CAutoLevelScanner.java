@@ -425,7 +425,7 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]> implements Com
 		{
 			for(int j=0; j < Globals.coGroup.rank; j++)
 			{
-				rootLength.add( Globals.coGroup.cartanMatrixInv[i][j].times(
+				rootLength.add( Globals.coGroup.invA[i][j].times(
 						(dynkinLabels[i] * dynkinLabels[j]) - (levelComponents[i] * levelComponents[j]) ) );
 			}
 		}
@@ -433,7 +433,7 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]> implements Com
 		{
 			for(int j=0; j < levels.length; j++)
 			{
-				rootLength.add( Globals.group.cartanMatrix[Globals.dd.translateLevel(i)][Globals.dd.translateLevel(j)] * levels[i] * levels[j] );
+				rootLength.add( Globals.group.A[Globals.dd.translateLevel(i)][Globals.dd.translateLevel(j)] * levels[i] * levels[j] );
 			}
 		}
 		
@@ -451,7 +451,7 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]> implements Com
 			coLevels[i] = new fraction(0);
 			for(int j=0; j < Globals.coGroup.rank; j++)
 			{
-				coLevels[i].add(Globals.coGroup.cartanMatrixInv[i][j].times(signConvention * dynkinLabels[j] - levelComponents[j]));
+				coLevels[i].add(Globals.coGroup.invA[i][j].times(signConvention * dynkinLabels[j] - levelComponents[j]));
 			}
 		}
 		
@@ -468,7 +468,7 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]> implements Com
 			levelComponents[i] = 0;
 			for(int j=0; j < levels.length; j++)
 			{
-				levelComponents[i] += Globals.group.cartanMatrix[Globals.dd.translateCo(i)][Globals.dd.translateLevel(j)] * levels[j];
+				levelComponents[i] += Globals.group.A[Globals.dd.translateCo(i)][Globals.dd.translateLevel(j)] * levels[j];
 			}
 		}
 		return levelComponents;
