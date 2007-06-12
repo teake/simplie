@@ -9,10 +9,8 @@ package edu.rug.hep.simplie.group;
 
 import edu.rug.hep.simplie.Globals;
 import edu.rug.hep.simplie.math.fraction;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
-import java.text.DecimalFormat;
 import Jama.Matrix;
 
 /**
@@ -29,7 +27,7 @@ public class CGroup
 	 *********************************/
 	
 	/** The Cartan matrix of the group. */
-	public final int[][]  A;
+	public final int[][] A;
 	/** The symmetrized Cartan matrix (the inverse of the quadratic form matrix) */
 	public final fraction[][] symA;
 	/** The inverse of the cartan matrix. */
@@ -44,21 +42,21 @@ public class CGroup
 	 */
 	
 	/** The determinant of the Cartan Matrix. */
-	public final int		det;
+	public final int	det;
 	/** The rank of the group. */
-	public final int		rank;
+	public final int	rank;
 	/** The dimension of the group (i.e. the number of generators). Only set for finite groups. */
-	public final int		dim;
+	public final int	dim;
 	/** String value of dim. "Infinite" if the group is infinite. */
-	public final String		dimension;
+	public final String	dimension;
 	/** The type of the group (e.g. "A1", "E6", etc) */
-	public final String		type;
+	public final String	type;
 	/** Boolean indicating whethet the group is finite or not. */
-	public final boolean	finite;
+	public final boolean finite;
 	/** The root system */
 	public final CRootSystem rs;
 	/** The Weyl vector of the group */
-	public final CWeight weylVector;
+	public final CWeight rho;
 	
 	
 	/**********************************
@@ -112,7 +110,7 @@ public class CGroup
 		{
 			weylLabels[i] = 1;
 		}
-		weylVector = new CWeight(weylLabels);
+		rho = new CWeight(weylLabels);
 		
 		// Detect the type of Lie group.
 		type = detectType(cartanMatrix);
@@ -255,6 +253,10 @@ public class CGroup
 	
 	/**
 	 * Calculate the innerproduct between two roots.
+	 * 
+	 * @param	root1	Root alpha.
+	 * @param	root2	Root beta.
+	 * @return			The innerproduct (alpha, beta), which is an integer.
 	 */
 	public int innerProduct(CRoot root1, CRoot root2)
 	{
@@ -271,6 +273,10 @@ public class CGroup
 	
 	/**
 	 * Calculate the innerproduct between two weights.
+	 * 
+	 * @param	weight1		Weight lambda.
+	 * @param	weight2		Weight mu.
+	 * @return				The innerproduct (lambda,mu).
 	 */
 	public fraction innerProduct(CWeight weight1, CWeight weight2)
 	{
@@ -287,16 +293,39 @@ public class CGroup
 	
 	/**
 	 * Calculate the innerproduct between a weight and a root.
+	 * This is the same as the action of the weight on the root, and vice versa.
+	 * 
+	 * @param	weight	Weight lambda.
+	 * @param	root	Root alpha.
+	 * @return			The innerproduct (lambda,alpha) = lambda(alpha) = alpha(lambda),
+	 *					which is an integer.
 	 */
 	public int innerProduct(CWeight weight, CRoot root)
 	{
 		int result = 0;
 		for (int i = 0; i < rank; i++)
 		{
-			result += weight.dynkinLabels[i] * root.vector[i];
+			result += weight.dynkinLabels[i] * root.vector[i] * rs.simpleRootNorms[i];
 		}
 		return result;
 	}
+	
+	/**
+	 * Calculate the action of the Weyl vector on a root.
+	 * 
+	 * @param	root	Root alpha.
+	 * @return			rho(alhpa), with rho the Weyl vector of this group.
+	 */
+	public int rho(CRoot root)
+	{
+		int result = 0;
+		for (int i = 0; i < rank; i++)
+		{
+			result += root.vector[i] * rs.simpleRootNorms[i];			
+		}
+		return result;
+	}
+	
 	
 	/**
 	 * Calculate the height of a weight.

@@ -68,7 +68,7 @@ public class CHighestWeightRep
 		
 		// Calculate a common factor in the freudenthal formula
 		highestWeightFactor = group.innerProduct(highestWeight,highestWeight);
-		highestWeightFactor.add(group.innerProduct(highestWeight, group.weylVector).times(2));
+		highestWeightFactor.add(group.innerProduct(highestWeight, group.rho).times(2));
 		
 		// Calculate the height of the highest weight
 		highestHeight = group.weightHeight(highestWeightLabels);
@@ -252,7 +252,7 @@ public class CHighestWeightRep
 		
 		// First calculate the denominator.
 		denominator = highestWeightFactor.minus(group.innerProduct(weight,weight));
-		denominator.subtract(group.innerProduct(weight,group.weylVector).times(2));
+		denominator.subtract(group.innerProduct(weight,group.rho).times(2));
 		
 		maxHeight = Math.min(weight.getDepth(), group.rs.size()-1);
 		

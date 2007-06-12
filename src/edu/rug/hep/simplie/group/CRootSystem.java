@@ -12,7 +12,6 @@ import edu.rug.hep.simplie.math.fraction;
 
 import java.util.Collection;
 import java.util.Vector;
-import java.util.Comparator;
 import java.util.Collections;
 import java.io.*;
 
@@ -632,7 +631,7 @@ public class CRootSystem
 		if(root.height() % 2 == 0)
 			multiplicity.add(petersonPart(root, root.height() / 2));
 		
-		multiplicity.divide( group.innerProduct(root,root) - (2 * root.height() ) );
+		multiplicity.divide( group.innerProduct(root,root) - (2 * group.rho(root) ) );
 		multiplicity.subtract(coMult);
 		
 		if(!multiplicity.isInt())
