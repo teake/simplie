@@ -247,8 +247,9 @@ public class CGroup
 			while (iterator.hasNext())
 			{
 				CRoot root = (CRoot) iterator.next();
-				dim.multiply( innerProduct(highestWeight,root) + root.height() );
-				dim.divide( root.height() );
+				int rhoRoot = rho(root);
+				dim.multiply( innerProduct(highestWeight,root) + rhoRoot );
+				dim.divide( rhoRoot );
 			}
 		}
 		

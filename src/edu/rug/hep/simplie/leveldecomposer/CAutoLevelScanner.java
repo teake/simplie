@@ -266,12 +266,12 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]> implements Com
 		{
 			if(scanFirst)
 			{
-				int rootLength = calculateRootLength(levels, dynkinLabels);
+				coLevels = calculateCoLevels(levels, dynkinLabels);
+				int rootLength = calculateRootLength(levels, coLevels);
 				// Only continue if the root length is not bigger than the maximum root length.
 				if(rootLength <= Globals.group.rs.maxNorm)
 				{
 					// First check if all root components are integers and non-negative.
-					coLevels  = calculateCoLevels(levels, dynkinLabels);
 					allGoodIntegers = true;
 					for (int i = 0; i < coLevels.length; i++)
 					{
@@ -417,27 +417,32 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]> implements Com
 	 ********************************/
 	
 	/** Returns the actual root length */
-	private int calculateRootLength(int[] levels, int[] dynkinLabels)
+	private int calculateRootLength(int[] levels, fraction[] coLevels)
 	{
-		int[] levelComponents = calculateLevelComponents(levels);
 		fraction rootLength = new fraction(0);
-		
-		for(int i=0; i < Globals.coGroup.rank; i++)
+
+		for(int i=0; i < coLevels.length; i++)
 		{
-			for(int j=0; j < Globals.coGroup.rank; j++)
+			for(int j=0; j < coLevels.length; j++)
 			{
-				rootLength.add( Globals.coGroup.invA[i][j].times(
-						(dynkinLabels[i] * dynkinLabels[j]) - (levelComponents[i] * levelComponents[j]) ) );
+				rootLength.add( coLevels[i].times(coLevels[j].times(Globals.group.B[Globals.dd.translateCo(i)][Globals.dd.translateCo(j)] )));
 			}
 		}
 		for(int i=0; i < levels.length; i++)
 		{
 			for(int j=0; j < levels.length; j++)
 			{
-				rootLength.add( Globals.group.A[Globals.dd.translateLevel(i)][Globals.dd.translateLevel(j)] * levels[i] * levels[j] );
+				rootLength.add( Globals.group.B[Globals.dd.translateLevel(i)][Globals.dd.translateLevel(j)] * levels[i] * levels[j] );
 			}
 		}
-		
+		for(int i=0; i < coLevels.length; i++)
+		{
+			for(int j=0; j < levels.length; j++)
+			{
+				rootLength.add( coLevels[i].times(2 * levels[j] * Globals.group.B[Globals.dd.translateCo(i)][Globals.dd.translateLevel(j)] ));
+			}
+		}
+
 		return rootLength.asInt();
 	}
 	
@@ -452,7 +457,7 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]> implements Com
 			coLevels[i] = new fraction(0);
 			for(int j=0; j < Globals.coGroup.rank; j++)
 			{
-				coLevels[i].add(Globals.coGroup.invA[i][j].times(signConvention * dynkinLabels[j] - levelComponents[j]));
+				coLevels[i].add(Globals.coGroup.invA[j][i].times(signConvention * dynkinLabels[j] - levelComponents[j]));
 			}
 		}
 		
@@ -469,7 +474,7 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]> implements Com
 			levelComponents[i] = 0;
 			for(int j=0; j < levels.length; j++)
 			{
-				levelComponents[i] += Globals.group.A[Globals.dd.translateCo(i)][Globals.dd.translateLevel(j)] * levels[j];
+				levelComponents[i] += Globals.group.A[Globals.dd.translateLevel(j)][Globals.dd.translateCo(i)] * levels[j];
 			}
 		}
 		return levelComponents;
