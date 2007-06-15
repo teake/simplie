@@ -355,7 +355,7 @@ public class CGroup
 		{
 			for (int j = 0; j < rank; j++)
 			{
-				height.add(invA[i][j].times(weightLabels[j]));
+				height.add(invA[j][i].times(weightLabels[j]));
 			}
 		}
 		return height.asInt();
@@ -373,7 +373,7 @@ public class CGroup
 		int[] output = new int[weightLabels.length];
 		for (int j = 0; j < output.length; j++)
 		{
-			output[j] = weightLabels[j] - A[j][i] * weightLabels[i];
+			output[j] = weightLabels[j] - A[i][j] * weightLabels[i];
 		}
 		return output;
 	}
