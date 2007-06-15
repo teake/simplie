@@ -15,20 +15,36 @@ import javax.swing.filechooser.*;
 import java.io.File;
 
 
-
 /**
  *
  * @author  Teake Nutma
  */
 public class Main extends javax.swing.JFrame implements DiagramListener
 {
-	private FileFilter ddFilter;
-	private FileFilter rsFilter;
+	private final FileFilter ddFilter;
+	private final FileFilter rsFilter;
+	private final File workDir;
+	private final File ddDir;
+	private final File rsDir;
+	
+	/** This class is used in the diagram preset UI */
+	class ddListener implements java.awt.event.ActionListener
+	{
+		String url;
+		public ddListener(String url)
+		{
+			this.url = url;
+		}
+		public void actionPerformed(java.awt.event.ActionEvent evt)
+		{
+			Globals.dd.loadFrom(this.url);
+		}
+	}
 	
 	/** Creates new form LevelDecompositionUI */
 	public Main()
 	{
-		/** Try to set the Look and Feel to the system native look and feel */
+		// Try to set the Look and Feel to the system native look and feel.
 		UIManager uiManager = new UIManager();
 		try
 		{
@@ -38,7 +54,7 @@ public class Main extends javax.swing.JFrame implements DiagramListener
 		{
 		}
 		initComponents();
-	
+		
 		this.setLocation(20,20);
 		
 		systemOutputDialog.setLocation(100,100);
@@ -50,11 +66,50 @@ public class Main extends javax.swing.JFrame implements DiagramListener
 		rsFilter = new FileNameExtensionFilter("Root system (*.rs)", "rs");
 		
 		Globals.dd.addListener(this);
+		
+		// Check what the working dir is.
+		String userDir	= java.lang.System.getProperty("user.home");
+		File appData	= new File(userDir,"Application Data");
+		if(appData.exists())
+		{
+			workDir = new File(appData, ".simplie");
+		}
+		else
+			workDir = new File(userDir, ".simplie");
+		ddDir = new File(workDir, "diagrams");
+		rsDir = new File(workDir, "roots");
+		
+		// If it doesn't exist, create it.
+		if(!ddDir.exists())
+			ddDir.mkdirs();
+		if(!rsDir.exists())
+			rsDir.mkdirs();
+		
+		// Fill the preset menu.
+		resetPresets();		
 	}
 	
 	public void diagramChanged()
 	{
 		algebraInfo.setGroup(Globals.group);
+	}
+	
+	private void resetPresets()
+	{
+		MenuPresets.removeAll();
+		// Add the diagram presets to the UI.
+		for(File file : ddDir.listFiles())
+		{
+			if(!ddFilter.accept(file))
+				continue;
+			
+			// Add the menu item.
+			javax.swing.JMenuItem ddPreset = new javax.swing.JMenuItem();
+			String text = file.getName();
+			ddPreset.setText(text.substring(0,text.lastIndexOf(".dd")));
+			ddPreset.addActionListener(new ddListener(file.toString()));
+			MenuPresets.add(ddPreset);
+		}
 	}
 	
 	
@@ -67,6 +122,7 @@ public class Main extends javax.swing.JFrame implements DiagramListener
     // <editor-fold defaultstate="collapsed" desc=" Generated Code ">//GEN-BEGIN:initComponents
     private void initComponents()
     {
+
         popup = new javax.swing.JFrame();
         optionPane = new javax.swing.JOptionPane();
         exportDialog = new javax.swing.JDialog();
@@ -90,10 +146,8 @@ public class Main extends javax.swing.JFrame implements DiagramListener
         MenuItemExit = new javax.swing.JMenuItem();
         MenuEdit = new javax.swing.JMenu();
         MenuItemClear = new javax.swing.JMenuItem();
-        jSeparator2 = new javax.swing.JSeparator();
-        MenuItemLoadG2 = new javax.swing.JMenuItem();
-        MenuItemLoadE11 = new javax.swing.JMenuItem();
-        MenuItemLoadD8very = new javax.swing.JMenuItem();
+        MenuItemResetPresets = new javax.swing.JMenuItem();
+        MenuPresets = new javax.swing.JMenu();
         MenuTools = new javax.swing.JMenu();
         MenuExportToTex = new javax.swing.JMenuItem();
         MenuExportRootSystem = new javax.swing.JMenuItem();
@@ -116,6 +170,7 @@ public class Main extends javax.swing.JFrame implements DiagramListener
             popupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(optionPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
+
         exportDialog.setTitle("Export to TeX");
         exportDialog.setMinimumSize(new java.awt.Dimension(430, 316));
         exportDialog.setResizable(false);
@@ -132,6 +187,7 @@ public class Main extends javax.swing.JFrame implements DiagramListener
             exportDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(exportToTex, javax.swing.GroupLayout.DEFAULT_SIZE, 294, Short.MAX_VALUE)
         );
+
         systemOutputDialog.setTitle("System output");
         systemOutputDialog.setMinimumSize(new java.awt.Dimension(360, 360));
 
@@ -148,16 +204,14 @@ public class Main extends javax.swing.JFrame implements DiagramListener
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("SimpLie");
+
         TabbedPane.addTab("Algebra setup", algebraSetup);
-
         TabbedPane.addTab("Algebra info", algebraInfo);
-
         TabbedPane.addTab("Level decomposition", levelDecomposition);
-
-        TabbedPane.getAccessibleContext().setAccessibleName("");
 
         MenuFile.setMnemonic('f');
         MenuFile.setLabel("File");
+
         MenuItemLoadDD.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.CTRL_MASK));
         MenuItemLoadDD.setMnemonic('o');
         MenuItemLoadDD.setLabel("Load Dynkin diagram");
@@ -168,7 +222,6 @@ public class Main extends javax.swing.JFrame implements DiagramListener
                 MenuItemLoadDDActionPerformed(evt);
             }
         });
-
         MenuFile.add(MenuItemLoadDD);
 
         MenuItemSaveDD.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
@@ -181,9 +234,7 @@ public class Main extends javax.swing.JFrame implements DiagramListener
                 MenuItemSaveDDActionPerformed(evt);
             }
         });
-
         MenuFile.add(MenuItemSaveDD);
-
         MenuFile.add(jSeparator4);
 
         MenuItemLoadRoots.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_L, java.awt.event.InputEvent.CTRL_MASK));
@@ -196,7 +247,6 @@ public class Main extends javax.swing.JFrame implements DiagramListener
                 MenuItemLoadRootsActionPerformed(evt);
             }
         });
-
         MenuFile.add(MenuItemLoadRoots);
 
         MenuItemSaveRoots.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_R, java.awt.event.InputEvent.CTRL_MASK));
@@ -209,9 +259,7 @@ public class Main extends javax.swing.JFrame implements DiagramListener
                 MenuItemSaveRootsActionPerformed(evt);
             }
         });
-
         MenuFile.add(MenuItemSaveRoots);
-
         MenuFile.add(jSeparator1);
 
         jMenuItemPrint.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P, java.awt.event.InputEvent.CTRL_MASK));
@@ -224,9 +272,7 @@ public class Main extends javax.swing.JFrame implements DiagramListener
                 jMenuItemPrintActionPerformed(evt);
             }
         });
-
         MenuFile.add(jMenuItemPrint);
-
         MenuFile.add(jSeparator3);
 
         MenuItemExit.setMnemonic('x');
@@ -238,13 +284,13 @@ public class Main extends javax.swing.JFrame implements DiagramListener
                 MenuItemExitActionPerformed(evt);
             }
         });
-
         MenuFile.add(MenuItemExit);
 
         MenuBar.add(MenuFile);
 
         MenuEdit.setMnemonic('e');
         MenuEdit.setText("Edit");
+
         MenuItemClear.setMnemonic('c');
         MenuItemClear.setText("Clear diagram");
         MenuItemClear.addActionListener(new java.awt.event.ActionListener()
@@ -254,51 +300,27 @@ public class Main extends javax.swing.JFrame implements DiagramListener
                 MenuItemClearActionPerformed(evt);
             }
         });
-
         MenuEdit.add(MenuItemClear);
 
-        MenuEdit.add(jSeparator2);
-
-        MenuItemLoadG2.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F2, java.awt.event.InputEvent.SHIFT_MASK));
-        MenuItemLoadG2.setText("G_2 preset");
-        MenuItemLoadG2.addActionListener(new java.awt.event.ActionListener()
+        MenuItemResetPresets.setText("Reset presets");
+        MenuItemResetPresets.addActionListener(new java.awt.event.ActionListener()
         {
             public void actionPerformed(java.awt.event.ActionEvent evt)
             {
-                MenuItemLoadG2ActionPerformed(evt);
+                MenuItemResetPresetsActionPerformed(evt);
             }
         });
-
-        MenuEdit.add(MenuItemLoadG2);
-
-        MenuItemLoadE11.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F11, java.awt.event.InputEvent.SHIFT_MASK));
-        MenuItemLoadE11.setText("E_11 preset");
-        MenuItemLoadE11.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
-                MenuItemLoadE11ActionPerformed(evt);
-            }
-        });
-
-        MenuEdit.add(MenuItemLoadE11);
-
-        MenuItemLoadD8very.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F10, java.awt.event.InputEvent.SHIFT_MASK));
-        MenuItemLoadD8very.setText("D_8+++ preset");
-        MenuItemLoadD8very.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
-                MenuItemLoadD8veryActionPerformed(evt);
-            }
-        });
-
-        MenuEdit.add(MenuItemLoadD8very);
+        MenuEdit.add(MenuItemResetPresets);
 
         MenuBar.add(MenuEdit);
 
+        MenuPresets.setMnemonic('p');
+        MenuPresets.setText("Presets");
+        MenuBar.add(MenuPresets);
+
         MenuTools.setMnemonic('t');
         MenuTools.setText("Tools");
+
         MenuExportToTex.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, java.awt.event.InputEvent.CTRL_MASK));
         MenuExportToTex.setMnemonic('e');
         MenuExportToTex.setText("Export to TeX");
@@ -309,7 +331,6 @@ public class Main extends javax.swing.JFrame implements DiagramListener
                 MenuExportToTexActionPerformed(evt);
             }
         });
-
         MenuTools.add(MenuExportToTex);
 
         MenuExportRootSystem.setText("Export root system");
@@ -320,7 +341,6 @@ public class Main extends javax.swing.JFrame implements DiagramListener
                 MenuExportRootSystemActionPerformed(evt);
             }
         });
-
         MenuTools.add(MenuExportRootSystem);
 
         MenuShowOutput.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
@@ -333,13 +353,13 @@ public class Main extends javax.swing.JFrame implements DiagramListener
                 MenuShowOutputActionPerformed(evt);
             }
         });
-
         MenuTools.add(MenuShowOutput);
 
         MenuBar.add(MenuTools);
 
         MenuHelp.setMnemonic('h');
         MenuHelp.setText("Help");
+
         MenuItemHelp.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F1, 0));
         MenuItemHelp.setMnemonic('h');
         MenuItemHelp.setText("Help");
@@ -350,7 +370,6 @@ public class Main extends javax.swing.JFrame implements DiagramListener
                 MenuItemHelpActionPerformed(evt);
             }
         });
-
         MenuHelp.add(MenuItemHelp);
 
         MenuItemAbout.setMnemonic('a');
@@ -362,7 +381,6 @@ public class Main extends javax.swing.JFrame implements DiagramListener
                 MenuItemAboutActionPerformed(evt);
             }
         });
-
         MenuHelp.add(MenuItemAbout);
 
         MenuBar.add(MenuHelp);
@@ -379,33 +397,16 @@ public class Main extends javax.swing.JFrame implements DiagramListener
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(TabbedPane, javax.swing.GroupLayout.DEFAULT_SIZE, 526, Short.MAX_VALUE)
         );
+
+        TabbedPane.getAccessibleContext().setAccessibleName("");
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-	private void MenuItemLoadG2ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_MenuItemLoadG2ActionPerformed
-	{//GEN-HEADEREND:event_MenuItemLoadG2ActionPerformed
-		Globals.dd.clear();
-		Globals.dd.addNode(0,0,0);
-		Globals.dd.addNode(1,0,3);
-	}//GEN-LAST:event_MenuItemLoadG2ActionPerformed
-
-	private void MenuItemLoadD8veryActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_MenuItemLoadD8veryActionPerformed
-	{//GEN-HEADEREND:event_MenuItemLoadD8veryActionPerformed
-		Globals.dd.clear();
-		CDynkinNode lastRegular = Globals.dd.addNode(5,0,0);
-		CDynkinNode endPoint	= Globals.dd.addNode(1,0,0);
-		Globals.dd.addNode(0,1,0);
-		CDynkinNode attachEnd = Globals.dd.addNode(1,1,1);
-		Globals.dd.addNode(2,1,1);
-		Globals.dd.addNode(3,1,1);
-		Globals.dd.addNode(4,1,1);
-		CDynkinNode attachReg = Globals.dd.addNode(5,1,1);
-		Globals.dd.addNode(6,1,1);
-		Globals.dd.addNode(7,1,1);
-		Globals.dd.addNode(8,1,1);
-		Globals.dd.modifyConnection(lastRegular, attachReg, 1, true);
-		Globals.dd.modifyConnection(endPoint, attachEnd, 1, true);
-	}//GEN-LAST:event_MenuItemLoadD8veryActionPerformed
+	
+	private void MenuItemResetPresetsActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_MenuItemResetPresetsActionPerformed
+	{//GEN-HEADEREND:event_MenuItemResetPresetsActionPerformed
+	resetPresets();
+}//GEN-LAST:event_MenuItemResetPresetsActionPerformed
 
 	private void MenuExportRootSystemActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_MenuExportRootSystemActionPerformed
 	{//GEN-HEADEREND:event_MenuExportRootSystemActionPerformed
@@ -423,17 +424,17 @@ public class Main extends javax.swing.JFrame implements DiagramListener
 			Globals.group.rs.writeTxtFile(fileURL);
 		}
 	}//GEN-LAST:event_MenuExportRootSystemActionPerformed
-
+	
 	private void MenuShowOutputActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_MenuShowOutputActionPerformed
 	{//GEN-HEADEREND:event_MenuShowOutputActionPerformed
 		systemOutputDialog.setVisible(true);
 	}//GEN-LAST:event_MenuShowOutputActionPerformed
-
+	
 	private void MenuExportToTexActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_MenuExportToTexActionPerformed
 	{//GEN-HEADEREND:event_MenuExportToTexActionPerformed
 		exportDialog.setVisible(true);
 	}//GEN-LAST:event_MenuExportToTexActionPerformed
-
+	
 	private void jMenuItemPrintActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jMenuItemPrintActionPerformed
 	{//GEN-HEADEREND:event_jMenuItemPrintActionPerformed
 		levelDecomposition.printTable();
@@ -441,7 +442,7 @@ public class Main extends javax.swing.JFrame implements DiagramListener
 	
 	private void MenuItemSaveRootsActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_MenuItemSaveRootsActionPerformed
 	{//GEN-HEADEREND:event_MenuItemSaveRootsActionPerformed
-		JFileChooser chooser = new JFileChooser("");
+		JFileChooser chooser = new JFileChooser(rsDir);
 		chooser.addChoosableFileFilter(rsFilter);
 		chooser.setSelectedFile(new File(Globals.group.type + "_height_" + Globals.group.rs.constructedHeight()));
 		chooser.setDialogTitle("Save root system");
@@ -465,7 +466,7 @@ public class Main extends javax.swing.JFrame implements DiagramListener
 		JFileChooser chooser;
 		int returnVal;
 		
-		chooser = new JFileChooser("");
+		chooser = new JFileChooser(rsDir);
 		chooser.addChoosableFileFilter(rsFilter);
 		chooser.setDialogTitle("Open root system");
 		returnVal = chooser.showOpenDialog(this);
@@ -503,7 +504,7 @@ public class Main extends javax.swing.JFrame implements DiagramListener
 	
 	private void MenuItemSaveDDActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_MenuItemSaveDDActionPerformed
 	{//GEN-HEADEREND:event_MenuItemSaveDDActionPerformed
-		JFileChooser chooser = new JFileChooser("");
+		JFileChooser chooser = new JFileChooser(ddDir);
 		chooser.addChoosableFileFilter(ddFilter);
 		chooser.setSelectedFile(new File(Globals.getDynkinDiagramType() + ".dd"));
 		chooser.setDialogTitle("Save Dynkin diagram");
@@ -527,7 +528,7 @@ public class Main extends javax.swing.JFrame implements DiagramListener
 		JFileChooser chooser;
 		int returnVal;
 		
-		chooser = new JFileChooser("");
+		chooser = new JFileChooser(ddDir);
 		chooser.addChoosableFileFilter(ddFilter);
 		chooser.setDialogTitle("Open Dynkin diagram");
 		returnVal = chooser.showOpenDialog(this);
@@ -541,23 +542,6 @@ public class Main extends javax.swing.JFrame implements DiagramListener
 			Globals.dd.loadFrom(fileURL);
 		}
 	}//GEN-LAST:event_MenuItemLoadDDActionPerformed
-	
-    private void MenuItemLoadE11ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_MenuItemLoadE11ActionPerformed
-    {//GEN-HEADEREND:event_MenuItemLoadE11ActionPerformed
-		Globals.dd.clear();
-		CDynkinNode exceptional = Globals.dd.addNode(2,0,0);
-		Globals.dd.addNode(0,1,0);
-		Globals.dd.addNode(1,1,1);
-		CDynkinNode attach = Globals.dd.addNode(2,1,1);
-		Globals.dd.addNode(3,1,1);
-		Globals.dd.addNode(4,1,1);
-		Globals.dd.addNode(5,1,1);
-		Globals.dd.addNode(6,1,1);
-		Globals.dd.addNode(7,1,1);
-		Globals.dd.addNode(8,1,1);
-		Globals.dd.addNode(9,1,1);
-		Globals.dd.modifyConnection(exceptional, attach, 1, true);
-    }//GEN-LAST:event_MenuItemLoadE11ActionPerformed
 	
     private void MenuItemClearActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_MenuItemClearActionPerformed
     {//GEN-HEADEREND:event_MenuItemClearActionPerformed
@@ -603,13 +587,12 @@ public class Main extends javax.swing.JFrame implements DiagramListener
     private javax.swing.JMenuItem MenuItemClear;
     private javax.swing.JMenuItem MenuItemExit;
     private javax.swing.JMenuItem MenuItemHelp;
-    private javax.swing.JMenuItem MenuItemLoadD8very;
     private javax.swing.JMenuItem MenuItemLoadDD;
-    private javax.swing.JMenuItem MenuItemLoadE11;
-    private javax.swing.JMenuItem MenuItemLoadG2;
     private javax.swing.JMenuItem MenuItemLoadRoots;
+    private javax.swing.JMenuItem MenuItemResetPresets;
     private javax.swing.JMenuItem MenuItemSaveDD;
     private javax.swing.JMenuItem MenuItemSaveRoots;
+    private javax.swing.JMenu MenuPresets;
     private javax.swing.JMenuItem MenuShowOutput;
     private javax.swing.JMenu MenuTools;
     private javax.swing.JTabbedPane TabbedPane;
@@ -619,7 +602,6 @@ public class Main extends javax.swing.JFrame implements DiagramListener
     private edu.rug.hep.simplie.ui.ExportToTex exportToTex;
     private javax.swing.JMenuItem jMenuItemPrint;
     private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
     private javax.swing.JSeparator jSeparator4;
     private edu.rug.hep.simplie.ui.LevelDecomposition levelDecomposition;
