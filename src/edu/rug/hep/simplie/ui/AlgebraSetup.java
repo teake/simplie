@@ -7,7 +7,6 @@
 package edu.rug.hep.simplie.ui;
 
 import edu.rug.hep.simplie.Globals;
-import edu.rug.hep.simplie.group.CGroup;
 import edu.rug.hep.simplie.dynkindiagram.*;
 
 import Jama.Matrix.*;

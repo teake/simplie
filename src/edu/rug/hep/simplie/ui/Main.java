@@ -8,9 +8,7 @@ package edu.rug.hep.simplie.ui;
 
 import edu.rug.hep.simplie.Globals;
 import edu.rug.hep.simplie.dynkindiagram.*;
-import javax.swing.Popup;
 
-import javax.swing.JTextField;
 import javax.swing.UIManager;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.*;

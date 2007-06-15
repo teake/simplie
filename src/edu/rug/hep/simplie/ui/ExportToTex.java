@@ -9,7 +9,6 @@ package edu.rug.hep.simplie.ui;
 import edu.rug.hep.simplie.Globals;
 import java.awt.datatransfer.Clipboard;
 
-import javax.swing.JTable;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.*;

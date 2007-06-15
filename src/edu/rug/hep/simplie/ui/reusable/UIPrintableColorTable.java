@@ -11,23 +11,16 @@ import edu.rug.hep.simplie.Globals;
 
 import javax.swing.JTable;
 import javax.swing.SwingUtilities;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.event.TableModelEvent;
 import javax.swing.table.TableCellRenderer;
-import java.awt.Dimension;
-import java.awt.GridLayout;
 import java.awt.Component;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
-import java.awt.print.PrinterException;
 
 import javax.swing.text.JTextComponent;
 import javax.swing.SwingUtilities;
-import javax.swing.JLabel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 
