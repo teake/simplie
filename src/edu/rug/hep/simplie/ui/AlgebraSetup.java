@@ -22,8 +22,6 @@ public class AlgebraSetup extends javax.swing.JPanel implements DiagramListener
 	{
 		initComponents();
 		Globals.dd.addListener(this);
-		dynkinDiagramPanel.Initialize(this);
-		//Update();
 		algebraInfo.SetTitle("Full algebra");
 		subAlgebraInfo.SetTitle("Regular subalgebra");
 		disAlgebraInfo.SetTitle("Disconnected subalgebra");
@@ -37,7 +35,7 @@ public class AlgebraSetup extends javax.swing.JPanel implements DiagramListener
 		disAlgebraInfo.Update(Globals.disGroup);
 		coAlgebraInfo.Update(Globals.coGroup);
 	
-		PanelDynkinDiagram.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Dynkin Diagram of " + Globals.getDynkinDiagramType(), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12)));
+		dynkinDiagramPanel.setTitle("Dynkin Diagram of " + Globals.getDynkinDiagramType());
 	}
 	
 	/** This method is called from within the constructor to
@@ -48,33 +46,11 @@ public class AlgebraSetup extends javax.swing.JPanel implements DiagramListener
     // <editor-fold defaultstate="collapsed" desc=" Generated Code ">//GEN-BEGIN:initComponents
     private void initComponents()
     {
-        PanelDynkinDiagram = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        dynkinDiagramPanel = new edu.rug.hep.simplie.ui.DynkinDiagramPanel();
         algebraInfo = new edu.rug.hep.simplie.ui.reusable.UIAlgebraInfo();
         subAlgebraInfo = new edu.rug.hep.simplie.ui.reusable.UIAlgebraInfo();
         disAlgebraInfo = new edu.rug.hep.simplie.ui.reusable.UIAlgebraInfo();
         coAlgebraInfo = new edu.rug.hep.simplie.ui.reusable.UIAlgebraInfo();
-
-        PanelDynkinDiagram.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Dynkin Diagram", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12)));
-
-        jScrollPane1.setViewportView(dynkinDiagramPanel);
-
-        javax.swing.GroupLayout PanelDynkinDiagramLayout = new javax.swing.GroupLayout(PanelDynkinDiagram);
-        PanelDynkinDiagram.setLayout(PanelDynkinDiagramLayout);
-        PanelDynkinDiagramLayout.setHorizontalGroup(
-            PanelDynkinDiagramLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(PanelDynkinDiagramLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 464, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-        PanelDynkinDiagramLayout.setVerticalGroup(
-            PanelDynkinDiagramLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(PanelDynkinDiagramLayout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 162, Short.MAX_VALUE)
-                .addContainerGap())
-        );
+        dynkinDiagramPanel = new edu.rug.hep.simplie.ui.DynkinDiagramPanel();
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -83,7 +59,7 @@ public class AlgebraSetup extends javax.swing.JPanel implements DiagramListener
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(PanelDynkinDiagram, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(dynkinDiagramPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 496, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(disAlgebraInfo, javax.swing.GroupLayout.DEFAULT_SIZE, 245, Short.MAX_VALUE)
@@ -98,7 +74,7 @@ public class AlgebraSetup extends javax.swing.JPanel implements DiagramListener
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(PanelDynkinDiagram, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(dynkinDiagramPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(algebraInfo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -113,12 +89,10 @@ public class AlgebraSetup extends javax.swing.JPanel implements DiagramListener
 	
 	
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel PanelDynkinDiagram;
     private edu.rug.hep.simplie.ui.reusable.UIAlgebraInfo algebraInfo;
     private edu.rug.hep.simplie.ui.reusable.UIAlgebraInfo coAlgebraInfo;
     private edu.rug.hep.simplie.ui.reusable.UIAlgebraInfo disAlgebraInfo;
     private edu.rug.hep.simplie.ui.DynkinDiagramPanel dynkinDiagramPanel;
-    private javax.swing.JScrollPane jScrollPane1;
     private edu.rug.hep.simplie.ui.reusable.UIAlgebraInfo subAlgebraInfo;
     // End of variables declaration//GEN-END:variables
 }

@@ -27,15 +27,12 @@ public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramLis
 	private int			connectionLaced;
 	private CDynkinNode connectionFrom;
 	
-	private AlgebraSetup algebraSetup;
-	
 	private int contextX;
 	private int contextY;
 	
 	/** Creates new form DynkinDiagramPanel */
 	public DynkinDiagramPanel()
 	{
-		initComponents();
 		Globals.dd.addListener(this);
 		
 		spacing = 40;
@@ -46,22 +43,22 @@ public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramLis
 		connectionFrom		= null;
 		
 		contextX = contextY = 0;
+		initComponents();
 	}
 	
 	public void diagramChanged()
 	{
-		this.repaint();
+		diagram.repaint();
 	}
 	
-	public void Initialize(AlgebraSetup algebraSetup)
+	/**
+	 * Sets the title in the border
+	 *
+	 * @param	text	The title of the dynkin diagram.
+	 */
+	public void setTitle(String text)
 	{
-		this.algebraSetup = algebraSetup;
-	}
-	
-	public void paintComponent(Graphics g)
-	{
-		super.paintComponent(g);
-		Globals.dd.drawDiagram(g,offset,spacing,radius);
+		this.setBorder(javax.swing.BorderFactory.createTitledBorder(null, text, javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12)));
 	}
 	
 	private void startModifyConnection(CDynkinNode node)
@@ -97,6 +94,14 @@ public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramLis
         menuAddDoubleConnection = new javax.swing.JMenuItem();
         menuAddTripleConnection = new javax.swing.JMenuItem();
         menuRemoveConnection = new javax.swing.JMenuItem();
+        diagram = new javax.swing.JPanel()
+        {
+            public void paintComponent(Graphics g)
+            {
+                super.paintComponent(g);
+                Globals.dd.drawDiagram(g,offset,spacing,radius);
+            }
+        };
 
         menuAddNode.setText("Add node");
         menuAddNode.addActionListener(new java.awt.event.ActionListener()
@@ -180,7 +185,7 @@ public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramLis
 
         contextMenu.add(menuRemoveConnection);
 
-        setBackground(new java.awt.Color(255, 255, 255));
+        setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Dynkin diagram", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12)));
         addMouseListener(new java.awt.event.MouseAdapter()
         {
             public void mouseReleased(java.awt.event.MouseEvent evt)
@@ -189,38 +194,56 @@ public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramLis
             }
         });
 
+        diagram.setBackground(new java.awt.Color(255, 255, 255));
+        diagram.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        javax.swing.GroupLayout diagramLayout = new javax.swing.GroupLayout(diagram);
+        diagram.setLayout(diagramLayout);
+        diagramLayout.setHorizontalGroup(
+            diagramLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 355, Short.MAX_VALUE)
+        );
+        diagramLayout.setVerticalGroup(
+            diagramLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 154, Short.MAX_VALUE)
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 289, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(diagram, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 112, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(diagram, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
-
+	
 	private void menuAddTripleConnectionActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_menuAddTripleConnectionActionPerformed
 	{//GEN-HEADEREND:event_menuAddTripleConnectionActionPerformed
 		addingConnection = true;
 		connectionLaced = 3;
 		startModifyConnection(Globals.dd.getNodeByCoor(contextX, contextY));
 	}//GEN-LAST:event_menuAddTripleConnectionActionPerformed
-
+	
 	private void menuAddDoubleConnectionActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_menuAddDoubleConnectionActionPerformed
 	{//GEN-HEADEREND:event_menuAddDoubleConnectionActionPerformed
 		addingConnection = true;
 		connectionLaced = 2;
 		startModifyConnection(Globals.dd.getNodeByCoor(contextX, contextY));
 	}//GEN-LAST:event_menuAddDoubleConnectionActionPerformed
-
+	
 	private void menuToggleNodeActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_menuToggleNodeActionPerformed
 	{//GEN-HEADEREND:event_menuToggleNodeActionPerformed
 		CDynkinNode node = Globals.dd.getNodeByCoor(contextX, contextY);
 		Globals.dd.toggleNode(node);
 	}//GEN-LAST:event_menuToggleNodeActionPerformed
-
+	
 	private void menuRemoveConnectionActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_menuRemoveConnectionActionPerformed
 	{//GEN-HEADEREND:event_menuRemoveConnectionActionPerformed
 		addingConnection = false;
@@ -282,6 +305,7 @@ public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramLis
 	
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPopupMenu contextMenu;
+    private javax.swing.JPanel diagram;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JMenu menuAddConnection;
     private javax.swing.JMenuItem menuAddDoubleConnection;
