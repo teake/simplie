@@ -22,18 +22,14 @@ public class AlgebraSetup extends javax.swing.JPanel implements DiagramListener
 	{
 		initComponents();
 		Globals.dd.addListener(this);
-		algebraInfo.SetTitle("Full algebra");
-		subAlgebraInfo.SetTitle("Regular subalgebra");
-		disAlgebraInfo.SetTitle("Disconnected subalgebra");
-		coAlgebraInfo.SetTitle("Co-subalgebra (regular x disconnected)");
 	}
 	
 	public void diagramChanged()
 	{
-		algebraInfo.Update(Globals.group);
-		subAlgebraInfo.Update(Globals.subGroup);
-		disAlgebraInfo.Update(Globals.disGroup);
-		coAlgebraInfo.Update(Globals.coGroup);
+		algebraInfo.update(Globals.group);
+		subAlgebraInfo.update(Globals.subGroup);
+		disAlgebraInfo.update(Globals.disGroup);
+		coAlgebraInfo.update(Globals.coGroup);
 	
 		dynkinDiagramPanel.setTitle("Dynkin Diagram of " + Globals.getDynkinDiagramType());
 	}
@@ -46,11 +42,20 @@ public class AlgebraSetup extends javax.swing.JPanel implements DiagramListener
     // <editor-fold defaultstate="collapsed" desc=" Generated Code ">//GEN-BEGIN:initComponents
     private void initComponents()
     {
+
         algebraInfo = new edu.rug.hep.simplie.ui.reusable.UIAlgebraInfo();
         subAlgebraInfo = new edu.rug.hep.simplie.ui.reusable.UIAlgebraInfo();
         disAlgebraInfo = new edu.rug.hep.simplie.ui.reusable.UIAlgebraInfo();
         coAlgebraInfo = new edu.rug.hep.simplie.ui.reusable.UIAlgebraInfo();
         dynkinDiagramPanel = new edu.rug.hep.simplie.ui.DynkinDiagramPanel();
+
+        algebraInfo.setTitle("Full algebra");
+
+        subAlgebraInfo.setTitle("Regular subalgebra");
+
+        disAlgebraInfo.setTitle("Internal algebra");
+
+        coAlgebraInfo.setTitle("Co-algebra (regular x internal)");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);

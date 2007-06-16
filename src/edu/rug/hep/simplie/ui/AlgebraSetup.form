@@ -56,12 +56,24 @@
   </Layout>
   <SubComponents>
     <Component class="edu.rug.hep.simplie.ui.reusable.UIAlgebraInfo" name="algebraInfo">
+      <Properties>
+        <Property name="title" type="java.lang.String" value="Full algebra"/>
+      </Properties>
     </Component>
     <Component class="edu.rug.hep.simplie.ui.reusable.UIAlgebraInfo" name="subAlgebraInfo">
+      <Properties>
+        <Property name="title" type="java.lang.String" value="Regular subalgebra"/>
+      </Properties>
     </Component>
     <Component class="edu.rug.hep.simplie.ui.reusable.UIAlgebraInfo" name="disAlgebraInfo">
+      <Properties>
+        <Property name="title" type="java.lang.String" value="Internal algebra"/>
+      </Properties>
     </Component>
     <Component class="edu.rug.hep.simplie.ui.reusable.UIAlgebraInfo" name="coAlgebraInfo">
+      <Properties>
+        <Property name="title" type="java.lang.String" value="Co-algebra (regular x internal)"/>
+      </Properties>
     </Component>
     <Component class="edu.rug.hep.simplie.ui.DynkinDiagramPanel" name="dynkinDiagramPanel">
     </Component>

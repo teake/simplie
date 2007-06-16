@@ -230,6 +230,9 @@
           </Properties>
         </Component>
         <Component class="edu.rug.hep.simplie.ui.reusable.UILevelTextfield" name="tfExtraColumns">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Extra columns"/>
+          </Properties>
         </Component>
         <Component class="javax.swing.JCheckBox" name="cbDDlabels">
           <Properties>

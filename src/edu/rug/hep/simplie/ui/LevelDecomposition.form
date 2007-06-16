@@ -175,8 +175,14 @@
           </Properties>
         </Component>
         <Component class="edu.rug.hep.simplie.ui.reusable.UILevelTextfield" name="autoScanMaxLevel">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Maximum level:"/>
+          </Properties>
         </Component>
         <Component class="edu.rug.hep.simplie.ui.reusable.UILevelTextfield" name="autoScanMinLevel">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Minimum level:"/>
+          </Properties>
         </Component>
         <Component class="javax.swing.JCheckBox" name="cbLocked">
           <Properties>

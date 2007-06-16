@@ -24,37 +24,17 @@ public class UIAlgebraInfo extends javax.swing.JPanel
 		initComponents();
 	}
 	
-	public void SetTitle(String title)
+	public void setTitle(String title)
 	{
 		setBorder(javax.swing.BorderFactory.createTitledBorder(null, title, javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12)));
 	}
-	
-	public void SetType(String type)
+		
+	public void update(CGroup group)
 	{
-		algebraInfoType.setText(type);
-	}
-	
-	public void SetRank(int rank)
-	{
-		algebraInfoRank.setText(Globals.intToString(rank));
-	}
-	
-	public void SetDim(String dim)
-	{
-		algebraInfoDim.setText(dim);
-	}
-	
-	public void SetCMDet(int det)
-	{
-		algebraInfoCMDet.setText(Globals.intToString(det));
-	}
-	
-	public void Update(CGroup group)
-	{
-		SetType(group.type);
-		SetRank(group.rank);
-		SetDim(group.dimension);
-		SetCMDet(group.det);
+		algebraInfoType.setText(group.type);
+		algebraInfoRank.setText(Globals.intToString(group.rank));
+		algebraInfoDim.setText(group.dimension);
+		algebraInfoCMDet.setText(Globals.intToString(group.det));
 	}
 	
 	/** This method is called from within the constructor to

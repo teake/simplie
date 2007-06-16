@@ -43,7 +43,7 @@ public class AlgebraInfo extends javax.swing.JPanel
 		if(group == null)
 			return;
 		
-		smallInfo.Update(group);
+		smallInfo.update(group);
 		
 		constructedHeight.setText(Globals.intToString(group.rs.constructedHeight()));
 		numPosRoots.setText(Globals.intToString((int) group.rs.numPosRoots()));
