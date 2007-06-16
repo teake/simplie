@@ -96,8 +96,14 @@ public class Main extends javax.swing.JFrame implements DiagramListener
 	
 	private void resetPresets()
 	{
-		MenuPresets.removeAll();
+		// Clear everything except the reset button
+		while(MenuPresets.getItemCount() > 2)
+		{
+			MenuPresets.remove(0);
+		}
+		
 		// Add the diagram presets to the UI.
+		int pos = 0;
 		for(File file : ddDir.listFiles())
 		{
 			if(!ddFilter.accept(file))
@@ -108,7 +114,12 @@ public class Main extends javax.swing.JFrame implements DiagramListener
 			String text = file.getName();
 			ddPreset.setText(text.substring(0,text.lastIndexOf(".dd")));
 			ddPreset.addActionListener(new ddListener(file.toString()));
-			MenuPresets.add(ddPreset);
+			if(pos < 12)
+			{
+				String shiftKey = "F" + (pos + 1);
+				ddPreset.setAccelerator(javax.swing.KeyStroke.getKeyStroke("shift " + shiftKey));
+			}
+			MenuPresets.add(ddPreset, pos++);
 		}
 	}
 	
@@ -122,7 +133,6 @@ public class Main extends javax.swing.JFrame implements DiagramListener
     // <editor-fold defaultstate="collapsed" desc=" Generated Code ">//GEN-BEGIN:initComponents
     private void initComponents()
     {
-
         popup = new javax.swing.JFrame();
         optionPane = new javax.swing.JOptionPane();
         exportDialog = new javax.swing.JDialog();
@@ -146,8 +156,9 @@ public class Main extends javax.swing.JFrame implements DiagramListener
         MenuItemExit = new javax.swing.JMenuItem();
         MenuEdit = new javax.swing.JMenu();
         MenuItemClear = new javax.swing.JMenuItem();
-        MenuItemResetPresets = new javax.swing.JMenuItem();
         MenuPresets = new javax.swing.JMenu();
+        jSeparator2 = new javax.swing.JSeparator();
+        MenuItemResetPresets = new javax.swing.JMenuItem();
         MenuTools = new javax.swing.JMenu();
         MenuExportToTex = new javax.swing.JMenuItem();
         MenuExportRootSystem = new javax.swing.JMenuItem();
@@ -170,7 +181,6 @@ public class Main extends javax.swing.JFrame implements DiagramListener
             popupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(optionPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
-
         exportDialog.setTitle("Export to TeX");
         exportDialog.setMinimumSize(new java.awt.Dimension(430, 316));
         exportDialog.setResizable(false);
@@ -187,7 +197,6 @@ public class Main extends javax.swing.JFrame implements DiagramListener
             exportDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(exportToTex, javax.swing.GroupLayout.DEFAULT_SIZE, 294, Short.MAX_VALUE)
         );
-
         systemOutputDialog.setTitle("System output");
         systemOutputDialog.setMinimumSize(new java.awt.Dimension(360, 360));
 
@@ -204,14 +213,16 @@ public class Main extends javax.swing.JFrame implements DiagramListener
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("SimpLie");
-
         TabbedPane.addTab("Algebra setup", algebraSetup);
+
         TabbedPane.addTab("Algebra info", algebraInfo);
+
         TabbedPane.addTab("Level decomposition", levelDecomposition);
+
+        TabbedPane.getAccessibleContext().setAccessibleName("");
 
         MenuFile.setMnemonic('f');
         MenuFile.setLabel("File");
-
         MenuItemLoadDD.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.CTRL_MASK));
         MenuItemLoadDD.setMnemonic('o');
         MenuItemLoadDD.setLabel("Load Dynkin diagram");
@@ -222,6 +233,7 @@ public class Main extends javax.swing.JFrame implements DiagramListener
                 MenuItemLoadDDActionPerformed(evt);
             }
         });
+
         MenuFile.add(MenuItemLoadDD);
 
         MenuItemSaveDD.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
@@ -234,7 +246,9 @@ public class Main extends javax.swing.JFrame implements DiagramListener
                 MenuItemSaveDDActionPerformed(evt);
             }
         });
+
         MenuFile.add(MenuItemSaveDD);
+
         MenuFile.add(jSeparator4);
 
         MenuItemLoadRoots.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_L, java.awt.event.InputEvent.CTRL_MASK));
@@ -247,6 +261,7 @@ public class Main extends javax.swing.JFrame implements DiagramListener
                 MenuItemLoadRootsActionPerformed(evt);
             }
         });
+
         MenuFile.add(MenuItemLoadRoots);
 
         MenuItemSaveRoots.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_R, java.awt.event.InputEvent.CTRL_MASK));
@@ -259,7 +274,9 @@ public class Main extends javax.swing.JFrame implements DiagramListener
                 MenuItemSaveRootsActionPerformed(evt);
             }
         });
+
         MenuFile.add(MenuItemSaveRoots);
+
         MenuFile.add(jSeparator1);
 
         jMenuItemPrint.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P, java.awt.event.InputEvent.CTRL_MASK));
@@ -272,7 +289,9 @@ public class Main extends javax.swing.JFrame implements DiagramListener
                 jMenuItemPrintActionPerformed(evt);
             }
         });
+
         MenuFile.add(jMenuItemPrint);
+
         MenuFile.add(jSeparator3);
 
         MenuItemExit.setMnemonic('x');
@@ -284,13 +303,13 @@ public class Main extends javax.swing.JFrame implements DiagramListener
                 MenuItemExitActionPerformed(evt);
             }
         });
+
         MenuFile.add(MenuItemExit);
 
         MenuBar.add(MenuFile);
 
         MenuEdit.setMnemonic('e');
         MenuEdit.setText("Edit");
-
         MenuItemClear.setMnemonic('c');
         MenuItemClear.setText("Clear diagram");
         MenuItemClear.addActionListener(new java.awt.event.ActionListener()
@@ -300,8 +319,16 @@ public class Main extends javax.swing.JFrame implements DiagramListener
                 MenuItemClearActionPerformed(evt);
             }
         });
+
         MenuEdit.add(MenuItemClear);
 
+        MenuBar.add(MenuEdit);
+
+        MenuPresets.setMnemonic('p');
+        MenuPresets.setText("Presets");
+        MenuPresets.add(jSeparator2);
+
+        MenuItemResetPresets.setMnemonic('r');
         MenuItemResetPresets.setText("Reset presets");
         MenuItemResetPresets.addActionListener(new java.awt.event.ActionListener()
         {
@@ -310,17 +337,13 @@ public class Main extends javax.swing.JFrame implements DiagramListener
                 MenuItemResetPresetsActionPerformed(evt);
             }
         });
-        MenuEdit.add(MenuItemResetPresets);
 
-        MenuBar.add(MenuEdit);
+        MenuPresets.add(MenuItemResetPresets);
 
-        MenuPresets.setMnemonic('p');
-        MenuPresets.setText("Presets");
         MenuBar.add(MenuPresets);
 
         MenuTools.setMnemonic('t');
         MenuTools.setText("Tools");
-
         MenuExportToTex.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, java.awt.event.InputEvent.CTRL_MASK));
         MenuExportToTex.setMnemonic('e');
         MenuExportToTex.setText("Export to TeX");
@@ -331,6 +354,7 @@ public class Main extends javax.swing.JFrame implements DiagramListener
                 MenuExportToTexActionPerformed(evt);
             }
         });
+
         MenuTools.add(MenuExportToTex);
 
         MenuExportRootSystem.setText("Export root system");
@@ -341,6 +365,7 @@ public class Main extends javax.swing.JFrame implements DiagramListener
                 MenuExportRootSystemActionPerformed(evt);
             }
         });
+
         MenuTools.add(MenuExportRootSystem);
 
         MenuShowOutput.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
@@ -353,13 +378,13 @@ public class Main extends javax.swing.JFrame implements DiagramListener
                 MenuShowOutputActionPerformed(evt);
             }
         });
+
         MenuTools.add(MenuShowOutput);
 
         MenuBar.add(MenuTools);
 
         MenuHelp.setMnemonic('h');
         MenuHelp.setText("Help");
-
         MenuItemHelp.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F1, 0));
         MenuItemHelp.setMnemonic('h');
         MenuItemHelp.setText("Help");
@@ -370,6 +395,7 @@ public class Main extends javax.swing.JFrame implements DiagramListener
                 MenuItemHelpActionPerformed(evt);
             }
         });
+
         MenuHelp.add(MenuItemHelp);
 
         MenuItemAbout.setMnemonic('a');
@@ -381,6 +407,7 @@ public class Main extends javax.swing.JFrame implements DiagramListener
                 MenuItemAboutActionPerformed(evt);
             }
         });
+
         MenuHelp.add(MenuItemAbout);
 
         MenuBar.add(MenuHelp);
@@ -397,9 +424,6 @@ public class Main extends javax.swing.JFrame implements DiagramListener
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(TabbedPane, javax.swing.GroupLayout.DEFAULT_SIZE, 526, Short.MAX_VALUE)
         );
-
-        TabbedPane.getAccessibleContext().setAccessibleName("");
-
         pack();
     }// </editor-fold>//GEN-END:initComponents
 	
@@ -602,6 +626,7 @@ public class Main extends javax.swing.JFrame implements DiagramListener
     private edu.rug.hep.simplie.ui.ExportToTex exportToTex;
     private javax.swing.JMenuItem jMenuItemPrint;
     private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
     private javax.swing.JSeparator jSeparator4;
     private edu.rug.hep.simplie.ui.LevelDecomposition levelDecomposition;
