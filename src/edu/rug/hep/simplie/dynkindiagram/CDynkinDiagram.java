@@ -237,15 +237,15 @@ public class CDynkinDiagram
 	 *								from this node to the last one added. If it equals zero, then 
 	 *								a connection won't be made. If it is bigger than zero it represents 
 	 *								the lacing of the connection.
-	 * @return						The node that was added, null if no node was added.
+	 * @return						A string representing the action taken.
 	 */
-	public CDynkinNode addNode(int x, int y, int connectionToLast)
+	public String addNode(int x, int y, int connectionToLast)
 	{
 		CDynkinNode newNode = new CDynkinNode(x, y);
 		
 		if(nodes.contains(newNode))
 		{
-			return null;
+			return "Cannot add node that is already present.";
 		}
 		else
 		{
@@ -256,22 +256,25 @@ public class CDynkinDiagram
 			nodes.add(newNode);
 			lastAddedNode = newNode;
 			update();
-			return newNode;
+			return "Node added.";
 		}
 	}
 	
-	public void toggleNode(CDynkinNode node)
+	public String toggleNode(CDynkinNode node)
 	{
 		if(node != null && nodes.contains(node))
 		{
 			node.toggle();
 			update();
+			return "Node toggled.";
 		}
+		return "No node to toggle.";
 	}
 	
 	/** Removes a node from the diagram. */
-	public void removeNode(CDynkinNode nodeToRemove)
+	public String removeNode(CDynkinNode nodeToRemove)
 	{
+		int prevRank = rank();
 		if(lastAddedNode != null && lastAddedNode.equals(nodeToRemove))
 		{
 			lastAddedNode = null;
@@ -291,7 +294,13 @@ public class CDynkinDiagram
 				it.remove();
 			}
 		}
-		update();
+		if(prevRank > rank())
+		{
+			update();
+			return "Node removed.";
+		}
+		else
+			return "No node to remove.";
 	}
 	
 	/**
@@ -301,11 +310,12 @@ public class CDynkinDiagram
 	 * @param toNode		The node to which the connection points.
 	 * @param add			True: add the connection. False: remove the connection.
 	 */
-	public void modifyConnection(CDynkinNode fromNode, CDynkinNode toNode, int laced, boolean add)
+	public String modifyConnection(CDynkinNode fromNode, CDynkinNode toNode, int laced, boolean add)
 	{
+		String action = (add) ? "added" : "removed";
 		// Do nothing if either one of the nodes is not found, or if both are the same.
 		if( fromNode == null || toNode == null || fromNode.equals(toNode) )
-			return;
+			return "No connection " + action + ", begin and / or end point incorrect.";
 		
 		CDynkinConnection connection = new CDynkinConnection(fromNode, toNode, laced);
 		
@@ -323,6 +333,7 @@ public class CDynkinDiagram
 		}
 		
 		update();
+		return "Connection " + action + ".";
 	}
 	
 	/**

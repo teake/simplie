@@ -91,8 +91,11 @@ public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramLis
 	private void startModifyConnection(CDynkinNode node)
 	{
 		if(node == null)
+		{
+			status.setText("Invalid start point specified.");
 			return;
-		
+		}
+		status.setText("Modifying connection ...");
 		modifyingConnection	= true;
 		connectionFrom		= node;
 		this.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -130,6 +133,7 @@ public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramLis
                 drawDiagram(g);
             }
         };
+        status = new javax.swing.JLabel();
 
         menuAddNode.setText("Add node");
         menuAddNode.addActionListener(new java.awt.event.ActionListener()
@@ -229,15 +233,20 @@ public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramLis
             }
         });
 
+        status.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        status.setText("(Right) click to add a node to the diagram.");
+
         javax.swing.GroupLayout diagramLayout = new javax.swing.GroupLayout(diagram);
         diagram.setLayout(diagramLayout);
         diagramLayout.setHorizontalGroup(
             diagramLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 355, Short.MAX_VALUE)
+            .addComponent(status, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 355, Short.MAX_VALUE)
         );
         diagramLayout.setVerticalGroup(
             diagramLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 154, Short.MAX_VALUE)
+            .addGroup(diagramLayout.createSequentialGroup()
+                .addContainerGap(140, Short.MAX_VALUE)
+                .addComponent(status))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -261,6 +270,7 @@ private void diagramMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:even
 	if(!contextMenu.isVisible())
 	{
 		x = y = -1;
+		diagram.repaint();
 	}
 }//GEN-LAST:event_diagramMouseExited
 
@@ -283,9 +293,9 @@ private void diagramMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:ev
 		return;
 	}
 	
-	if(evt.getButton() == evt.BUTTON1)
+	if(evt.getButton() == evt.BUTTON1 && !modifyingConnection)
 	{
-		Globals.dd.addNode(x, y, 0);
+		status.setText(Globals.dd.addNode(x, y, 0));
 		return;
 	}
 	
@@ -297,12 +307,12 @@ private void diagramMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:ev
 	if(evt.getButton() == evt.BUTTON2 || (evt.getButton() == evt.BUTTON1 && evt.isAltDown() ) )
 	{
 		stopModifyConnection();
-		Globals.dd.toggleNode(node);
+		status.setText(Globals.dd.toggleNode(node));
 	}
 	
 	if(modifyingConnection)
 	{
-		Globals.dd.modifyConnection(connectionFrom, node, connectionLaced, addingConnection);
+		status.setText(Globals.dd.modifyConnection(connectionFrom, node, connectionLaced, addingConnection));
 		stopModifyConnection();
 	}
 }//GEN-LAST:event_diagramMouseReleased
@@ -342,12 +352,12 @@ private void diagramMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:ev
 	
 	private void menuRemoveNodeActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_menuRemoveNodeActionPerformed
 	{//GEN-HEADEREND:event_menuRemoveNodeActionPerformed
-		Globals.dd.removeNode(Globals.dd.getNodeByCoor(contextX, contextY));
+		status.setText(Globals.dd.removeNode(Globals.dd.getNodeByCoor(contextX, contextY)));
 	}//GEN-LAST:event_menuRemoveNodeActionPerformed
 	
 	private void menuAddNodeActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_menuAddNodeActionPerformed
 	{//GEN-HEADEREND:event_menuAddNodeActionPerformed
-		Globals.dd.addNode(contextX, contextY, 0);
+		status.setText(Globals.dd.addNode(contextX, contextY, 0));
 	}//GEN-LAST:event_menuAddNodeActionPerformed
 	
 	
@@ -363,6 +373,7 @@ private void diagramMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:ev
     private javax.swing.JMenuItem menuRemoveConnection;
     private javax.swing.JMenuItem menuRemoveNode;
     private javax.swing.JMenuItem menuToggleNode;
+    private javax.swing.JLabel status;
     // End of variables declaration//GEN-END:variables
 	
 }
