@@ -28,6 +28,8 @@ public class CHighestWeightRep
 {
 	/** The height of the highest weight. */
 	public final int		highestHeight;
+	/** The dimension of this representation. */
+	public final long dim;
 	/** The group of which this is a weight system. */
 	private final CGroup	group;
 	/** The rank of the group of which this is a weight system. */
@@ -57,6 +59,9 @@ public class CHighestWeightRep
 		this.group	= group;
 		this.rank	= group.rank;
 		
+		// Get the dimension of this rep.
+		dim = group.dimOfRep(highestWeightLabels);
+		
 		// Add the highest weight (construct to depth 0)
 		weightSystem	= new FastList<FastList>();
 		highestWeight	= new CWeight(highestWeightLabels);
@@ -78,6 +83,18 @@ public class CHighestWeightRep
 	public void cancelConstruction()
 	{
 		cancelConstruction = true;
+	}
+	
+	/** Returns the size of the weight system, i.e. the depth to which we have constructed so far + 1 */
+	public int size()
+	{
+		return weightSystem.size();
+	}
+	
+	/** Returns the weights in this rep at the given index, which is equal to the depth. */
+	public Collection<CWeight> get(int index)
+	{
+		return weightSystem.get(index);
 	}
 	
 	/**
@@ -118,29 +135,29 @@ public class CHighestWeightRep
 		return wantedWeights.get(wantedIndex);
 	}
 	
-	/** 
+	/**
 	 * Given the Dynkin labels of a non-dominant weight, this function
 	 * returns the dynkin labels of the weight after it has been
 	 * reflected into the dominant chamber.
 	 *
 	 * @param	weightLabels	The dynkin labels of the weight.
 	 * @return					The dynkin labels of the reflected dominant weight.
-	 */	
+	 */
 	public int[] makeDominant(int[] weightLabels)
 	{
 		makeItSo:
 			while(true)
 			{
-			for (int i = 0; i < weightLabels.length; i++)
-			{
-				if(weightLabels[i] < 0)
+				for (int i = 0; i < weightLabels.length; i++)
 				{
-					weightLabels = group.simpWeylRefl(weightLabels, i);
-					break;
+					if(weightLabels[i] < 0)
+					{
+						weightLabels = group.simpWeylRefl(weightLabels, i);
+						break;
+					}
+					if(i == weightLabels.length - 1)
+						break makeItSo;
 				}
-				if(i == weightLabels.length - 1)
-					break makeItSo;
-			}
 			}
 		
 		return weightLabels;
@@ -159,8 +176,8 @@ public class CHighestWeightRep
 		
 		// Print some info to sout.
 		System.out.println(
-				"Constructing highest weight rep " + Globals.intArrayToString(highestWeight.dynkinLabels) +
-				" to depth " + maxDepth + " of group " + group.type + ".");
+			"Constructing highest weight rep " + Globals.intArrayToString(highestWeight.dynkinLabels) +
+			" to depth " + maxDepth + " of group " + group.type + ".");
 		
 		// Do the construction.
 		while(constructedDepth < maxDepth && !cancelConstruction)
