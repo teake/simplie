@@ -84,6 +84,7 @@ public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramLis
     // <editor-fold defaultstate="collapsed" desc=" Generated Code ">//GEN-BEGIN:initComponents
     private void initComponents()
     {
+
         contextMenu = new javax.swing.JPopupMenu();
         menuAddNode = new javax.swing.JMenuItem();
         menuToggleNode = new javax.swing.JMenuItem();
@@ -111,7 +112,6 @@ public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramLis
                 menuAddNodeActionPerformed(evt);
             }
         });
-
         contextMenu.add(menuAddNode);
 
         menuToggleNode.setText("Toggle node");
@@ -122,7 +122,6 @@ public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramLis
                 menuToggleNodeActionPerformed(evt);
             }
         });
-
         contextMenu.add(menuToggleNode);
 
         menuRemoveNode.setText("Remove node");
@@ -133,12 +132,11 @@ public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramLis
                 menuRemoveNodeActionPerformed(evt);
             }
         });
-
         contextMenu.add(menuRemoveNode);
-
         contextMenu.add(jSeparator1);
 
         menuAddConnection.setText("Add connection");
+
         menuAddSingleConnection.setText("Single");
         menuAddSingleConnection.addActionListener(new java.awt.event.ActionListener()
         {
@@ -147,7 +145,6 @@ public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramLis
                 menuAddSingleConnectionActionPerformed(evt);
             }
         });
-
         menuAddConnection.add(menuAddSingleConnection);
 
         menuAddDoubleConnection.setText("Double");
@@ -158,7 +155,6 @@ public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramLis
                 menuAddDoubleConnectionActionPerformed(evt);
             }
         });
-
         menuAddConnection.add(menuAddDoubleConnection);
 
         menuAddTripleConnection.setText("Triple");
@@ -169,7 +165,6 @@ public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramLis
                 menuAddTripleConnectionActionPerformed(evt);
             }
         });
-
         menuAddConnection.add(menuAddTripleConnection);
 
         contextMenu.add(menuAddConnection);
@@ -182,20 +177,20 @@ public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramLis
                 menuRemoveConnectionActionPerformed(evt);
             }
         });
-
         contextMenu.add(menuRemoveConnection);
 
         setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Dynkin diagram", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12)));
-        addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseReleased(java.awt.event.MouseEvent evt)
-            {
-                formMouseReleased(evt);
-            }
-        });
 
         diagram.setBackground(new java.awt.Color(255, 255, 255));
         diagram.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        diagram.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseReleased(java.awt.event.MouseEvent evt)
+            {
+                diagramMouseReleased(evt);
+            }
+        });
+
         javax.swing.GroupLayout diagramLayout = new javax.swing.GroupLayout(diagram);
         diagram.setLayout(diagramLayout);
         diagramLayout.setHorizontalGroup(
@@ -224,6 +219,40 @@ public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramLis
         );
     }// </editor-fold>//GEN-END:initComponents
 	
+private void diagramMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_diagramMouseReleased
+	// Don't do anything while we are scanning.
+	if(Globals.scanning)
+		return;
+	
+	int x = Math.round((evt.getX() - offset) / spacing);
+	int y = Math.round((evt.getY() - offset) / spacing);
+	
+	if(evt.getButton() == evt.BUTTON3)
+	{
+		contextX = x;
+		contextY = y;
+		contextMenu.show(diagram,evt.getX(),evt.getY());
+		return;
+	}
+	
+	CDynkinNode node = Globals.dd.getNodeByCoor(x,y);
+	if(node == null)
+		return;
+	
+	// Middle mouse or alt+left: toggle a node.
+	if(evt.getButton() == evt.BUTTON2 || (evt.getButton() == evt.BUTTON1 && evt.isAltDown() ) )
+	{
+		stopModifyConnection();
+		Globals.dd.toggleNode(node);
+	}
+	
+	if(modifyingConnection)
+	{
+		Globals.dd.modifyConnection(connectionFrom, node, connectionLaced, addingConnection);
+		stopModifyConnection();
+	}
+}//GEN-LAST:event_diagramMouseReleased
+
 	private void menuAddTripleConnectionActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_menuAddTripleConnectionActionPerformed
 	{//GEN-HEADEREND:event_menuAddTripleConnectionActionPerformed
 		addingConnection = true;
@@ -266,42 +295,7 @@ public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramLis
 	{//GEN-HEADEREND:event_menuAddNodeActionPerformed
 		Globals.dd.addNode(contextX, contextY, 0);
 	}//GEN-LAST:event_menuAddNodeActionPerformed
-	
-    private void formMouseReleased(java.awt.event.MouseEvent evt)//GEN-FIRST:event_formMouseReleased
-    {//GEN-HEADEREND:event_formMouseReleased
-		// Don't do anything while we are scanning.
-		if(Globals.scanning)
-			return;
 		
-		int x = Math.round((evt.getX() - offset) / spacing);
-		int y = Math.round((evt.getY() - offset) / spacing);
-		
-		if(evt.getButton() == evt.BUTTON3)
-		{
-			contextX = x;
-			contextY = y;
-			contextMenu.show(this,evt.getX(),evt.getY());
-			return;
-		}
-		
-		CDynkinNode node = Globals.dd.getNodeByCoor(x,y);
-		if(node == null)
-			return;
-		
-		// Middle mouse or alt+left: toggle a node.
-		if(evt.getButton() == evt.BUTTON2 || (evt.getButton() == evt.BUTTON1 && evt.isAltDown() ) )
-		{
-			stopModifyConnection();
-			Globals.dd.toggleNode(node);
-		}
-		
-		if(modifyingConnection)
-		{
-			Globals.dd.modifyConnection(connectionFrom, node, connectionLaced, addingConnection);
-			stopModifyConnection();
-		}
-    }//GEN-LAST:event_formMouseReleased
-	
 	
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPopupMenu contextMenu;
