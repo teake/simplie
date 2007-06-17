@@ -10,6 +10,9 @@ import edu.rug.hep.simplie.Globals;
 import edu.rug.hep.simplie.dynkindiagram.*;
 
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.Color;
 import java.awt.Cursor;
 
 /**
@@ -30,6 +33,9 @@ public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramLis
 	private int contextX;
 	private int contextY;
 	
+	private int x;
+	private int y;
+	
 	/** Creates new form DynkinDiagramPanel */
 	public DynkinDiagramPanel()
 	{
@@ -43,12 +49,33 @@ public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramLis
 		connectionFrom		= null;
 		
 		contextX = contextY = 0;
+		x = y = -1;
 		initComponents();
 	}
 	
 	public void diagramChanged()
 	{
 		diagram.repaint();
+	}
+	
+	public void drawDiagram(Graphics g)
+	{
+		Graphics2D g2 = (Graphics2D) g;
+		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
+		
+		// Draw the preview.
+		if(x != -1)
+		{
+			g2.setColor(Color.GRAY);
+			g2.drawOval(
+				spacing * x + offset,
+				spacing * y + offset,
+				2*radius, 2*radius);
+			g2.setColor(Color.BLACK);
+		}
+		
+		// Draw the diagram.
+		Globals.dd.drawDiagram(g2,offset,spacing,radius);
 	}
 	
 	/**
@@ -100,7 +127,7 @@ public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramLis
             public void paintComponent(Graphics g)
             {
                 super.paintComponent(g);
-                Globals.dd.drawDiagram(g,offset,spacing,radius);
+                drawDiagram(g);
             }
         };
 
@@ -185,9 +212,20 @@ public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramLis
         diagram.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         diagram.addMouseListener(new java.awt.event.MouseAdapter()
         {
+            public void mouseExited(java.awt.event.MouseEvent evt)
+            {
+                diagramMouseExited(evt);
+            }
             public void mouseReleased(java.awt.event.MouseEvent evt)
             {
                 diagramMouseReleased(evt);
+            }
+        });
+        diagram.addMouseMotionListener(new java.awt.event.MouseMotionAdapter()
+        {
+            public void mouseMoved(java.awt.event.MouseEvent evt)
+            {
+                diagramMouseMoved(evt);
             }
         });
 
@@ -219,19 +257,35 @@ public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramLis
         );
     }// </editor-fold>//GEN-END:initComponents
 	
+private void diagramMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_diagramMouseExited
+	if(!contextMenu.isVisible())
+	{
+		x = y = -1;
+	}
+}//GEN-LAST:event_diagramMouseExited
+
+private void diagramMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_diagramMouseMoved
+	x = Math.round(((float) evt.getX() - offset) / spacing);
+	y = Math.round(((float) evt.getY() - offset) / spacing);
+	diagram.repaint();
+}//GEN-LAST:event_diagramMouseMoved
+
 private void diagramMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_diagramMouseReleased
 	// Don't do anything while we are scanning.
 	if(Globals.scanning)
 		return;
-	
-	int x = Math.round((evt.getX() - offset) / spacing);
-	int y = Math.round((evt.getY() - offset) / spacing);
 	
 	if(evt.getButton() == evt.BUTTON3)
 	{
 		contextX = x;
 		contextY = y;
 		contextMenu.show(diagram,evt.getX(),evt.getY());
+		return;
+	}
+	
+	if(evt.getButton() == evt.BUTTON1)
+	{
+		Globals.dd.addNode(x, y, 0);
 		return;
 	}
 	
@@ -295,7 +349,7 @@ private void diagramMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:ev
 	{//GEN-HEADEREND:event_menuAddNodeActionPerformed
 		Globals.dd.addNode(contextX, contextY, 0);
 	}//GEN-LAST:event_menuAddNodeActionPerformed
-		
+	
 	
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPopupMenu contextMenu;

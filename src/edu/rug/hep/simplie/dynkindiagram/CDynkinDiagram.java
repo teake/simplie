@@ -14,12 +14,10 @@ import java.util.Vector;
 import java.util.Iterator;
 import java.util.Collections;
 import java.io.*;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.awt.Point;
 import java.awt.geom.Line2D;
-import java.awt.RenderingHints;
 import java.awt.Color;
 import java.awt.Font;
 import Jama.Matrix;
@@ -452,11 +450,8 @@ public class CDynkinDiagram
 	 * @param	spacing	The amount of spacing between each node.
 	 * @param	radius	The radius of each node.
 	 */
-	public void drawDiagram(Graphics g, int offset, int spacing, int radius)
+	public void drawDiagram(Graphics2D g2, int offset, int spacing, int radius)
 	{
-		Graphics2D g2 = (Graphics2D) g;
-		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
-		
 		for (CDynkinConnection connection : connections)
 		{
 			CDynkinNode node1 = connection.fromNode;

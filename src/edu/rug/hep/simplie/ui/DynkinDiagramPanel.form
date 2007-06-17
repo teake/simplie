@@ -127,10 +127,12 @@
         </Property>
       </Properties>
       <Events>
+        <EventHandler event="mouseExited" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="diagramMouseExited"/>
         <EventHandler event="mouseReleased" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="diagramMouseReleased"/>
+        <EventHandler event="mouseMoved" listener="java.awt.event.MouseMotionListener" parameters="java.awt.event.MouseEvent" handler="diagramMouseMoved"/>
       </Events>
       <AuxValues>
-        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JPanel() {&#xa;        public void paintComponent(Graphics g) { &#xa;            super.paintComponent(g);&#xa;&#x9;&#x9;&#x9;Globals.dd.drawDiagram(g,offset,spacing,radius);&#xa;        }&#xa;};"/>
+        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JPanel() {&#xa;        public void paintComponent(Graphics g) { &#xa;            super.paintComponent(g);&#xa;&#x9;&#x9;&#x9;drawDiagram(g);&#xa;        }&#xa;};"/>
       </AuxValues>
 
       <Layout>
