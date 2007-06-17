@@ -68,8 +68,8 @@ public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramLis
 		{
 			g2.setColor(Color.GRAY);
 			g2.drawOval(
-				spacing * x + offset,
-				spacing * y + offset,
+				spacing * x + offset - radius,
+				spacing * y + offset - radius,
 				2*radius, 2*radius);
 			g2.setColor(Color.BLACK);
 		}
