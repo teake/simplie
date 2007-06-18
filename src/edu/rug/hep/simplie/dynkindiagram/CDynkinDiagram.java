@@ -195,8 +195,8 @@ public class CDynkinDiagram
 		for (CDynkinNode node : nodes)
 		{
 			if((node.isEnabled() && type == "sub")
-			|| (node.isDisconnected() && type == "dis")
-			|| (!node.isLevel() && type == "co") )
+					|| (node.isDisconnected() && type == "dis")
+					|| (!node.isLevel() && type == "co") )
 			{
 				subRank++;
 			}
@@ -234,8 +234,8 @@ public class CDynkinDiagram
 	 * @param	x					The x-coordinate of the node in the diagram.
 	 * @param	y					The y-coordinate of the node in the diagram.
 	 * @param	connectionToLast	Integer indicating whether or not a connection should be made
-	 *								from this node to the last one added. If it equals zero, then 
-	 *								a connection won't be made. If it is bigger than zero it represents 
+	 *								from this node to the last one added. If it equals zero, then
+	 *								a connection won't be made. If it is bigger than zero it represents
 	 *								the lacing of the connection.
 	 * @return						A string representing the action taken.
 	 */
@@ -289,7 +289,7 @@ public class CDynkinDiagram
 		{
 			CDynkinConnection connection = (CDynkinConnection) it.next();
 			if(connection.fromNode.equals(nodeToRemove)
-			|| connection.toNode.equals(nodeToRemove) )
+					|| connection.toNode.equals(nodeToRemove) )
 			{
 				it.remove();
 			}
@@ -419,10 +419,11 @@ public class CDynkinDiagram
 		
 		// The header
 		output += "\\begin{figure}[h]\n";
+		output += "\\psset{unit=1.5cm}\n";
 		output += "\\begin{center}\n";
 		output += "\\begin{pspicture}(" + xMin + "," + yMin + ")(" + xMax + "," + yMax + ")\n";
 		
-		// The nodes and connections
+		// The nodes.
 		for(CDynkinNode node : nodes)
 		{
 			output += "\\cnode";
@@ -430,16 +431,24 @@ public class CDynkinDiagram
 				output += "[fillstyle=solid,fillcolor=lightgray]";
 			if(node.isLevel())
 				output += "[fillstyle=solid,fillcolor=black]";
-			output += "(" + node.x + "," + (yMax - node.y) + "){0.15}{N" + node.getLabel() + hashCode + "} \n";
+			output += "(" + node.x + "," + (yMax - node.y) + "){0.17}{N" + node.getLabel() + hashCode + "} \n";
 			if(includeLabels)
-				output += "\\nput{-60}{N" + node.getLabel() + hashCode + "}{" + node.getLabel() + "}\n";
+				output += "\\nput[labelsep=0.2]{-40}{N" + node.getLabel() + hashCode + "}{" + node.getLabel() + "}\n";
 		}
 		
+		// The connections.
 		for(CDynkinConnection connection : connections)
 		{
-			output += "\\ncline{-}"
-					+ "{N" + connection.fromNode.getLabel() + hashCode + "}"
+			String toFrom= "{N" + connection.fromNode.getLabel() + hashCode + "}"
 					+ "{N" + connection.toNode.getLabel() + hashCode + "}\n";
+			output += "\\ncline";
+			if(connection.laced > 1)
+				output += "[doubleline=true,doublesep=0.2,arrowsize=0.6,arrowlength=0.25,arrowinset=0.6]{->}";
+			else
+				output += "{-}";
+			output += toFrom;
+			if(connection.laced == 3)
+				output += "\\ncline{-}" + toFrom;
 		}
 		
 		
@@ -472,14 +481,14 @@ public class CDynkinDiagram
 			Point end	= new Point(spacing * node2.x + offset, spacing * node2.y + offset);
 			switch(connection.laced)
 			{
-				case 3:
-					line = new LinesWithArrow(begin,end,3,2*radius);
-					break;
-				case 2:
-					line = new LinesWithArrow(begin,end,2,2*radius);
-					break;
-				default:
-					line = new Line2D.Double(begin,end);
+			case 3:
+				line = new LinesWithArrow(begin,end,3,2*radius);
+				break;
+			case 2:
+				line = new LinesWithArrow(begin,end,2,2*radius);
+				break;
+			default:
+				line = new Line2D.Double(begin,end);
 			}
 			g2.draw(line);
 		}
