@@ -111,6 +111,27 @@ public class Globals
 		return output;
 	}
 	
+	public static int[] stringToIntArray(String string)
+	{
+		ArrayList<Integer> values = new ArrayList<Integer>();
+		String[] array = string.trim().split(" ");
+		for(int i = 0; i < array.length; i++)
+		{
+			Integer value = stringToInt(array[i]);
+			if(value.toString().equals(array[i]))
+			{
+				values.add(value);
+			}
+		}
+		int[] output = new int[values.size()];
+		for (int i = 0; i < values.size(); i++)
+		{
+			output[i] = values.get(i);
+		}
+
+		return output;
+	}
+	
 	/**
 	 * Returns the A_n cartan matrix of the given rank.
 	 *
@@ -272,7 +293,7 @@ public class Globals
 		return matrixToString(newMatrix,decimalPlates);
 	}
 	
-
+	
 	public static String matrixToString(fraction[][] matrix, int decimalPlates)
 	{
 		Matrix newMatrix = new Matrix(matrix.length, matrix.length);
