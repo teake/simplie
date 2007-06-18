@@ -8,32 +8,6 @@
         <Property name="useNullLayout" type="boolean" value="true"/>
       </Layout>
       <SubComponents>
-        <MenuItem class="javax.swing.JMenuItem" name="menuAddNode">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="Add node"/>
-          </Properties>
-          <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="menuAddNodeActionPerformed"/>
-          </Events>
-        </MenuItem>
-        <MenuItem class="javax.swing.JMenuItem" name="menuToggleNode">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="Toggle node"/>
-          </Properties>
-          <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="menuToggleNodeActionPerformed"/>
-          </Events>
-        </MenuItem>
-        <MenuItem class="javax.swing.JMenuItem" name="menuRemoveNode">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="Remove node"/>
-          </Properties>
-          <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="menuRemoveNodeActionPerformed"/>
-          </Events>
-        </MenuItem>
-        <Component class="javax.swing.JSeparator" name="jSeparator1">
-        </Component>
         <Menu class="javax.swing.JMenu" name="menuAddConnection">
           <Properties>
             <Property name="text" type="java.lang.String" value="Add connection"/>
@@ -71,6 +45,32 @@
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="menuRemoveConnectionActionPerformed"/>
+          </Events>
+        </MenuItem>
+        <Component class="javax.swing.JSeparator" name="menuSeparator">
+        </Component>
+        <MenuItem class="javax.swing.JMenuItem" name="menuAddNode">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Add node"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="menuAddNodeActionPerformed"/>
+          </Events>
+        </MenuItem>
+        <MenuItem class="javax.swing.JMenuItem" name="menuToggleNode">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Toggle node"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="menuToggleNodeActionPerformed"/>
+          </Events>
+        </MenuItem>
+        <MenuItem class="javax.swing.JMenuItem" name="menuRemoveNode">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Remove node"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="menuRemoveNodeActionPerformed"/>
           </Events>
         </MenuItem>
       </SubComponents>

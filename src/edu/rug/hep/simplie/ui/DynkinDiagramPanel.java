@@ -68,9 +68,9 @@ public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramLis
 		{
 			g2.setColor(Color.GRAY);
 			g2.drawOval(
-				spacing * x + offset - radius,
-				spacing * y + offset - radius,
-				2*radius, 2*radius);
+					spacing * x + offset - radius,
+					spacing * y + offset - radius,
+					2*radius, 2*radius);
 			g2.setColor(Color.BLACK);
 		}
 		
@@ -86,6 +86,16 @@ public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramLis
 	public void setTitle(String text)
 	{
 		this.setBorder(javax.swing.BorderFactory.createTitledBorder(null, text, javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12)));
+	}
+	
+	private void setupMenu(boolean onNode)
+	{
+		menuAddConnection.setVisible(onNode);
+		menuRemoveConnection.setVisible(onNode);
+		menuSeparator.setVisible(onNode);
+		menuAddNode.setVisible(!onNode);
+		menuRemoveNode.setVisible(onNode);
+		menuToggleNode.setVisible(onNode);
 	}
 	
 	private void startModifyConnection(CDynkinNode node)
@@ -116,15 +126,15 @@ public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramLis
     {
 
         contextMenu = new javax.swing.JPopupMenu();
-        menuAddNode = new javax.swing.JMenuItem();
-        menuToggleNode = new javax.swing.JMenuItem();
-        menuRemoveNode = new javax.swing.JMenuItem();
-        jSeparator1 = new javax.swing.JSeparator();
         menuAddConnection = new javax.swing.JMenu();
         menuAddSingleConnection = new javax.swing.JMenuItem();
         menuAddDoubleConnection = new javax.swing.JMenuItem();
         menuAddTripleConnection = new javax.swing.JMenuItem();
         menuRemoveConnection = new javax.swing.JMenuItem();
+        menuSeparator = new javax.swing.JSeparator();
+        menuAddNode = new javax.swing.JMenuItem();
+        menuToggleNode = new javax.swing.JMenuItem();
+        menuRemoveNode = new javax.swing.JMenuItem();
         diagram = new javax.swing.JPanel()
         {
             public void paintComponent(Graphics g)
@@ -134,37 +144,6 @@ public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramLis
             }
         };
         status = new javax.swing.JLabel();
-
-        menuAddNode.setText("Add node");
-        menuAddNode.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
-                menuAddNodeActionPerformed(evt);
-            }
-        });
-        contextMenu.add(menuAddNode);
-
-        menuToggleNode.setText("Toggle node");
-        menuToggleNode.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
-                menuToggleNodeActionPerformed(evt);
-            }
-        });
-        contextMenu.add(menuToggleNode);
-
-        menuRemoveNode.setText("Remove node");
-        menuRemoveNode.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
-                menuRemoveNodeActionPerformed(evt);
-            }
-        });
-        contextMenu.add(menuRemoveNode);
-        contextMenu.add(jSeparator1);
 
         menuAddConnection.setText("Add connection");
 
@@ -209,6 +188,37 @@ public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramLis
             }
         });
         contextMenu.add(menuRemoveConnection);
+        contextMenu.add(menuSeparator);
+
+        menuAddNode.setText("Add node");
+        menuAddNode.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                menuAddNodeActionPerformed(evt);
+            }
+        });
+        contextMenu.add(menuAddNode);
+
+        menuToggleNode.setText("Toggle node");
+        menuToggleNode.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                menuToggleNodeActionPerformed(evt);
+            }
+        });
+        contextMenu.add(menuToggleNode);
+
+        menuRemoveNode.setText("Remove node");
+        menuRemoveNode.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                menuRemoveNodeActionPerformed(evt);
+            }
+        });
+        contextMenu.add(menuRemoveNode);
 
         setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Dynkin diagram", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12)));
 
@@ -285,23 +295,24 @@ private void diagramMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:ev
 	if(Globals.scanning)
 		return;
 	
+	CDynkinNode node = Globals.dd.getNodeByCoor(x,y);
+	
 	if(evt.getButton() == evt.BUTTON3)
 	{
+		setupMenu((node!=null));
 		contextX = x;
 		contextY = y;
 		contextMenu.show(diagram,evt.getX(),evt.getY());
 		return;
 	}
 	
+	// Left click and not modifying connection: add a node.
 	if(evt.getButton() == evt.BUTTON1 && !modifyingConnection)
 	{
-		status.setText(Globals.dd.addNode(x, y, 0));
+		int connectionToLast = (evt.isShiftDown()) ? 1 : 0;
+		status.setText(Globals.dd.addNode(x, y, connectionToLast));
 		return;
 	}
-	
-	CDynkinNode node = Globals.dd.getNodeByCoor(x,y);
-	if(node == null)
-		return;
 	
 	// Middle mouse or alt+left: toggle a node.
 	if(evt.getButton() == evt.BUTTON2 || (evt.getButton() == evt.BUTTON1 && evt.isAltDown() ) )
@@ -364,7 +375,6 @@ private void diagramMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:ev
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPopupMenu contextMenu;
     private javax.swing.JPanel diagram;
-    private javax.swing.JSeparator jSeparator1;
     private javax.swing.JMenu menuAddConnection;
     private javax.swing.JMenuItem menuAddDoubleConnection;
     private javax.swing.JMenuItem menuAddNode;
@@ -372,6 +382,7 @@ private void diagramMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:ev
     private javax.swing.JMenuItem menuAddTripleConnection;
     private javax.swing.JMenuItem menuRemoveConnection;
     private javax.swing.JMenuItem menuRemoveNode;
+    private javax.swing.JSeparator menuSeparator;
     private javax.swing.JMenuItem menuToggleNode;
     private javax.swing.JLabel status;
     // End of variables declaration//GEN-END:variables
