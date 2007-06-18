@@ -8,7 +8,6 @@
 package edu.rug.hep.simplie;
 
 import edu.rug.hep.simplie.dynkindiagram.*;
-import edu.rug.hep.simplie.group.CGroup;
 import edu.rug.hep.simplie.math.*;
 
 import Jama.Matrix;
@@ -22,23 +21,13 @@ import java.math.BigDecimal;
  *
  * @author Teake Nutma
  */
-public class Globals implements DiagramListener
+public class Globals
 {
 	
 	/**********************************
 	 * Global variables
 	 **********************************/
 	
-	/** Global CGroup object for the full group */
-	public static CGroup group;
-	/** Global CGroup object for the regular subgroup */
-	public static CGroup subGroup;
-	/** Global CGroup object for the disconnected disabled subgroup */
-	public static CGroup disGroup;
-	/** Global CGroup object for the non-level subgroup (which is equal to the direct product of subGroup x disGroup) */
-	public static CGroup coGroup;
-	/** Global CDynkinDiagram object */
-	public static CDynkinDiagram dd;
 	/** Boolean to indicate whether or not we are scanning right now. */
 	public static boolean scanning;
 	/** The number of cpus avaible for the application */
@@ -53,9 +42,6 @@ public class Globals implements DiagramListener
 	/** Private constructor */
 	private Globals()
 	{
-		dd = new CDynkinDiagram();
-		dd.addListener(this);
-		
 		scanning	= false;
 		numCPUs		= Runtime.getRuntime().availableProcessors();
 	}
@@ -67,57 +53,9 @@ public class Globals implements DiagramListener
 	}
 	
 	
-	public void diagramChanged()
-	{
-		if(group == null || !sameMatrices(dd.cartanMatrix(), group.A))
-			group = new CGroup(dd.cartanMatrix());
-		
-		subGroup	= new CGroup(dd.cartanSubMatrix("sub"));
-		disGroup	= new CGroup(dd.cartanSubMatrix("dis"));
-		coGroup		= new CGroup(dd.cartanSubMatrix("co"));
-	}
-	
 	/**********************************
 	 * Helper functions defined below
 	 **********************************/
-	
-	/**
-	 * Returns a string representing the type of decomposition of the full group into
-	 * the regular subgroup and the disconnected subgroup.
-	 *
-	 * @return	String of the type "regular subgroup x disconnected subgroup representations in fullgroup".
-	 * @see		#getDynkinDiagramType
-	 */
-	public static String getDecompositionType()
-	{
-		String output;
-		
-		output = subGroup.type;
-		if(disGroup.rank != 0)
-			output += " x " + disGroup.type;
-		output += " representations in " + group.type;
-		
-		return output;
-	}
-	
-	/**
-	 * Returns a string representing the regular subgroup and the disconnected subgroup of the full group.
-	 *
-	 * @return	String of the type "fullgroup as regular subgroup x disconnected subgroup".
-	 * @see		#getDecompositionType
-	 */
-	public static String getDynkinDiagramType()
-	{
-		String output;
-		
-		output = group.type;
-		if(subGroup.rank != group.rank)
-			output += " as " + subGroup.type;
-		if(disGroup.rank != 0)
-			output += " x " + disGroup.type;
-		
-		return output;
-	}
 	
 	/**
 	 * Converts a string into an integer. If the string cannot be parsed into an integer,

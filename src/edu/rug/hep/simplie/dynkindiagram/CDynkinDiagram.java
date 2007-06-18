@@ -179,13 +179,13 @@ public class CDynkinDiagram
 	/**
 	 * Returns the Cartan matrix of one of the subalgebras.
 	 *
-	 * @param	type	The name of the subalgebra to get. Either "sub", "dis", or "co".
+	 * @param	type	The name of the subalgebra to get. Either "sub", "int", or "co".
 	 * @return			The cartan matrix of the regular ("sub"),
-	 *					the disabled disconnect ("dis"), or the sub x dis ("co") subalgebra.
+	 *					the internal ("int"), or the sub x dis ("co") subalgebra.
 	 */
 	public Matrix cartanSubMatrix(String type)
 	{
-		if( !( type == "sub" || type == "dis" || type == "co") )
+		if( !( type == "sub" || type == "int" || type == "co") )
 			return null;
 		
 		int indexI;
@@ -195,7 +195,7 @@ public class CDynkinDiagram
 		for (CDynkinNode node : nodes)
 		{
 			if((node.isEnabled() && type == "sub")
-					|| (node.isDisconnected() && type == "dis")
+					|| (node.isDisconnected() && type == "int")
 					|| (!node.isLevel() && type == "co") )
 			{
 				subRank++;
@@ -399,7 +399,8 @@ public class CDynkinDiagram
 		
 		// Append a hashcode of this specific diagram to all the labels in the psfigure.
 		// This prevents multiple garbled psfigures on one page.
-		String hashCode = Globals.intToString(Globals.getDynkinDiagramType().hashCode());
+		String hashCode = 
+				(Globals.matrixToString(cartanMatrix(), 0) + Globals.matrixToString(cartanSubMatrix("sub"), 0).hashCode());
 		
 		// First determine the min and max values of x and y
 		int xMin = Integer.MAX_VALUE;
@@ -456,7 +457,7 @@ public class CDynkinDiagram
 		output += "\\end{pspicture}\n";
 		output += "\\end{center}\n";
 		if(includeCaption)
-			output += "\\caption{Dynkin diagram of " + Globals.getDynkinDiagramType() + "}\n";
+			output += "\\caption{Dynkin diagram of ... }\n";
 		output += "\\end{figure}\n";
 		
 		return output;

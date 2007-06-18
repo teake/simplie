@@ -166,7 +166,7 @@ public class UIPrintableColorTable extends JTable
 		}
 		output += "|} \n";
 		if(includeCaption)
-			output += "\\caption{" + Globals.getDecompositionType() + "} \\\\ \n";
+			output += "\\caption{...} \\\\ \n";
 		output += "\\hline \n";
 		for (int i = 0; i < totalColumns; i++)
 		{

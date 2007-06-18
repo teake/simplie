@@ -7,7 +7,7 @@
 
 package edu.rug.hep.simplie.leveldecomposer;
 
-import edu.rug.hep.simplie.Globals;
+import edu.rug.hep.simplie.*;
 import edu.rug.hep.simplie.group.CRoot;
 import edu.rug.hep.simplie.math.fraction;
 
@@ -28,6 +28,7 @@ import java.util.Comparator;
  */
 public class CAutoLevelScanner extends SwingWorker<Void,Object[]> implements Comparator<int[]>
 {
+	private final CAlgebraComposite algebras;
 	private final boolean calcRootMult;
 	private final boolean calcRepMult;
 	private final boolean showZeroMultRoot;
@@ -60,6 +61,7 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]> implements Com
 	 * @param	maxLevel			The maximum value of the levels.
 	 */
 	public CAutoLevelScanner(
+			CAlgebraComposite algebras,
 			boolean posSignConvention,
 			boolean calcRootMult,
 			boolean calcRepMult,
@@ -70,6 +72,7 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]> implements Com
 			int minLevel,
 			int maxLevel)
 	{
+		this.algebras		= algebras;
 		this.tableModel		= tableModel;
 		this.minLevel		= minLevel;
 		this.maxLevel		= maxLevel;
@@ -83,7 +86,7 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]> implements Com
 		
 		this.levelSign = 0;
 		
-		this.levelOneIndices = new int[Globals.group.rank - Globals.coGroup.rank];
+		this.levelOneIndices = new int[algebras.group.rank - algebras.coGroup.rank];
 		for (int i = 0; i < levelOneIndices.length; i++)
 		{
 			levelOneIndices[i] = 0;
@@ -132,11 +135,11 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]> implements Com
 		// Some preliminary checks.
 		if(minLevel > maxLevel)
 			return null;
-		if(Globals.group.rank == Globals.coGroup.rank)
+		if(algebras.group.rank == algebras.coGroup.rank)
 			return null;
 		
 		// How many possibilities of level combinations are there?
-		levelRank	= Globals.group.rank - Globals.coGroup.rank;
+		levelRank	= algebras.group.rank - algebras.coGroup.rank;
 		base		= maxLevel + 1 - minLevel;
 		num			= (int) Math.pow(base, levelRank);
 		try
@@ -234,7 +237,7 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]> implements Com
 		
 		// Don't scan this level if the number of indices exceeds the number of dimensions
 		// and we don't want to scan for exotic fields.
-		if(!showExotic && minNumIndices > (Globals.subGroup.rank + 1) )
+		if(!showExotic && minNumIndices > (algebras.subGroup.rank + 1) )
 		{
 			System.out.print("Skipping levels " + Globals.intArrayToString(levels));
 			System.out.println(", number of indices too large: " + minNumIndices);
@@ -244,7 +247,7 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]> implements Com
 		System.out.println("Scanning levels " + Globals.intArrayToString(levels));
 		
 		// Set up the Dynkin labels
-		int[] dynkinLabels = new int[Globals.coGroup.rank];
+		int[] dynkinLabels = new int[algebras.coGroup.rank];
 		for (int i = 0; i < dynkinLabels.length; i++)
 		{
 			dynkinLabels[i] = 0;
@@ -269,7 +272,7 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]> implements Com
 				coLevels = calculateCoLevels(levels, dynkinLabels);
 				int rootLength = calculateRootLength(levels, coLevels);
 				// Only continue if the root length is not bigger than the maximum root length.
-				if(rootLength <= Globals.group.rs.maxNorm)
+				if(rootLength <= algebras.group.rs.maxNorm)
 				{
 					// First check if all root components are integers and non-negative.
 					allGoodIntegers = true;
@@ -315,6 +318,7 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]> implements Com
 		
 		// Add the representation.
 		CRepresentation rep = new CRepresentation(
+				algebras,
 				dynkinLabels,
 				levels,
 				newCoLevels,
@@ -348,7 +352,7 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]> implements Com
 				repI = repContainer.get(k);
 				
 				// Get and set the root multiplicities.
-				CRoot root = Globals.group.rs.getRoot(repI.rootVector.clone());
+				CRoot root = algebras.group.rs.getRoot(repI.rootVector.clone());
 				if(root != null)
 					repI.setRootMult(root.mult);
 				else
@@ -398,8 +402,8 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]> implements Com
 			rowData[2] = Globals.intArrayToString(rep.disDynkinLabels);
 			rowData[3] = Globals.intArrayToString(rep.rootVector);
 			rowData[4] = rep.length;
-			rowData[5] = (long) Globals.subGroup.dimOfRep(rep.subDynkinLabels);
-			rowData[6] = (long) Globals.disGroup.dimOfRep(rep.disDynkinLabels);
+			rowData[5] = (long) algebras.subGroup.dimOfRep(rep.subDynkinLabels);
+			rowData[6] = (long) algebras.intGroup.dimOfRep(rep.disDynkinLabels);
 			rowData[7] = rep.getRootMult();
 			rowData[8] = rep.getOuterMult();
 			rowData[9] = rep.height;
@@ -425,21 +429,21 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]> implements Com
 		{
 			for(int j=0; j < coLevels.length; j++)
 			{
-				rootLength.add( coLevels[i].times(coLevels[j].times(Globals.group.B[Globals.dd.translateCo(i)][Globals.dd.translateCo(j)] )));
+				rootLength.add( coLevels[i].times(coLevels[j].times(algebras.group.B[algebras.dd.translateCo(i)][algebras.dd.translateCo(j)] )));
 			}
 		}
 		for(int i=0; i < levels.length; i++)
 		{
 			for(int j=0; j < levels.length; j++)
 			{
-				rootLength.add( Globals.group.B[Globals.dd.translateLevel(i)][Globals.dd.translateLevel(j)] * levels[i] * levels[j] );
+				rootLength.add( algebras.group.B[algebras.dd.translateLevel(i)][algebras.dd.translateLevel(j)] * levels[i] * levels[j] );
 			}
 		}
 		for(int i=0; i < coLevels.length; i++)
 		{
 			for(int j=0; j < levels.length; j++)
 			{
-				rootLength.add( coLevels[i].times(2 * levels[j] * Globals.group.B[Globals.dd.translateCo(i)][Globals.dd.translateLevel(j)] ));
+				rootLength.add( coLevels[i].times(2 * levels[j] * algebras.group.B[algebras.dd.translateCo(i)][algebras.dd.translateLevel(j)] ));
 			}
 		}
 
@@ -449,15 +453,15 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]> implements Com
 	/** Returns the levels of the co-algebra. */
 	private fraction[] calculateCoLevels(int[] levels, int[] dynkinLabels)
 	{
-		fraction[] coLevels		= new fraction[Globals.coGroup.rank];
+		fraction[] coLevels		= new fraction[algebras.coGroup.rank];
 		int[] levelComponents	= calculateLevelComponents(levels);
 		
 		for(int i=0; i < coLevels.length; i++)
 		{
 			coLevels[i] = new fraction(0);
-			for(int j=0; j < Globals.coGroup.rank; j++)
+			for(int j=0; j < algebras.coGroup.rank; j++)
 			{
-				coLevels[i].add(Globals.coGroup.invA[j][i].times(signConvention * dynkinLabels[j] - levelComponents[j]));
+				coLevels[i].add(algebras.coGroup.invA[j][i].times(signConvention * dynkinLabels[j] - levelComponents[j]));
 			}
 		}
 		
@@ -467,14 +471,14 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]> implements Com
 	/** Calculates the contraction of the levels with the Cartan matrix. */
 	private int[] calculateLevelComponents(int[] levels)
 	{
-		int[] levelComponents = new int[Globals.coGroup.rank];
+		int[] levelComponents = new int[algebras.coGroup.rank];
 		
 		for(int i=0; i < levelComponents.length; i++)
 		{
 			levelComponents[i] = 0;
 			for(int j=0; j < levels.length; j++)
 			{
-				levelComponents[i] += Globals.group.A[Globals.dd.translateLevel(j)][Globals.dd.translateCo(i)] * levels[j];
+				levelComponents[i] += algebras.group.A[algebras.dd.translateLevel(j)][algebras.dd.translateCo(i)] * levels[j];
 			}
 		}
 		return levelComponents;

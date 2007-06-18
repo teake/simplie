@@ -17,12 +17,13 @@ import java.util.Iterator;
 
 /**
  *
- * @author  teake
+ * @author  Teake Nutma
  */
-public class AlgebraInfo extends javax.swing.JPanel
+public class AlgebraInfo extends javax.swing.JPanel implements DiagramListener
 {
 	private DefaultTableModel tableModel;
 	private CGroup group;
+	private CAlgebraComposite algebras;
 	
 	/** Creates new form AlgebraInfo */
 	public AlgebraInfo()
@@ -32,14 +33,15 @@ public class AlgebraInfo extends javax.swing.JPanel
 		group = null;
 	}
 	
-	public void setGroup(CGroup group)
+	public void setAlgebraComposite(CAlgebraComposite algebras)
 	{
-		this.group = group;
-		update();
+		this.algebras	= algebras;
+		algebras.dd.addListener(this);
 	}
 	
-	private void update()
+	public void diagramChanged()
 	{
+		this.group = algebras.group;
 		if(group == null)
 			return;
 		
@@ -406,9 +408,9 @@ public class AlgebraInfo extends javax.swing.JPanel
 		// Clear and fill the table.
 		tableModel.setRowCount(0);
 		
-		for (int i = 0; i < Globals.group.rs.size(); i++)
+		for (int i = 0; i < group.rs.size(); i++)
 		{
-			Collection roots	= Globals.group.rs.get(i);
+			Collection roots	= group.rs.get(i);
 			Iterator iterator	= roots.iterator();
 			while (iterator.hasNext())
 			{

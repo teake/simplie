@@ -6,7 +6,7 @@
 
 package edu.rug.hep.simplie.ui;
 
-import edu.rug.hep.simplie.Globals;
+import edu.rug.hep.simplie.*;
 import java.awt.datatransfer.Clipboard;
 
 import javax.swing.JDialog;
@@ -26,6 +26,7 @@ import edu.rug.hep.simplie.ui.reusable.UIPrintableColorTable;
  */
 public class ExportToTex extends javax.swing.JPanel
 {
+	private CAlgebraComposite algebras;
 	private FileFilter texFilter;
 	private JDialog parent;
 	private UIPrintableColorTable repTable;
@@ -39,8 +40,9 @@ public class ExportToTex extends javax.swing.JPanel
 		clipboard = java.awt.Toolkit.getDefaultToolkit().getSystemClipboard();
 	}
 	
-	public void setup(JDialog parent, UIPrintableColorTable repTable)
+	public void setup(JDialog parent, UIPrintableColorTable repTable, CAlgebraComposite algebras)
 	{
+		this.algebras = algebras;
 		this.parent = parent;
 		this.repTable = repTable;
 		
@@ -250,7 +252,7 @@ public class ExportToTex extends javax.swing.JPanel
 		String output = new String();
 		
 		if(cbDD.isSelected())
-			output += Globals.dd.toTeX(cbCaption.isSelected(), cbDDlabels.isSelected());
+			output += algebras.dd.toTeX(cbCaption.isSelected(), cbDDlabels.isSelected());
 		if(cbDD.isSelected() && cbReps.isSelected())
 			output += "\n";
 		if(cbReps.isSelected())
@@ -259,7 +261,7 @@ public class ExportToTex extends javax.swing.JPanel
 		if(rbFile.isSelected())
 		{
 			JFileChooser chooser = new JFileChooser("");
-			chooser.setSelectedFile(new File(Globals.getDynkinDiagramType() + ".tex"));
+			chooser.setSelectedFile(new File(algebras.getDynkinDiagramType() + ".tex"));
 			chooser.addChoosableFileFilter(texFilter);
 			chooser.setDialogTitle("Export to TeX");
 			int returnVal = chooser.showSaveDialog(this);

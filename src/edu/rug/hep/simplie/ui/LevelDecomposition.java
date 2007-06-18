@@ -6,7 +6,7 @@
 
 package edu.rug.hep.simplie.ui;
 
-import edu.rug.hep.simplie.Globals;
+import edu.rug.hep.simplie.*;
 import edu.rug.hep.simplie.leveldecomposer.CAutoLevelScanner;
 
 import java.util.*;
@@ -28,6 +28,7 @@ public class LevelDecomposition extends javax.swing.JPanel
 {
 	private DefaultTableModel	tableModel;
 	private CAutoLevelScanner	autoScanner;
+	private CAlgebraComposite	algebras;
 	
 	private long startTime;
 	
@@ -39,12 +40,17 @@ public class LevelDecomposition extends javax.swing.JPanel
 		tableModel = (DefaultTableModel) representationsTable.getModel();
 	}
 	
+	public void setAlgebraComposite(CAlgebraComposite algebras)
+	{
+		this.algebras = algebras;
+	}
+	
 	public void printTable()
 	{
 		try
 		{
 			MessageFormat footer = new MessageFormat("Page {0}");
-			MessageFormat header = new MessageFormat(Globals.getDecompositionType());
+			MessageFormat header = new MessageFormat(algebras.getDecompositionType());
 			representationsTable.print(JTable.PrintMode.FIT_WIDTH, header, footer);
 		}
 		catch (PrinterException e)
@@ -313,7 +319,7 @@ public class LevelDecomposition extends javax.swing.JPanel
 		{
 			/** The scanner is busy, and the button is a cancel button. So cancel the task. */
 			autoScanner.cancel(true);
-			Globals.group.cancelEverything();
+			algebras.group.cancelEverything();
 		}
 		else
 		{
@@ -325,7 +331,7 @@ public class LevelDecomposition extends javax.swing.JPanel
 			 *  - Change the "scan" button into a "cancel" button.
 			 *  - Start the progressbar animation.
 			 */
-			RepresentationPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, Globals.getDecompositionType(), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12)));
+			RepresentationPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, algebras.getDecompositionType(), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12)));
 			bAutoScan.setText("Cancel");
 			autoScanProgressBar.setIndeterminate(true);
 			autoScanProgressBar.setString("Scanning");
@@ -333,6 +339,7 @@ public class LevelDecomposition extends javax.swing.JPanel
 			
 			/** Set up the scan */
 			autoScanner = new CAutoLevelScanner(
+					algebras,
 					rbSignPos.isSelected(),
 					cbRootMult.isSelected(),
 					cbRepMult.isSelected(),

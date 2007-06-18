@@ -1,12 +1,12 @@
 /*
- * LevelDecompositionUI.java
+ * Main.java
  *
  * Created on 8 maart 2007, 12:28
  */
 
 package edu.rug.hep.simplie.ui;
 
-import edu.rug.hep.simplie.Globals;
+import edu.rug.hep.simplie.*;
 import edu.rug.hep.simplie.dynkindiagram.*;
 
 import javax.swing.UIManager;
@@ -19,13 +19,14 @@ import java.io.File;
  *
  * @author  Teake Nutma
  */
-public class Main extends javax.swing.JFrame implements DiagramListener
+public class Main extends javax.swing.JFrame
 {
 	private final FileFilter ddFilter;
 	private final FileFilter rsFilter;
 	private final File workDir;
 	private final File ddDir;
 	private final File rsDir;
+	private final CAlgebraComposite algebras;
 	
 	/** This class is used in the diagram preset UI */
 	class ddListener implements java.awt.event.ActionListener
@@ -37,7 +38,7 @@ public class Main extends javax.swing.JFrame implements DiagramListener
 		}
 		public void actionPerformed(java.awt.event.ActionEvent evt)
 		{
-			Globals.dd.loadFrom(this.url);
+			algebras.dd.loadFrom(this.url);
 		}
 	}
 	
@@ -55,17 +56,21 @@ public class Main extends javax.swing.JFrame implements DiagramListener
 		}
 		initComponents();
 		
+		algebras = new CAlgebraComposite();
+		algebraSetup.setAlgebraComposite(algebras);
+		algebraInfo.setAlgebraComposite(algebras);
+		levelDecomposition.setAlgebraComposite(algebras);
+		
+		
 		this.setLocation(20,20);
 		
 		systemOutputDialog.setLocation(100,100);
 		systemOutputDialog.setMinimumSize(new java.awt.Dimension(0,0));
 		exportDialog.setLocation(300,250);
-		exportToTex.setup(exportDialog,levelDecomposition.getRepTable());
+		exportToTex.setup(exportDialog,levelDecomposition.getRepTable(),algebras);
 		
 		ddFilter = new FileNameExtensionFilter("Dynkin diagram (*.dd)", "dd");
 		rsFilter = new FileNameExtensionFilter("Root system (*.rs)", "rs");
-		
-		Globals.dd.addListener(this);
 		
 		// Check what the working dir is.
 		String userDir	= java.lang.System.getProperty("user.home");
@@ -87,11 +92,6 @@ public class Main extends javax.swing.JFrame implements DiagramListener
 		
 		// Fill the preset menu.
 		resetPresets();		
-	}
-	
-	public void diagramChanged()
-	{
-		algebraInfo.setGroup(Globals.group);
 	}
 	
 	private void resetPresets()
@@ -435,7 +435,7 @@ public class Main extends javax.swing.JFrame implements DiagramListener
 	private void MenuExportRootSystemActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_MenuExportRootSystemActionPerformed
 	{//GEN-HEADEREND:event_MenuExportRootSystemActionPerformed
 		JFileChooser chooser = new JFileChooser("");
-		chooser.setSelectedFile(new File(Globals.group.type + "_height_" + Globals.group.rs.constructedHeight() + ".txt"));
+		chooser.setSelectedFile(new File(algebras.group.type + "_height_" + algebras.group.rs.constructedHeight() + ".txt"));
 		chooser.setDialogTitle("Export root system");
 		int returnVal = chooser.showSaveDialog(this);
 		
@@ -445,7 +445,7 @@ public class Main extends javax.swing.JFrame implements DiagramListener
 		 * pre-pend the "file" protocol to the absolute path of the file.
 		 */
 			String fileURL = chooser.getSelectedFile().getAbsolutePath();
-			Globals.group.rs.writeTxtFile(fileURL);
+			algebras.group.rs.writeTxtFile(fileURL);
 		}
 	}//GEN-LAST:event_MenuExportRootSystemActionPerformed
 	
@@ -468,7 +468,7 @@ public class Main extends javax.swing.JFrame implements DiagramListener
 	{//GEN-HEADEREND:event_MenuItemSaveRootsActionPerformed
 		JFileChooser chooser = new JFileChooser(rsDir);
 		chooser.addChoosableFileFilter(rsFilter);
-		chooser.setSelectedFile(new File(Globals.group.type + "_height_" + Globals.group.rs.constructedHeight()));
+		chooser.setSelectedFile(new File(algebras.group.type + "_height_" + algebras.group.rs.constructedHeight()));
 		chooser.setDialogTitle("Save root system");
 		int returnVal = chooser.showSaveDialog(this);
 		
@@ -480,7 +480,7 @@ public class Main extends javax.swing.JFrame implements DiagramListener
 			String fileURL = chooser.getSelectedFile().getAbsolutePath();
 			if(!rsFilter.accept(chooser.getSelectedFile()))
 				fileURL += ".rs";
-			Globals.group.rs.saveTo(fileURL);
+			algebras.group.rs.saveTo(fileURL);
 		}
 	}//GEN-LAST:event_MenuItemSaveRootsActionPerformed
 	
@@ -501,7 +501,7 @@ public class Main extends javax.swing.JFrame implements DiagramListener
 		 * pre-pend the "file" protocol to the absolute path of the file.
 		 */
 			fileURL = chooser.getSelectedFile().getAbsolutePath();
-			if(!Globals.group.rs.loadFrom(fileURL))
+			if(!algebras.group.rs.loadFrom(fileURL))
 			{
 				optionPane.showMessageDialog(
 						popup,
@@ -530,7 +530,7 @@ public class Main extends javax.swing.JFrame implements DiagramListener
 	{//GEN-HEADEREND:event_MenuItemSaveDDActionPerformed
 		JFileChooser chooser = new JFileChooser(ddDir);
 		chooser.addChoosableFileFilter(ddFilter);
-		chooser.setSelectedFile(new File(Globals.getDynkinDiagramType() + ".dd"));
+		chooser.setSelectedFile(new File(algebras.getDynkinDiagramType() + ".dd"));
 		chooser.setDialogTitle("Save Dynkin diagram");
 		int returnVal = chooser.showSaveDialog(this);
 		
@@ -542,7 +542,7 @@ public class Main extends javax.swing.JFrame implements DiagramListener
 			String fileURL = chooser.getSelectedFile().getAbsolutePath();
 			if(!ddFilter.accept(chooser.getSelectedFile()))
 				fileURL += ".dd";
-			Globals.dd.saveTo(fileURL);
+			algebras.dd.saveTo(fileURL);
 		}
 	}//GEN-LAST:event_MenuItemSaveDDActionPerformed
 	
@@ -563,13 +563,13 @@ public class Main extends javax.swing.JFrame implements DiagramListener
 		 * pre-pend the "file" protocol to the absolute path of the file.
 		 */
 			fileURL = chooser.getSelectedFile().getAbsolutePath();
-			Globals.dd.loadFrom(fileURL);
+			algebras.dd.loadFrom(fileURL);
 		}
 	}//GEN-LAST:event_MenuItemLoadDDActionPerformed
 	
     private void MenuItemClearActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_MenuItemClearActionPerformed
     {//GEN-HEADEREND:event_MenuItemClearActionPerformed
-		Globals.dd.clear();
+		algebras.dd.clear();
     }//GEN-LAST:event_MenuItemClearActionPerformed
 	
     private void MenuItemAboutActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_MenuItemAboutActionPerformed

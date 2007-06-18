@@ -6,7 +6,7 @@
 
 package edu.rug.hep.simplie.ui;
 
-import edu.rug.hep.simplie.Globals;
+import edu.rug.hep.simplie.*;
 import edu.rug.hep.simplie.dynkindiagram.*;
 
 import Jama.Matrix.*;
@@ -17,21 +17,29 @@ import Jama.Matrix.*;
  */
 public class AlgebraSetup extends javax.swing.JPanel implements DiagramListener
 {
+	private CAlgebraComposite algebras;
+	
 	/** Creates new form LevelDecompositionUI */
 	public AlgebraSetup()
 	{
 		initComponents();
-		Globals.dd.addListener(this);
+	}
+	
+	public void setAlgebraComposite(CAlgebraComposite algebras)
+	{
+		this.algebras = algebras;
+		dynkinDiagramPanel.setDynkinDiagram(algebras.dd);
+		algebras.dd.addListener(this);
 	}
 	
 	public void diagramChanged()
 	{
-		algebraInfo.update(Globals.group);
-		subAlgebraInfo.update(Globals.subGroup);
-		disAlgebraInfo.update(Globals.disGroup);
-		coAlgebraInfo.update(Globals.coGroup);
+		algebraInfo.update(algebras.group);
+		subAlgebraInfo.update(algebras.subGroup);
+		disAlgebraInfo.update(algebras.intGroup);
+		coAlgebraInfo.update(algebras.coGroup);
 	
-		dynkinDiagramPanel.setTitle("Dynkin Diagram of " + Globals.getDynkinDiagramType());
+		dynkinDiagramPanel.setTitle("Dynkin Diagram of " + algebras.getDynkinDiagramType());
 	}
 	
 	/** This method is called from within the constructor to

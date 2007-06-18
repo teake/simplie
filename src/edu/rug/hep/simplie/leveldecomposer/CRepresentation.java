@@ -7,7 +7,7 @@
 
 package edu.rug.hep.simplie.leveldecomposer;
 
-import edu.rug.hep.simplie.Globals;
+import edu.rug.hep.simplie.*;
 import edu.rug.hep.simplie.group.CHighestWeightRep;
 import edu.rug.hep.simplie.group.CWeight;
 
@@ -47,6 +47,8 @@ public class CRepresentation implements Comparable<CRepresentation>
 	
 	private final CHighestWeightRep hwRep;
 	
+	private final CAlgebraComposite algebras;
+	
 	/**
 	 * Creates a new instance of CRepresentation
 	 *
@@ -55,8 +57,9 @@ public class CRepresentation implements Comparable<CRepresentation>
 	 * @param	coLevels		The part of the rootvector corresponding to the regular subalgebra nodes.
 	 * @param	length			The length of the associated root (i.e. the innerproduct with itself).
 	 */
-	public CRepresentation(int[] dynkinLabels, int[] levels, int[] coLevels, int length, boolean posSignConvention)
+	public CRepresentation(CAlgebraComposite algebras, int[] dynkinLabels, int[] levels, int[] coLevels, int length, boolean posSignConvention)
 	{
+		this.algebras		= algebras;
 		this.dynkinLabels	= dynkinLabels.clone();
 		this.levels			= levels.clone();
 		this.length			= length;
@@ -64,11 +67,11 @@ public class CRepresentation implements Comparable<CRepresentation>
 		this.outerMult		= 0;
 		
 		// Construct the whole root vector.
-		this.rootVector	= new int[Globals.group.rank];
+		this.rootVector	= new int[algebras.group.rank];
 		for (int i = 0; i < coLevels.length; i++)
-			rootVector[Globals.dd.translateCo(i)] = coLevels[i];
+			rootVector[algebras.dd.translateCo(i)] = coLevels[i];
 		for (int i = 0; i < levels.length; i++)
-			rootVector[Globals.dd.translateLevel(i)] = levels[i];
+			rootVector[algebras.dd.translateLevel(i)] = levels[i];
 		
 		// Calculate the height.
 		int tHeight = 0;
@@ -80,18 +83,18 @@ public class CRepresentation implements Comparable<CRepresentation>
 		
 		// Split the dynkinlabels into labels of the regular subalgebra and
 		// labels of the disconnected subalgebra.
-		int[] translatedLabels	= new int[Globals.group.rank];
-		this.subDynkinLabels	= new int[Globals.subGroup.rank];
-		this.disDynkinLabels	= new int[Globals.disGroup.rank];
+		int[] translatedLabels	= new int[algebras.group.rank];
+		this.subDynkinLabels	= new int[algebras.subGroup.rank];
+		this.disDynkinLabels	= new int[algebras.intGroup.rank];
 		for (int i = 0; i < dynkinLabels.length; i++)
-			translatedLabels[Globals.dd.translateCo(i)] = dynkinLabels[i];
+			translatedLabels[algebras.dd.translateCo(i)] = dynkinLabels[i];
 		for (int i = 0; i < disDynkinLabels.length; i++)
-			disDynkinLabels[i] = translatedLabels[Globals.dd.translateDis(i)];
+			disDynkinLabels[i] = translatedLabels[algebras.dd.translateDis(i)];
 		for (int i = 0; i < subDynkinLabels.length; i++)
-			subDynkinLabels[i] = translatedLabels[Globals.dd.translateSub(i)];
+			subDynkinLabels[i] = translatedLabels[algebras.dd.translateSub(i)];
 		
 		// Instantiate the highest weight rep.
-		hwRep = new CHighestWeightRep(Globals.coGroup, dynkinLabels);
+		hwRep = new CHighestWeightRep(algebras.coGroup, dynkinLabels);
 		weightHeight = hwRep.highestHeight;
 		
 		// Calculate the number of indices.

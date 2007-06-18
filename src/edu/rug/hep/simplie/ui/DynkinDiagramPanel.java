@@ -6,7 +6,7 @@
 
 package edu.rug.hep.simplie.ui;
 
-import edu.rug.hep.simplie.Globals;
+import edu.rug.hep.simplie.*;
 import edu.rug.hep.simplie.dynkindiagram.*;
 
 import java.awt.Graphics;
@@ -21,6 +21,8 @@ import java.awt.Cursor;
  */
 public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramListener
 {
+	private CDynkinDiagram dd;
+	
 	private int spacing;
 	private int radius;
 	private int offset;
@@ -39,8 +41,6 @@ public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramLis
 	/** Creates new form DynkinDiagramPanel */
 	public DynkinDiagramPanel()
 	{
-		Globals.dd.addListener(this);
-		
 		spacing = 40;
 		radius	= 5;
 		offset	= 25;
@@ -51,6 +51,12 @@ public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramLis
 		contextX = contextY = 0;
 		x = y = -1;
 		initComponents();
+	}
+	
+	public void setDynkinDiagram(CDynkinDiagram dd)
+	{
+		this.dd = dd;
+		this.dd.addListener(this);
 	}
 	
 	public void diagramChanged()
@@ -75,7 +81,8 @@ public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramLis
 		}
 		
 		// Draw the diagram.
-		Globals.dd.drawDiagram(g2,offset,spacing,radius);
+		if(dd != null)
+			dd.drawDiagram(g2,offset,spacing,radius);
 	}
 	
 	/**
@@ -295,7 +302,7 @@ private void diagramMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:ev
 	if(Globals.scanning)
 		return;
 	
-	CDynkinNode node = Globals.dd.getNodeByCoor(x,y);
+	CDynkinNode node = dd.getNodeByCoor(x,y);
 	
 	if(evt.getButton() == evt.BUTTON3)
 	{
@@ -310,7 +317,7 @@ private void diagramMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:ev
 	if(evt.getButton() == evt.BUTTON1 && !modifyingConnection)
 	{
 		int connectionToLast = (evt.isShiftDown()) ? 1 : 0;
-		status.setText(Globals.dd.addNode(x, y, connectionToLast));
+		status.setText(dd.addNode(x, y, connectionToLast));
 		return;
 	}
 	
@@ -318,12 +325,12 @@ private void diagramMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:ev
 	if(evt.getButton() == evt.BUTTON2 || (evt.getButton() == evt.BUTTON1 && evt.isAltDown() ) )
 	{
 		stopModifyConnection();
-		status.setText(Globals.dd.toggleNode(node));
+		status.setText(dd.toggleNode(node));
 	}
 	
 	if(modifyingConnection)
 	{
-		status.setText(Globals.dd.modifyConnection(connectionFrom, node, connectionLaced, addingConnection));
+		status.setText(dd.modifyConnection(connectionFrom, node, connectionLaced, addingConnection));
 		stopModifyConnection();
 	}
 }//GEN-LAST:event_diagramMouseReleased
@@ -332,43 +339,43 @@ private void diagramMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:ev
 	{//GEN-HEADEREND:event_menuAddTripleConnectionActionPerformed
 		addingConnection = true;
 		connectionLaced = 3;
-		startModifyConnection(Globals.dd.getNodeByCoor(contextX, contextY));
+		startModifyConnection(dd.getNodeByCoor(contextX, contextY));
 	}//GEN-LAST:event_menuAddTripleConnectionActionPerformed
 	
 	private void menuAddDoubleConnectionActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_menuAddDoubleConnectionActionPerformed
 	{//GEN-HEADEREND:event_menuAddDoubleConnectionActionPerformed
 		addingConnection = true;
 		connectionLaced = 2;
-		startModifyConnection(Globals.dd.getNodeByCoor(contextX, contextY));
+		startModifyConnection(dd.getNodeByCoor(contextX, contextY));
 	}//GEN-LAST:event_menuAddDoubleConnectionActionPerformed
 	
 	private void menuToggleNodeActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_menuToggleNodeActionPerformed
 	{//GEN-HEADEREND:event_menuToggleNodeActionPerformed
-		CDynkinNode node = Globals.dd.getNodeByCoor(contextX, contextY);
-		Globals.dd.toggleNode(node);
+		CDynkinNode node = dd.getNodeByCoor(contextX, contextY);
+		dd.toggleNode(node);
 	}//GEN-LAST:event_menuToggleNodeActionPerformed
 	
 	private void menuRemoveConnectionActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_menuRemoveConnectionActionPerformed
 	{//GEN-HEADEREND:event_menuRemoveConnectionActionPerformed
 		addingConnection = false;
-		startModifyConnection(Globals.dd.getNodeByCoor(contextX, contextY));
+		startModifyConnection(dd.getNodeByCoor(contextX, contextY));
 	}//GEN-LAST:event_menuRemoveConnectionActionPerformed
 	
 	private void menuAddSingleConnectionActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_menuAddSingleConnectionActionPerformed
 	{//GEN-HEADEREND:event_menuAddSingleConnectionActionPerformed
 		addingConnection = true;
 		connectionLaced = 1;
-		startModifyConnection(Globals.dd.getNodeByCoor(contextX, contextY));
+		startModifyConnection(dd.getNodeByCoor(contextX, contextY));
 	}//GEN-LAST:event_menuAddSingleConnectionActionPerformed
 	
 	private void menuRemoveNodeActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_menuRemoveNodeActionPerformed
 	{//GEN-HEADEREND:event_menuRemoveNodeActionPerformed
-		status.setText(Globals.dd.removeNode(Globals.dd.getNodeByCoor(contextX, contextY)));
+		status.setText(dd.removeNode(dd.getNodeByCoor(contextX, contextY)));
 	}//GEN-LAST:event_menuRemoveNodeActionPerformed
 	
 	private void menuAddNodeActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_menuAddNodeActionPerformed
 	{//GEN-HEADEREND:event_menuAddNodeActionPerformed
-		status.setText(Globals.dd.addNode(contextX, contextY, 0));
+		status.setText(dd.addNode(contextX, contextY, 0));
 	}//GEN-LAST:event_menuAddNodeActionPerformed
 	
 	
