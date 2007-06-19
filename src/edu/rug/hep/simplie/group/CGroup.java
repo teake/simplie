@@ -7,7 +7,7 @@
 
 package edu.rug.hep.simplie.group;
 
-import edu.rug.hep.simplie.Globals;
+import edu.rug.hep.simplie.Helper;
 import edu.rug.hep.simplie.math.fraction;
 import java.util.Collection;
 import java.util.Iterator;
@@ -165,7 +165,7 @@ public class CGroup
 		if(det > 0 || rank == 0)
 		{
 			dim			= 2 * (int) rs.numPosGenerators() + rank;
-			dimension	= Globals.intToString(dim);
+			dimension	= Helper.intToString(dim);
 		}
 		else
 		{
@@ -188,10 +188,10 @@ public class CGroup
 		String type = null;
 		
 		// TODO: make this algorithm find more types
-		Matrix compareMatrix = Globals.regularMatrix(rank);
+		Matrix compareMatrix = Helper.regularMatrix(rank);
 		if(rank == 0)
 			type = "Empty";
-		else if(Globals.sameMatrices(compareMatrix,cartanMatrix))
+		else if(Helper.sameMatrices(compareMatrix,cartanMatrix))
 			type = "A";
 		else if(rank > 4)
 		{
@@ -199,16 +199,16 @@ public class CGroup
 			compareMatrix.set(3,0,-1);
 			compareMatrix.set(0,1,0);
 			compareMatrix.set(1,0,0);
-			if(Globals.sameMatrices(compareMatrix,cartanMatrix))
+			if(Helper.sameMatrices(compareMatrix,cartanMatrix))
 				type = "E";
 			else
 			{
-				compareMatrix = Globals.regularMatrix(rank);
+				compareMatrix = Helper.regularMatrix(rank);
 				compareMatrix.set(rank-1,2,-1);
 				compareMatrix.set(2,rank-1,-1);
 				compareMatrix.set(rank-2,rank-1,0);
 				compareMatrix.set(rank-1,rank-2,0);
-				if(Globals.sameMatrices(compareMatrix,cartanMatrix))
+				if(Helper.sameMatrices(compareMatrix,cartanMatrix))
 					type = "E";
 			}
 		}

@@ -317,27 +317,25 @@ public class LevelDecomposition extends javax.swing.JPanel
     {//GEN-HEADEREND:event_bAutoScanActionPerformed
 		if(!(autoScanner == null || autoScanner.isDone()))
 		{
-			/** The scanner is busy, and the button is a cancel button. So cancel the task. */
+			// The scanner is busy, and the button is a cancel button. So cancel the task.
 			autoScanner.cancel(true);
 			algebras.group.cancelEverything();
 		}
 		else
 		{
-			/** Clear the table. */
+			// Clear the table.
 			tableModel.setRowCount(0);
 			
-			/**
-			 * Prepare the UI:
-			 *  - Change the "scan" button into a "cancel" button.
-			 *  - Start the progressbar animation.
-			 */
+			// Prepare the UI:
+			//  - Change the "scan" button into a "cancel" button.
+			//  - Start the progressbar animation.
 			RepresentationPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, algebras.getDecompositionType(), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12)));
 			bAutoScan.setText("Cancel");
 			autoScanProgressBar.setIndeterminate(true);
 			autoScanProgressBar.setString("Scanning");
-			Globals.scanning = true;
+			algebras.dd.setLocked(true);
 			
-			/** Set up the scan */
+			// Set up the scan.
 			autoScanner = new CAutoLevelScanner(
 					algebras,
 					rbSignPos.isSelected(),
@@ -346,7 +344,7 @@ public class LevelDecomposition extends javax.swing.JPanel
 					cbZeroMultRoot.isSelected(),
 					cbZeroMultRep.isSelected(),
 					cbExotic.isSelected(),
-					tableModel, 
+					tableModel,
 					autoScanMinLevel.getValue(),
 					autoScanMaxLevel.getValue()
 					);
@@ -354,20 +352,20 @@ public class LevelDecomposition extends javax.swing.JPanel
 			{
 				public void propertyChange(PropertyChangeEvent evt)
 				{
-					if (autoScanner.getState().equals(SwingWorker.StateValue.DONE) && Globals.scanning)
+					if (autoScanner.getState().equals(SwingWorker.StateValue.DONE) && algebras.dd.getLocked())
 					{
-						/** Invoked when the scan is done (or canceled). */
+						// Invoked when the scan is done (or canceled).
 						bAutoScan.setText("Scan");
 						autoScanProgressBar.setIndeterminate(false);
 						autoScanProgressBar.setString("Idle");
-						Globals.scanning = false;
+						algebras.dd.setLocked(false);
 						System.out.print("Finished level decomposition. Milliseconds: ");
 						System.out.println(System.currentTimeMillis() - startTime);
 					}
 				}
 			});
 			
-			/* Start the scan */
+			// Start the scan.
 			startTime = System.currentTimeMillis();
 			System.out.println("Starting level decomposition");
 			autoScanner.execute();

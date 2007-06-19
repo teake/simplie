@@ -298,8 +298,8 @@ private void diagramMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event
 }//GEN-LAST:event_diagramMouseMoved
 
 private void diagramMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_diagramMouseReleased
-	// Don't do anything while we are scanning.
-	if(Globals.scanning)
+	// Don't do anything if the diagram is locked.
+	if(dd.getLocked())
 		return;
 	
 	CDynkinNode node = dd.getNodeByCoor(x,y);

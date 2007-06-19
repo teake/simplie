@@ -7,7 +7,7 @@
 
 package edu.rug.hep.simplie.group;
 
-import edu.rug.hep.simplie.Globals;
+import edu.rug.hep.simplie.Helper;
 import edu.rug.hep.simplie.math.fraction;
 
 import java.util.Collection;
@@ -385,7 +385,7 @@ public class CRootSystem
 			fis = new FileInputStream(filename);
 			in	= new ObjectInputStream(fis);
 			int[][] savedCM	= (int[][]) in.readObject();
-			if(Globals.sameMatrices(savedCM, group.A))
+			if(Helper.sameMatrices(savedCM, group.A))
 			{
 				constructedHeight	= in.readInt();
 				numPosRoots			= in.readLong();

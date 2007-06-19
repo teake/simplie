@@ -6,7 +6,7 @@
 
 package edu.rug.hep.simplie.ui.reusable;
 
-import edu.rug.hep.simplie.Globals;
+import edu.rug.hep.simplie.Helper;
 import edu.rug.hep.simplie.group.CGroup;
 
 /**
@@ -32,9 +32,9 @@ public class UIAlgebraInfo extends javax.swing.JPanel
 	public void update(CGroup group)
 	{
 		algebraInfoType.setText(group.type);
-		algebraInfoRank.setText(Globals.intToString(group.rank));
+		algebraInfoRank.setText(Helper.intToString(group.rank));
 		algebraInfoDim.setText(group.dimension);
-		algebraInfoCMDet.setText(Globals.intToString(group.det));
+		algebraInfoCMDet.setText(Helper.intToString(group.det));
 	}
 	
 	/** This method is called from within the constructor to

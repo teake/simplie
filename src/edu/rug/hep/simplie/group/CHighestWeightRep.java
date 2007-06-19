@@ -7,7 +7,7 @@
 
 package edu.rug.hep.simplie.group;
 
-import edu.rug.hep.simplie.Globals;
+import edu.rug.hep.simplie.Helper;
 import edu.rug.hep.simplie.math.fraction;
 
 import java.util.Collection;
@@ -176,7 +176,7 @@ public class CHighestWeightRep
 		
 		// Print some info to sout.
 		System.out.println(
-			"Constructing highest weight rep " + Globals.intArrayToString(highestWeight.dynkinLabels) +
+			"Constructing highest weight rep " + Helper.intArrayToString(highestWeight.dynkinLabels) +
 			" to depth " + maxDepth + " of group " + group.type + ".");
 		
 		// Do the construction.

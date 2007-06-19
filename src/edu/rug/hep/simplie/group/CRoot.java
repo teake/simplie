@@ -7,7 +7,7 @@
 
 package edu.rug.hep.simplie.group;
 
-import edu.rug.hep.simplie.Globals;
+import edu.rug.hep.simplie.Helper;
 import edu.rug.hep.simplie.math.fraction;
 import java.io.Serializable;
 
@@ -222,7 +222,7 @@ public class CRoot implements Serializable
 	public String toString()
 	{
 		String output = "height: " + height() +
-				", vector: " + Globals.intArrayToString(vector) +
+				", vector: " + Helper.intArrayToString(vector) +
 				", norm: " + norm +
 				", mult: " + mult;
 		

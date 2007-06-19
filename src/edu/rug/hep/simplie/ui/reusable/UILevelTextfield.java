@@ -6,7 +6,7 @@
 
 package edu.rug.hep.simplie.ui.reusable;
 
-import edu.rug.hep.simplie.Globals;
+import edu.rug.hep.simplie.Helper;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -75,12 +75,12 @@ public class UILevelTextfield extends javax.swing.JPanel
 	}
 	public int getValue()
 	{
-		return Globals.stringToInt(tfLevel.getText());
+		return Helper.stringToInt(tfLevel.getText());
 	}
 	
 	public void setValue(int value)
 	{
-		tfLevel.setText(Globals.intToString(value));
+		tfLevel.setText(Helper.intToString(value));
 	}
 	
 	public void linkTo(UILevelTextfield linkTo)

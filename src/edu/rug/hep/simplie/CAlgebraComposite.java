@@ -34,7 +34,7 @@ public class CAlgebraComposite implements DiagramListener
 	
 	public void diagramChanged()
 	{
-		if(group == null || !Globals.sameMatrices(dd.cartanMatrix(), group.A))
+		if(group == null || !Helper.sameMatrices(dd.cartanMatrix(), group.A))
 			group = new CGroup(dd.cartanMatrix());
 		
 		subGroup	= new CGroup(dd.cartanSubMatrix("sub"));

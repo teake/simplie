@@ -148,7 +148,7 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]> implements Com
 			levels = new ArrayList<int[]>();
 			for (int i = 0; i < num; i++)
 			{
-				levels.add(Globals.numberToVector(i,base,levelRank,minLevel));
+				levels.add(Helper.numberToVector(i,base,levelRank,minLevel));
 			}
 			Collections.sort(levels,this);
 			
@@ -239,12 +239,12 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]> implements Com
 		// and we don't want to scan for exotic fields.
 		if(!showExotic && minNumIndices > (algebras.subGroup.rank + 1) )
 		{
-			System.out.print("Skipping levels " + Globals.intArrayToString(levels));
+			System.out.print("Skipping levels " + Helper.intArrayToString(levels));
 			System.out.println(", number of indices too large: " + minNumIndices);
 			return;
 		}
 		
-		System.out.println("Scanning levels " + Globals.intArrayToString(levels));
+		System.out.println("Scanning levels " + Helper.intArrayToString(levels));
 		
 		// Set up the Dynkin labels
 		int[] dynkinLabels = new int[algebras.coGroup.rank];
@@ -397,10 +397,10 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]> implements Com
 			
 			// Add the data to the table.
 			Object[] rowData = new Object[12];
-			rowData[0] = Globals.intArrayToString(rep.levels);
-			rowData[1] = Globals.intArrayToString(rep.subDynkinLabels);
-			rowData[2] = Globals.intArrayToString(rep.disDynkinLabels);
-			rowData[3] = Globals.intArrayToString(rep.rootVector);
+			rowData[0] = Helper.intArrayToString(rep.levels);
+			rowData[1] = Helper.intArrayToString(rep.subDynkinLabels);
+			rowData[2] = Helper.intArrayToString(rep.disDynkinLabels);
+			rowData[3] = Helper.intArrayToString(rep.rootVector);
 			rowData[4] = rep.length;
 			rowData[5] = (long) algebras.subGroup.dimOfRep(rep.subDynkinLabels);
 			rowData[6] = (long) algebras.intGroup.dimOfRep(rep.disDynkinLabels);

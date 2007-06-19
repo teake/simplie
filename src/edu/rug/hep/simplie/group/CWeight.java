@@ -7,7 +7,7 @@
 
 package edu.rug.hep.simplie.group;
 
-import edu.rug.hep.simplie.Globals;
+import edu.rug.hep.simplie.Helper;
 
 /**
  * An object for storing weight information: 
@@ -146,8 +146,8 @@ public class CWeight
 	public String toString()
 	{
 		return "depth: " + getDepth() + 
-				", labels: " + Globals.intArrayToString(dynkinLabels) + 
+				", labels: " + Helper.intArrayToString(dynkinLabels) + 
 				", mult: " + getMult() +
-				", simp subtractable: " + Globals.intArrayToString(simpRootSubtractable);
+				", simp subtractable: " + Helper.intArrayToString(simpRootSubtractable);
 	}
 }

@@ -64,15 +64,15 @@ public class AlgebraInfo extends javax.swing.JPanel implements DiagramListener
 		if(group == null)
 			return;
 		
-		constructedHeight.setText(Globals.intToString(group.rs.constructedHeight()));
-		numPosRoots.setText(Globals.intToString((int) group.rs.numPosRoots()));
+		constructedHeight.setText(Helper.intToString(group.rs.constructedHeight()));
+		numPosRoots.setText(Helper.intToString((int) group.rs.numPosRoots()));
 		
-		cartanMatrix.setText(Globals.matrixToString(group.A,0));
-		symCartanMatrix.setText(Globals.matrixToString(group.symA,1));
-		cartanMatrixInverse.setText(Globals.matrixToString(group.invA,1));
-		qFormMatrix.setText(Globals.matrixToString(group.G,1));
-		rootSpaceMetric.setText(Globals.matrixToString(group.B, 0));
-		invMetric.setText(Globals.matrixToString(group.invB, 1));
+		cartanMatrix.setText(Helper.matrixToString(group.A,0));
+		symCartanMatrix.setText(Helper.matrixToString(group.symA,1));
+		cartanMatrixInverse.setText(Helper.matrixToString(group.invA,1));
+		qFormMatrix.setText(Helper.matrixToString(group.G,1));
+		rootSpaceMetric.setText(Helper.matrixToString(group.B, 0));
+		invMetric.setText(Helper.matrixToString(group.invB, 1));
 	}
 	
 	/** This method is called from within the constructor to
@@ -548,11 +548,11 @@ public class AlgebraInfo extends javax.swing.JPanel implements DiagramListener
 
 	private void repOKbuttonActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_repOKbuttonActionPerformed
 	{//GEN-HEADEREND:event_repOKbuttonActionPerformed
-		int[] labels = Globals.stringToIntArray(tfDynkinLabels.getText());
+		int[] labels = Helper.stringToIntArray(tfDynkinLabels.getText());
 		if(group != null && labels.length == group.rank)
 		{
 			HWrep = new CHighestWeightRep(group,labels);
-			lDynkinLabels.setText(Globals.intArrayToString(labels));
+			lDynkinLabels.setText(Helper.intArrayToString(labels));
 			Long dim = new Long(HWrep.dim);
 			lDimRep.setText(dim.toString());
 		}
@@ -583,7 +583,7 @@ public class AlgebraInfo extends javax.swing.JPanel implements DiagramListener
 			{
 				CRoot root = (CRoot) iterator.next();
 				Object[] rowData = new Object[5];
-				rowData[0] = Globals.intArrayToString(root.vector);
+				rowData[0] = Helper.intArrayToString(root.vector);
 				rowData[1] = root.norm;
 				rowData[2] = root.mult;
 				rowData[3] = root.coMult;

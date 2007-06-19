@@ -7,8 +7,6 @@
 
 package edu.rug.hep.simplie.ui.reusable;
 
-import edu.rug.hep.simplie.Globals;
-
 import javax.swing.JTable;
 import javax.swing.SwingUtilities;
 import javax.swing.event.TableModelEvent;

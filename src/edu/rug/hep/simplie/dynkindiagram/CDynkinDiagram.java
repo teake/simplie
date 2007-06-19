@@ -7,7 +7,7 @@
 
 package edu.rug.hep.simplie.dynkindiagram;
 
-import edu.rug.hep.simplie.Globals;
+import edu.rug.hep.simplie.Helper;
 import edu.rug.hep.simplie.ui.shapes.*;
 
 import java.util.Vector;
@@ -41,12 +41,15 @@ public class CDynkinDiagram
 	private CDynkinNode lastAddedNode;
 	/** The internal list of listeners */
 	private Vector<DiagramListener> listeners;
+	/** Internal boolean to keep if the diagram is locked or not */
+	private boolean locked;
 	
 	/**
 	 * Creates a new instance of CDynkinDiagram
 	 */
 	public CDynkinDiagram()
 	{
+		locked		= false;
 		nodes		= new Vector<CDynkinNode>();
 		connections	= new Vector<CDynkinConnection>();
 		font		= new Font("Monospaced", Font.PLAIN, 12);
@@ -59,9 +62,22 @@ public class CDynkinDiagram
 		listeners.add(listener);
 	}
 	
+	public void setLocked(boolean locked)
+	{
+		this.locked = locked;
+	}
+	
+	public boolean getLocked()
+	{
+		return this.locked;
+	}
+	
 	/** Clears the Dynkin diagram. That is, it deletes all nodes. */
 	public void clear()
 	{
+		if(locked)
+			return;
+		
 		nodes.clear();
 		connections.clear();
 		lastAddedNode = null;
@@ -241,6 +257,9 @@ public class CDynkinDiagram
 	 */
 	public String addNode(int x, int y, int connectionToLast)
 	{
+		if(locked)
+			return "Diagram is locked.";
+		
 		CDynkinNode newNode = new CDynkinNode(x, y);
 		
 		if(nodes.contains(newNode))
@@ -262,6 +281,9 @@ public class CDynkinDiagram
 	
 	public String toggleNode(CDynkinNode node)
 	{
+		if(locked)
+			return "Diagram is locked.";
+		
 		if(node != null && nodes.contains(node))
 		{
 			node.toggle();
@@ -274,6 +296,9 @@ public class CDynkinDiagram
 	/** Removes a node from the diagram. */
 	public String removeNode(CDynkinNode nodeToRemove)
 	{
+		if(locked)
+			return "Diagram is locked.";
+		
 		int prevRank = rank();
 		if(lastAddedNode != null && lastAddedNode.equals(nodeToRemove))
 		{
@@ -312,6 +337,9 @@ public class CDynkinDiagram
 	 */
 	public String modifyConnection(CDynkinNode fromNode, CDynkinNode toNode, int laced, boolean add)
 	{
+		if(locked)
+			return "Diagram is locked.";
+		
 		String action = (add) ? "added" : "removed";
 		// Do nothing if either one of the nodes is not found, or if both are the same.
 		if( fromNode == null || toNode == null || fromNode.equals(toNode) )
@@ -366,6 +394,9 @@ public class CDynkinDiagram
 	 */
 	public boolean loadFrom(String filename)
 	{
+		if(locked)
+			return false;
+		
 		filename.trim();
 		FileInputStream fis		= null;
 		ObjectInputStream in	= null;
@@ -399,8 +430,8 @@ public class CDynkinDiagram
 		
 		// Append a hashcode of this specific diagram to all the labels in the psfigure.
 		// This prevents multiple garbled psfigures on one page.
-		String hashCode = 
-				(Globals.matrixToString(cartanMatrix(), 0) + Globals.matrixToString(cartanSubMatrix("sub"), 0).hashCode());
+		String hashCode =
+				(Helper.matrixToString(cartanMatrix(), 0) + Helper.matrixToString(cartanSubMatrix("sub"), 0).hashCode());
 		
 		// First determine the min and max values of x and y
 		int xMin = Integer.MAX_VALUE;
@@ -513,7 +544,7 @@ public class CDynkinDiagram
 					2*radius, 2*radius);
 			
 			g2.setFont(font);
-			g2.drawString(Globals.intToString(node.getLabel()),
+			g2.drawString(Helper.intToString(node.getLabel()),
 					spacing * node.x + offset + radius,
 					spacing * node.y + offset + radius + 10);
 		}
