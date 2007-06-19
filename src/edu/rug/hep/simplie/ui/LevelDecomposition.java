@@ -7,6 +7,7 @@
 package edu.rug.hep.simplie.ui;
 
 import edu.rug.hep.simplie.*;
+import edu.rug.hep.simplie.group.*;
 import edu.rug.hep.simplie.leveldecomposer.CAutoLevelScanner;
 
 import java.util.*;
@@ -27,7 +28,8 @@ import edu.rug.hep.simplie.ui.reusable.UIPrintableColorTable;
  */
 public class LevelDecomposition extends javax.swing.JPanel
 {
-	private DefaultTableModel	tableModel;
+	private DefaultTableModel	tableModelReps;
+	private DefaultTableModel	tableModelWeights;
 	private CAutoLevelScanner	autoScanner;
 	private CAlgebraComposite	algebras;
 	
@@ -37,8 +39,8 @@ public class LevelDecomposition extends javax.swing.JPanel
 	public LevelDecomposition()
 	{
 		initComponents();
-		
-		tableModel = (DefaultTableModel) representationsTable.getModel();
+		tableModelReps		= (javax.swing.table.DefaultTableModel) representationsTable.getModel();
+		tableModelWeights	= (javax.swing.table.DefaultTableModel) weightsTable.getModel();
 		// Listen for selection changes in the rep table.
 		representationsTable.getSelectionModel().addListSelectionListener(new ListSelectionListener()
 		{
@@ -49,11 +51,11 @@ public class LevelDecomposition extends javax.swing.JPanel
 				if(representationsTable.getSelectedRowCount() != 1)
 					return;
 				int index = representationsTable.getSelectedRow();
-				int[] vector = Helper.stringToIntArray((String) tableModel.getValueAt(index,3));
+				int[] vector = Helper.stringToIntArray((String) tableModelReps.getValueAt(index,3));
 				setSelectedRep(vector);
 			}
 		});
-	}	
+	}
 	
 	public void setAlgebraComposite(CAlgebraComposite algebras)
 	{
@@ -82,7 +84,35 @@ public class LevelDecomposition extends javax.swing.JPanel
 	
 	private void setSelectedRep(int[] rootVector)
 	{
-		System.out.println(Helper.intArrayToString(rootVector));
+		int[] subDynkinLabels = algebras.subDynkinLabels(rootVector);
+		int[] intDynkinLabels = algebras.intDynkinLabels(rootVector);
+		int[] levels = algebras.levels(rootVector);
+		CHighestWeightRep hwRep = new CHighestWeightRep(algebras.subGroup,subDynkinLabels);
+		
+		// Fully construct the weight system.
+		hwRep.construct(0);
+		
+		// Clear and fill the table.
+		tableModelWeights.setRowCount(0);
+		
+		for (int i = 0; i < hwRep.size(); i++)
+		{
+			Collection<CWeight> weights = hwRep.get(i);
+			Iterator iterator	= weights.iterator();
+			while (iterator.hasNext())
+			{
+				CWeight weight = (CWeight) iterator.next();
+				if(!weight.isDominant)
+					continue;
+				Object[] rowData = new Object[5];
+				rowData[0] = Helper.intArrayToString(algebras.rootVector(levels, weight.dynkinLabels, intDynkinLabels));
+				rowData[1] = Helper.intArrayToString(weight.dynkinLabels);
+				rowData[2] = weight.getMult();
+				rowData[3] = algebras.subGroup.dimOfRep(weight.dynkinLabels);
+				rowData[4] = weight.getDepth();
+				tableModelWeights.addRow(rowData);
+			}
+		}
 	}
 	
 	/** This method is called from within the constructor to
@@ -110,9 +140,10 @@ public class LevelDecomposition extends javax.swing.JPanel
         rbSignNeg = new javax.swing.JRadioButton();
         cbExotic = new javax.swing.JCheckBox();
         cbZeroMultRoot = new javax.swing.JCheckBox();
-        jTabbedPane1 = new javax.swing.JTabbedPane();
+        jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         representationsTable = new edu.rug.hep.simplie.ui.reusable.UIPrintableColorTable();
+        jPanel2 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         weightsTable = new edu.rug.hep.simplie.ui.reusable.UIPrintableColorTable();
 
@@ -263,6 +294,8 @@ public class LevelDecomposition extends javax.swing.JPanel
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Subalgebra representations", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12)));
+
         representationsTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][]
             {
@@ -296,7 +329,23 @@ public class LevelDecomposition extends javax.swing.JPanel
         representationsTable.setCellSelectionEnabled(true);
         jScrollPane1.setViewportView(representationsTable);
 
-        jTabbedPane1.addTab("Subalgebra Representations", jScrollPane1);
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 537, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 194, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Dominant weights of selected representation", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12)));
 
         weightsTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][]
@@ -305,7 +354,7 @@ public class LevelDecomposition extends javax.swing.JPanel
             },
             new String []
             {
-                "Labels", "Roots", "Multiplicity", "Dimension", "Depth"
+                "Roots", "Labels", "Multiplicity", "Dimension", "Depth"
             }
         )
         {
@@ -330,17 +379,32 @@ public class LevelDecomposition extends javax.swing.JPanel
         });
         jScrollPane2.setViewportView(weightsTable);
 
-        jTabbedPane1.addTab("Dominant weights of selected representation", jScrollPane2);
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 537, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 84, Short.MAX_VALUE)
+                .addContainerGap())
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 569, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addComponent(AutoScanPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(settingsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -354,15 +418,17 @@ public class LevelDecomposition extends javax.swing.JPanel
                     .addComponent(AutoScanPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(settingsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 351, Short.MAX_VALUE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
-
+	
 private void rbSignPosStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_rbSignPosStateChanged
 	algebras.setSignPos(rbSignPos.isSelected());
 }//GEN-LAST:event_rbSignPosStateChanged
-	
+
     private void cbLockedStateChanged(javax.swing.event.ChangeEvent evt)//GEN-FIRST:event_cbLockedStateChanged
     {//GEN-HEADEREND:event_cbLockedStateChanged
 		if(cbLocked.isSelected())
@@ -388,7 +454,7 @@ private void rbSignPosStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIR
 		else
 		{
 			// Clear the table.
-			tableModel.setRowCount(0);
+			tableModelReps.setRowCount(0);
 			
 			// Prepare the UI:
 			//  - Change the "scan" button into a "cancel" button.
@@ -406,9 +472,10 @@ private void rbSignPosStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIR
 					cbZeroMultRoot.isSelected(),
 					cbZeroMultRep.isSelected(),
 					cbExotic.isSelected(),
-					tableModel,
+					tableModelReps,
 					autoScanMinLevel.getValue(),
 					autoScanMaxLevel.getValue()
+					
 					);
 			autoScanner.addPropertyChangeListener(new PropertyChangeListener()
 			{
@@ -448,9 +515,10 @@ private void rbSignPosStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIR
     private javax.swing.JCheckBox cbZeroMultRep;
     private javax.swing.JCheckBox cbZeroMultRoot;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JRadioButton rbSignNeg;
     private javax.swing.JRadioButton rbSignPos;
     private edu.rug.hep.simplie.ui.reusable.UIPrintableColorTable representationsTable;
