@@ -21,7 +21,8 @@ import java.util.Iterator;
  */
 public class AlgebraInfo extends javax.swing.JPanel implements DiagramListener
 {
-	private DefaultTableModel tableModel;
+	private DefaultTableModel tableModelRoots;
+	private DefaultTableModel tableModelWeights;
 	private CGroup group;
 	private CAlgebraComposite algebras;
 	private CHighestWeightRep HWrep;
@@ -30,7 +31,8 @@ public class AlgebraInfo extends javax.swing.JPanel implements DiagramListener
 	public AlgebraInfo()
 	{
 		initComponents();
-		tableModel = (DefaultTableModel) rootTable.getModel();
+		tableModelRoots = (DefaultTableModel) rootTable.getModel();
+		tableModelWeights = (DefaultTableModel) repTable.getModel();
 		group = null;
 		HWrep = null;
 	}
@@ -114,14 +116,20 @@ public class AlgebraInfo extends javax.swing.JPanel implements DiagramListener
         constructedHeight = new javax.swing.JLabel();
         fillRootTable = new javax.swing.JButton();
         jPanel10 = new javax.swing.JPanel();
-        jLabel4 = new javax.swing.JLabel();
-        tfDynkinLabels = new javax.swing.JTextField();
-        repOKbutton = new javax.swing.JButton();
         jPanel11 = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
         lDynkinLabels = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         lDimRep = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        lHeight = new javax.swing.JLabel();
+        jScrollPane7 = new javax.swing.JScrollPane();
+        repTable = new edu.rug.hep.simplie.ui.reusable.UIPrintableColorTable();
+        jPanel12 = new javax.swing.JPanel();
+        tfDynkinLabels = new javax.swing.JTextField();
+        repOKbutton = new javax.swing.JButton();
+        cbDominant = new javax.swing.JCheckBox();
+        repFillButton = new javax.swing.JButton();
         algebrasBox = new javax.swing.JComboBox();
         jLabel3 = new javax.swing.JLabel();
 
@@ -365,8 +373,8 @@ public class AlgebraInfo extends javax.swing.JPanel implements DiagramListener
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel1))
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(constructedHeight)
@@ -376,14 +384,16 @@ public class AlgebraInfo extends javax.swing.JPanel implements DiagramListener
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(constructedHeight))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(numPosRoots))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(constructedHeight)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(numPosRoots))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel2)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -415,25 +425,14 @@ public class AlgebraInfo extends javax.swing.JPanel implements DiagramListener
             .addGroup(jPanel9Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(fillRootTable))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 247, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 259, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
         tabbedPane.addTab("Roots", jPanel9);
-
-        jLabel4.setText("Enter Dynkin labels of rep (seperated by spaces):");
-
-        repOKbutton.setText("OK");
-        repOKbutton.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
-                repOKbuttonActionPerformed(evt);
-            }
-        });
 
         jPanel11.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Representation info", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12)));
 
@@ -445,6 +444,10 @@ public class AlgebraInfo extends javax.swing.JPanel implements DiagramListener
 
         lDimRep.setText("    ");
 
+        jLabel7.setText("Highest weight height:");
+
+        lHeight.setText("     ");
+
         javax.swing.GroupLayout jPanel11Layout = new javax.swing.GroupLayout(jPanel11);
         jPanel11.setLayout(jPanel11Layout);
         jPanel11Layout.setHorizontalGroup(
@@ -452,27 +455,115 @@ public class AlgebraInfo extends javax.swing.JPanel implements DiagramListener
             .addGroup(jPanel11Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel11Layout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel6)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lDynkinLabels, javax.swing.GroupLayout.DEFAULT_SIZE, 248, Short.MAX_VALUE))
-                    .addGroup(jPanel11Layout.createSequentialGroup()
-                        .addComponent(jLabel5)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lDimRep, javax.swing.GroupLayout.DEFAULT_SIZE, 248, Short.MAX_VALUE)))
+                    .addComponent(jLabel7)
+                    .addComponent(jLabel5)
+                    .addComponent(jLabel6))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lDynkinLabels, javax.swing.GroupLayout.DEFAULT_SIZE, 98, Short.MAX_VALUE)
+                    .addComponent(lDimRep, javax.swing.GroupLayout.DEFAULT_SIZE, 98, Short.MAX_VALUE)
+                    .addComponent(lHeight, javax.swing.GroupLayout.DEFAULT_SIZE, 98, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel11Layout.setVerticalGroup(
             jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel11Layout.createSequentialGroup()
                 .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel6)
-                    .addComponent(lDynkinLabels))
+                    .addComponent(lDynkinLabels)
+                    .addComponent(jLabel6))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
-                    .addComponent(lDimRep)))
+                    .addComponent(lDimRep))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel7)
+                    .addComponent(lHeight))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        repTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][]
+            {
+
+            },
+            new String []
+            {
+                "Labels", "Multiplicity", "Dimension", "Depth"
+            }
+        )
+        {
+            Class[] types = new Class []
+            {
+                java.lang.String.class, java.lang.Long.class, java.lang.Long.class, java.lang.Integer.class
+            };
+            boolean[] canEdit = new boolean []
+            {
+                false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex)
+            {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex)
+            {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane7.setViewportView(repTable);
+
+        jPanel12.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Enter Dynkin labels", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12)));
+
+        repOKbutton.setText("OK");
+        repOKbutton.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                repOKbuttonActionPerformed(evt);
+            }
+        });
+
+        cbDominant.setText("Only dominant weights");
+        cbDominant.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
+        cbDominant.setMargin(new java.awt.Insets(0, 0, 0, 0));
+
+        repFillButton.setText("Fill weight table");
+        repFillButton.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                repFillButtonActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel12Layout = new javax.swing.GroupLayout(jPanel12);
+        jPanel12.setLayout(jPanel12Layout);
+        jPanel12Layout.setHorizontalGroup(
+            jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel12Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(tfDynkinLabels, javax.swing.GroupLayout.DEFAULT_SIZE, 127, Short.MAX_VALUE)
+                    .addComponent(cbDominant, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(repOKbutton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(repFillButton))
+                .addContainerGap())
+        );
+        jPanel12Layout.setVerticalGroup(
+            jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel12Layout.createSequentialGroup()
+                .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(tfDynkinLabels, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(repOKbutton))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cbDominant)
+                    .addComponent(repFillButton))
+                .addContainerGap(13, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel10Layout = new javax.swing.GroupLayout(jPanel10);
@@ -481,29 +572,24 @@ public class AlgebraInfo extends javax.swing.JPanel implements DiagramListener
             jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel10Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane7, javax.swing.GroupLayout.DEFAULT_SIZE, 626, Short.MAX_VALUE)
                     .addGroup(jPanel10Layout.createSequentialGroup()
-                        .addComponent(tfDynkinLabels, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jPanel12, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(repOKbutton))
-                    .addComponent(jLabel4))
-                .addGap(18, 18, 18)
-                .addComponent(jPanel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jPanel11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         jPanel10Layout.setVerticalGroup(
             jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel10Layout.createSequentialGroup()
-                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel10Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jLabel4)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(tfDynkinLabels, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(repOKbutton)))
-                    .addComponent(jPanel11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(297, Short.MAX_VALUE))
+                .addContainerGap()
+                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jPanel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane7, javax.swing.GroupLayout.DEFAULT_SIZE, 238, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         tabbedPane.addTab("Representations", jPanel10);
@@ -545,7 +631,36 @@ public class AlgebraInfo extends javax.swing.JPanel implements DiagramListener
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
-
+	
+private void repFillButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_repFillButtonActionPerformed
+	if(HWrep == null || group == null)
+		return;
+	
+	// Fully construct the weight system.
+	HWrep.construct(0);
+	
+	// Clear and fill the table.
+	tableModelWeights.setRowCount(0);
+	
+	for (int i = 0; i < HWrep.size(); i++)
+	{
+		Collection<CWeight> weights = HWrep.get(i);
+		Iterator iterator	= weights.iterator();
+		while (iterator.hasNext())
+		{
+			CWeight weight = (CWeight) iterator.next();
+			if(cbDominant.isSelected() && !weight.isDominant)
+				continue;
+			Object[] rowData = new Object[4];
+			rowData[0] = Helper.intArrayToString(weight.dynkinLabels);
+			rowData[1] = weight.getMult();
+			rowData[2] = (weight.isDominant) ? group.dimOfRep(weight.dynkinLabels) : 0;
+			rowData[3] = weight.getDepth();
+			tableModelWeights.addRow(rowData);
+		}
+	}
+}//GEN-LAST:event_repFillButtonActionPerformed
+		
 	private void repOKbuttonActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_repOKbuttonActionPerformed
 	{//GEN-HEADEREND:event_repOKbuttonActionPerformed
 		int[] labels = Helper.stringToIntArray(tfDynkinLabels.getText());
@@ -555,6 +670,7 @@ public class AlgebraInfo extends javax.swing.JPanel implements DiagramListener
 			lDynkinLabels.setText(Helper.intArrayToString(labels));
 			Long dim = new Long(HWrep.dim);
 			lDimRep.setText(dim.toString());
+			lHeight.setText(Helper.intToString(HWrep.highestHeight));
 		}
 		
 }//GEN-LAST:event_repOKbuttonActionPerformed
@@ -573,7 +689,7 @@ public class AlgebraInfo extends javax.swing.JPanel implements DiagramListener
 			return;
 		
 		// Clear and fill the table.
-		tableModel.setRowCount(0);
+		tableModelRoots.setRowCount(0);
 		
 		for (int i = 0; i < group.rs.size(); i++)
 		{
@@ -588,7 +704,7 @@ public class AlgebraInfo extends javax.swing.JPanel implements DiagramListener
 				rowData[2] = root.mult;
 				rowData[3] = root.coMult;
 				rowData[4] = root.height();
-				tableModel.addRow(rowData);
+				tableModelRoots.addRow(rowData);
 			}
 		}
 	}//GEN-LAST:event_fillRootTableActionPerformed
@@ -598,18 +714,20 @@ public class AlgebraInfo extends javax.swing.JPanel implements DiagramListener
     private javax.swing.JComboBox algebrasBox;
     private javax.swing.JTextArea cartanMatrix;
     private javax.swing.JTextArea cartanMatrixInverse;
+    private javax.swing.JCheckBox cbDominant;
     private javax.swing.JLabel constructedHeight;
     private javax.swing.JButton fillRootTable;
     private javax.swing.JTextArea invMetric;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel11;
+    private javax.swing.JPanel jPanel12;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
@@ -624,12 +742,16 @@ public class AlgebraInfo extends javax.swing.JPanel implements DiagramListener
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JScrollPane jScrollPane6;
+    private javax.swing.JScrollPane jScrollPane7;
     private javax.swing.JScrollPane jScrollPane8;
     private javax.swing.JLabel lDimRep;
     private javax.swing.JLabel lDynkinLabels;
+    private javax.swing.JLabel lHeight;
     private javax.swing.JLabel numPosRoots;
     private javax.swing.JTextArea qFormMatrix;
+    private javax.swing.JButton repFillButton;
     private javax.swing.JButton repOKbutton;
+    private edu.rug.hep.simplie.ui.reusable.UIPrintableColorTable repTable;
     private javax.swing.JTextArea rootSpaceMetric;
     private edu.rug.hep.simplie.ui.reusable.UIPrintableColorTable rootTable;
     private javax.swing.JTextArea symCartanMatrix;
@@ -637,4 +759,4 @@ public class AlgebraInfo extends javax.swing.JPanel implements DiagramListener
     private javax.swing.JTextField tfDynkinLabels;
     // End of variables declaration//GEN-END:variables
 	
-}
+	}

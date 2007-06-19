@@ -165,7 +165,7 @@ public class CHighestWeightRep
 	
 	
 	/** Construct the weight system down to the given depth */
-	private void construct(int maxDepth)
+	public void construct(int maxDepth)
 	{
 		int		newDepth;
 		boolean	addedSomething;
@@ -180,7 +180,7 @@ public class CHighestWeightRep
 			" to depth " + maxDepth + " of group " + group.type + ".");
 		
 		// Do the construction.
-		while(constructedDepth < maxDepth && !cancelConstruction)
+		while((constructedDepth < maxDepth || maxDepth == 0) && !cancelConstruction)
 		{
 			addedSomething	= false;
 			newDepth		= constructedDepth + 1;
