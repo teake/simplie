@@ -377,4 +377,19 @@ public class CGroup
 		}
 		return output;
 	}
+	
+	
+	public int[] rootToWeight(int[] rootVector)
+	{
+		int[] dynkinLabels = new int[rank];
+		for (int i = 0; i < rank; i++)
+		{
+			dynkinLabels[i] = 0;
+			for (int j = 0; j < rank; j++)
+			{
+				dynkinLabels[i] += A[j][i] * rootVector[j];
+			}
+		}
+		return dynkinLabels;
+	}
 }

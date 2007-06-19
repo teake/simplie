@@ -36,8 +36,6 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]> implements Com
 	private final boolean showExotic;
 	private final int minLevel;
 	private final int maxLevel;
-	private final int signConvention;
-	private final boolean posSignConvention;
 	private final DefaultTableModel tableModel;
 	
 	private int levelSign;
@@ -62,7 +60,6 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]> implements Com
 	 */
 	public CAutoLevelScanner(
 			CAlgebraComposite algebras,
-			boolean posSignConvention,
 			boolean calcRootMult,
 			boolean calcRepMult,
 			boolean showZeroMultRoot,
@@ -81,8 +78,6 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]> implements Com
 		this.showZeroMultRoot	= showZeroMultRoot;
 		this.showZeroMultRep	= showZeroMultRep;
 		this.showExotic		= showExotic;
-		this.signConvention = posSignConvention ? 1 : -1;
-		this.posSignConvention = posSignConvention;
 		
 		this.levelSign = 0;
 		
@@ -269,8 +264,8 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]> implements Com
 		{
 			if(scanFirst)
 			{
-				coLevels = calculateCoLevels(levels, dynkinLabels);
-				int rootLength = calculateRootLength(levels, coLevels);
+				coLevels = algebras.calculateCoLevels(levels, dynkinLabels);
+				int rootLength = algebras.calculateRootLength(levels, coLevels);
 				// Only continue if the root length is not bigger than the maximum root length.
 				if(rootLength <= algebras.group.rs.maxNorm)
 				{
@@ -322,8 +317,7 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]> implements Com
 				dynkinLabels,
 				levels,
 				newCoLevels,
-				rootLength,
-				posSignConvention
+				rootLength
 				);
 		repContainer.add(rep);
 	}
@@ -345,7 +339,7 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]> implements Com
 			for (int i = 0; i < repContainer.size(); i++)
 			{
 				// Reverse the order if the sign is positive.
-				if(posSignConvention)
+				if(algebras.isSignPos())
 					k = repContainer.size() - i - 1;
 				else
 					k = i;
@@ -369,7 +363,7 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]> implements Com
 				outerMult = repI.getRootMult();
 				for (int j = 0; j < i; j++)
 				{
-					if(posSignConvention)
+					if(algebras.isSignPos())
 						l = repContainer.size() - j - 1;
 					else
 						l = j;
@@ -399,89 +393,17 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]> implements Com
 			Object[] rowData = new Object[12];
 			rowData[0] = Helper.intArrayToString(rep.levels);
 			rowData[1] = Helper.intArrayToString(rep.subDynkinLabels);
-			rowData[2] = Helper.intArrayToString(rep.disDynkinLabels);
+			rowData[2] = Helper.intArrayToString(rep.intDynkinLabels);
 			rowData[3] = Helper.intArrayToString(rep.rootVector);
 			rowData[4] = rep.length;
 			rowData[5] = (long) algebras.subGroup.dimOfRep(rep.subDynkinLabels);
-			rowData[6] = (long) algebras.intGroup.dimOfRep(rep.disDynkinLabels);
+			rowData[6] = (long) algebras.intGroup.dimOfRep(rep.intDynkinLabels);
 			rowData[7] = rep.getRootMult();
 			rowData[8] = rep.getOuterMult();
 			rowData[9] = rep.height;
-			rowData[10] = posSignConvention ? rep.height : rep.height + 2 * rep.weightHeight;
+			rowData[10] = algebras.isSignPos() ? rep.height : rep.height + 2 * rep.weightHeight;
 			rowData[11] = rep.numIndices;
 			publish(rowData);
 		}
 	}
-	
-	
-	
-	/********************************
-	 * Methods for representation
-	 * calculation
-	 ********************************/
-	
-	/** Returns the actual root length */
-	private int calculateRootLength(int[] levels, fraction[] coLevels)
-	{
-		fraction rootLength = new fraction(0);
-
-		for(int i=0; i < coLevels.length; i++)
-		{
-			for(int j=0; j < coLevels.length; j++)
-			{
-				rootLength.add( coLevels[i].times(coLevels[j].times(algebras.group.B[algebras.dd.translateCo(i)][algebras.dd.translateCo(j)] )));
-			}
-		}
-		for(int i=0; i < levels.length; i++)
-		{
-			for(int j=0; j < levels.length; j++)
-			{
-				rootLength.add( algebras.group.B[algebras.dd.translateLevel(i)][algebras.dd.translateLevel(j)] * levels[i] * levels[j] );
-			}
-		}
-		for(int i=0; i < coLevels.length; i++)
-		{
-			for(int j=0; j < levels.length; j++)
-			{
-				rootLength.add( coLevels[i].times(2 * levels[j] * algebras.group.B[algebras.dd.translateCo(i)][algebras.dd.translateLevel(j)] ));
-			}
-		}
-
-		return rootLength.asInt();
-	}
-	
-	/** Returns the levels of the co-algebra. */
-	private fraction[] calculateCoLevels(int[] levels, int[] dynkinLabels)
-	{
-		fraction[] coLevels		= new fraction[algebras.coGroup.rank];
-		int[] levelComponents	= calculateLevelComponents(levels);
-		
-		for(int i=0; i < coLevels.length; i++)
-		{
-			coLevels[i] = new fraction(0);
-			for(int j=0; j < algebras.coGroup.rank; j++)
-			{
-				coLevels[i].add(algebras.coGroup.invA[j][i].times(signConvention * dynkinLabels[j] - levelComponents[j]));
-			}
-		}
-		
-		return coLevels;
-	}
-	
-	/** Calculates the contraction of the levels with the Cartan matrix. */
-	private int[] calculateLevelComponents(int[] levels)
-	{
-		int[] levelComponents = new int[algebras.coGroup.rank];
-		
-		for(int i=0; i < levelComponents.length; i++)
-		{
-			levelComponents[i] = 0;
-			for(int j=0; j < levels.length; j++)
-			{
-				levelComponents[i] += algebras.group.A[algebras.dd.translateLevel(j)][algebras.dd.translateCo(i)] * levels[j];
-			}
-		}
-		return levelComponents;
-	}
-	
 }

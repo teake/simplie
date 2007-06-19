@@ -19,9 +19,9 @@
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
-              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="RepresentationPanel" alignment="0" max="32767" attributes="0"/>
+                  <Component id="jTabbedPane1" alignment="0" pref="569" max="32767" attributes="0"/>
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="AutoScanPanel" min="-2" max="-2" attributes="1"/>
                       <EmptySpace max="-2" attributes="0"/>
@@ -41,76 +41,13 @@
                   <Component id="settingsPanel" alignment="0" max="32767" attributes="1"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="RepresentationPanel" max="32767" attributes="0"/>
+              <Component id="jTabbedPane1" pref="351" max="32767" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
   </Layout>
   <SubComponents>
-    <Container class="javax.swing.JPanel" name="RepresentationPanel">
-      <Properties>
-        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-          <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-            <TitledBorder title="Subalgebra Representations">
-              <Font PropertyName="font" name="Tahoma" size="12" style="1"/>
-            </TitledBorder>
-          </Border>
-        </Property>
-      </Properties>
-
-      <Layout>
-        <DimensionLayout dim="0">
-          <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" alignment="0" attributes="0">
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Component id="jScrollPane1" pref="508" max="32767" attributes="0"/>
-                  <EmptySpace max="-2" attributes="0"/>
-              </Group>
-          </Group>
-        </DimensionLayout>
-        <DimensionLayout dim="1">
-          <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" alignment="0" attributes="0">
-                  <Component id="jScrollPane1" pref="191" max="32767" attributes="0"/>
-                  <EmptySpace min="-2" max="-2" attributes="0"/>
-              </Group>
-          </Group>
-        </DimensionLayout>
-      </Layout>
-      <SubComponents>
-        <Container class="javax.swing.JScrollPane" name="jScrollPane1">
-          <AuxValues>
-            <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
-          </AuxValues>
-
-          <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
-          <SubComponents>
-            <Component class="edu.rug.hep.simplie.ui.reusable.UIPrintableColorTable" name="representationsTable">
-              <Properties>
-                <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                  <Table columnCount="12" rowCount="0">
-                    <Column editable="false" title="l" type="java.lang.String"/>
-                    <Column editable="false" title="p_r" type="java.lang.String"/>
-                    <Column editable="false" title="p_i" type="java.lang.String"/>
-                    <Column editable="false" title="vector" type="java.lang.String"/>
-                    <Column editable="false" title="a^2" type="java.lang.Integer"/>
-                    <Column editable="false" title="d_r" type="java.lang.Long"/>
-                    <Column editable="false" title="d_i" type="java.lang.Long"/>
-                    <Column editable="false" title="mult" type="java.lang.Long"/>
-                    <Column editable="false" title="mu" type="java.lang.Long"/>
-                    <Column editable="false" title="h" type="java.lang.Integer"/>
-                    <Column editable="false" title="h&apos;" type="java.lang.Integer"/>
-                    <Column editable="false" title="ind" type="java.lang.Integer"/>
-                  </Table>
-                </Property>
-                <Property name="cellSelectionEnabled" type="boolean" value="true"/>
-              </Properties>
-            </Component>
-          </SubComponents>
-        </Container>
-      </SubComponents>
-    </Container>
     <Container class="javax.swing.JPanel" name="AutoScanPanel">
       <Properties>
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
@@ -324,6 +261,9 @@
               <Insets value="[0, 0, 0, 0]"/>
             </Property>
           </Properties>
+          <Events>
+            <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="rbSignPosStateChanged"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JRadioButton" name="rbSignNeg">
           <Properties>
@@ -369,6 +309,83 @@
             </Property>
           </Properties>
         </Component>
+      </SubComponents>
+    </Container>
+    <Container class="javax.swing.JTabbedPane" name="jTabbedPane1">
+
+      <Layout class="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout"/>
+      <SubComponents>
+        <Container class="javax.swing.JScrollPane" name="jScrollPane1">
+          <Properties>
+            <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+              <SerializedValue value="-84,-19,0,5,115,114,0,47,106,97,118,97,120,46,115,119,105,110,103,46,112,108,97,102,46,98,97,115,105,99,46,66,97,115,105,99,66,111,114,100,101,114,115,36,70,105,101,108,100,66,111,114,100,101,114,124,123,-79,100,-86,-101,-24,-38,2,0,4,76,0,10,100,97,114,107,83,104,97,100,111,119,116,0,16,76,106,97,118,97,47,97,119,116,47,67,111,108,111,114,59,76,0,9,104,105,103,104,108,105,103,104,116,113,0,126,0,1,76,0,14,108,105,103,104,116,72,105,103,104,108,105,103,104,116,113,0,126,0,1,76,0,6,115,104,97,100,111,119,113,0,126,0,1,120,114,0,33,106,97,118,97,120,46,115,119,105,110,103,46,98,111,114,100,101,114,46,65,98,115,116,114,97,99,116,66,111,114,100,101,114,-99,92,-94,-101,106,-10,-127,51,2,0,0,120,112,115,114,0,32,106,97,118,97,120,46,115,119,105,110,103,46,112,108,97,102,46,67,111,108,111,114,85,73,82,101,115,111,117,114,99,101,107,83,-7,-97,-14,-22,-26,-110,2,0,0,120,114,0,14,106,97,118,97,46,97,119,116,46,67,111,108,111,114,1,-91,23,-125,16,-113,51,117,2,0,5,70,0,6,102,97,108,112,104,97,73,0,5,118,97,108,117,101,76,0,2,99,115,116,0,27,76,106,97,118,97,47,97,119,116,47,99,111,108,111,114,47,67,111,108,111,114,83,112,97,99,101,59,91,0,9,102,114,103,98,118,97,108,117,101,116,0,2,91,70,91,0,6,102,118,97,108,117,101,113,0,126,0,7,120,112,0,0,0,0,-1,64,64,64,112,112,112,115,113,0,126,0,4,0,0,0,0,-1,-44,-48,-56,112,112,112,115,113,0,126,0,4,0,0,0,0,-1,-1,-1,-1,112,112,112,115,113,0,126,0,4,0,0,0,0,-1,-128,-128,-128,112,112,112"/>
+            </Property>
+          </Properties>
+          <AuxValues>
+            <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
+          </AuxValues>
+          <Constraints>
+            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
+              <JTabbedPaneConstraints tabName="Subalgebra Representations">
+                <Property name="tabTitle" type="java.lang.String" value="Subalgebra Representations"/>
+              </JTabbedPaneConstraints>
+            </Constraint>
+          </Constraints>
+
+          <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+          <SubComponents>
+            <Component class="edu.rug.hep.simplie.ui.reusable.UIPrintableColorTable" name="representationsTable">
+              <Properties>
+                <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
+                  <Table columnCount="12" rowCount="0">
+                    <Column editable="false" title="l" type="java.lang.String"/>
+                    <Column editable="false" title="p_r" type="java.lang.String"/>
+                    <Column editable="false" title="p_i" type="java.lang.String"/>
+                    <Column editable="false" title="vector" type="java.lang.String"/>
+                    <Column editable="false" title="a^2" type="java.lang.Integer"/>
+                    <Column editable="false" title="d_r" type="java.lang.Long"/>
+                    <Column editable="false" title="d_i" type="java.lang.Long"/>
+                    <Column editable="false" title="mult" type="java.lang.Long"/>
+                    <Column editable="false" title="mu" type="java.lang.Long"/>
+                    <Column editable="false" title="h" type="java.lang.Integer"/>
+                    <Column editable="false" title="h&apos;" type="java.lang.Integer"/>
+                    <Column editable="false" title="ind" type="java.lang.Integer"/>
+                  </Table>
+                </Property>
+                <Property name="cellSelectionEnabled" type="boolean" value="true"/>
+              </Properties>
+            </Component>
+          </SubComponents>
+        </Container>
+        <Container class="javax.swing.JScrollPane" name="jScrollPane2">
+          <AuxValues>
+            <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
+          </AuxValues>
+          <Constraints>
+            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
+              <JTabbedPaneConstraints tabName="Dominant weights of selected representation">
+                <Property name="tabTitle" type="java.lang.String" value="Dominant weights of selected representation"/>
+              </JTabbedPaneConstraints>
+            </Constraint>
+          </Constraints>
+
+          <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+          <SubComponents>
+            <Component class="edu.rug.hep.simplie.ui.reusable.UIPrintableColorTable" name="weightsTable">
+              <Properties>
+                <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
+                  <Table columnCount="5" rowCount="0">
+                    <Column editable="false" title="Labels" type="java.lang.String"/>
+                    <Column editable="false" title="Roots" type="java.lang.String"/>
+                    <Column editable="false" title="Multiplicity" type="java.lang.Long"/>
+                    <Column editable="false" title="Dimension" type="java.lang.Long"/>
+                    <Column editable="false" title="Depth" type="java.lang.Integer"/>
+                  </Table>
+                </Property>
+              </Properties>
+            </Component>
+          </SubComponents>
+        </Container>
       </SubComponents>
     </Container>
   </SubComponents>

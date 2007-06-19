@@ -30,7 +30,7 @@ public class CRepresentation implements Comparable<CRepresentation>
 	/** The regular subalgebra part of the full dynkinlabels. */
 	public final int[] subDynkinLabels;
 	/** The disconnected disabled part of the full dynkinlabels. */
-	public final int[] disDynkinLabels;
+	public final int[] intDynkinLabels;
 	
 	/** The length of the associated root (i.e. the innerproduct with itself). */
 	public final int length;
@@ -57,7 +57,7 @@ public class CRepresentation implements Comparable<CRepresentation>
 	 * @param	coLevels		The part of the rootvector corresponding to the regular subalgebra nodes.
 	 * @param	length			The length of the associated root (i.e. the innerproduct with itself).
 	 */
-	public CRepresentation(CAlgebraComposite algebras, int[] dynkinLabels, int[] levels, int[] coLevels, int length, boolean posSignConvention)
+	public CRepresentation(CAlgebraComposite algebras, int[] dynkinLabels, int[] levels, int[] coLevels, int length)
 	{
 		this.algebras		= algebras;
 		this.dynkinLabels	= dynkinLabels.clone();
@@ -81,17 +81,9 @@ public class CRepresentation implements Comparable<CRepresentation>
 		}
 		this.height = tHeight;
 		
-		// Split the dynkinlabels into labels of the regular subalgebra and
-		// labels of the disconnected subalgebra.
-		int[] translatedLabels	= new int[algebras.group.rank];
-		this.subDynkinLabels	= new int[algebras.subGroup.rank];
-		this.disDynkinLabels	= new int[algebras.intGroup.rank];
-		for (int i = 0; i < dynkinLabels.length; i++)
-			translatedLabels[algebras.dd.translateCo(i)] = dynkinLabels[i];
-		for (int i = 0; i < disDynkinLabels.length; i++)
-			disDynkinLabels[i] = translatedLabels[algebras.dd.translateDis(i)];
-		for (int i = 0; i < subDynkinLabels.length; i++)
-			subDynkinLabels[i] = translatedLabels[algebras.dd.translateSub(i)];
+		// Get the Dynkin labels of the internal- and sub-algebra.
+		subDynkinLabels = algebras.subDynkinLabels(rootVector);
+		intDynkinLabels = algebras.intDynkinLabels(rootVector);
 		
 		// Instantiate the highest weight rep.
 		hwRep = new CHighestWeightRep(algebras.coGroup, dynkinLabels);
@@ -102,7 +94,7 @@ public class CRepresentation implements Comparable<CRepresentation>
 		for (int i = 0; i < subDynkinLabels.length; i++)
 		{
 			int j = i;
-			if(posSignConvention)
+			if(algebras.isSignPos())
 				j = subDynkinLabels.length - i - 1;
 			tempNumIndices += subDynkinLabels[j] * (i+1);
 		}

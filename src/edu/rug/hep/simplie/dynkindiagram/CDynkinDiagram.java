@@ -140,8 +140,8 @@ public class CDynkinDiagram
 		return -1; // not found
 	}
 	
-	/** Translates a disconnected-index into an index of the full matrix */
-	public int translateDis(int index)
+	/** Translates a internal-index into an index of the full matrix */
+	public int translateInt(int index)
 	{
 		int subIndex = 0;
 		for(int i = 0; i < rank(); i++)
@@ -228,7 +228,7 @@ public class CDynkinDiagram
 			else if(type == "co")
 				indexI = translateCo(i);
 			else
-				indexI = translateDis(i);
+				indexI = translateInt(i);
 			for(int j = 0; j < subRank; j++)
 			{
 				if(type == "sub")
@@ -236,7 +236,7 @@ public class CDynkinDiagram
 				else if(type == "co")
 					indexJ = translateCo(j);
 				else
-					indexJ = translateDis(j);
+					indexJ = translateInt(j);
 				cartanSubMatrix.set(i,j, cartanMatrix.get(indexI,indexJ));
 			}
 		}
