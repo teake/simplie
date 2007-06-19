@@ -352,7 +352,7 @@ public class LevelDecomposition extends javax.swing.JPanel
 			{
 				public void propertyChange(PropertyChangeEvent evt)
 				{
-					if (autoScanner.getState().equals(SwingWorker.StateValue.DONE) && algebras.dd.getLocked())
+					if (autoScanner.getState().equals(SwingWorker.StateValue.DONE) && algebras.dd.isLocked())
 					{
 						// Invoked when the scan is done (or canceled).
 						bAutoScan.setText("Scan");

@@ -299,7 +299,7 @@ private void diagramMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event
 
 private void diagramMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_diagramMouseReleased
 	// Don't do anything if the diagram is locked.
-	if(dd.getLocked())
+	if(dd.isLocked())
 		return;
 	
 	CDynkinNode node = dd.getNodeByCoor(x,y);

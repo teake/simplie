@@ -67,7 +67,7 @@ public class CDynkinDiagram
 		this.locked = locked;
 	}
 	
-	public boolean getLocked()
+	public boolean isLocked()
 	{
 		return this.locked;
 	}
