@@ -19,18 +19,19 @@
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="1" attributes="0">
-              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="1" attributes="0">
                   <Component id="jPanel1" alignment="0" max="32767" attributes="0"/>
                   <Group type="102" alignment="1" attributes="0">
-                      <Component id="AutoScanPanel" min="-2" max="-2" attributes="1"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="settingsPanel" min="-2" max="-2" attributes="1"/>
+                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                          <Component id="AutoScanPanel" linkSize="3" max="32767" attributes="1"/>
+                          <Component id="settingsPanel" linkSize="3" alignment="0" max="32767" attributes="1"/>
+                      </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="jPanel2" max="32767" attributes="0"/>
                   </Group>
               </Group>
-              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -39,9 +40,12 @@
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace min="-2" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                  <Component id="AutoScanPanel" linkSize="2" max="32767" attributes="1"/>
-                  <Component id="jPanel2" linkSize="2" alignment="0" max="32767" attributes="1"/>
-                  <Component id="settingsPanel" linkSize="2" alignment="0" max="32767" attributes="1"/>
+                  <Group type="102" attributes="0">
+                      <Component id="settingsPanel" min="-2" pref="109" max="-2" attributes="1"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="AutoScanPanel" min="-2" max="-2" attributes="1"/>
+                  </Group>
+                  <Component id="jPanel2" max="32767" attributes="3"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="jPanel1" max="32767" attributes="0"/>
@@ -65,41 +69,34 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" attributes="0">
-                  <EmptySpace max="-2" attributes="0"/>
+              <Group type="102" alignment="1" attributes="0">
+                  <EmptySpace min="-2" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Group type="102" alignment="1" attributes="1">
-                              <Component id="autoScanProgressBar" min="0" pref="0" max="32767" attributes="1"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="bAutoScan" min="-2" pref="89" max="-2" attributes="1"/>
-                          </Group>
-                          <Group type="103" alignment="1" groupAlignment="0" attributes="0">
-                              <Component id="autoScanMinLevel" alignment="0" min="-2" pref="207" max="-2" attributes="0"/>
-                              <Component id="autoScanMaxLevel" alignment="1" min="-2" pref="207" max="-2" attributes="0"/>
-                          </Group>
+                      <Group type="102" alignment="1" attributes="0">
+                          <EmptySpace min="-2" max="-2" attributes="0"/>
+                          <Component id="autoScanProgressBar" pref="127" max="32767" attributes="2"/>
+                          <EmptySpace min="-2" max="-2" attributes="0"/>
+                          <Component id="bAutoScan" min="-2" pref="89" max="-2" attributes="1"/>
                       </Group>
-                      <Component id="cbLocked" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Component id="autoScanMinLevel" alignment="1" pref="222" max="32767" attributes="1"/>
+                      <Component id="autoScanMaxLevel" alignment="1" pref="222" max="32767" attributes="1"/>
                   </Group>
-                  <EmptySpace max="32767" attributes="0"/>
+                  <EmptySpace min="-2" max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" alignment="1" attributes="0">
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Component id="cbLocked" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace pref="33" max="32767" attributes="0"/>
+              <Group type="102" alignment="0" attributes="0">
                   <Component id="autoScanMaxLevel" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="autoScanMinLevel" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="bAutoScan" min="-2" max="-2" attributes="1"/>
-                      <Component id="autoScanProgressBar" min="-2" max="-2" attributes="1"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="bAutoScan" alignment="3" min="-2" max="-2" attributes="1"/>
+                      <Component id="autoScanProgressBar" alignment="3" min="-2" max="-2" attributes="1"/>
                   </Group>
-                  <EmptySpace max="-2" attributes="0"/>
+                  <EmptySpace max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -129,22 +126,6 @@
             <Property name="text" type="java.lang.String" value="Minimum level:"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JCheckBox" name="cbLocked">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="Lock maximum - minimum level"/>
-            <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-              <Border info="org.netbeans.modules.form.compat2.border.EmptyBorderInfo">
-                <EmptyBorder bottom="0" left="0" right="0" top="0"/>
-              </Border>
-            </Property>
-            <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
-              <Insets value="[0, 0, 0, 0]"/>
-            </Property>
-          </Properties>
-          <Events>
-            <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="cbLockedStateChanged"/>
-          </Events>
-        </Component>
       </SubComponents>
     </Container>
     <Container class="javax.swing.JPanel" name="settingsPanel">
@@ -164,20 +145,29 @@
               <Group type="102" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" alignment="0" attributes="0">
+                      <Group type="102" attributes="0">
                           <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
+                          <Component id="rbSignPos" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="rbSignNeg" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <Group type="102" alignment="0" attributes="0">
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="rbSignNeg" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="rbSignPos" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="cbZeroMultRoot" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="cbZeroMultRep" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="cbExotic" alignment="0" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Component id="cbAllWeights" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace min="20" pref="20" max="20" attributes="0"/>
+                              </Group>
+                              <Component id="cbRootMult" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="cbRepMult" alignment="0" min="-2" max="-2" attributes="0"/>
                           </Group>
                       </Group>
-                      <Component id="cbRootMult" alignment="0" min="-2" max="-2" attributes="0"/>
-                      <Component id="cbRepMult" alignment="0" min="-2" max="-2" attributes="0"/>
-                      <Component id="cbZeroMultRoot" alignment="0" min="-2" max="-2" attributes="0"/>
-                      <Component id="cbZeroMultRep" alignment="0" min="-2" max="-2" attributes="0"/>
-                      <Component id="cbExotic" alignment="0" min="-2" max="-2" attributes="0"/>
-                      <Component id="cbDominant" alignment="0" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="32767" attributes="0"/>
               </Group>
@@ -189,21 +179,25 @@
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="jLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="rbSignPos" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="rbSignNeg" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="rbSignNeg" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Component id="cbRootMult" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Component id="cbRepMult" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Component id="cbZeroMultRoot" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Component id="cbZeroMultRep" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Component id="cbExotic" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Component id="cbDominant" min="-2" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="102" attributes="0">
+                          <Component id="cbZeroMultRoot" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="cbZeroMultRep" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="cbExotic" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <Group type="102" attributes="0">
+                          <Component id="cbAllWeights" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="cbRootMult" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="cbRepMult" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                  </Group>
                   <EmptySpace max="32767" attributes="0"/>
               </Group>
           </Group>
@@ -213,7 +207,7 @@
         <Component class="javax.swing.JCheckBox" name="cbRootMult">
           <Properties>
             <Property name="selected" type="boolean" value="true"/>
-            <Property name="text" type="java.lang.String" value="Calculate root mults"/>
+            <Property name="text" type="java.lang.String" value="Calc root mults"/>
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
               <Border info="org.netbeans.modules.form.compat2.border.EmptyBorderInfo">
                 <EmptyBorder bottom="0" left="0" right="0" top="0"/>
@@ -227,7 +221,7 @@
         <Component class="javax.swing.JCheckBox" name="cbZeroMultRep">
           <Properties>
             <Property name="selected" type="boolean" value="true"/>
-            <Property name="text" type="java.lang.String" value="Show reps with zero outer mult"/>
+            <Property name="text" type="java.lang.String" value="Show 0 mu reps"/>
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
               <Border info="org.netbeans.modules.form.compat2.border.EmptyBorderInfo">
                 <EmptyBorder bottom="0" left="0" right="0" top="0"/>
@@ -241,7 +235,7 @@
         <Component class="javax.swing.JCheckBox" name="cbRepMult">
           <Properties>
             <Property name="selected" type="boolean" value="true"/>
-            <Property name="text" type="java.lang.String" value="Calculate representation mults"/>
+            <Property name="text" type="java.lang.String" value="Calc rep mults"/>
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
               <Border info="org.netbeans.modules.form.compat2.border.EmptyBorderInfo">
                 <EmptyBorder bottom="0" left="0" right="0" top="0"/>
@@ -262,7 +256,7 @@
             <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
               <ComponentRef name="signButtonGroup"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="p_i = + A_ij m^j"/>
+            <Property name="text" type="java.lang.String" value="p = + A m"/>
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
               <Border info="org.netbeans.modules.form.compat2.border.EmptyBorderInfo">
                 <EmptyBorder bottom="0" left="0" right="0" top="0"/>
@@ -282,7 +276,7 @@
               <ComponentRef name="signButtonGroup"/>
             </Property>
             <Property name="selected" type="boolean" value="true"/>
-            <Property name="text" type="java.lang.String" value="p_i = - A_ij m^j"/>
+            <Property name="text" type="java.lang.String" value="p = - A m"/>
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
               <Border info="org.netbeans.modules.form.compat2.border.EmptyBorderInfo">
                 <EmptyBorder bottom="0" left="0" right="0" top="0"/>
@@ -296,7 +290,7 @@
         <Component class="javax.swing.JCheckBox" name="cbExotic">
           <Properties>
             <Property name="selected" type="boolean" value="true"/>
-            <Property name="text" type="java.lang.String" value="Show exotic fields"/>
+            <Property name="text" type="java.lang.String" value="Show &gt; D indices reps"/>
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
               <Border info="org.netbeans.modules.form.compat2.border.EmptyBorderInfo">
                 <EmptyBorder bottom="0" left="0" right="0" top="0"/>
@@ -309,7 +303,7 @@
         </Component>
         <Component class="javax.swing.JCheckBox" name="cbZeroMultRoot">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Show roots with zero mult"/>
+            <Property name="text" type="java.lang.String" value="Show zero mult roots"/>
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
               <Border info="org.netbeans.modules.form.compat2.border.EmptyBorderInfo">
                 <EmptyBorder bottom="0" left="0" right="0" top="0"/>
@@ -320,10 +314,9 @@
             </Property>
           </Properties>
         </Component>
-        <Component class="javax.swing.JCheckBox" name="cbDominant">
+        <Component class="javax.swing.JCheckBox" name="cbAllWeights">
           <Properties>
-            <Property name="selected" type="boolean" value="true"/>
-            <Property name="text" type="java.lang.String" value="Only dominant weights"/>
+            <Property name="text" type="java.lang.String" value="All weights"/>
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
               <Border info="org.netbeans.modules.form.compat2.border.EmptyBorderInfo">
                 <EmptyBorder bottom="0" left="0" right="0" top="0"/>
@@ -352,7 +345,7 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="1" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="jScrollPane1" pref="666" max="32767" attributes="0"/>
+                  <Component id="jScrollPane1" pref="507" max="32767" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
@@ -360,7 +353,7 @@
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
-                  <Component id="jScrollPane1" pref="192" max="32767" attributes="0"/>
+                  <Component id="jScrollPane1" pref="175" max="32767" attributes="0"/>
                   <EmptySpace min="-2" max="-2" attributes="0"/>
               </Group>
           </Group>
@@ -420,7 +413,7 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="jScrollPane2" pref="202" max="32767" attributes="0"/>
+                  <Component id="jScrollPane2" pref="247" max="32767" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
@@ -428,7 +421,7 @@
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="1" attributes="0">
-                  <Component id="jScrollPane2" pref="162" max="32767" attributes="0"/>
+                  <Component id="jScrollPane2" pref="218" max="32767" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
@@ -445,9 +438,10 @@
             <Component class="edu.rug.hep.simplie.ui.reusable.UIPrintableColorTable" name="weightsTable">
               <Properties>
                 <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                  <Table columnCount="3" rowCount="0">
+                  <Table columnCount="4" rowCount="0">
                     <Column editable="false" title="vector" type="java.lang.String"/>
                     <Column editable="false" title="p_r" type="java.lang.String"/>
+                    <Column editable="false" title="p_i" type="java.lang.String"/>
                     <Column editable="false" title="mult" type="java.lang.Long"/>
                   </Table>
                 </Property>

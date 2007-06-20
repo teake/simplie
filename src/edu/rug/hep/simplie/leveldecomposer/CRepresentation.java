@@ -57,7 +57,7 @@ public class CRepresentation implements Comparable<CRepresentation>
 	 * @param	coLevels		The part of the rootvector corresponding to the regular subalgebra nodes.
 	 * @param	length			The length of the associated root (i.e. the innerproduct with itself).
 	 */
-	public CRepresentation(CAlgebraComposite algebras, int[] dynkinLabels, int[] levels, int[] coLevels, int length)
+	public CRepresentation(CAlgebraComposite algebras, int[] dynkinLabels, int[] levels, int length)
 	{
 		this.algebras		= algebras;
 		this.dynkinLabels	= dynkinLabels.clone();
@@ -67,11 +67,7 @@ public class CRepresentation implements Comparable<CRepresentation>
 		this.outerMult		= 0;
 		
 		// Construct the whole root vector.
-		this.rootVector	= new int[algebras.group.rank];
-		for (int i = 0; i < coLevels.length; i++)
-			rootVector[algebras.dd.translateCo(i)] = coLevels[i];
-		for (int i = 0; i < levels.length; i++)
-			rootVector[algebras.dd.translateLevel(i)] = levels[i];
+		this.rootVector	= algebras.rootVector(levels, dynkinLabels);
 		
 		// Calculate the height.
 		int tHeight = 0;

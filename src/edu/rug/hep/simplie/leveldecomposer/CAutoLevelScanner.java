@@ -282,7 +282,14 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]> implements Com
 					// If we found a valid representation, add it.
 					if(allGoodIntegers)
 					{
-						addRepresentation(levels, dynkinLabels, coLevels, rootLength, repContainer);
+						// Add the representation.
+						CRepresentation rep = new CRepresentation(
+								algebras,
+								dynkinLabels,
+								levels,
+								rootLength
+								);
+						repContainer.add(rep);
 					}
 				}
 				else
@@ -298,29 +305,6 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]> implements Com
 		} while( !isCancelled() );
 	}
 	
-	
-	
-	/********************************
-	 * Adding & processing reps
-	 ********************************/
-	
-	/** Adds a new valid representation to "reps" */
-	private void addRepresentation(int[] levels, int[] dynkinLabels, fraction[] coLevels, int rootLength, ArrayList<CRepresentation> repContainer)
-	{
-		int[] newCoLevels = new int[coLevels.length];
-		for (int i = 0; i < coLevels.length; i++)
-			newCoLevels[i] = coLevels[i].asInt();
-		
-		// Add the representation.
-		CRepresentation rep = new CRepresentation(
-				algebras,
-				dynkinLabels,
-				levels,
-				newCoLevels,
-				rootLength
-				);
-		repContainer.add(rep);
-	}
 	
 	/** Processes all the representations contained in "reps" */
 	private void processRepresentations(ArrayList<CRepresentation> repContainer)

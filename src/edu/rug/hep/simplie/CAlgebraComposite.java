@@ -129,7 +129,7 @@ public class CAlgebraComposite implements DiagramListener
 		int[] levels = new int[group.rank - coGroup.rank];
 		for (int i = 0; i < levels.length; i++)
 		{
-			levels[i] = rootVector[dd.translateLevel(i)];			
+			levels[i] = rootVector[dd.translateLevel(i)];
 		}
 		return levels;
 	}
@@ -156,27 +156,22 @@ public class CAlgebraComposite implements DiagramListener
 		return intDynkinLabels;
 	}
 	
-	public int[] rootVector(int[] levels, int[] subDynkinLabels, int[] intDynkinLabels)
+	public int[] coDynkinLabels(int[] rootVector)
+	{
+		int[] coDynkinLabels = new int[coGroup.rank];
+		int[] fullLabels = group.rootToWeight(rootVector);
+		for (int i = 0; i < coDynkinLabels.length; i++)
+		{
+			coDynkinLabels[i] = sign * fullLabels[dd.translateCo(i)];
+		}
+		return coDynkinLabels;
+	}
+	
+	public int[] rootVector(int[] levels, int[] coDynkinLabels)
 	{
 		int[] rootVector = new int[group.rank];
 		
-		// Construct the full labels
-		int[] labels = new int[group.rank];
-		for (int i = 0; i < subDynkinLabels.length; i++)
-		{
-			labels[dd.translateSub(i)] = subDynkinLabels[i];
-		}
-		for (int i = 0; i < intDynkinLabels.length; i++)
-		{
-			labels[dd.translateInt(i)] = intDynkinLabels[i];
-		}
-		int[] dynkinLabels = new int[coGroup.rank];
-		for (int i = 0; i < dynkinLabels.length; i++)
-		{
-			dynkinLabels[i] = labels[dd.translateCo(i)];
-		}
-		
-		fraction[] coLevels = calculateCoLevels(levels, dynkinLabels);
+		fraction[] coLevels = calculateCoLevels(levels, coDynkinLabels);
 		for (int i = 0; i < coLevels.length; i++)
 		{
 			rootVector[dd.translateCo(i)] = coLevels[i].asInt();
@@ -185,7 +180,7 @@ public class CAlgebraComposite implements DiagramListener
 		{
 			rootVector[dd.translateLevel(i)] = levels[i];
 		}
-		return rootVector;		
+		return rootVector;
 	}
 	
 	/********************************
