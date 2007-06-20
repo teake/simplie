@@ -41,9 +41,9 @@ public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramLis
 	/** Creates new form DynkinDiagramPanel */
 	public DynkinDiagramPanel()
 	{
-		spacing = 40;
-		radius	= 5;
-		offset	= 25;
+		spacing = 50;
+		radius	= 8;
+		offset	= 50;
 		
 		modifyingConnection	= false;
 		connectionFrom		= null;
