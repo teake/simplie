@@ -444,8 +444,9 @@ private void rbSignPosStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIR
 		}
 		else
 		{
-			// Clear the table.
+			// Clear the tables.
 			tableModelReps.setRowCount(0);
+			tableModelWeights.setRowCount(0);
 			
 			// Prepare the UI:
 			//  - Change the "scan" button into a "cancel" button.

@@ -160,10 +160,7 @@
                           </Group>
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="102" alignment="0" attributes="0">
-                                  <Component id="cbAllWeights" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace min="20" pref="20" max="20" attributes="0"/>
-                              </Group>
+                              <Component id="cbAllWeights" alignment="0" min="-2" max="-2" attributes="0"/>
                               <Component id="cbRootMult" alignment="0" min="-2" max="-2" attributes="0"/>
                               <Component id="cbRepMult" alignment="0" min="-2" max="-2" attributes="0"/>
                           </Group>
