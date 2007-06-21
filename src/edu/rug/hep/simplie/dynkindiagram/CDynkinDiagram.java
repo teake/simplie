@@ -430,8 +430,8 @@ public class CDynkinDiagram
 		
 		// Append a hashcode of this specific diagram to all the labels in the psfigure.
 		// This prevents multiple garbled psfigures on one page.
-		String hashCode =
-				(Helper.matrixToString(cartanMatrix(), 0) + Helper.matrixToString(cartanSubMatrix("sub"), 0).hashCode());
+		int hashCode = Math.abs(
+				(Helper.matrixToString(cartanMatrix(), 0) + Helper.matrixToString(cartanSubMatrix("sub"), 0)).hashCode());
 		
 		// First determine the min and max values of x and y
 		int xMin = Integer.MAX_VALUE;
@@ -451,7 +451,7 @@ public class CDynkinDiagram
 		
 		// The header
 		output += "\\begin{figure}[h]\n";
-		output += "\\psset{unit=1.5cm}\n";
+		output += "\\psset{unit=1.25cm}\n";
 		output += "\\begin{center}\n";
 		output += "\\begin{pspicture}(" + xMin + "," + yMin + ")(" + xMax + "," + yMax + ")\n";
 		
