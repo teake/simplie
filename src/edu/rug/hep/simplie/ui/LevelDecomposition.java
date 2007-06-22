@@ -51,7 +51,9 @@ public class LevelDecomposition extends javax.swing.JPanel
 				if(representationsTable.getSelectedRowCount() != 1)
 					return;
 				int index = representationsTable.getSelectedRow();
-				int[] vector = Helper.stringToIntArray((String) tableModelReps.getValueAt(index,3));
+				int[] vector = Helper.stringToIntArray((String) tableModelReps.getValueAt(
+						representationsTable.convertRowIndexToModel(index),
+						3));
 				setSelectedRep(vector);
 			}
 		});
