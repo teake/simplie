@@ -470,6 +470,7 @@ public class CRootSystem
 						// n_plus is always positive, thus (root + simpleRoot) is a root.
 						// Add it to the root table.
 						addRoot(newRoot);
+						continue;
 					}
 					
 					// Multiply by 2 and divide by the norm of the simple root

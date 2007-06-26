@@ -557,7 +557,8 @@ public class CDynkinDiagram
 				line = null;
 				break;
 			}
-			g2.draw(line);
+			if(line != null)
+				g2.draw(line);
 		}
 		for (CDynkinNode node : nodes)
 		{
