@@ -17,12 +17,27 @@ import java.io.Serializable;
  */
 public class CDynkinConnection implements Serializable
 {
+	/** The constants for the type of connections */
+	
+	/** No connection, shouldn't be used in principle */
+	public static final int TYPE_NULL		= 0;
+	/** Simply laced connection */
+	public static final int TYPE_SINGLE		= 1;
+	/** Doubly laced connection */
+	public static final int TYPE_DOUBLE		= 2;
+	/** Triply laced connection */
+	public static final int TYPE_TRIPLE		= 3;
+	/** Quadruply laced connection */
+	public static final int TYPE_QUADRUPLE	= 4;
+	/** A double unoriented connection (used in A_1+). */
+	public static final int TYPE_SPECIAL_DOUBLE = -2;
+	
 	/** The Dynkin node from which this connection points. */
 	public final CDynkinNode fromNode;
 	/** The Dynkin node to which this connection points. */
 	public final CDynkinNode toNode;
 	/** The number of lines */
-	public final int laced;
+	public final int type;
 	
 	/** 
 	 * Creates a new instance of CDynkinConnection
@@ -30,11 +45,11 @@ public class CDynkinConnection implements Serializable
 	 * @param	fromNode	The node from which this connection points.
 	 * @param	toNode		The node to which this connection points.
 	 */
-	public CDynkinConnection(CDynkinNode fromNode, CDynkinNode toNode, int laced)
+	public CDynkinConnection(CDynkinNode fromNode, CDynkinNode toNode,int type)
 	{
 		this.fromNode	= fromNode;
 		this.toNode		= toNode;
-		this.laced		= laced;
+		this.type		= type;
 	}
 	
 	/** 
@@ -60,6 +75,6 @@ public class CDynkinConnection implements Serializable
 	
 	public String toString()
 	{
-		return "Connection from " + fromNode.getLabel() + " to " + toNode.getLabel() + ", " + laced + " time(s) laced.";
+		return "Connection from " + fromNode.getLabel() + " to " + toNode.getLabel() + ", " + type + " time(s) laced.";
 	}
 }

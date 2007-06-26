@@ -29,7 +29,7 @@ public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramLis
 	
 	private boolean		modifyingConnection;
 	private boolean		addingConnection;
-	private int			connectionLaced;
+	private int			connectionType;
 	private CDynkinNode connectionFrom;
 	
 	private int contextX;
@@ -137,6 +137,9 @@ public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramLis
         menuAddSingleConnection = new javax.swing.JMenuItem();
         menuAddDoubleConnection = new javax.swing.JMenuItem();
         menuAddTripleConnection = new javax.swing.JMenuItem();
+        jSeparator1 = new javax.swing.JSeparator();
+        menuAddQuadrupleConnection = new javax.swing.JMenuItem();
+        menuAddSpecialDoubleConnection = new javax.swing.JMenuItem();
         menuRemoveConnection = new javax.swing.JMenuItem();
         menuSeparator = new javax.swing.JSeparator();
         menuAddNode = new javax.swing.JMenuItem();
@@ -183,6 +186,27 @@ public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramLis
             }
         });
         menuAddConnection.add(menuAddTripleConnection);
+        menuAddConnection.add(jSeparator1);
+
+        menuAddQuadrupleConnection.setText("Quadruple");
+        menuAddQuadrupleConnection.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                menuAddQuadrupleConnectionActionPerformed(evt);
+            }
+        });
+        menuAddConnection.add(menuAddQuadrupleConnection);
+
+        menuAddSpecialDoubleConnection.setText("Special double");
+        menuAddSpecialDoubleConnection.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                menuAddSpecialDoubleConnectionActionPerformed(evt);
+            }
+        });
+        menuAddConnection.add(menuAddSpecialDoubleConnection);
 
         contextMenu.add(menuAddConnection);
 
@@ -283,6 +307,20 @@ public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramLis
         );
     }// </editor-fold>//GEN-END:initComponents
 	
+	private void menuAddSpecialDoubleConnectionActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_menuAddSpecialDoubleConnectionActionPerformed
+	{//GEN-HEADEREND:event_menuAddSpecialDoubleConnectionActionPerformed
+	addingConnection = true;
+	connectionType = CDynkinConnection.TYPE_SPECIAL_DOUBLE;
+	startModifyConnection(dd.getNodeByCoor(contextX, contextY));
+}//GEN-LAST:event_menuAddSpecialDoubleConnectionActionPerformed
+
+	private void menuAddQuadrupleConnectionActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_menuAddQuadrupleConnectionActionPerformed
+	{//GEN-HEADEREND:event_menuAddQuadrupleConnectionActionPerformed
+		addingConnection = true;
+		connectionType = CDynkinConnection.TYPE_QUADRUPLE;
+		startModifyConnection(dd.getNodeByCoor(contextX, contextY));
+}//GEN-LAST:event_menuAddQuadrupleConnectionActionPerformed
+	
 private void diagramMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_diagramMouseExited
 	if(!contextMenu.isVisible())
 	{
@@ -330,7 +368,7 @@ private void diagramMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:ev
 	
 	if(modifyingConnection)
 	{
-		status.setText(dd.modifyConnection(connectionFrom, node, connectionLaced, addingConnection));
+		status.setText(dd.modifyConnection(connectionFrom, node, connectionType, addingConnection));
 		stopModifyConnection();
 	}
 }//GEN-LAST:event_diagramMouseReleased
@@ -338,14 +376,14 @@ private void diagramMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:ev
 	private void menuAddTripleConnectionActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_menuAddTripleConnectionActionPerformed
 	{//GEN-HEADEREND:event_menuAddTripleConnectionActionPerformed
 		addingConnection = true;
-		connectionLaced = 3;
+		connectionType = CDynkinConnection.TYPE_TRIPLE;
 		startModifyConnection(dd.getNodeByCoor(contextX, contextY));
 	}//GEN-LAST:event_menuAddTripleConnectionActionPerformed
 	
 	private void menuAddDoubleConnectionActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_menuAddDoubleConnectionActionPerformed
 	{//GEN-HEADEREND:event_menuAddDoubleConnectionActionPerformed
 		addingConnection = true;
-		connectionLaced = 2;
+		connectionType = CDynkinConnection.TYPE_DOUBLE;
 		startModifyConnection(dd.getNodeByCoor(contextX, contextY));
 	}//GEN-LAST:event_menuAddDoubleConnectionActionPerformed
 	
@@ -364,7 +402,7 @@ private void diagramMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:ev
 	private void menuAddSingleConnectionActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_menuAddSingleConnectionActionPerformed
 	{//GEN-HEADEREND:event_menuAddSingleConnectionActionPerformed
 		addingConnection = true;
-		connectionLaced = 1;
+		connectionType = CDynkinConnection.TYPE_SINGLE;
 		startModifyConnection(dd.getNodeByCoor(contextX, contextY));
 	}//GEN-LAST:event_menuAddSingleConnectionActionPerformed
 	
@@ -382,10 +420,13 @@ private void diagramMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:ev
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPopupMenu contextMenu;
     private javax.swing.JPanel diagram;
+    private javax.swing.JSeparator jSeparator1;
     private javax.swing.JMenu menuAddConnection;
     private javax.swing.JMenuItem menuAddDoubleConnection;
     private javax.swing.JMenuItem menuAddNode;
+    private javax.swing.JMenuItem menuAddQuadrupleConnection;
     private javax.swing.JMenuItem menuAddSingleConnection;
+    private javax.swing.JMenuItem menuAddSpecialDoubleConnection;
     private javax.swing.JMenuItem menuAddTripleConnection;
     private javax.swing.JMenuItem menuRemoveConnection;
     private javax.swing.JMenuItem menuRemoveNode;

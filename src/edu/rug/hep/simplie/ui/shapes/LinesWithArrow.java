@@ -12,17 +12,19 @@ import java.awt.geom.GeneralPath;
 public class LinesWithArrow implements Shape
 {
 	private final GeneralPath shape;
-		
-	public LinesWithArrow(Point2D begin, Point2D end, int numLines, float width)
+	
+	public LinesWithArrow(Point2D begin, Point2D end, int numLines, float width, boolean arrow)
 	{
 		float x1 = (float) begin.getX();
 		float y1 = (float) begin.getY();
 		float x2 = (float) end.getX();
 		float y2 = (float) end.getY();
 		
+		// Calculate some stuff first.
 		float spacing	= width / (numLines - 1);
 		float length	= (float) Math.sqrt(Math.pow(x1-x2,2) + Math.pow(y1-y2,2));
 		
+		// The lines.
 		shape = new GeneralPath();
 		for (int i = 0; i < numLines; i++)
 		{
@@ -30,10 +32,15 @@ public class LinesWithArrow implements Shape
 			shape.lineTo(x1 + length, y1+(i*spacing)-width/2);
 		}
 		
-		shape.moveTo(x1 + length/2 - width/5, y1 - width);
-		shape.lineTo(x1 + length/2 + width/5, y1);
-		shape.lineTo(x1 + length/2 - width/5, y1 + width);
+		// The arrow.
+		if(arrow)
+		{
+			shape.moveTo(x1 + length/2 - width/5, y1 - width);
+			shape.lineTo(x1 + length/2 + width/5, y1);
+			shape.lineTo(x1 + length/2 - width/5, y1 + width);
+		}
 		
+		// And finally rotate it.
 		double rad = this.calcAngle(x1,y1,x2,y2);
 		shape.transform(AffineTransform.getRotateInstance(rad,x1,y1));
 	}

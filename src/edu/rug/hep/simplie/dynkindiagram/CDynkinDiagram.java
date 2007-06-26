@@ -185,8 +185,33 @@ public class CDynkinDiagram
 		{
 			int i		= connection.fromNode.getLabel() - 1;
 			int j		= connection.toNode.getLabel() - 1;
-			cartanMatrix.set(i,j,-1*connection.laced);
-			cartanMatrix.set(j,i,-1);
+			switch(connection.type)
+			{
+			case CDynkinConnection.TYPE_SINGLE:
+				cartanMatrix.set(i,j,-1);
+				cartanMatrix.set(j,i,-1);
+				break;
+			case CDynkinConnection.TYPE_DOUBLE:
+				cartanMatrix.set(i,j,-2);
+				cartanMatrix.set(j,i,-1);
+				break;
+			case CDynkinConnection.TYPE_TRIPLE:
+				cartanMatrix.set(i,j,-3);
+				cartanMatrix.set(j,i,-1);
+				break;
+			case CDynkinConnection.TYPE_QUADRUPLE:
+				cartanMatrix.set(i,j,-4);
+				cartanMatrix.set(j,i,-1);
+				break;
+			case CDynkinConnection.TYPE_SPECIAL_DOUBLE:
+				cartanMatrix.set(i,j,-2);
+				cartanMatrix.set(j,i,-2);
+				break;
+			default:
+				cartanMatrix.set(i,j,0);
+				cartanMatrix.set(j,i,0);
+				break;
+			}
 		}
 		
 		return cartanMatrix;
@@ -474,12 +499,12 @@ public class CDynkinDiagram
 			String toFrom= "{N" + connection.fromNode.getLabel() + hashCode + "}"
 					+ "{N" + connection.toNode.getLabel() + hashCode + "}\n";
 			output += "\\ncline";
-			if(connection.laced > 1)
+			if(connection.type > 1)
 				output += "[doubleline=true,doublesep=0.2,arrowsize=0.6,arrowlength=0.25,arrowinset=0.6]{->}";
 			else
 				output += "{-}";
 			output += toFrom;
-			if(connection.laced == 3)
+			if(connection.type == 3)
 				output += "\\ncline{-}" + toFrom;
 		}
 		
@@ -511,16 +536,26 @@ public class CDynkinDiagram
 			Shape line;
 			Point begin	= new Point(spacing * node1.x + offset, spacing * node1.y + offset);
 			Point end	= new Point(spacing * node2.x + offset, spacing * node2.y + offset);
-			switch(connection.laced)
+			switch(connection.type)
 			{
-			case 3:
-				line = new LinesWithArrow(begin,end,3,2*radius);
+			case CDynkinConnection.TYPE_SINGLE:
+				line = new Line2D.Double(begin,end);
 				break;
-			case 2:
-				line = new LinesWithArrow(begin,end,2,2*radius);
+			case CDynkinConnection.TYPE_DOUBLE:
+				line = new LinesWithArrow(begin,end,2,2*radius,true);
+				break;
+			case CDynkinConnection.TYPE_TRIPLE:
+				line = new LinesWithArrow(begin,end,3,2*radius,true);
+				break;
+			case CDynkinConnection.TYPE_QUADRUPLE:
+				line = new LinesWithArrow(begin,end,4,2*radius,true);
+				break;
+			case CDynkinConnection.TYPE_SPECIAL_DOUBLE:
+				line = new LinesWithArrow(begin,end,2,2*radius,false);
 				break;
 			default:
-				line = new Line2D.Double(begin,end);
+				line = null;
+				break;
 			}
 			g2.draw(line);
 		}
