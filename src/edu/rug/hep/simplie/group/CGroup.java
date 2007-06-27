@@ -73,6 +73,8 @@ public class CGroup
 	
 	/** Vector containing the norm of the simple roots divided by two. */
 	private final int[] simpleRootNorms;
+	/** List of matrices into which the Cartan matrix factorizes */
+	private final ArrayList<int[][]> directProductFactors;
 	
 	/**********************************
 	 * Public methods
@@ -108,6 +110,7 @@ public class CGroup
 		this.invA	= new fraction[rank][rank];
 		this.invB	= new fraction[rank][rank];
 		this.G		= new fraction[rank][rank];
+		this.directProductFactors = new ArrayList<int[][]>();
 		
 		// Set the cartan matrix
 		for(int i=0; i<rank; i++)
@@ -192,8 +195,21 @@ public class CGroup
 						break;
 			}
 			
+			// Add the cartan matrix of this piece to the direct product factors.
+			int[][] pieceMatrix = new int[piece.size()][piece.size()];
+			for (int i = 0; i < pieceMatrix.length; i++)
+			{
+				for (int j = 0; j < pieceMatrix.length; j++)
+				{
+					pieceMatrix[i][j] = this.A[piece.get(i).index][piece.get(j).index];
+				}
+			}
+			directProductFactors.add(pieceMatrix);
+			
+			// Sort this piece according to norm.
 			Collections.sort(piece);
 			
+			// Set the simple root norms.
 			double	coefficient	= 2 / piece.get(0).norm;
 			for(CNormHelper nh : piece)
 			{
@@ -220,7 +236,16 @@ public class CGroup
 		rho = new CWeight(weylLabels);
 		
 		// Detect the type of Lie group.
-		type = detectType(A);
+		String tempType = "";
+		for(int i = 0; i < directProductFactors.size(); i++)
+		{
+			tempType += detectType(directProductFactors.get(i));
+			if(i != directProductFactors.size() - 1)
+			{
+				tempType += " x ";
+			}
+		}
+		type = tempType;
 		
 		// Set up the root system.
 		rs = new CRootSystem(this);
@@ -281,42 +306,43 @@ public class CGroup
 	 * Given a Cartan matrix, this methods tries to determine the type
 	 * of the group associated to that matrix.
 	 *
-	 * @param	cartanMatrix	The Cartan matrix of which the type is to be determined.
-	 * @return					The type of the Lie group, e.g. "A10", or "E6".
+	 * @param	A	The Cartan matrix of which the type is to be determined.
+	 * @return		The type of the Lie group, e.g. "A10", or "E6".
 	 */
-	public String detectType(Matrix cartanMatrix)
+	public String detectType(int[][] A)
 	{
 		String type = null;
+		int rankA = A.length;
 		
 		// TODO: make this algorithm find more types
-		Matrix compareMatrix = Helper.regularMatrix(rank);
-		if(rank == 0)
+		Matrix compareMatrix = Helper.regularMatrix(rankA);
+		if(rankA == 0)
 			type = "Empty";
-		else if(Helper.sameMatrices(compareMatrix,cartanMatrix))
+		else if(Helper.sameMatrices(compareMatrix,A))
 			type = "A";
-		else if(rank > 4)
+		else if(rankA > 4)
 		{
 			compareMatrix.set(0,3,-1);
 			compareMatrix.set(3,0,-1);
 			compareMatrix.set(0,1,0);
 			compareMatrix.set(1,0,0);
-			if(Helper.sameMatrices(compareMatrix,cartanMatrix))
+			if(Helper.sameMatrices(compareMatrix,A))
 				type = "E";
 			else
 			{
-				compareMatrix = Helper.regularMatrix(rank);
-				compareMatrix.set(rank-1,2,-1);
-				compareMatrix.set(2,rank-1,-1);
-				compareMatrix.set(rank-2,rank-1,0);
-				compareMatrix.set(rank-1,rank-2,0);
-				if(Helper.sameMatrices(compareMatrix,cartanMatrix))
+				compareMatrix = Helper.regularMatrix(rankA);
+				compareMatrix.set(rankA-1,2,-1);
+				compareMatrix.set(2,rankA-1,-1);
+				compareMatrix.set(rankA-2,rankA-1,0);
+				compareMatrix.set(rankA-1,rankA-2,0);
+				if(Helper.sameMatrices(compareMatrix,A))
 					type = "E";
 			}
 		}
 		if(type == null)
 			type = "Unknown";
-		else if(rank != 0)
-			type += rank;
+		else if(rankA != 0)
+			type += rankA;
 		
 		return type;
 	}
