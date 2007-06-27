@@ -55,6 +55,8 @@ public class CGroup
 	
 	/** The determinant of the Cartan Matrix. */
 	public final int	det;
+	/** The rank of the Cartan matrix */
+	public final int	rankA;
 	/** The rank of the group. */
 	public final int	rank;
 	/** The dimension of the group (i.e. the number of generators). Only set for finite groups. */
@@ -95,11 +97,13 @@ public class CGroup
 		if(A.getColumnDimension() != A.getRowDimension() || A.getColumnDimension() == 0)
 		{
 			rank	= 0;
+			rankA	= 0;
 			det		= 0;
 		}
 		else
 		{
 			rank	= A.getColumnDimension();
+			rankA	= A.rank();
 			det		= (int) Math.round(A.det());
 		}
 		if(det > 0)
@@ -316,37 +320,19 @@ public class CGroup
 	public String detectType(int[][] A)
 	{
 		String type = null;
-		int rankA = A.length;
+		int size = A.length;
 		
 		// TODO: make this algorithm find more types
-		Matrix compareMatrix = Helper.regularMatrix(rankA);
-		if(rankA == 0)
+		Matrix compareMatrix = Helper.regularMatrix(size);
+		if(size == 0)
 			type = "Empty";
 		else if(Helper.sameMatrices(compareMatrix,A))
 			type = "A";
-		else if(rankA > 4)
-		{
-			compareMatrix.set(0,3,-1);
-			compareMatrix.set(3,0,-1);
-			compareMatrix.set(0,1,0);
-			compareMatrix.set(1,0,0);
-			if(Helper.sameMatrices(compareMatrix,A))
-				type = "E";
-			else
-			{
-				compareMatrix = Helper.regularMatrix(rankA);
-				compareMatrix.set(rankA-1,2,-1);
-				compareMatrix.set(2,rankA-1,-1);
-				compareMatrix.set(rankA-2,rankA-1,0);
-				compareMatrix.set(rankA-1,rankA-2,0);
-				if(Helper.sameMatrices(compareMatrix,A))
-					type = "E";
-			}
-		}
+
 		if(type == null)
 			type = "Unknown";
-		else if(rankA != 0)
-			type += rankA;
+		else if(size != 0)
+			type += size;
 		
 		return type;
 	}
