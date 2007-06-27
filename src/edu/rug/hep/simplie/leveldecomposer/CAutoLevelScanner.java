@@ -267,7 +267,7 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]> implements Com
 				coLevels = algebras.calculateCoLevels(levels, dynkinLabels);
 				int rootLength = algebras.calculateRootLength(levels, coLevels);
 				// Only continue if the root length is not bigger than the maximum root length.
-				if(rootLength <= algebras.group.rs.maxNorm)
+				if(rootLength <= algebras.group.maxNorm)
 				{
 					// First check if all root components are integers and non-negative.
 					allGoodIntegers = true;

@@ -11,8 +11,6 @@ import edu.rug.hep.simplie.Helper;
 import edu.rug.hep.simplie.math.fraction;
 
 import java.util.Collection;
-import java.util.Vector;
-import java.util.Collections;
 import java.io.*;
 
 import javolution.util.FastList;
@@ -27,11 +25,6 @@ import javolution.util.FastCollection.Record;
  */
 public class CRootSystem
 {
-	/** Vector containing the norm of the simple roots divided by two. */
-	public final int[] simpleRootNorms;
-	/** The maximum root norm. */
-	public final int maxNorm;
-	
 	/** The group of which this is the rootsystem. */
 	private final CGroup group;
 	/** The rank of the group of which this is the rootsystem. */
@@ -54,18 +47,16 @@ public class CRootSystem
 	/** Creates a new instance of CRootSystem and constructs up to height 1. */
 	public CRootSystem(CGroup group)
 	{
-		this.group	= group;
-		this.rank	= group.rank;
+		this.group			= group;
+		this.rank			= group.rank;
 		
 		rootSystem			= new FastList<FastList>();
 		numPosRoots			= 0;
 		numPosGenerators	= 0;
 		constructedHeight	= 0;
-		simpleRootNorms		= new int[rank];
 		
 		if(rank==0)
 		{
-			maxNorm = 0;
 			return;
 		}
 		
@@ -78,107 +69,18 @@ public class CRootSystem
 		csa.add(csaRoot);
 		rootSystem.add(0,csa);
 		
-		// Add the simple roots to the root table.
+		// Add the simple roots.
 		simpleRoots = new FastList<CRoot>();
-		for (int i = 0; i < rank; i++)
+		for(CRoot simpleRoot : group.simpleRoots)
 		{
-			int[] rootVector = new int[rank];
-			for (int j = 0; j < rank; j++)
-			{
-				rootVector[j] = ( i == j) ? 1 : 0;
-			}
-			CRoot simpleRoot	= new CRoot(rootVector);
-			simpleRoot.mult		= 1;
-			simpleRoot.coMult	= new fraction(1);
-			simpleRoot.norm		= 0; // these will be set later on.
 			simpleRoots.add(simpleRoot);
 		}
-		
-		// Set the root norms for every disconnected piece.
-		// Set the highest norm simultaneously.
-		int tempMaxNorm = 0;
-		while(true)
-		{
-			int startIndex = -1;
-			
-			// Grab the first simple root that hasn't been set yet.
-			for (int i = 0; i < rank; i++)
-			{
-				CRoot simpleRoot = simpleRoots.get(i);
-				if(simpleRoot.norm == 0)
-				{
-					startIndex = i;
-					break;
-				}
-			}
-			
-			// Are we done?
-			if(startIndex == -1)
-				break;
-			
-			// If we're still here then we're not done.
-			// First detect all the simple roots in this piece.
-			Vector<CNormHelper> piece = new Vector<CNormHelper>();
-			piece.add(new CNormHelper(startIndex,1));
-			while(true)
-			{
-				CNormHelper add	 = null;
-				CNormHelper from = null;
-				// Try to see if this piece has connections to roots we've missed so far.
-				loopToBreak:
-					for(CNormHelper nh : piece)
-					{
-						from = nh;
-						for (int i = 0; i < rank; i++)
-						{
-							if(nh.index != i && group.A[i][nh.index] != 0)
-							{
-								CNormHelper normHelper = new CNormHelper(i,1);
-								if(!piece.contains(normHelper))
-								{
-									add = normHelper;
-									break loopToBreak;
-								}
-							}
-						}
-					}
-					
-					if(add != null)
-					{
-						double norm = from.norm * group.A[add.index][from.index] / group.A[from.index][add.index];
-						piece.add(new CNormHelper(add.index,norm));
-					}
-					else
-						break;
-			}
-			
-			Collections.sort(piece);
-			
-			Integer	shortIndex	= piece.get(0).index;
-			CRoot	shortRoot	= simpleRoots.get(shortIndex);
-			double	coefficient	= 2 / piece.get(0).norm;
-			for(CNormHelper nh : piece)
-			{
-				CRoot root = simpleRoots.get(nh.index);
-				root.norm = (int) Math.round(nh.norm * coefficient);
-				tempMaxNorm = Math.max(tempMaxNorm, root.norm);
-			}
-			
-		}
-		maxNorm = tempMaxNorm;
-		
-		rootSystem.add(1,simpleRoots);
+		rootSystem.add(1, simpleRoots);
 		numPosGenerators	= rank;
 		numPosRoots			= rank;
 		
 		// And we've constructed to height 1.
 		constructedHeight = 1;
-		
-		for (int i = 0; i < rank; i++)
-		{
-			// The norm of the simple roots are always a multiple of 2.
-			simpleRootNorms[i] = simpleRoots.get(i).norm / 2;
-		}
 		
 		// Set the table of root multiples.
 		rootMultiples = new FastList<FastList>();

@@ -9,7 +9,10 @@ package edu.rug.hep.simplie.group;
 
 import edu.rug.hep.simplie.Helper;
 import edu.rug.hep.simplie.math.fraction;
+
+import java.util.Collections;
 import java.util.Collection;
+import java.util.ArrayList;
 import java.util.Iterator;
 import Jama.Matrix;
 
@@ -45,6 +48,11 @@ public class CGroup
 	 * a^2 = 2 for the *longest* root, and I use it for the *shortest* root.
 	 */
 	
+	/** The simple roots */
+	public final ArrayList<CRoot> simpleRoots;
+	/** The maximum root norm. */
+	public final int maxNorm;
+	
 	/** The determinant of the Cartan Matrix. */
 	public final int	det;
 	/** The rank of the group. */
@@ -63,6 +71,9 @@ public class CGroup
 	public final CWeight rho;
 	
 	
+	/** Vector containing the norm of the simple roots divided by two. */
+	private final int[] simpleRootNorms;
+	
 	/**********************************
 	 * Public methods
 	 **********************************/
@@ -75,9 +86,6 @@ public class CGroup
 	 */
 	public CGroup(Matrix A)
 	{
-		Matrix	compareMatrix;
-		String	tempType = null;
-		
 		// Do some preliminary checks
 		if(A.getColumnDimension() != A.getRowDimension() || A.getColumnDimension() == 0)
 		{
@@ -110,6 +118,99 @@ public class CGroup
 			}
 		}
 		
+		// Set the simple roots
+		simpleRoots = new ArrayList<CRoot>();
+		for (int i = 0; i < rank; i++)
+		{
+			int[] rootVector = new int[rank];
+			for (int j = 0; j < rank; j++)
+			{
+				rootVector[j] = ( i == j) ? 1 : 0;
+			}
+			CRoot simpleRoot	= new CRoot(rootVector);
+			simpleRoot.mult		= 1;
+			simpleRoot.coMult	= new fraction(1);
+			simpleRoot.norm		= 0; // these will be set later on.
+			simpleRoots.add(simpleRoot);
+		}
+		
+		// Set the root norms for every disconnected piece.
+		// Set the highest norm simultaneously.
+		int tempMaxNorm = 0;
+		while(true)
+		{
+			int startIndex = -1;
+			
+			// Grab the first simple root that hasn't been set yet.
+			for (int i = 0; i < rank; i++)
+			{
+				CRoot simpleRoot = simpleRoots.get(i);
+				if(simpleRoot.norm == 0)
+				{
+					startIndex = i;
+					break;
+				}
+			}
+			
+			// Are we done?
+			if(startIndex == -1)
+				break;
+			
+			// If we're still here then we're not done.
+			// First detect all the simple roots in this piece.
+			ArrayList<CNormHelper> piece = new ArrayList<CNormHelper>();
+			piece.add(new CNormHelper(startIndex,1));
+			while(true)
+			{
+				CNormHelper add	 = null;
+				CNormHelper from = null;
+				// Try to see if this piece has connections to roots we've missed so far.
+				loopToBreak:
+					for(CNormHelper nh : piece)
+					{
+						from = nh;
+						for (int i = 0; i < rank; i++)
+						{
+							if(nh.index != i && this.A[i][nh.index] != 0)
+							{
+								CNormHelper normHelper = new CNormHelper(i,1);
+								if(!piece.contains(normHelper))
+								{
+									add = normHelper;
+									break loopToBreak;
+								}
+							}
+						}
+					}
+					
+					if(add != null)
+					{
+						double norm = from.norm * this.A[add.index][from.index] / this.A[from.index][add.index];
+						piece.add(new CNormHelper(add.index,norm));
+					}
+					else
+						break;
+			}
+			
+			Collections.sort(piece);
+			
+			double	coefficient	= 2 / piece.get(0).norm;
+			for(CNormHelper nh : piece)
+			{
+				CRoot root = simpleRoots.get(nh.index);
+				root.norm = (int) Math.round(nh.norm * coefficient);
+				tempMaxNorm = Math.max(tempMaxNorm, root.norm);
+			}
+			
+		}
+		maxNorm = tempMaxNorm;
+		simpleRootNorms	= new int[rank];
+		for (int i = 0; i < rank; i++)
+		{
+			// The norm of the simple roots are always a multiple of 2.
+			simpleRootNorms[i] = simpleRoots.get(i).norm / 2;
+		}
+		
 		// Construct the Weyl vector
 		int[] weylLabels = new int[rank];
 		for (int i = 0; i < rank; i++)
@@ -133,8 +234,8 @@ public class CGroup
 		{
 			for (int j = 0; j < rank; j++)
 			{
-				this.symA[i][j] = new fraction(this.A[i][j], rs.simpleRootNorms[i]);
-				this.B[i][j]	= this.A[i][j] * rs.simpleRootNorms[j];
+				this.symA[i][j] = new fraction(this.A[i][j], simpleRootNorms[i]);
+				this.B[i][j]	= this.A[i][j] * simpleRootNorms[j];
 				symA.set(i,j,this.symA[i][j].asDouble());
 				B.set(i,j,this.B[i][j]);
 			}
@@ -320,7 +421,7 @@ public class CGroup
 		int result = 0;
 		for (int i = 0; i < rank; i++)
 		{
-			result += weight.dynkinLabels[i] * root.vector[i] * rs.simpleRootNorms[i];
+			result += weight.dynkinLabels[i] * root.vector[i] * simpleRootNorms[i];
 		}
 		return result;
 	}
@@ -336,7 +437,7 @@ public class CGroup
 		int result = 0;
 		for (int i = 0; i < rank; i++)
 		{
-			result += root.vector[i] * rs.simpleRootNorms[i];
+			result += root.vector[i] * simpleRootNorms[i];
 		}
 		return result;
 	}
