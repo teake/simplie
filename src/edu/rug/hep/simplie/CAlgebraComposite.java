@@ -67,7 +67,7 @@ public class CAlgebraComposite implements DiagramListener
 		}
 		
 		// Only construct the intgroup if it is new and different from the cogroup.
-		if(intGroup == null || !Helper.sameMatrices(dd.cartanSubMatrix("sub"), intGroup.A))
+		if(intGroup == null || !Helper.sameMatrices(dd.cartanSubMatrix("int"), intGroup.A))
 		{
 			if(Helper.sameMatrices(dd.cartanSubMatrix("int"),coGroup.A))
 				intGroup = coGroup;
