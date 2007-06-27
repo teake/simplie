@@ -40,15 +40,41 @@ public class CAlgebraComposite implements DiagramListener
 	
 	public void diagramChanged()
 	{
+		// Don't do anything if the algebras are locked.
 		if(locked)
 			return;
 		
+		// Only construct the full group if the new matrix is different.
 		if(group == null || !Helper.sameMatrices(dd.cartanMatrix(), group.A))
 			group = new CGroup(dd.cartanMatrix());
 		
-		subGroup	= new CGroup(dd.cartanSubMatrix("sub"));
-		intGroup	= new CGroup(dd.cartanSubMatrix("int"));
-		coGroup		= new CGroup(dd.cartanSubMatrix("co"));
+		// Only construct the cogroup if it is new and different from the full group.
+		if(coGroup == null || !Helper.sameMatrices(dd.cartanSubMatrix("co"), coGroup.A))
+		{
+			if(Helper.sameMatrices(dd.cartanSubMatrix("co"),group.A))
+				coGroup = group;
+			else
+				coGroup	= new CGroup(dd.cartanSubMatrix("co"));
+		}
+		
+		// Only construct the subgroup if it is new and different from the cogroup.
+		if(subGroup == null || !Helper.sameMatrices(dd.cartanSubMatrix("sub"), subGroup.A))
+		{
+			if(Helper.sameMatrices(dd.cartanSubMatrix("sub"),coGroup.A))
+				subGroup = coGroup;
+			else
+				subGroup = new CGroup(dd.cartanSubMatrix("sub"));
+		}
+		
+		// Only construct the intgroup if it is new and different from the cogroup.
+		if(intGroup == null || !Helper.sameMatrices(dd.cartanSubMatrix("sub"), intGroup.A))
+		{
+			if(Helper.sameMatrices(dd.cartanSubMatrix("int"),coGroup.A))
+				intGroup = coGroup;
+			else
+				intGroup = new CGroup(dd.cartanSubMatrix("int"));
+		}
+		
 	}
 	
 	public boolean isSignPos()

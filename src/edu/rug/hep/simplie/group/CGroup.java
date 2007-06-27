@@ -70,6 +70,9 @@ public class CGroup
 	/** The Weyl vector of the group */
 	public final CWeight rho;
 	
+	/** The number of subgroups this is a direct product of */
+	public final int numProducts;
+	
 	
 	/** Vector containing the norm of the simple roots divided by two. */
 	private final int[] simpleRootNorms;
@@ -246,6 +249,7 @@ public class CGroup
 			}
 		}
 		type = tempType;
+		numProducts = directProductFactors.size();
 		
 		// Set up the root system.
 		rs = new CRootSystem(this);
