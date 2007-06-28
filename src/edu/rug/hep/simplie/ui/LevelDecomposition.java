@@ -453,10 +453,13 @@ private void rbSignPosStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIR
 			// Prepare the UI:
 			//  - Change the "scan" button into a "cancel" button.
 			//  - Start the progressbar animation.
+			//	- Set the rep table title.
 			bAutoScan.setText("Cancel");
 			autoScanProgressBar.setIndeterminate(true);
 			autoScanProgressBar.setString("Scanning");
 			algebras.setLocked(true);
+			jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null,algebras.getDecompositionType(), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12)));
+			representationsTable.setTitle(algebras.getDecompositionType());			
 			
 			// Set up the scan.
 			autoScanner = new CAutoLevelScanner(

@@ -75,6 +75,8 @@ public class CAlgebraComposite implements DiagramListener
 				intGroup = new CGroup(dd.cartanSubMatrix("int"));
 		}
 		
+		dd.setTitle("Dynkin diagram of " +getDynkinDiagramType());
+		
 	}
 	
 	public boolean isSignPos()
@@ -116,14 +118,7 @@ public class CAlgebraComposite implements DiagramListener
 	 */
 	public String getDecompositionType()
 	{
-		String output;
-		
-		output = subGroup.type;
-		if(intGroup.rank != 0)
-			output += " x " + intGroup.type;
-		output += " representations in " + group.type;
-		
-		return output;
+		return coGroup.type + " representations in " + group.type;
 	}
 	
 	/**
@@ -134,14 +129,9 @@ public class CAlgebraComposite implements DiagramListener
 	 */
 	public String getDynkinDiagramType()
 	{
-		String output;
-		
-		output = group.type;
-		if(subGroup.rank != group.rank)
-			output += " as " + subGroup.type;
-		if(intGroup.rank != 0)
-			output += " x " + intGroup.type;
-		
+		String output = group.type;
+		if(group.rank > coGroup.rank)
+			output += " as " + coGroup.type;
 		return output;
 	}
 	

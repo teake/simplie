@@ -62,6 +62,7 @@ public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramLis
 	public void diagramChanged()
 	{
 		diagram.repaint();
+		setTitle(dd.getTitle());
 	}
 	
 	public void drawDiagram(Graphics g)

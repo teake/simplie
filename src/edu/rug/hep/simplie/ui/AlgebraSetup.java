@@ -38,8 +38,6 @@ public class AlgebraSetup extends javax.swing.JPanel implements DiagramListener
 		subAlgebraInfo.update(algebras.subGroup);
 		disAlgebraInfo.update(algebras.intGroup);
 		coAlgebraInfo.update(algebras.coGroup);
-	
-		dynkinDiagramPanel.setTitle("Dynkin Diagram of " + algebras.getDynkinDiagramType());
 	}
 	
 	/** This method is called from within the constructor to

@@ -25,6 +25,7 @@ import javax.swing.table.TableColumnModel;
 public class UIPrintableColorTable extends JTable
 {
 	private boolean printing = false;
+	private String title = "";
 	
 	/** Creates a printable color table that automatically resizes its columns. */
 	public UIPrintableColorTable()
@@ -45,6 +46,16 @@ public class UIPrintableColorTable extends JTable
 			super.setShowHorizontalLines(false);
 			printing = false;
 		}
+	}
+	
+	public void setTitle(String title)
+	{
+		this.title = title;
+	}
+	
+	public String getTitle()
+	{
+		return this.title;
 	}
 	
 	public Component prepareRenderer(
@@ -164,7 +175,7 @@ public class UIPrintableColorTable extends JTable
 		}
 		output += "|} \n";
 		if(includeCaption)
-			output += "\\caption{...} \\\\ \n";
+			output += "\\caption{" + title + "} \\\\ \n";
 		output += "\\hline \n";
 		for (int i = 0; i < totalColumns; i++)
 		{

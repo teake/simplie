@@ -43,6 +43,8 @@ public class CDynkinDiagram
 	private Vector<DiagramListener> listeners;
 	/** Internal boolean to keep if the diagram is locked or not */
 	private boolean locked;
+	/** The title of the dynkin diagram */
+	private String title;
 	
 	/**
 	 * Creates a new instance of CDynkinDiagram
@@ -70,6 +72,16 @@ public class CDynkinDiagram
 	public boolean isLocked()
 	{
 		return this.locked;
+	}
+	
+	public void setTitle(String title)
+	{
+		this.title = title;
+	}
+	
+	public String getTitle()
+	{
+		return this.title;
 	}
 	
 	/** Clears the Dynkin diagram. That is, it deletes all nodes. */
@@ -513,7 +525,7 @@ public class CDynkinDiagram
 		output += "\\end{pspicture}\n";
 		output += "\\end{center}\n";
 		if(includeCaption)
-			output += "\\caption{Dynkin diagram of ... }\n";
+			output += "\\caption{" + title + "}\n";
 		output += "\\end{figure}\n";
 		
 		return output;
