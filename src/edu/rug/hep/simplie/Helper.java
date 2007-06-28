@@ -99,25 +99,127 @@ public class Helper
 	}
 	
 	/**
-	 * Returns the A_n cartan matrix of the given rank.
+	 * Returns the cartan matrix of the given rank and type.
 	 *
 	 * @param	 rank	The rank of the A_n matrix to be returned.
+	 * @param	 type	The type of the Cartan matrix, "A", "B", etc.
 	 * @return			The A_n cartan matrix of the given rank.
 	 */
-	public static Matrix regularMatrix(int rank)
+	public static int[][] cartanMatrix(int rank, String type)
 	{
-		Matrix matrix = new Matrix(rank, rank);
+		int[][] matrix = new int[rank][rank];
+		
+		// First do the regular A-series matrix.
 		for (int i = 0; i < rank; i++)
 		{
 			for (int j = 0; j < rank; j++)
 			{
 				if(i == j)
-					matrix.set(i,j,2);
-				if(j == i-1 || j == i+1)
-					matrix.set(i,j,-1);
+					matrix[i][j] = 2;
+				else if(j == i-1 || j == i+1)
+					matrix[i][j] = -1;
+				else
+					matrix[i][j] = 0;
 			}
 		}
-		return matrix;
+		
+		if(type == "A")
+			return matrix;
+		
+		if(type == "B" && rank > 1)
+		{
+			matrix[1][0] = -2;
+			return matrix;
+		}
+		
+		if(type == "C" && rank > 2)
+		{
+			matrix[0][1] = -2;
+			return matrix;
+		}
+		
+		if(type == "D" && rank > 3)
+		{
+			matrix[0][1] = matrix[1][0] = 0;
+			matrix[0][2] = matrix[2][0] = -1;
+			return matrix;
+		}
+		
+		if(type == "E" && rank > 5)
+		{
+			matrix[0][3] = matrix[3][0] = -1;
+			matrix[0][1] = matrix[1][0] = 0;
+			return matrix;
+		}
+		
+		if(type == "F" && rank == 4)
+		{
+			matrix[1][2] = -2;
+			return matrix;
+		}
+		
+		if(type == "G" && rank == 2)
+		{
+			matrix[0][1] = -3;
+			return matrix;
+		}
+
+		return null;
+	}
+	
+	public static boolean sameCartanMatrices(int[][] matrix1, int[][] matrix2)
+	{
+		if(matrix1 == null || matrix2 == null)
+			return false;
+		if(matrix1.length != matrix2.length)
+			return false;
+		
+		Matrix A = new Matrix(matrix1.length,matrix1.length);
+		Matrix B = new Matrix(matrix1.length,matrix1.length);
+		
+		int normA = 0;
+		int normB = 0;
+		for (int i = 0; i < matrix1.length; i++)
+		{
+			for (int j = 0; j < matrix1.length; j++)
+			{
+				A.set(i,j,matrix1[i][j]);
+				B.set(i,j,matrix2[i][j]);
+				normA += matrix1[i][j];
+				normB += matrix1[i][j];
+			}
+		}
+		
+		if(normA != normB)
+			return false;
+		
+		if(Math.round(A.det()) != Math.round(B.det()))
+			return false;
+		
+		if(A.rank() != B.rank())
+			return false;
+		
+		if(Math.round(100 * A.normF()) != Math.round(100 * B.normF()))
+			return false;
+		
+		// I don't seem to need the following, so let's save some computation time
+		// and don't include them.
+		
+		/*
+		if(Math.round(100 * A.norm1()) != Math.round(100 * B.norm1()))
+			return false;
+		 
+		if(Math.round(100 * A.norm2()) != Math.round(100 * B.norm2()))
+			return false;
+		 
+		if(Math.round(100 * A.normInf()) != Math.round(100 * B.normInf()))
+			return false;
+		 
+		if(Math.round(100 * A.cond()) != Math.round(100 * B.cond()))
+			return false;
+		 */
+		
+		return true;
 	}
 	
 	/**

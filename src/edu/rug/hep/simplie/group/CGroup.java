@@ -322,13 +322,23 @@ public class CGroup
 		String type = null;
 		int size = A.length;
 		
-		// TODO: make this algorithm find more types
-		Matrix compareMatrix = Helper.regularMatrix(size);
 		if(size == 0)
 			type = "Empty";
-		else if(Helper.sameMatrices(compareMatrix,A))
+		else if(Helper.sameCartanMatrices(A,Helper.cartanMatrix(size, "A")))
 			type = "A";
-
+		else if(Helper.sameCartanMatrices(A,Helper.cartanMatrix(size, "B")))
+			type = "B";
+		else if(Helper.sameCartanMatrices(A,Helper.cartanMatrix(size, "C")))
+			type = "C";
+		else if(Helper.sameCartanMatrices(A,Helper.cartanMatrix(size, "D")))
+			type = "D";
+		else if(Helper.sameCartanMatrices(A,Helper.cartanMatrix(size, "E")))
+			type = "E";
+		else if(Helper.sameCartanMatrices(A,Helper.cartanMatrix(size, "F")))
+			type = "F";
+		else if(Helper.sameCartanMatrices(A,Helper.cartanMatrix(size, "G")))
+			type = "G";
+		
 		if(type == null)
 			type = "Unknown";
 		else if(size != 0)
