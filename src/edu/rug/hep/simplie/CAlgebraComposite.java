@@ -75,7 +75,8 @@ public class CAlgebraComposite implements DiagramListener
 				intGroup = new CGroup(dd.cartanSubMatrix("int"));
 		}
 		
-		dd.setTitle("Dynkin diagram of " +getDynkinDiagramType());
+		dd.setTitle("Dynkin diagram of " + getDynkinDiagramType(false));
+		dd.setTitleTeX("Dynkin diagram of " + getDynkinDiagramType(true));
 		
 	}
 	
@@ -116,9 +117,12 @@ public class CAlgebraComposite implements DiagramListener
 	 * @return	String of the type "regular subgroup x disconnected subgroup representations in fullgroup".
 	 * @see		#getDynkinDiagramType
 	 */
-	public String getDecompositionType()
+	public String getDecompositionType(boolean TeX)
 	{
-		return coGroup.type + " representations in " + group.type;
+		if(TeX)
+			return coGroup.typeTeX + " representations in " + group.typeTeX;
+		else
+			return coGroup.type + " representations in " + group.type;
 	}
 	
 	/**
@@ -127,11 +131,22 @@ public class CAlgebraComposite implements DiagramListener
 	 * @return	String of the type "fullgroup as regular subgroup x disconnected subgroup".
 	 * @see		#getDecompositionType
 	 */
-	public String getDynkinDiagramType()
+	public String getDynkinDiagramType(boolean TeX)
 	{
-		String output = group.type;
-		if(group.rank > coGroup.rank)
-			output += " as " + coGroup.type;
+		String output = "";
+		
+		if(TeX)
+		{
+			output += group.typeTeX;
+			if(group.rank > coGroup.rank)
+				output += " as " + coGroup.typeTeX;
+		}
+		else
+		{
+			output += group.type;
+			if(group.rank > coGroup.rank)
+				output += " as " + coGroup.type;			
+		}
 		return output;
 	}
 	

@@ -143,7 +143,6 @@ public class Helper
 			return matrix;
 		}
 		
-		
 		if(type == "B" && simpleRank > 1)
 		{
 			matrix[1][0] = -2;

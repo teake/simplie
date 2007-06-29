@@ -521,7 +521,7 @@ public class Main extends javax.swing.JFrame
 	{//GEN-HEADEREND:event_MenuItemSaveDDActionPerformed
 		JFileChooser chooser = new JFileChooser(ddDir);
 		chooser.addChoosableFileFilter(ddFilter);
-		chooser.setSelectedFile(new File(algebras.getDynkinDiagramType() + ".dd"));
+		chooser.setSelectedFile(new File(algebras.getDynkinDiagramType(false) + ".dd"));
 		chooser.setDialogTitle("Save Dynkin diagram");
 		int returnVal = chooser.showSaveDialog(this);
 		

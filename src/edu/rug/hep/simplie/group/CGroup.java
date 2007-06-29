@@ -65,16 +65,16 @@ public class CGroup
 	public final String	dimension;
 	/** The type of the group (e.g. "A1", "E6", etc) */
 	public final String	type;
+	/** The same as "type", but now in HTML markup */
+	public final String typeHTML;
+	/** The same as "type", but now in TeX markup */
+	public final String typeTeX;
 	/** Boolean indicating whethet the group is finite or not. */
 	public final boolean finite;
 	/** The root system */
 	public final CRootSystem rs;
 	/** The Weyl vector of the group */
 	public final CWeight rho;
-	
-	/** The number of subgroups this is a direct product of */
-	public final int numProducts;
-	
 	
 	/** Vector containing the norm of the simple roots divided by two. */
 	private final int[] simpleRootNorms;
@@ -243,17 +243,77 @@ public class CGroup
 		rho = new CWeight(weylLabels);
 		
 		// Detect the type of Lie group.
-		String tempType = "";
+		String tType	= "";
+		String tTypeTeX	= "";
+		String tTypeHTML= "";
+		String[] series	= { "A", "B", "C", "D", "E", "F", "G" };
 		for(int i = 0; i < directProductFactors.size(); i++)
 		{
-			tempType += detectType(directProductFactors.get(i));
+			int[][]	matrix	= directProductFactors.get(i);
+			String	ttType		= null;
+			String	ttTypeHTML	= null;
+			String	ttTypeTeX	= null;
+			
+			int size		= matrix.length;
+			int extended	= 0;
+			
+			{
+				loopToBreak:
+					for (int j = 0; j < size; j++)
+					{
+						for(String serie : series)
+						{
+							if(Helper.sameCartanMatrices(matrix,Helper.cartanMatrix(size,j,serie)))
+							{
+								ttType = ttTypeHTML = ttTypeTeX = serie;
+								extended = j;
+								break loopToBreak;
+							}
+						}
+					}
+			}
+			
+			if(ttType == null)
+				tType = ttTypeHTML = ttTypeTeX = "Unknown";
+			else
+			{
+				if(size != 0)
+				{
+					int simpleRank = size - extended;
+					ttType		+= simpleRank;
+					ttTypeHTML	+= "<sub>" + simpleRank + "</sub>";
+					ttTypeTeX	+= "_{" + simpleRank + "}";
+				}
+				ttTypeHTML	+= "<sup>";
+				ttTypeTeX	+= "^{";
+				for (int j = 0; j < extended; j++)
+				{
+					ttType		+= "+";
+					ttTypeHTML	+= "+";
+					ttTypeTeX	+= "+";
+				}
+				ttTypeHTML	+= "</sup>";
+				ttTypeTeX	+= "}";
+				
+			}
+			tType		+= ttType;
+			tTypeHTML	+= ttTypeHTML;
+			tTypeTeX	+= ttTypeTeX;
 			if(i != directProductFactors.size() - 1)
 			{
-				tempType += " x ";
+				tType		+= " x ";
+				tTypeHTML	+= " x ";
+				tTypeTeX	+= " \\otimes ";
 			}
 		}
-		type = tempType;
-		numProducts = directProductFactors.size();
+		if(tType == "")
+			type = typeHTML = typeTeX = "Empty";
+		else
+		{
+			type		= tType;
+			typeTeX		= "$" + tTypeTeX + "$";
+			typeHTML	= "<html>" + tTypeHTML + "</html>";
+		}
 		
 		// Set up the root system.
 		rs = new CRootSystem(this);
@@ -308,54 +368,6 @@ public class CGroup
 		}
 		
 		
-	}
-	
-	/**
-	 * Given a Cartan matrix, this methods tries to determine the type
-	 * of the group associated to that matrix.
-	 *
-	 * @param	A	The ireducible Cartan matrix of which the type is to be determined.
-	 * @return		The type of the Lie group, e.g. "A10", or "E6".
-	 */
-	public String detectType(int[][] A)
-	{
-		String		type	= null;
-		String[]	series	= { "A", "B", "C", "D", "E", "F", "G" };
-		int size		= A.length;
-		int extended	= 0;
-		
-		if(size == 0)
-			type = "Empty";
-		else
-		{
-			loopToBreak:
-				for (int i = 0; i < size; i++)
-				{
-					for(String serie : series)
-					{
-						if(Helper.sameCartanMatrices(A,Helper.cartanMatrix(size,i,serie)))
-						{
-							type		= serie;
-							extended	= i;
-							break loopToBreak;
-						}
-					}
-				}
-		}
-		
-		if(type == null)
-			type = "Unknown";
-		else
-		{
-			if(size != 0)
-				type += size - extended;
-			for (int i = 0; i < extended; i++)
-			{
-				type += "+";				
-			}
-		}
-				
-		return type;
 	}
 	
 	/**

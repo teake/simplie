@@ -70,7 +70,7 @@ public class LevelDecomposition extends javax.swing.JPanel
 		try
 		{
 			MessageFormat footer = new MessageFormat("Page {0}");
-			MessageFormat header = new MessageFormat(algebras.getDecompositionType());
+			MessageFormat header = new MessageFormat(algebras.getDecompositionType(false));
 			representationsTable.print(JTable.PrintMode.FIT_WIDTH, header, footer);
 		}
 		catch (PrinterException e)
@@ -88,7 +88,7 @@ public class LevelDecomposition extends javax.swing.JPanel
 	{
 		int[] coDynkinLabels = algebras.coDynkinLabels(rootVector);
 		int[] levels = algebras.levels(rootVector);
- 		CHighestWeightRep hwRep = new CHighestWeightRep(algebras.coGroup,coDynkinLabels);
+		CHighestWeightRep hwRep = new CHighestWeightRep(algebras.coGroup,coDynkinLabels);
 		
 		// Fully construct the weight system.
 		hwRep.construct(0);
@@ -435,7 +435,7 @@ public class LevelDecomposition extends javax.swing.JPanel
 private void rbSignPosStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_rbSignPosStateChanged
 	algebras.setSignPos(rbSignPos.isSelected());
 }//GEN-LAST:event_rbSignPosStateChanged
-	
+
     private void bAutoScanActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_bAutoScanActionPerformed
     {//GEN-HEADEREND:event_bAutoScanActionPerformed
 		if(!(autoScanner == null || autoScanner.isDone()))
@@ -458,8 +458,8 @@ private void rbSignPosStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIR
 			autoScanProgressBar.setIndeterminate(true);
 			autoScanProgressBar.setString("Scanning");
 			algebras.setLocked(true);
-			jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null,algebras.getDecompositionType(), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12)));
-			representationsTable.setTitle(algebras.getDecompositionType());			
+			jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null,algebras.getDecompositionType(false), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12)));
+			representationsTable.setTitleTeX(algebras.getDecompositionType(true));
 			
 			// Set up the scan.
 			autoScanner = new CAutoLevelScanner(

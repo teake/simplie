@@ -45,6 +45,8 @@ public class CDynkinDiagram
 	private boolean locked;
 	/** The title of the dynkin diagram */
 	private String title;
+	/** The same as "title", only now in TeX */
+	private String titleTeX;
 	
 	/**
 	 * Creates a new instance of CDynkinDiagram
@@ -82,6 +84,16 @@ public class CDynkinDiagram
 	public String getTitle()
 	{
 		return this.title;
+	}
+	
+	public void setTitleTeX(String title)
+	{
+		this.titleTeX = title;
+	}
+	
+	public String getTitleTeX()
+	{
+		return this.titleTeX;
 	}
 	
 	/** Clears the Dynkin diagram. That is, it deletes all nodes. */
@@ -525,7 +537,7 @@ public class CDynkinDiagram
 		output += "\\end{pspicture}\n";
 		output += "\\end{center}\n";
 		if(includeCaption)
-			output += "\\caption{" + title + "}\n";
+			output += "\\caption{" + titleTeX + "}\n";
 		output += "\\end{figure}\n";
 		
 		return output;

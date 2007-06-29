@@ -261,7 +261,7 @@ public class ExportToTex extends javax.swing.JPanel
 		if(rbFile.isSelected())
 		{
 			JFileChooser chooser = new JFileChooser("");
-			chooser.setSelectedFile(new File(algebras.getDynkinDiagramType() + ".tex"));
+			chooser.setSelectedFile(new File(algebras.getDynkinDiagramType(false) + ".tex"));
 			chooser.addChoosableFileFilter(texFilter);
 			chooser.setDialogTitle("Export to TeX");
 			int returnVal = chooser.showSaveDialog(this);
