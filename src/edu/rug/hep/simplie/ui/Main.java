@@ -13,6 +13,8 @@ import javax.swing.UIManager;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.*;
 import java.io.File;
+import java.awt.Image;
+import java.awt.Toolkit;
 
 
 /**
@@ -54,6 +56,9 @@ public class Main extends javax.swing.JFrame
 		catch (Exception e)
 		{
 		}
+		Image img = Toolkit.getDefaultToolkit().getImage(java.net.URLClassLoader.getSystemResource("icon.gif"));
+		this.setIconImage( img );
+		
 		initComponents();
 		
 		algebras = new CAlgebraComposite();
@@ -91,7 +96,7 @@ public class Main extends javax.swing.JFrame
 			rsDir.mkdirs();
 		
 		// Fill the preset menu.
-		resetPresets();		
+		resetPresets();
 	}
 	
 	private void resetPresets()
@@ -420,9 +425,9 @@ public class Main extends javax.swing.JFrame
 	
 	private void MenuItemResetPresetsActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_MenuItemResetPresetsActionPerformed
 	{//GEN-HEADEREND:event_MenuItemResetPresetsActionPerformed
-	resetPresets();
+		resetPresets();
 }//GEN-LAST:event_MenuItemResetPresetsActionPerformed
-
+	
 	private void MenuExportRootSystemActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_MenuExportRootSystemActionPerformed
 	{//GEN-HEADEREND:event_MenuExportRootSystemActionPerformed
 		JFileChooser chooser = new JFileChooser("");
