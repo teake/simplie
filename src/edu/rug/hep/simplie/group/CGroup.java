@@ -314,36 +314,47 @@ public class CGroup
 	 * Given a Cartan matrix, this methods tries to determine the type
 	 * of the group associated to that matrix.
 	 *
-	 * @param	A	The Cartan matrix of which the type is to be determined.
+	 * @param	A	The ireducible Cartan matrix of which the type is to be determined.
 	 * @return		The type of the Lie group, e.g. "A10", or "E6".
 	 */
 	public String detectType(int[][] A)
 	{
-		String type = null;
-		int size = A.length;
+		String		type	= null;
+		String[]	series	= { "A", "B", "C", "D", "E", "F", "G" };
+		int size		= A.length;
+		int extended	= 0;
 		
 		if(size == 0)
 			type = "Empty";
-		else if(Helper.sameCartanMatrices(A,Helper.cartanMatrix(size, "A")))
-			type = "A";
-		else if(Helper.sameCartanMatrices(A,Helper.cartanMatrix(size, "B")))
-			type = "B";
-		else if(Helper.sameCartanMatrices(A,Helper.cartanMatrix(size, "C")))
-			type = "C";
-		else if(Helper.sameCartanMatrices(A,Helper.cartanMatrix(size, "D")))
-			type = "D";
-		else if(Helper.sameCartanMatrices(A,Helper.cartanMatrix(size, "E")))
-			type = "E";
-		else if(Helper.sameCartanMatrices(A,Helper.cartanMatrix(size, "F")))
-			type = "F";
-		else if(Helper.sameCartanMatrices(A,Helper.cartanMatrix(size, "G")))
-			type = "G";
+		else
+		{
+			loopToBreak:
+				for (int i = 0; i < size; i++)
+				{
+					for(String serie : series)
+					{
+						if(Helper.sameCartanMatrices(A,Helper.cartanMatrix(size,i,serie)))
+						{
+							type		= serie;
+							extended	= i;
+							break loopToBreak;
+						}
+					}
+				}
+		}
 		
 		if(type == null)
 			type = "Unknown";
-		else if(size != 0)
-			type += size;
-		
+		else
+		{
+			if(size != 0)
+				type += size - extended;
+			for (int i = 0; i < extended; i++)
+			{
+				type += "+";				
+			}
+		}
+				
 		return type;
 	}
 	
