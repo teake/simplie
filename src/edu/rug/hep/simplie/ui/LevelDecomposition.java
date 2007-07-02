@@ -11,14 +11,11 @@ import edu.rug.hep.simplie.group.*;
 import edu.rug.hep.simplie.leveldecomposer.CAutoLevelScanner;
 
 import java.util.*;
-import javax.swing.JTable;
 import javax.swing.table.*;
 import javax.swing.event.*;
-import java.awt.print.PrinterException;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeEvent;
 import javax.swing.SwingWorker;
-import java.text.MessageFormat;
 import edu.rug.hep.simplie.ui.reusable.UIPrintableColorTable;
 
 
@@ -63,20 +60,6 @@ public class LevelDecomposition extends javax.swing.JPanel
 	{
 		this.algebras = algebras;
 		this.algebras.setSignPos(rbSignPos.isSelected());
-	}
-	
-	public void printTable()
-	{
-		try
-		{
-			MessageFormat footer = new MessageFormat("Page {0}");
-			MessageFormat header = new MessageFormat(algebras.getDecompositionType(false));
-			representationsTable.print(JTable.PrintMode.FIT_WIDTH, header, footer);
-		}
-		catch (PrinterException e)
-		{
-			e.printStackTrace();
-		}
 	}
 	
 	public UIPrintableColorTable getRepTable()

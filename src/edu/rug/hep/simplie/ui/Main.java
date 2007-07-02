@@ -13,9 +13,6 @@ import javax.swing.UIManager;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.*;
 import java.io.File;
-import java.awt.Image;
-import java.awt.Toolkit;
-
 
 /**
  *
@@ -56,16 +53,17 @@ public class Main extends javax.swing.JFrame
 		catch (Exception e)
 		{
 		}
-		Image img = Toolkit.getDefaultToolkit().getImage(java.net.URLClassLoader.getSystemResource("icon.png"));
-		this.setIconImage( img );
+		
+		// Set the custom SimpLie icon.
+		this.setIconImage(java.awt.Toolkit.getDefaultToolkit().getImage(java.net.URLClassLoader.getSystemResource("icon.png")) );
 		
 		initComponents();
 		
+		// Create the algebras and initialize the other components.
 		algebras = new CAlgebraComposite();
 		algebraSetup.setAlgebraComposite(algebras);
 		algebraInfo.setAlgebraComposite(algebras);
 		levelDecomposition.setAlgebraComposite(algebras);
-		
 		
 		this.setLocation(20,20);
 		
@@ -102,7 +100,7 @@ public class Main extends javax.swing.JFrame
 	private void resetPresets()
 	{
 		// Clear everything except the reset button
-		while(MenuPresets.getItemCount() > 2)
+		while(MenuPresets.getItemCount() > 3)
 		{
 			MenuPresets.remove(0);
 		}
@@ -157,13 +155,10 @@ public class Main extends javax.swing.JFrame
         MenuItemLoadRoots = new javax.swing.JMenuItem();
         MenuItemSaveRoots = new javax.swing.JMenuItem();
         jSeparator1 = new javax.swing.JSeparator();
-        jMenuItemPrint = new javax.swing.JMenuItem();
-        jSeparator3 = new javax.swing.JSeparator();
         MenuItemExit = new javax.swing.JMenuItem();
-        MenuEdit = new javax.swing.JMenu();
-        MenuItemClear = new javax.swing.JMenuItem();
         MenuPresets = new javax.swing.JMenu();
         jSeparator2 = new javax.swing.JSeparator();
+        MenuItemClear = new javax.swing.JMenuItem();
         MenuItemResetPresets = new javax.swing.JMenuItem();
         MenuTools = new javax.swing.JMenu();
         MenuExportToTex = new javax.swing.JMenuItem();
@@ -279,19 +274,6 @@ public class Main extends javax.swing.JFrame
         MenuFile.add(MenuItemSaveRoots);
         MenuFile.add(jSeparator1);
 
-        jMenuItemPrint.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P, java.awt.event.InputEvent.CTRL_MASK));
-        jMenuItemPrint.setMnemonic('p');
-        jMenuItemPrint.setText("Print representation table");
-        jMenuItemPrint.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
-                jMenuItemPrintActionPerformed(evt);
-            }
-        });
-        MenuFile.add(jMenuItemPrint);
-        MenuFile.add(jSeparator3);
-
         MenuItemExit.setMnemonic('x');
         MenuItemExit.setText("Exit");
         MenuItemExit.addActionListener(new java.awt.event.ActionListener()
@@ -305,9 +287,11 @@ public class Main extends javax.swing.JFrame
 
         MenuBar.add(MenuFile);
 
-        MenuEdit.setMnemonic('e');
-        MenuEdit.setText("Edit");
+        MenuPresets.setMnemonic('p');
+        MenuPresets.setText("Presets");
+        MenuPresets.add(jSeparator2);
 
+        MenuItemClear.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_X, java.awt.event.InputEvent.SHIFT_MASK));
         MenuItemClear.setMnemonic('c');
         MenuItemClear.setText("Clear diagram");
         MenuItemClear.addActionListener(new java.awt.event.ActionListener()
@@ -317,13 +301,7 @@ public class Main extends javax.swing.JFrame
                 MenuItemClearActionPerformed(evt);
             }
         });
-        MenuEdit.add(MenuItemClear);
-
-        MenuBar.add(MenuEdit);
-
-        MenuPresets.setMnemonic('p');
-        MenuPresets.setText("Presets");
-        MenuPresets.add(jSeparator2);
+        MenuPresets.add(MenuItemClear);
 
         MenuItemResetPresets.setMnemonic('r');
         MenuItemResetPresets.setText("Reset presets");
@@ -454,12 +432,7 @@ public class Main extends javax.swing.JFrame
 	{//GEN-HEADEREND:event_MenuExportToTexActionPerformed
 		exportDialog.setVisible(true);
 	}//GEN-LAST:event_MenuExportToTexActionPerformed
-	
-	private void jMenuItemPrintActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jMenuItemPrintActionPerformed
-	{//GEN-HEADEREND:event_jMenuItemPrintActionPerformed
-		levelDecomposition.printTable();
-	}//GEN-LAST:event_jMenuItemPrintActionPerformed
-	
+		
 	private void MenuItemSaveRootsActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_MenuItemSaveRootsActionPerformed
 	{//GEN-HEADEREND:event_MenuItemSaveRootsActionPerformed
 		JFileChooser chooser = new JFileChooser(rsDir);
@@ -598,7 +571,6 @@ public class Main extends javax.swing.JFrame
 	
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuBar MenuBar;
-    private javax.swing.JMenu MenuEdit;
     private javax.swing.JMenuItem MenuExportRootSystem;
     private javax.swing.JMenuItem MenuExportToTex;
     private javax.swing.JMenu MenuFile;
@@ -620,10 +592,8 @@ public class Main extends javax.swing.JFrame
     private edu.rug.hep.simplie.ui.AlgebraSetup algebraSetup;
     private javax.swing.JDialog exportDialog;
     private edu.rug.hep.simplie.ui.ExportToTex exportToTex;
-    private javax.swing.JMenuItem jMenuItemPrint;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
-    private javax.swing.JSeparator jSeparator3;
     private javax.swing.JSeparator jSeparator4;
     private edu.rug.hep.simplie.ui.LevelDecomposition levelDecomposition;
     private javax.swing.JOptionPane optionPane;
