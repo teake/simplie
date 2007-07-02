@@ -56,7 +56,7 @@ public class Main extends javax.swing.JFrame
 		catch (Exception e)
 		{
 		}
-		Image img = Toolkit.getDefaultToolkit().getImage(java.net.URLClassLoader.getSystemResource("icon.gif"));
+		Image img = Toolkit.getDefaultToolkit().getImage(java.net.URLClassLoader.getSystemResource("icon.png"));
 		this.setIconImage( img );
 		
 		initComponents();
