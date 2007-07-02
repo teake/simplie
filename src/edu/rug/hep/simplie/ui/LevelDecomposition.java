@@ -441,6 +441,8 @@ private void rbSignPosStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIR
 			autoScanProgressBar.setIndeterminate(true);
 			autoScanProgressBar.setString("Scanning");
 			algebras.setLocked(true);
+			rbSignNeg.setEnabled(false);
+			rbSignPos.setEnabled(false);
 			jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null,algebras.getDecompositionType(false), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12)));
 			representationsTable.setTitleTeX(algebras.getDecompositionType(true));
 			
@@ -468,6 +470,8 @@ private void rbSignPosStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIR
 						autoScanProgressBar.setIndeterminate(false);
 						autoScanProgressBar.setString("Idle");
 						algebras.setLocked(false);
+						rbSignNeg.setEnabled(true);
+						rbSignPos.setEnabled(true);
 						System.out.print("Finished level decomposition. Milliseconds: ");
 						System.out.println(System.currentTimeMillis() - startTime);
 					}

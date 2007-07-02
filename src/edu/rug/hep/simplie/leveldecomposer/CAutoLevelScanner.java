@@ -21,9 +21,7 @@ import java.util.Comparator;
 
 /**
  * A SwingWorker for scanning regular subalgebra representations within a group.
- * It currently reads its group information from the Globals singleton.
  *
- * @see		Globals
  * @author	Teake Nutma
  */
 public class CAutoLevelScanner extends SwingWorker<Void,Object[]> implements Comparator<int[]>
@@ -45,8 +43,7 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]> implements Com
 	/**
 	 * Creates a new instance of CAutoLevelScanner.
 	 *
-	 * @param	posSignConvention	If true, we will be scanning for highest weight representations (p_i = + A_ij m^j).
-	 *								If false, we will be scanning for negative lowest weight representations (p_i = - A_ij m^j).
+	 * @param	algebras			The CAlgebraComposite object for which to do the level decomposition.
 	 * @param	calcRootMult		If true, the multiplicity of the roots will be calculate. This will take longer.
 	 * @param	calcRepMult			If true, the multiplicity of the subalgebra representations will be calculated.
 	 *								This again will take longer.

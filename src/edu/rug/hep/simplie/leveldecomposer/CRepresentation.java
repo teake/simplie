@@ -52,9 +52,9 @@ public class CRepresentation implements Comparable<CRepresentation>
 	/**
 	 * Creates a new instance of CRepresentation
 	 *
+	 * @param	algebras		The CAlgebraComposite object for which this is a rep at a level.
 	 * @param	dynkinLabels	The full dynkinlabels of the highest weight state.
 	 * @param	levels			The part of the rootvector corresponding to the level nodes.
-	 * @param	coLevels		The part of the rootvector corresponding to the regular subalgebra nodes.
 	 * @param	length			The length of the associated root (i.e. the innerproduct with itself).
 	 */
 	public CRepresentation(CAlgebraComposite algebras, int[] dynkinLabels, int[] levels, int length)
