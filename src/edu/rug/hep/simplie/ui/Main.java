@@ -13,6 +13,8 @@ import javax.swing.UIManager;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.*;
 import java.io.File;
+import java.util.ArrayList;
+import java.awt.Image;
 
 /**
  *
@@ -54,8 +56,11 @@ public class Main extends javax.swing.JFrame
 		{
 		}
 		
-		// Set the custom SimpLie icon.
-		this.setIconImage(java.awt.Toolkit.getDefaultToolkit().getImage(java.net.URLClassLoader.getSystemResource("icon.png")) );
+		// Set the custom SimpLie icons.
+		ArrayList iconList = new ArrayList<Image>();
+		iconList.add(java.awt.Toolkit.getDefaultToolkit().getImage(java.net.URLClassLoader.getSystemResource("icon32.png")));
+		iconList.add(java.awt.Toolkit.getDefaultToolkit().getImage(java.net.URLClassLoader.getSystemResource("icon16.png")));
+		this.setIconImages(iconList);
 		
 		initComponents();
 		

@@ -262,31 +262,34 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]> implements Com
 			if(scanFirst)
 			{
 				coLevels = algebras.calculateCoLevels(levels, dynkinLabels);
-				int rootLength = algebras.calculateRootLength(levels, coLevels);
+				fraction rootLength = algebras.calculateRootLength(levels, coLevels);
 				// Only continue if the root length is not bigger than the maximum root length.
-				if(rootLength <= algebras.group.maxNorm)
+				if(rootLength.asDouble() <= algebras.group.maxNorm)
 				{
-					// First check if all root components are integers and non-negative.
-					allGoodIntegers = true;
-					for (int i = 0; i < coLevels.length; i++)
+					if(rootLength.isInt())
 					{
-						if(!coLevels[i].isInt() || coLevels[i].asDouble() * levelSign < 0)
+						// First check if all root components are integers and non-negative.
+						allGoodIntegers = true;
+						for (int i = 0; i < coLevels.length; i++)
 						{
-							allGoodIntegers = false;
-							break;
+							if(!coLevels[i].isInt() || coLevels[i].asDouble() * levelSign < 0)
+							{
+								allGoodIntegers = false;
+								break;
+							}
 						}
-					}
-					// If we found a valid representation, add it.
-					if(allGoodIntegers)
-					{
-						// Add the representation.
-						CRepresentation rep = new CRepresentation(
-								algebras,
-								dynkinLabels,
-								levels,
-								rootLength
-								);
-						repContainer.add(rep);
+						// If we found a valid representation, add it.
+						if(allGoodIntegers)
+						{
+							// Add the representation.
+							CRepresentation rep = new CRepresentation(
+									algebras,
+									dynkinLabels,
+									levels,
+									rootLength.asInt()
+									);
+							repContainer.add(rep);
+						}
 					}
 				}
 				else

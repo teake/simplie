@@ -145,7 +145,7 @@ public class CAlgebraComposite implements DiagramListener
 		{
 			output += group.type;
 			if(group.rank > coGroup.rank)
-				output += " as " + coGroup.type;			
+				output += " as " + coGroup.type;
 		}
 		return output;
 	}
@@ -220,7 +220,7 @@ public class CAlgebraComposite implements DiagramListener
 	 ********************************/
 	
 	/** Returns the actual root length */
-	public int calculateRootLength(int[] levels, fraction[] coLevels)
+	public fraction calculateRootLength(int[] levels, fraction[] coLevels)
 	{
 		fraction rootLength = new fraction(0);
 		
@@ -246,7 +246,7 @@ public class CAlgebraComposite implements DiagramListener
 			}
 		}
 		
-		return rootLength.asInt();
+		return rootLength;
 	}
 	
 	/** Returns the levels of the co-algebra. */
