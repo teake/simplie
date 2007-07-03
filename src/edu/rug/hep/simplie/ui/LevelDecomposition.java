@@ -185,7 +185,6 @@ public class LevelDecomposition extends javax.swing.JPanel
         cbRootMult.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
         cbRootMult.setMargin(new java.awt.Insets(0, 0, 0, 0));
 
-        cbZeroMultRep.setSelected(true);
         cbZeroMultRep.setText("Show 0 mu reps");
         cbZeroMultRep.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
         cbZeroMultRep.setMargin(new java.awt.Insets(0, 0, 0, 0));
@@ -248,9 +247,7 @@ public class LevelDecomposition extends javax.swing.JPanel
                             .addComponent(cbExotic))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(settingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(settingsPanelLayout.createSequentialGroup()
-                                .addComponent(cbAllWeights)
-                                .addGap(20, 20, 20))
+                            .addComponent(cbAllWeights)
                             .addComponent(cbRootMult)
                             .addComponent(cbRepMult))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
