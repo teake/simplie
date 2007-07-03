@@ -220,17 +220,21 @@ public class CAlgebraComposite implements DiagramListener
 	 ********************************/
 	
 	/** Returns the actual root length */
-	public fraction calculateRootLength(int[] levels, fraction[] coLevels)
+	public fraction calculateRootLength(int[] levels, int[] dynkinLabels)
 	{
 		fraction rootLength = new fraction(0);
+		int[] levelComponents	= calculateLevelComponents(levels);
 		
-		for(int i=0; i < coLevels.length; i++)
+		for(int i=0; i < dynkinLabels.length; i++)
 		{
-			for(int j=0; j < coLevels.length; j++)
+			for(int j=0; j < dynkinLabels.length; j++)
 			{
-				rootLength.add( coLevels[i].times(coLevels[j].times(group.B[dd.translateCo(i)][dd.translateCo(j)] )));
+				fraction contribution = new fraction(group.simpleRootNorms[dd.translateCo(j)],coGroup.simpleRootNorms[j]);
+				contribution.multiply(dynkinLabels[i] * dynkinLabels[j] - levelComponents[i] * levelComponents[j]);
+				rootLength.add( coGroup.G[i][j].times(contribution) );
 			}
 		}
+		
 		for(int i=0; i < levels.length; i++)
 		{
 			for(int j=0; j < levels.length; j++)
@@ -238,15 +242,8 @@ public class CAlgebraComposite implements DiagramListener
 				rootLength.add( group.B[dd.translateLevel(i)][dd.translateLevel(j)] * levels[i] * levels[j] );
 			}
 		}
-		for(int i=0; i < coLevels.length; i++)
-		{
-			for(int j=0; j < levels.length; j++)
-			{
-				rootLength.add( coLevels[i].times(2 * levels[j] * group.B[dd.translateCo(i)][dd.translateLevel(j)] ));
-			}
-		}
 		
-		return rootLength;
+		return rootLength;		
 	}
 	
 	/** Returns the levels of the co-algebra. */

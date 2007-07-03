@@ -77,7 +77,7 @@ public class CGroup
 	public final CWeight rho;
 	
 	/** Vector containing the norm of the simple roots divided by two. */
-	private final int[] simpleRootNorms;
+	public final int[] simpleRootNorms;
 	/** List of matrices into which the Cartan matrix factorizes */
 	private final ArrayList<int[][]> directProductFactors;
 	
