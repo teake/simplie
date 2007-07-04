@@ -522,16 +522,34 @@ public class CDynkinDiagram
 		{
 			String toFrom= "{N" + connection.fromNode.getLabel() + hashCode + "}"
 					+ "{N" + connection.toNode.getLabel() + hashCode + "}\n";
-			output += "\\ncline";
-			if(connection.type > 1)
-				output += "[doubleline=true,doublesep=0.2,arrowsize=0.6,arrowlength=0.25,arrowinset=0.6]{->}";
-			else
-				output += "{-}";
-			output += toFrom;
-			if(connection.type == 3)
+			switch(connection.type)
+			{
+			case CDynkinConnection.TYPE_SINGLE:
 				output += "\\ncline{-}" + toFrom;
+				break;
+			case CDynkinConnection.TYPE_DOUBLE:
+				output += "\\ncline[doubleline=true,doublesep=0.2,arrowsize=0.6,arrowlength=0.25,arrowinset=0.6]{->}";
+				output += toFrom;
+				break;
+			case CDynkinConnection.TYPE_TRIPLE:
+				output += "\\ncline[doubleline=true,doublesep=0.2,arrowsize=0.6,arrowlength=0.25,arrowinset=0.6]{->}";
+				output += toFrom;
+				output += "\\ncline{-}" + toFrom;
+				break;
+			case CDynkinConnection.TYPE_QUADRUPLE:
+				output += "\\ncline[doubleline=true,doublesep=0.2,arrowsize=0.6,arrowlength=0.25,arrowinset=0.6]{->}";
+				output += toFrom;
+				output += "\\ncline[doubleline=true,doublesep=0.05]{-}";
+				output += toFrom;
+				break;
+			case CDynkinConnection.TYPE_SPECIAL_DOUBLE:
+				output += "\\ncline[doubleline=true,doublesep=0.2,arrowsize=0.6,arrowlength=0.25,arrowinset=0.6]{-}";
+				output += toFrom;
+				break;
+			default:
+				break;
+			}
 		}
-		
 		
 		// The footer
 		output += "\\end{pspicture}\n";
