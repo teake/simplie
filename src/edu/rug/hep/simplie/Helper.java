@@ -204,7 +204,7 @@ public class Helper
 		
 		if(type == "G" && simpleRank == 2)
 		{
-			matrix[0][1] = -3;
+			matrix[1][0] = -3;
 			return matrix;
 		}
 		

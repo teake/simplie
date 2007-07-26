@@ -274,7 +274,7 @@ public class CGroup
 			}
 			
 			if(ttType == null)
-				tType = ttTypeHTML = ttTypeTeX = "Unknown";
+				ttType = ttTypeHTML = ttTypeTeX = "Unknown";
 			else
 			{
 				if(size != 0)
