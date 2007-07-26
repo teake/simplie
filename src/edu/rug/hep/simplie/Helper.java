@@ -155,7 +155,7 @@ public class Helper
 			return matrix;
 		}
 		
-		if(type == "C" && simpleRank > 2)
+		if(type == "C" && simpleRank > 1)
 		{
 			matrix[0][1] = -2;
 			if(extended > 0)
