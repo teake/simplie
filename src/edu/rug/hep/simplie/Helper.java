@@ -10,6 +10,7 @@ import edu.rug.hep.simplie.math.*;
 
 import Jama.Matrix;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.text.DecimalFormat;
 import java.math.BigDecimal;
 
@@ -239,11 +240,19 @@ public class Helper
 		int[] nodeConnB = new int[matrix1.length];
 		for (int i = 0; i < nodeConnB.length; i++)
 			nodeConnB[i] = nodeConnA[i] =0;
+		
+		// Calculate the sum of each column and sort these later on
+		int[] columnSums1 = new int[matrix1.length];
+		int[] columnSums2 = new int[matrix1.length];
 
 		for (int i = 0; i < matrix1.length; i++)
 		{
 			int connA = 0;
 			int connB = 0;
+			
+			columnSums1[i] = 0;
+			columnSums2[i] = 0;
+			
 			for (int j = 0; j < matrix1.length; j++)
 			{
 				A.set(i,j,matrix1[i][j]);
@@ -256,11 +265,20 @@ public class Helper
 						connA++;
 					if(matrix2[i][j] != 0)
 						connB++;
+					columnSums1[i] += matrix1[i][j];
+					columnSums2[i] += matrix2[i][j];
 				}
 			}
 			nodeConnA[connA]++;
-			nodeConnB[connB]++;;
+			nodeConnB[connB]++;
+			
 		}
+		
+		Arrays.sort(columnSums1);
+		Arrays.sort(columnSums2);
+		
+		if(!Arrays.equals(columnSums1, columnSums2))
+			return false;
 		
 		if(normA != normB)
 			return false;
