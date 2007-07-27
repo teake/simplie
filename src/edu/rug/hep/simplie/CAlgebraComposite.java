@@ -75,8 +75,8 @@ public class CAlgebraComposite implements DiagramListener
 				intGroup = new CGroup(dd.cartanSubMatrix("int"));
 		}
 		
-		dd.setTitle("Dynkin diagram of " + getDynkinDiagramType(false));
-		dd.setTitleTeX("Dynkin diagram of " + getDynkinDiagramType(true));
+		dd.setTitle(getDynkinDiagramType(false));
+		dd.setTitleTeX(getDynkinDiagramType(true));
 		
 	}
 	
@@ -139,13 +139,13 @@ public class CAlgebraComposite implements DiagramListener
 		{
 			output += group.typeTeX;
 			if(group.rank > coGroup.rank)
-				output += " as " + coGroup.typeTeX;
+				output += " decomposed as " + coGroup.typeTeX;
 		}
 		else
 		{
 			output += group.type;
 			if(group.rank > coGroup.rank)
-				output += " as " + coGroup.type;
+				output += " decomposed as " + coGroup.type;
 		}
 		return output;
 	}

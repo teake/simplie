@@ -499,7 +499,7 @@ public class CDynkinDiagram
 		String output = new String();
 		
 		// The header
-		output += "\\begin{figure}[h]\n";
+		output += "\\begin{figure}[H]\n";
 		output += "\\psset{unit=1.25cm}\n";
 		output += "\\begin{center}\n";
 		output += "\\begin{pspicture}(" + xMin + "," + yMin + ")(" + xMax + "," + yMax + ")\n";
