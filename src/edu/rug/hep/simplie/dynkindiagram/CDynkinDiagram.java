@@ -470,7 +470,7 @@ public class CDynkinDiagram
 	}
 	
 	/** Returns a string of LaTeX representing the diagram visually. */
-	public String toTeX(boolean includeCaption, boolean includeLabels)
+	public String toTeX(boolean includeCaption, boolean includeLabels, boolean includeFigure)
 	{
 		if(rank() == 0)
 		{
@@ -499,20 +499,22 @@ public class CDynkinDiagram
 		String output = new String();
 		
 		// The header
-		output += "\\begin{figure}[H]\n";
-		output += "\\psset{unit=1.25cm}\n";
-		output += "\\begin{center}\n";
+		if(includeFigure)
+		{
+			output += "\\begin{figure}[H]\n";
+			output += "\\begin{center}\n";
+		}
 		output += "\\begin{pspicture}(" + xMin + "," + yMin + ")(" + xMax + "," + yMax + ")\n";
 		
 		// The nodes.
 		for(CDynkinNode node : nodes)
 		{
-			output += "\\cnode";
+			output += "\\Cnode";
 			if(node.isDisconnected())
 				output += "[fillstyle=solid,fillcolor=lightgray]";
 			if(node.isLevel())
 				output += "[fillstyle=solid,fillcolor=black]";
-			output += "(" + node.x + "," + (yMax - node.y) + "){0.17}{N" + node.getLabel() + hashCode + "} \n";
+			output += "(" + node.x + "," + (yMax - node.y) + "){N" + node.getLabel() + hashCode + "} \n";
 			if(includeLabels)
 				output += "\\nput[labelsep=0.2]{-40}{N" + node.getLabel() + hashCode + "}{" + node.getLabel() + "}\n";
 		}
@@ -553,10 +555,13 @@ public class CDynkinDiagram
 		
 		// The footer
 		output += "\\end{pspicture}\n";
-		output += "\\end{center}\n";
-		if(includeCaption)
-			output += "\\caption{" + titleTeX + "}\n";
-		output += "\\end{figure}\n";
+		if(includeFigure)
+		{
+			output += "\\end{center}\n";
+			if(includeCaption)
+				output += "\\caption{" + titleTeX + "}\n";
+			output += "\\end{figure}\n";
+		}
 		
 		return output;
 	}
