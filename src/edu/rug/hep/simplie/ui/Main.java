@@ -28,7 +28,7 @@ public class Main extends javax.swing.JFrame
 	private final File ddDir;
 	private final File rsDir;
 	private final CAlgebraComposite algebras;
-	private final String revision;
+	private final String build;
 	
 	/** This class is used in the diagram preset UI */
 	class ddListener implements java.awt.event.ActionListener
@@ -48,7 +48,8 @@ public class Main extends javax.swing.JFrame
 	public Main()
 	{
 		// This is replaced by SVN everytime we commit
-		revision = "$Rev$";
+		String revision = "$Rev$";
+		build = revision.replace("Rev:","").replace("$","");
 		
 		// Try to set the Look and Feel to the system native look and feel.
 		UIManager uiManager = new UIManager();
@@ -554,7 +555,7 @@ public class Main extends javax.swing.JFrame
     {//GEN-HEADEREND:event_MenuItemAboutActionPerformed
 		optionPane.showMessageDialog(
 				popup,
-				"SimpLie, a simple program for Lie algebras.\n Revision: " + revision +  " \n \n Teake Nutma \n t.a.nutma@rug.nl",
+				"SimpLie, a simple program for Lie algebras.\nBuild " + build +  " \n \nWritten by Teake Nutma \nt.a.nutma@rug.nl",
 				"About",
 				optionPane.PLAIN_MESSAGE);
     }//GEN-LAST:event_MenuItemAboutActionPerformed
