@@ -509,14 +509,15 @@ public class CDynkinDiagram
 		// The nodes.
 		for(CDynkinNode node : nodes)
 		{
-			output += "\\Cnode";
+			if(node.isEnabled())
+				output += "\\normalNode";
 			if(node.isDisconnected())
-				output += "[fillstyle=solid,fillcolor=lightgray]";
+				output += "\\dualityNode";
 			if(node.isLevel())
-				output += "[fillstyle=solid,fillcolor=black]";
-			output += "(" + node.x + "," + (yMax - node.y) + "){N" + node.getLabel() + hashCode + "} \n";
+				output += "\\disabledNode";
+			output += "{" + node.x + "," + (yMax - node.y) + "}{N" + node.getLabel() + hashCode + "} \n";
 			if(includeLabels)
-				output += "\\nput[labelsep=0.2]{-40}{N" + node.getLabel() + hashCode + "}{" + node.getLabel() + "}\n";
+				output += "\\nodeLabel{N" + node.getLabel() + hashCode + "}{" + node.getLabel() + "}\n";
 		}
 		
 		// The connections.
@@ -527,26 +528,19 @@ public class CDynkinDiagram
 			switch(connection.type)
 			{
 			case CDynkinConnection.TYPE_SINGLE:
-				output += "\\ncline{-}" + toFrom;
+				output += "\\singleConnection" + toFrom;
 				break;
 			case CDynkinConnection.TYPE_DOUBLE:
-				output += "\\ncline[doubleline=true,doublesep=0.2,arrowsize=0.6,arrowlength=0.25,arrowinset=0.6]{->}";
-				output += toFrom;
+				output += "\\doubleConnection" + toFrom;
 				break;
 			case CDynkinConnection.TYPE_TRIPLE:
-				output += "\\ncline[doubleline=true,doublesep=0.2,arrowsize=0.6,arrowlength=0.25,arrowinset=0.6]{->}";
-				output += toFrom;
-				output += "\\ncline{-}" + toFrom;
+				output += "\\tripleConnection" + toFrom;
 				break;
 			case CDynkinConnection.TYPE_QUADRUPLE:
-				output += "\\ncline[doubleline=true,doublesep=0.2,arrowsize=0.6,arrowlength=0.25,arrowinset=0.6]{->}";
-				output += toFrom;
-				output += "\\ncline[doubleline=true,doublesep=0.05]{-}";
-				output += toFrom;
+				output += "\\quadrupleConnection" + toFrom;
 				break;
 			case CDynkinConnection.TYPE_SPECIAL_DOUBLE:
-				output += "\\ncline[doubleline=true,doublesep=0.2,arrowsize=0.6,arrowlength=0.25,arrowinset=0.6]{-}";
-				output += toFrom;
+				output += "\\specialDoubleConnection" + toFrom;
 				break;
 			default:
 				break;

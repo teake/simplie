@@ -58,7 +58,7 @@ public class CDynkinNode implements Serializable, Comparable<CDynkinNode>
 	}
 	
 	/**
-	 * Boolean indicating whether or not the node is enabled.
+	 * Boolean indicating whether or not the node is enabled ( = not disabled or disconnected).
 	 */
 	public boolean isEnabled()
 	{
