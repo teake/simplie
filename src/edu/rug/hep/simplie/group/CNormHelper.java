@@ -8,12 +8,15 @@
 package edu.rug.hep.simplie.group;
 
 /**
- *
+ * Helper-object for ordering simple roots according to their norm.
+ * 
  * @author Teake Nutma
  */
 public class CNormHelper implements Comparable<CNormHelper>
 {
+	/** The norm of the root (used for ordering). */
 	public final double norm;
+	/** Index to keep track of the original order of the root.  */ 
 	public final int index;
 	
 	/** Creates a new instance of CNormHelper */
@@ -23,6 +26,7 @@ public class CNormHelper implements Comparable<CNormHelper>
 		this.norm = norm;
 	}
 	
+	/** Compares normHelpers according to their norm */
 	public int compareTo(CNormHelper compareNH)
 	{
 		final int BEFORE = -1;
@@ -34,6 +38,8 @@ public class CNormHelper implements Comparable<CNormHelper>
 		
 		return EQUAL;
 	}
+	
+	/** NormHelpers are equal to each other when their index is the same. */
 	public boolean equals(Object obj)
 	{
 		if(this == obj)

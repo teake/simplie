@@ -12,7 +12,12 @@ import edu.rug.hep.simplie.group.*;
 import edu.rug.hep.simplie.math.*;
 
 /**
- * @author Teake Nutma
+ * The core SimpLie object. It stores the group disintegration
+ * information from a decomposed Dynkin diagram. It also stores
+ * the Dynkin diagram itself.
+ * Implements DiagramListener to obtain the diagram information.
+ * 
+ * @author  Teake Nutma
  */
 public class CAlgebraComposite implements DiagramListener
 {
@@ -38,6 +43,7 @@ public class CAlgebraComposite implements DiagramListener
 		this.locked = false;
 	}
 	
+	@Override
 	public void diagramChanged()
 	{
 		// Don't do anything if the algebras are locked.
@@ -80,6 +86,12 @@ public class CAlgebraComposite implements DiagramListener
 		
 	}
 	
+	/**
+	 * Checks if the sign used in the calculations (lowest / highest weights)
+	 * is positive (highest weights) or negative (lowest weights).
+	 * 
+	 * @return  True if positive, false if negative.
+	 */
 	public boolean isSignPos()
 	{
 		if(sign == 1)
@@ -88,6 +100,11 @@ public class CAlgebraComposite implements DiagramListener
 			return false;
 	}
 	
+	/**
+	 * Sets the sign used in the calculations (lowest / highest weights).
+	 * 
+	 * @param   positive	True for positive, false for negative.
+	 */
 	public void setSignPos(boolean positive)
 	{
 		if(locked)
@@ -99,12 +116,23 @@ public class CAlgebraComposite implements DiagramListener
 			this.sign = -1;
 	}
 	
+	/**
+	 * Locks everything (eg the sign and the diagram cannot be changed),
+	 * useful for when we are in the middle of a long calculation.
+	 * 
+	 * @param   locked  True: locks everything, false: unlock everything.
+	 */
 	public void setLocked(boolean locked)
 	{
 		this.locked = locked;
 		dd.setLocked(locked);
 	}
 	
+	/**
+	 * Is the algebraComposite locked or not?
+	 * 
+	 * @return  True if it is locked, false otherwise.
+	 */
 	public boolean isLocked()
 	{
 		return this.locked;
@@ -155,6 +183,13 @@ public class CAlgebraComposite implements DiagramListener
 	 * root vectors, dynkin labels and such
 	 *********************************/
 	
+	
+	/**
+	 * Returns the level-part of a root vector
+	 * 
+	 * @param   rootVector	The root vector of which the level part is to be returned.
+	 * @return		The level part of the root vector.
+	 */
 	public int[] levels(int[] rootVector)
 	{
 		int[] levels = new int[group.rank - coGroup.rank];
@@ -165,6 +200,13 @@ public class CAlgebraComposite implements DiagramListener
 		return levels;
 	}
 	
+	/**
+	 * Calculates Dynkin labels of the regular subalgebra
+	 * given a root vector.
+	 * 
+	 * @param   rootVector	The root vector of the weight.
+	 * @return		The subalgebra part of the associated Dynkin labels.
+	 */
 	public int[] subDynkinLabels(int[] rootVector)
 	{
 		int[] subDynkinLabels = new int[subGroup.rank];
@@ -176,6 +218,13 @@ public class CAlgebraComposite implements DiagramListener
 		return subDynkinLabels;
 	}
 	
+	/** 
+	 * Calculates Dynkin labels of the internal algebra
+	 * given a root vector.
+	 * 
+	 * @param   rootVector	The root vector of the weight.
+	 * @return		The internal algebra part of the associated Dynkin labels.
+	 */
 	public int[] intDynkinLabels(int[] rootVector)
 	{
 		int[] intDynkinLabels = new int[intGroup.rank];
@@ -187,6 +236,13 @@ public class CAlgebraComposite implements DiagramListener
 		return intDynkinLabels;
 	}
 	
+	/**
+	 * Calculates Dynkin labels of the co-algebra
+	 * given a root vector.
+	 * 
+	 * @param   rootVector	The root vector of the weight.
+	 * @return		The co-algebra part of the associated Dynkin labels.
+	 */
 	public int[] coDynkinLabels(int[] rootVector)
 	{
 		int[] coDynkinLabels = new int[coGroup.rank];
@@ -198,6 +254,13 @@ public class CAlgebraComposite implements DiagramListener
 		return coDynkinLabels;
 	}
 	
+	/**
+	 * Returns the full root vector from the levels and the co-Dynkin labels.
+	 * 
+	 * @param   levels	    The levels-part of the root vector.
+	 * @param   coDynkinLabels  Co-algebra Dynkin labels of the associated root vector.
+	 * @return		    The full root vector calculated from the two parameters.
+	 */ 
 	public int[] rootVector(int[] levels, int[] coDynkinLabels)
 	{
 		int[] rootVector = new int[group.rank];
@@ -219,7 +282,7 @@ public class CAlgebraComposite implements DiagramListener
 	 * calculation
 	 ********************************/
 	
-	/** Returns the actual root length */
+	/** Returns the root length */
 	public fraction calculateRootLength(int[] levels, int[] dynkinLabels)
 	{
 		fraction rootLength = new fraction(0);

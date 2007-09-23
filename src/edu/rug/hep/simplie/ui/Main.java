@@ -17,7 +17,8 @@ import java.util.ArrayList;
 import java.awt.Image;
 
 /**
- *
+ * The runnable of SimpLie, also displays all of its sub-windows.
+ * 
  * @author  Teake Nutma
  */
 public class Main extends javax.swing.JFrame
@@ -555,7 +556,7 @@ public class Main extends javax.swing.JFrame
     {//GEN-HEADEREND:event_MenuItemAboutActionPerformed
 		optionPane.showMessageDialog(
 				popup,
-				"SimpLie, a simple program for Lie algebras.\nBuild " + build +  " \n \nWritten by Teake Nutma \nt.a.nutma@rug.nl",
+				"SimpLie, a simple program for Lie algebras.\nVersion 1.0\n \nWritten by Teake Nutma \nt.a.nutma@rug.nl",
 				"About",
 				optionPane.PLAIN_MESSAGE);
     }//GEN-LAST:event_MenuItemAboutActionPerformed

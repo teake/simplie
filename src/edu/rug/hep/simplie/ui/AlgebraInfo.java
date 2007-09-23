@@ -16,7 +16,12 @@ import java.util.Iterator;
 
 
 /**
- *
+ * Displays information on a composite of algebras.
+ * The information contains the (symmetrized / inverse) Cartan matrix, 
+ * the root space metric, the root system, and arbitrary highest
+ * weight representations.
+ * 
+ * @see		CAlgebraComposite
  * @author  Teake Nutma
  */
 public class AlgebraInfo extends javax.swing.JPanel implements DiagramListener
@@ -37,6 +42,7 @@ public class AlgebraInfo extends javax.swing.JPanel implements DiagramListener
 		HWrep = null;
 	}
 	
+	/** Sets the composite of algebras we want to view info of. */
 	public void setAlgebraComposite(CAlgebraComposite algebras)
 	{
 		this.algebras	= algebras;

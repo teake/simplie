@@ -53,11 +53,12 @@ public class CDynkinConnection implements Serializable
 	}
 	
 	/** 
-	 * Checks if this connection is equal another connection.
+	 * Checks if this connection is equal to another connection.
 	 * The are the same both the fromNode and the toNode are the same.
 	 *
 	 * @param	obj		The object to be compared, which has to be a connection.
 	 */
+	@Override
 	public boolean equals(Object obj)
 	{
 		if(this == obj)
@@ -73,6 +74,8 @@ public class CDynkinConnection implements Serializable
 			return false;
 	}
 	
+	/** Represents to connection as a string */
+	@Override
 	public String toString()
 	{
 		return "Connection from " + fromNode.getLabel() + " to " + toNode.getLabel() + ", " + type + " time(s) laced.";

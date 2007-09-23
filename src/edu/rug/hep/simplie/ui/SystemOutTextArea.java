@@ -11,8 +11,10 @@ import java.io.OutputStream;
 import java.io.PrintStream;
 
 /**
- *
- * @author  P221000
+ * Output panel for low-level SimpLie messages, which are not of direct concern
+ * of to the user.
+ * 
+ * @author  Teake Nutma
  */
 public class SystemOutTextArea extends javax.swing.JPanel
 {

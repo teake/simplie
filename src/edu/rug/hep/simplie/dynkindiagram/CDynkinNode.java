@@ -47,11 +47,21 @@ public class CDynkinNode implements Serializable, Comparable<CDynkinNode>
 		this.connectionsTo = new ArrayList<CDynkinNode>();
 	}
 	
+	/**
+	 * Returns the label of this node.
+	 * 
+	 * @return	The label of this node.
+	 */
 	public int getLabel()
 	{
 		return label;
 	}
 
+	/**
+	 * Sets the label of this node.
+	 * 
+	 * @param   label   The new label of this node.
+	 */
 	public void setLabel(int label)
 	{
 		this.label = label;

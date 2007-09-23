@@ -12,7 +12,8 @@ import edu.rug.hep.simplie.dynkindiagram.*;
 import Jama.Matrix.*;
 
 /**
- *
+ * Panel that displays a Dynkin diagram and information on the 4 derived algebras.
+ * 
  * @author  Teake Nutma
  */
 public class AlgebraSetup extends javax.swing.JPanel implements DiagramListener

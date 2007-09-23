@@ -21,7 +21,9 @@ import edu.rug.hep.simplie.ui.reusable.UIPrintableColorTable;
 
 
 /**
- *
+ * User interface for exporting various things (Dynkin diagram,
+ * output of level decomposition) to LaTeX.
+ * 
  * @author  Teake Nutma
  */
 public class ExportToTex extends javax.swing.JPanel

@@ -59,11 +59,11 @@ public class CGroup
 	public final int	rankA;
 	/** The rank of the group. */
 	public final int	rank;
-	/** The dimension of the group (i.e. the number of generators). Only set for finite groups. */
+	/** The dimension of the group (the number of generators). Only set for finite groups. */
 	public final int	dim;
 	/** String value of dim. "Infinite" if the group is infinite. */
 	public final String	dimension;
-	/** The type of the group (e.g. "A1", "E6", etc) */
+	/** The type of the group ("A1", "E6", etc) */
 	public final String	type;
 	/** The same as "type", but now in HTML markup */
 	public final String typeHTML;
@@ -321,7 +321,7 @@ public class CGroup
 		// Now that the simple roots have been created,
 		// we can set the symmetrized Cartan matrix
 		// and the metric on the root space.
-		Matrix symA = new Matrix(rank,rank);
+		Matrix symA	= new Matrix(rank,rank);
 		Matrix B	= new Matrix(rank,rank);
 		for (int i = 0; i < rank; i++)
 		{
@@ -380,14 +380,14 @@ public class CGroup
 	 */
 	public long dimOfRep(int[] highestWeightLabels)
 	{
-		fraction	dim;
+		fraction	dimOfRep;
 		CWeight		highestWeight;
 		
 		// Preliminary checks.
 		if(!finite || highestWeightLabels.length != rank)
 			return 0;
 		
-		dim				= new fraction(1);
+		dimOfRep				= new fraction(1);
 		highestWeight	= new CWeight(highestWeightLabels);
 		
 		for (int i = 1; i < rs.size(); i++)
@@ -398,12 +398,12 @@ public class CGroup
 			{
 				CRoot root = (CRoot) iterator.next();
 				int rhoRoot = rho(root);
-				dim.multiply( innerProduct(highestWeight,root) + rhoRoot );
-				dim.divide( rhoRoot );
+				dimOfRep.multiply( innerProduct(highestWeight,root) + rhoRoot );
+				dimOfRep.divide( rhoRoot );
 			}
 		}
 		
-		return dim.asLong();
+		return dimOfRep.asLong();
 	}
 	
 	/**
@@ -529,6 +529,7 @@ public class CGroup
 	}
 	
 	
+	/** Returns the Dynkin labels of the weight associated to a vector of the root. */
 	public int[] rootToWeight(int[] rootVector)
 	{
 		int[] dynkinLabels = new int[rank];

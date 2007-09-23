@@ -58,39 +58,80 @@ public class CDynkinDiagram
 		connections	= new Vector<CDynkinConnection>();
 		font		= new Font("Monospaced", Font.PLAIN, 12);
 		lastAddedNode	= null;
-		listeners		= new Vector<DiagramListener>();
+		listeners	= new Vector<DiagramListener>();
 	}
 	
+	/**
+	 * Adds a listener to this diagram.
+	 * 
+	 * @param   listener	The listener to add.
+	 */
 	public void addListener(DiagramListener listener)
 	{
 		listeners.add(listener);
 	}
 	
+	
+	/**
+	 * Locks the diagram.
+	 * 
+	 * @param   locked  If true, the diagram will get locked.
+	 *		    If false, the diagram will get unlocked.
+	 */
 	public void setLocked(boolean locked)
 	{
 		this.locked = locked;
 	}
 	
+	/**
+	 * If the diagram is locked it cannot be changed
+	 * (no nodes or connections can be added or removed).
+	 * 
+	 * @return  True is the diagram is locked, false otherwise.
+	 */
 	public boolean isLocked()
 	{
 		return this.locked;
 	}
 	
+	/**
+	 * Sets the plain-text title of the diagram.
+	 * 
+	 * @param   title   The title of the diagram.
+	 */
 	public void setTitle(String title)
 	{
 		this.title = title;
 	}
 	
+	/**
+	 * Gets the plain-text title of the diagram.
+	 * 
+	 * @return  The title of the diagram.
+	 */
 	public String getTitle()
 	{
 		return this.title;
 	}
 	
+	/**
+	 * Sets the TeX-formatted title of the diagram.
+	 * Used when export to TeX.
+	 * 
+	 * @param   title   The TeX-formatted title of the diagram.
+	 * @see		    #toTeX
+	 */
 	public void setTitleTeX(String title)
 	{
 		this.titleTeX = title;
 	}
 	
+	
+	/**
+	 * Gets the TeX-formatted title of the diagram.
+	 * 
+	 * @return  The TeX-formatted title of the diagram.
+	 */
 	public String getTitleTeX()
 	{
 		return this.titleTeX;
@@ -328,6 +369,14 @@ public class CDynkinDiagram
 		}
 	}
 	
+	/**
+	 * Toggles a certain node and returns a 
+	 * string containing info on the action performed.
+	 * If the node was enabled, it will be disabled, and vice-versa.
+	 * 
+	 * @param   node    The node to be toggled.
+	 * @return	    String containing info on the action taken.
+	 */
 	public String toggleNode(CDynkinNode node)
 	{
 		if(locked)
@@ -469,7 +518,16 @@ public class CDynkinDiagram
 		return true;
 	}
 	
-	/** Returns a string of LaTeX representing the diagram visually. */
+	/** 
+	 * Returns a string of LaTeX representing the diagram visually.
+	 * 
+	 * @param   includeCaption  Includes a caption with the LaTeX figure, 
+	 *			    which contains LaTeX title.
+	 * @param   includeLabels   Includes numbering on the nodes within the figure.
+	 * @param   includeFigure   Includes the "figure" environment when exporting to TeX.
+	 * @return		    A string containing TeX code that can be compiled.
+	 * @see	    #setTitleTeX
+	 */
 	public String toTeX(boolean includeCaption, boolean includeLabels, boolean includeFigure)
 	{
 		if(rank() == 0)

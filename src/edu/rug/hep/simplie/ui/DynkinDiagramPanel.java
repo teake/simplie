@@ -16,7 +16,8 @@ import java.awt.Color;
 import java.awt.Cursor;
 
 /**
- *
+ * Displays a Dynkin diagram and allows its editing via direct user-interaction.
+ * 
  * @author  Teake Nutma
  */
 public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramListener

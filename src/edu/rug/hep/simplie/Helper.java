@@ -15,7 +15,9 @@ import java.text.DecimalFormat;
 import java.math.BigDecimal;
 
 /**
- *
+ * This class contains miscellaneous helper functions that
+ * come in handy from time to time.
+ * 
  * @author Teake Nutma
  */
 public class Helper
@@ -78,6 +80,14 @@ public class Helper
 		return output;
 	}
 	
+	/**
+	 * Splits a string into and array of integers.
+	 * The delimiter is a space (" ") and is fixed.
+	 * For example, the string "1 2 3 4" returns the array [1,2,3,4].
+	 * 
+	 * @param   string  The string to split.
+	 * @return	    An integer array.
+	 */
 	public static int[] stringToIntArray(String string)
 	{
 		ArrayList<Integer> values = new ArrayList<Integer>();
@@ -427,7 +437,15 @@ public class Helper
 		}
 		return vector;
 	}
-	
+
+	/**
+	 * Takes an integer matrix and returns it as a string,
+	 * with all entries formatted to have the given decimal plates.
+	 *
+	 * @param	matrix		 The integer matrix to be formatted to a string.
+	 * @param	decimalPlates	 The number of decimals each entry will have.
+	 * @return			 A string representing the matrix.
+	 */
 	public static String matrixToString(int[][] matrix, int decimalPlates)
 	{
 		Matrix newMatrix = new Matrix(matrix.length, matrix.length);
@@ -441,7 +459,14 @@ public class Helper
 		return matrixToString(newMatrix,decimalPlates);
 	}
 	
-	
+	/**
+	 * Takes an fractional matrix and returns it as a string,
+	 * with all entries formatted to have the given decimal plates.
+	 *
+	 * @param	matrix		 The fractional matrix to be formatted to a string.
+	 * @param	decimalPlates	 The number of decimals each entry will have.
+	 * @return			 A string representing the matrix.
+	 */
 	public static String matrixToString(fraction[][] matrix, int decimalPlates)
 	{
 		Matrix newMatrix = new Matrix(matrix.length, matrix.length);

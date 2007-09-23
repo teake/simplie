@@ -23,7 +23,7 @@ public class CRoot implements Serializable
 	
 	/** The root vector. */
 	public final int[] vector;
-	/** The norm of the root, i.e. the innerproduct with itself. */
+	/** The norm of the root (the innerproduct with itself). */
 	public int norm;
 	/** The root multiplicity. */
 	public long	mult;

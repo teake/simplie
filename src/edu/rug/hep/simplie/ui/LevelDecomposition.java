@@ -20,7 +20,8 @@ import edu.rug.hep.simplie.ui.reusable.UIPrintableColorTable;
 
 
 /**
- *
+ * Windows for executing a level decomposition and vieuing its results.
+ * 
  * @author  Teake Nutma
  */
 public class LevelDecomposition extends javax.swing.JPanel
