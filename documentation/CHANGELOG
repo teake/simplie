@@ -1,0 +1,17 @@
+xx-09-2007: Version 1.0
+
+* [math] SimpLie can now handle non-simply laced algebras.
+* [math] Automatic detection of the type of diagram, including direct products.
+* [math] Sort levels prior to scanning according to their sum squared.
+* [ui] Algebra presets are now customizable by the user.
+* [ui] Added a context menu to the Dynkin diagram interaction panel.
+* [ui] Added a preview node to the dynkin diagram.
+* [ui] Added status-feedback in the diagram panel.
+* [ui] Added big algebra-info tab.
+* [ui] Added extra column to rep table: h'. It contains the height of the root associated to the highest weight state.
+* [ui] Added 'show exotic fields' option. Useful for truncating results that have more indices than the number of space time dimensions.
+* [misc] Increased perfomance by > 50%.
+* [misc] Lock the diagram and disable sign convention buttons when scanning.
+
+
+09-05-2007: Unnumbered, first version.

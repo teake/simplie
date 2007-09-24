@@ -316,6 +316,7 @@ is divided into following sections:
         </copy>
     </target>
     <target name="-post-compile">
+		<copydir src="documentation" dest="dist"></copydir>
         <!-- Empty placeholder for easier customization. -->
         <!-- You can override this target in the ../build.xml file. -->
     </target>
