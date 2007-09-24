@@ -497,15 +497,13 @@ public class Main extends javax.swing.JFrame
 		optionPane.showMessageDialog(
 				popup,
 				"Dynkin diagram interaction: \n \n" +
-				"Add a node: \n   Left mouse \n" +
-				"Remove node: \n   Control + left mouse \n" +
-				"Add connection: \n   Right mouse \n" +
-				"Remove connection: \n   Control + right mouse \n" +
-				"Toggle node: \n   Middle mouse or Alt + left mouse",
+				"Left mouse-click: \n   Add a node. \n" +
+				"Middle mouse-click: \n   Toggle a node. \n" +
+				"Right mouse-click: \n   Bring up context menu.",
 				"Help",
 				optionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_MenuItemHelpActionPerformed
-	
+
 	private void MenuItemSaveDDActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_MenuItemSaveDDActionPerformed
 	{//GEN-HEADEREND:event_MenuItemSaveDDActionPerformed
 		JFileChooser chooser = new JFileChooser(ddDir);
