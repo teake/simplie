@@ -65,7 +65,33 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="menuRemoveConnectionActionPerformed"/>
           </Events>
         </MenuItem>
-        <Component class="javax.swing.JSeparator" name="menuSeparator">
+        <Component class="javax.swing.JSeparator" name="menuSeparator1">
+        </Component>
+        <MenuItem class="javax.swing.JMenuItem" name="menuToggleCompact">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Compact toggle"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="menuToggleCompactActionPerformed"/>
+          </Events>
+        </MenuItem>
+        <MenuItem class="javax.swing.JMenuItem" name="menuAddCompactPair">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Create compact pair"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="menuAddCompactPairActionPerformed"/>
+          </Events>
+        </MenuItem>
+        <MenuItem class="javax.swing.JMenuItem" name="menuRemoveCompactPair">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Remove compact pair"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="menuRemoveCompactPairActionPerformed"/>
+          </Events>
+        </MenuItem>
+        <Component class="javax.swing.JSeparator" name="menuSeparator2">
         </Component>
         <MenuItem class="javax.swing.JMenuItem" name="menuAddNode">
           <Properties>
@@ -105,6 +131,7 @@
   </Properties>
   <AuxValues>
     <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="0"/>
+    <AuxValue name="FormSettings_autoSetComponentName" type="java.lang.Boolean" value="false"/>
     <AuxValue name="FormSettings_generateMnemonicsCode" type="java.lang.Boolean" value="false"/>
     <AuxValue name="FormSettings_i18nAutoMode" type="java.lang.Boolean" value="false"/>
     <AuxValue name="FormSettings_layoutCodeTarget" type="java.lang.Integer" value="1"/>
@@ -145,6 +172,7 @@
         </Property>
       </Properties>
       <Events>
+        <EventHandler event="mouseEntered" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="diagramMouseEntered"/>
         <EventHandler event="mouseExited" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="diagramMouseExited"/>
         <EventHandler event="mouseReleased" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="diagramMouseReleased"/>
         <EventHandler event="mouseMoved" listener="java.awt.event.MouseMotionListener" parameters="java.awt.event.MouseEvent" handler="diagramMouseMoved"/>
@@ -156,20 +184,20 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Component id="status" alignment="1" pref="355" max="32767" attributes="0"/>
+              <Component id="tf_status" alignment="1" pref="355" max="32767" attributes="0"/>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace pref="140" max="32767" attributes="0"/>
-                  <Component id="status" min="-2" max="-2" attributes="0"/>
+                  <Component id="tf_status" min="-2" max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
       </Layout>
       <SubComponents>
-        <Component class="javax.swing.JLabel" name="status">
+        <Component class="javax.swing.JLabel" name="tf_status">
           <Properties>
             <Property name="horizontalAlignment" type="int" value="4"/>
             <Property name="text" type="java.lang.String" value="(Right) click to add a node to the diagram."/>

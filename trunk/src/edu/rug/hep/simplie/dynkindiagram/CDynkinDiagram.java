@@ -37,6 +37,8 @@ import java.awt.geom.Line2D;
 import java.awt.Color;
 import java.awt.Font;
 import Jama.Matrix;
+import java.awt.BasicStroke;
+import java.awt.geom.QuadCurve2D;
 
 /**
  * A class representing (as of yet only simply-laced) Dynkin diagrams.
@@ -51,6 +53,8 @@ public class CDynkinDiagram
 	private Vector<CDynkinNode> nodes;
 	/** Vector containing all connections of this diagram */
 	private Vector<CDynkinConnection> connections;
+	/** Vector containing all the compact pairs of this diagram */
+	private Vector<CCompactPair> compactPairs;
 	/** Font for drawing the diagram. */
 	private Font font;
 	/** The node that was added last. */
@@ -64,6 +68,10 @@ public class CDynkinDiagram
 	/** The same as "title", only now in TeX */
 	private String titleTeX;
 	
+	private final float dash[] = {5.0f,2.0f};
+	private final BasicStroke dashedStroke;
+	private final BasicStroke normalStroke;
+	
 	/**
 	 * Creates a new instance of CDynkinDiagram
 	 */
@@ -72,9 +80,16 @@ public class CDynkinDiagram
 		locked		= false;
 		nodes		= new Vector<CDynkinNode>();
 		connections	= new Vector<CDynkinConnection>();
+		compactPairs= new Vector<CCompactPair>();
 		font		= new Font("Monospaced", Font.PLAIN, 12);
 		lastAddedNode	= null;
 		listeners	= new Vector<DiagramListener>();
+		
+		dashedStroke = new BasicStroke(1.0f,
+				BasicStroke.CAP_BUTT,
+				BasicStroke.JOIN_MITER, 
+				10.0f, dash, 0.0f);
+		normalStroke = new BasicStroke(1.0f);
 	}
 	
 	/**
@@ -384,6 +399,25 @@ public class CDynkinDiagram
 			return "Node added.";
 		}
 	}
+	 
+	public String toggleCompactNode(CDynkinNode node)
+	{
+		if(locked)
+			return "Diagram is locked.";
+		
+		if(node != null && nodes.contains(node))
+		{
+			if(node.toggleCompact())
+			{
+				update();
+				return "Node toggled.";
+			}
+			else
+				return "Node not toggled.";
+		}
+		return "No node to toggle.";
+	}
+	
 	
 	/**
 	 * Toggles a certain node and returns a 
@@ -410,10 +444,13 @@ public class CDynkinDiagram
 	/** Removes a node from the diagram. */
 	public String removeNode(CDynkinNode nodeToRemove)
 	{
+		Iterator it;
+		
 		if(locked)
 			return "Diagram is locked.";
 		
 		int prevRank = rank();
+		// Remove the node.
 		if(lastAddedNode != null && lastAddedNode.equals(nodeToRemove))
 		{
 			lastAddedNode = null;
@@ -423,7 +460,8 @@ public class CDynkinDiagram
 		{
 			node.removeConnection(nodeToRemove);
 		}
-		Iterator it = connections.iterator();
+		// Remove any connections to it.
+		it = connections.iterator();
 		while(it.hasNext())
 		{
 			CDynkinConnection connection = (CDynkinConnection) it.next();
@@ -432,6 +470,23 @@ public class CDynkinDiagram
 			{
 				it.remove();
 			}
+		}
+		// Remove the compact pair it was part of (if any).
+		it = compactPairs.iterator();
+		while(it.hasNext())
+		{
+			CCompactPair pair = (CCompactPair) it.next();
+			if(pair.node1.equals(nodeToRemove))
+			{
+				pair.node2.setCompactPartner(null);
+				it.remove();
+			}
+			if(pair.node2.equals(nodeToRemove))
+			{
+				pair.node1.setCompactPartner(null);
+				it.remove();
+			}
+
 		}
 		if(prevRank > rank())
 		{
@@ -461,8 +516,10 @@ public class CDynkinDiagram
 		
 		CDynkinConnection connection = new CDynkinConnection(fromNode, toNode, laced);
 		
-		if(add && !connections.contains(connection))
+		if(add)
 		{
+			if(connections.contains(connection))
+				return "Connection already exists.";
 			connections.add(connection);
 			fromNode.addConnection(toNode);
 			toNode.addConnection(fromNode);
@@ -476,6 +533,37 @@ public class CDynkinDiagram
 		
 		update();
 		return "Connection " + action + ".";
+	}
+
+	public String modifyCompactPair(CDynkinNode n1, CDynkinNode n2, boolean add)
+	{
+		if(locked)
+			return "Diagram is locked.";
+		
+		String action = (add) ? "added" : "removed";
+		// Do nothing if either one of the nodes is not found, or if both are the same.
+		if( n1 == null || n2 == null || n1.equals(n2) )
+			return "No compact pair " + action + ", begin and / or end point incorrect.";
+		
+		CCompactPair pair = new CCompactPair(n1, n2);
+		
+		if(add)
+		{
+			if(compactPairs.contains(pair))
+				return "No compact pair added.";
+			compactPairs.add(pair);
+			n1.setCompactPartner(n2);
+			n2.setCompactPartner(n1);
+		}
+		else
+		{
+			compactPairs.remove(pair);
+			n1.setCompactPartner(null);
+			n2.setCompactPartner(null);
+		}
+		
+		update();
+		return "Compact pair " + action + ".";
 	}
 	
 	/**
@@ -493,6 +581,7 @@ public class CDynkinDiagram
 			out = new ObjectOutputStream(fos);
 			out.writeObject(nodes);
 			out.writeObject(connections);
+			out.writeObject(compactPairs);
 			out.close();
 		}
 		catch(IOException ex)
@@ -520,6 +609,7 @@ public class CDynkinDiagram
 			in		= new ObjectInputStream(fis);
 			nodes	= (Vector<CDynkinNode>) in.readObject();
 			connections = (Vector<CDynkinConnection>) in.readObject();
+			compactPairs = (Vector<CCompactPair>) in.readObject();
 			in.close();
 			update();
 		}
@@ -644,6 +734,8 @@ public class CDynkinDiagram
 	 */
 	public void drawDiagram(Graphics2D g2, int offset, int spacing, int radius)
 	{
+		// Draw the connections first.
+		g2.setColor(Color.BLACK);
 		for (CDynkinConnection connection : connections)
 		{
 			CDynkinNode node1 = connection.fromNode;
@@ -675,29 +767,53 @@ public class CDynkinDiagram
 			if(line != null)
 				g2.draw(line);
 		}
+		// Secondly the compact pair indicators.
+		g2.setColor(Color.GRAY);
+		g2.setStroke(dashedStroke);
+		for(CCompactPair pair : compactPairs)
+		{
+			CDynkinNode node1 = pair.node1;
+			CDynkinNode node2 = pair.node2;
+			int x1 = spacing * node1.x + offset;
+			int y1 = spacing * node1.y + offset;
+			int x2 = spacing * node2.x + offset;
+			int y2 = spacing * node2.y + offset;
+			int controlx = (x1 + x2 + y1 - y2) / 2;
+			int controly = (y1 + y2 + x2 - x1) / 2;
+			g2.draw(new QuadCurve2D.Float(x1, y1, controlx, controly, x2, y2));
+		}
+		// Now draw the nodes.
+		g2.setStroke(normalStroke);
 		for (CDynkinNode node : nodes)
 		{
-			if(node.isEnabled())
-				g2.setColor(Color.WHITE);
+			int x = spacing * node.x + offset;
+			int y = spacing * node.y + offset;
+			Color color;
+			
+			if(node.isEnabled() || node.isCompact())
+				color = Color.WHITE;
 			else if(node.isDisconnected())
-				g2.setColor(Color.ORANGE);
+				color = Color.ORANGE;
 			else
-				g2.setColor(Color.GRAY);
-			g2.fillOval(
-					spacing * node.x + offset - radius,
-					spacing * node.y + offset - radius,
-					2*radius, 2*radius);
+				color = Color.GRAY;
 			
-			g2.setColor(Color.BLACK);
-			g2.drawOval(
-					spacing * node.x + offset - radius,
-					spacing * node.y + offset - radius,
-					2*radius, 2*radius);
+			Helper.drawFilledCircle(g2,color,Color.BLACK,x,y,radius);
 			
+			if(node.isCompact())
+			{
+				if(node.isEnabled())
+					color = Color.WHITE;
+				else if(node.isDisconnected())
+					color = Color.ORANGE;
+				else
+					color = Color.GRAY;
+
+				Helper.drawFilledCircle(g2,color,Color.BLACK,x,y,radius/2);
+			}
 			g2.setFont(font);
 			g2.drawString(Helper.intToString(node.getLabel()),
-					spacing * node.x + offset + radius,
-					spacing * node.y + offset + radius + 10);
+					x + radius,
+					y + radius + 10);
 		}
 	}
 	

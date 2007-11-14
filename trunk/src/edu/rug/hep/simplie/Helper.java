@@ -25,6 +25,8 @@ package edu.rug.hep.simplie;
 import edu.rug.hep.simplie.math.*;
 
 import Jama.Matrix;
+import java.awt.Color;
+import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.text.DecimalFormat;
@@ -561,5 +563,11 @@ public class Helper
 		return stringMatrix;
 	}
 	
-	
+	public static void drawFilledCircle(Graphics2D g, Color c1, Color c2, int x, int y, int radius)
+	{
+		g.setColor(c1);
+		g.fillOval(x - radius, y - radius, 2*radius, 2*radius);
+		g.setColor(c2);
+		g.drawOval(x - radius, y - radius, 2*radius, 2*radius);	
+	}
 }

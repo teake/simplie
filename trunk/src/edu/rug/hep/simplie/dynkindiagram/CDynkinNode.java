@@ -43,8 +43,12 @@ public class CDynkinNode implements Serializable, Comparable<CDynkinNode>
 	private int label;
 	/** Is the node enabled or not? */
 	private boolean	enabled;
+	/** Is the node compact or not? */
+	private boolean compact;
 	/** The internal list of nodes to which this node has connections. */
 	private ArrayList<CDynkinNode> connectionsTo;
+	/** The compact partner, if any. */
+	private CDynkinNode compactPartner;
 	
 	/**
 	 * Creates a new instance of CDynkinNode.
@@ -56,9 +60,11 @@ public class CDynkinNode implements Serializable, Comparable<CDynkinNode>
 	public CDynkinNode(int x, int y)
 	{
 		this.enabled	= true;
+		this.compact	= false;
 		this.x			= x;
 		this.y			= y;
 		this.label		= 1;
+		this.compactPartner = null;
 		
 		this.connectionsTo = new ArrayList<CDynkinNode>();
 	}
@@ -90,6 +96,14 @@ public class CDynkinNode implements Serializable, Comparable<CDynkinNode>
 	{
 		return enabled;
 	}
+
+	/**
+	 * Boolean indicating whether or not the node is compact.
+	 */
+	public boolean isCompact()
+	{
+		return compact;
+	}
 	
 	/** 
 	 * Toggles a node from enabled <-> disabled.
@@ -98,6 +112,22 @@ public class CDynkinNode implements Serializable, Comparable<CDynkinNode>
 	{
 		enabled = !enabled;
 	}
+
+	/** 
+	 * Toggles a node from non-compact <-> compact.
+	 */
+	public boolean toggleCompact()
+	{
+		// Can't toggle if we're in a compact pair.
+		if(compactPartner == null)
+		{
+			compact = !compact;
+			return true;
+		}
+		else
+			return false;
+	}
+	
 	
 	/**
 	 * The node is "disconnected" if it is part of the disconnected subalgebra,
@@ -128,6 +158,13 @@ public class CDynkinNode implements Serializable, Comparable<CDynkinNode>
 			return true;
 		else
 			return false;
+	}
+	
+	public void setCompactPartner(CDynkinNode partner)
+	{
+		if(partner != null)
+			compact = false;
+		this.compactPartner = partner;
 	}
 	
 	/**
