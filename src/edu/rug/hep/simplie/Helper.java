@@ -25,12 +25,19 @@ package edu.rug.hep.simplie;
 import edu.rug.hep.simplie.math.*;
 
 import Jama.Matrix;
+import edu.rug.hep.simplie.dynkindiagram.CDynkinConnection;
+import edu.rug.hep.simplie.ui.shapes.LinesWithArrow;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.text.DecimalFormat;
 import java.math.BigDecimal;
+import java.awt.BasicStroke;
+import java.awt.Point;
+import java.awt.Shape;
+import java.awt.geom.Line2D;
+import java.awt.geom.QuadCurve2D;
 
 /**
  * This class contains miscellaneous helper functions that
@@ -40,6 +47,13 @@ import java.math.BigDecimal;
  */
 public class Helper
 {
+	private static final float dash[] = {5.0f,2.0f};
+	private static final BasicStroke dashedStroke = new BasicStroke(0.75f,
+				BasicStroke.CAP_BUTT,
+				BasicStroke.JOIN_MITER, 
+				10.0f, dash, 0.0f);
+	private static final BasicStroke normalStroke = new BasicStroke(1.0f);;
+	
 	public Helper()
 	{
 	}
@@ -569,5 +583,44 @@ public class Helper
 		g.fillOval(x - radius, y - radius, 2*radius, 2*radius);
 		g.setColor(c2);
 		g.drawOval(x - radius, y - radius, 2*radius, 2*radius);	
+	}
+	
+	public static void drawCompactCon(Graphics2D g, Color c, int x1, int y1, int x2, int y2)
+	{
+		g.setColor(c);
+		g.setStroke(dashedStroke);
+		int controlx = (x1 + x2 + y1 - y2) / 2;
+		int controly = (y1 + y2 + x2 - x1) / 2;
+		g.draw(new QuadCurve2D.Float(x1, y1, controlx, controly, x2, y2));
+		g.setStroke(normalStroke);
+	}
+	
+	public static void drawConnection(Graphics2D g, Color c, int type, Point begin, Point end, int radius)
+	{
+		g.setColor(c);
+		Shape line;
+		switch(type)
+		{
+			case CDynkinConnection.TYPE_SINGLE:
+				line = new Line2D.Double(begin,end);
+				break;
+			case CDynkinConnection.TYPE_DOUBLE:
+				line = new LinesWithArrow(begin,end,2,2*radius,true);
+				break;
+			case CDynkinConnection.TYPE_TRIPLE:
+				line = new LinesWithArrow(begin,end,3,2*radius,true);
+				break;
+			case CDynkinConnection.TYPE_QUADRUPLE:
+				line = new LinesWithArrow(begin,end,4,2*radius,true);
+				break;
+			case CDynkinConnection.TYPE_SPECIAL_DOUBLE:
+				line = new LinesWithArrow(begin,end,2,2*radius,false);
+				break;
+			default:
+				line = null;
+				break;
+		}
+		if(line != null)
+			g.draw(line);	
 	}
 }

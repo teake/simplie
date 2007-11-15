@@ -31,14 +31,11 @@ import java.util.Iterator;
 import java.util.Collections;
 import java.io.*;
 import java.awt.Graphics2D;
-import java.awt.Shape;
 import java.awt.Point;
-import java.awt.geom.Line2D;
 import java.awt.Color;
 import java.awt.Font;
 import Jama.Matrix;
-import java.awt.BasicStroke;
-import java.awt.geom.QuadCurve2D;
+
 
 /**
  * A class representing (as of yet only simply-laced) Dynkin diagrams.
@@ -68,10 +65,6 @@ public class CDynkinDiagram
 	/** The same as "title", only now in TeX */
 	private String titleTeX;
 	
-	private final float dash[] = {5.0f,2.0f};
-	private final BasicStroke dashedStroke;
-	private final BasicStroke normalStroke;
-	
 	/**
 	 * Creates a new instance of CDynkinDiagram
 	 */
@@ -84,12 +77,6 @@ public class CDynkinDiagram
 		font		= new Font("Monospaced", Font.PLAIN, 12);
 		lastAddedNode	= null;
 		listeners	= new Vector<DiagramListener>();
-		
-		dashedStroke = new BasicStroke(1.0f,
-				BasicStroke.CAP_BUTT,
-				BasicStroke.JOIN_MITER, 
-				10.0f, dash, 0.0f);
-		normalStroke = new BasicStroke(1.0f);
 	}
 	
 	/**
@@ -740,36 +727,11 @@ public class CDynkinDiagram
 		{
 			CDynkinNode node1 = connection.fromNode;
 			CDynkinNode node2 = connection.toNode;
-			Shape line;
 			Point begin	= new Point(spacing * node1.x + offset, spacing * node1.y + offset);
 			Point end	= new Point(spacing * node2.x + offset, spacing * node2.y + offset);
-			switch(connection.type)
-			{
-			case CDynkinConnection.TYPE_SINGLE:
-				line = new Line2D.Double(begin,end);
-				break;
-			case CDynkinConnection.TYPE_DOUBLE:
-				line = new LinesWithArrow(begin,end,2,2*radius,true);
-				break;
-			case CDynkinConnection.TYPE_TRIPLE:
-				line = new LinesWithArrow(begin,end,3,2*radius,true);
-				break;
-			case CDynkinConnection.TYPE_QUADRUPLE:
-				line = new LinesWithArrow(begin,end,4,2*radius,true);
-				break;
-			case CDynkinConnection.TYPE_SPECIAL_DOUBLE:
-				line = new LinesWithArrow(begin,end,2,2*radius,false);
-				break;
-			default:
-				line = null;
-				break;
-			}
-			if(line != null)
-				g2.draw(line);
+			Helper.drawConnection(g2, Color.BLACK, connection.type, begin, end, radius);
 		}
 		// Secondly the compact pair indicators.
-		g2.setColor(Color.GRAY);
-		g2.setStroke(dashedStroke);
 		for(CCompactPair pair : compactPairs)
 		{
 			CDynkinNode node1 = pair.node1;
@@ -778,12 +740,9 @@ public class CDynkinDiagram
 			int y1 = spacing * node1.y + offset;
 			int x2 = spacing * node2.x + offset;
 			int y2 = spacing * node2.y + offset;
-			int controlx = (x1 + x2 + y1 - y2) / 2;
-			int controly = (y1 + y2 + x2 - x1) / 2;
-			g2.draw(new QuadCurve2D.Float(x1, y1, controlx, controly, x2, y2));
+			Helper.drawCompactCon(g2, Color.BLACK, x1, y1, x2, y2);
 		}
 		// Now draw the nodes.
-		g2.setStroke(normalStroke);
 		for (CDynkinNode node : nodes)
 		{
 			int x = spacing * node.x + offset;
