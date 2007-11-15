@@ -30,6 +30,7 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.Color;
 import java.awt.Cursor;
+import java.awt.Point;
 import java.awt.event.MouseEvent;
 
 /**
@@ -104,10 +105,29 @@ public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramLis
 		Graphics2D g2 = (Graphics2D) g;
 		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
 
-		// Draw the preview.
-		if(status == STATUS_PREVIEW)
-			Helper.drawFilledCircle(g2, Color.WHITE, Color.GRAY, spacing * x + offset, spacing * y + offset, radius);
-				
+		int x_mouse = spacing * x + offset;
+		int y_mouse = spacing * y + offset;
+
+		switch(status)
+		{
+			case STATUS_PREVIEW:
+				Helper.drawFilledCircle(g2, Color.WHITE, Color.GRAY, x_mouse, y_mouse, radius);
+				break;
+			case STATUS_ADDCOMP:
+			case STATUS_ADDCON:
+				int x_start = spacing * modificationFrom.x + offset;
+				int y_start = spacing * modificationFrom.y + offset;
+				Point begin = new Point(x_start,y_start);
+				Point end = new Point(x_mouse,y_mouse);
+				if(status == STATUS_ADDCOMP)
+					Helper.drawCompactCon(g2, Color.GRAY, x_start, y_start, x_mouse, y_mouse);
+				else
+					Helper.drawConnection(g2, Color.GRAY, connectionType, begin, end, radius);
+				break;
+			default:
+				break;			
+		}
+		
 		// Draw the diagram.
 		if(dd != null)
 			dd.drawDiagram(g2,offset,spacing,radius);
@@ -127,6 +147,7 @@ public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramLis
 	{
 		status		= new_status;
 		prev_status = new_status;
+		diagram.repaint();
 	}
 	
 	private void setupMenu(boolean onNode)
