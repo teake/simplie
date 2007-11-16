@@ -70,6 +70,8 @@ public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramLis
 	private int x;
 	private int y;
 	
+	private boolean shiftDown;
+	
 	/** Creates new form DynkinDiagramPanel */
 	public DynkinDiagramPanel()
 	{
@@ -84,6 +86,9 @@ public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramLis
 		
 		contextX = contextY = 0;
 		x = y = -1;
+		
+		shiftDown = false;
+		
 		initComponents();
 	}
 	
@@ -111,6 +116,16 @@ public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramLis
 		switch(status)
 		{
 			case STATUS_PREVIEW:
+				CDynkinNode node = dd.getLastAddedNode();
+				if(shiftDown && node != null)
+				{
+					Helper.drawConnection(g2, 
+							Color.LIGHT_GRAY, 
+							CDynkinConnection.TYPE_SINGLE, 
+							new Point(node.x * spacing + offset, node.y * spacing + offset),
+							new Point(x_mouse,y_mouse),
+							radius);
+				}
 				Helper.drawFilledCircle(g2, Color.WHITE, Color.GRAY, x_mouse, y_mouse, radius);
 				break;
 			case STATUS_ADDCOMP:
@@ -122,7 +137,7 @@ public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramLis
 				if(status == STATUS_ADDCOMP)
 					Helper.drawCompactCon(g2, Color.GRAY, x_start, y_start, x_mouse, y_mouse);
 				else
-					Helper.drawConnection(g2, Color.GRAY, connectionType, begin, end, radius);
+					Helper.drawConnection(g2, Color.LIGHT_GRAY, connectionType, begin, end, radius);
 				break;
 			default:
 				break;			
@@ -428,8 +443,9 @@ private void diagramMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:even
 private void diagramMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_diagramMouseMoved
 	int x_new = Math.round(((float) evt.getX() - offset) / spacing);
 	int y_new = Math.round(((float) evt.getY() - offset) / spacing);
-	if(x!=x_new || y!=y_new)
+	if(x!=x_new || y!=y_new || evt.isShiftDown() != shiftDown)
 	{
+		shiftDown = evt.isShiftDown();
 		x = x_new;
 		y = y_new;
 		diagram.repaint();
