@@ -155,6 +155,11 @@ public class CDynkinDiagram
 		return this.titleTeX;
 	}
 	
+	public CDynkinNode getLastAddedNode()
+	{
+		return lastAddedNode;
+	}
+	
 	/** Clears the Dynkin diagram. That is, it deletes all nodes. */
 	public void clear()
 	{
