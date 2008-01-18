@@ -459,7 +459,7 @@ private void diagramMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:ev
 	
 	CDynkinNode node = dd.getNodeByCoor(x,y);
 	
-	if(evt.getButton() == MouseEvent.BUTTON3)
+	if(evt.getButton() == MouseEvent.BUTTON3 || evt.isControlDown())
 	{
 		setupMenu((node!=null));
 		contextX = x;
