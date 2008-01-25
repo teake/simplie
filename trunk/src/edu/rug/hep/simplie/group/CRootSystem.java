@@ -442,7 +442,7 @@ public class CRootSystem
 						// Else we would count this one double.
 						if(properList.contains(rootMultiple))
 							continue;
-						rootMultiple.coMult	= calculateCoMult(rootMultiple,false);
+						rootMultiple.coMult	= calculateCoMult(rootMultiple);
 						multiplesList.add(rootMultiple);
 					}
 				}
@@ -482,12 +482,14 @@ public class CRootSystem
 		
 		// TODO: possibly move this to CRoot
 		
+		root.norm	= group.innerProduct(root,root);
+		
 		// Determine its coMult minus the root multiplicity.
-		fraction coMult = calculateCoMult(root,false);
+		fraction coMult = calculateCoMult(root);
 		
 		root.mult	= calculateMult(root,coMult);
 		root.coMult = coMult.plus(root.mult);
-		root.norm	= group.innerProduct(root,root);
+		
 		
 		// Increment numPosRoots.
 		numPosRoots++;
@@ -511,15 +513,17 @@ public class CRootSystem
 	 * Calculates the "co-multiplicity", i.e. the fractional sum of multiplicities
 	 * of all fractional roots. Used in the Peterson formula.
 	 *
-	 * @param	root	The root whose co-multiplicity we should calculate.
 	 * @return			The co-multiplicity.
 	 */
-	private fraction calculateCoMult(CRoot root, boolean includeRoot)
+	private fraction calculateCoMult(CRoot root)
 	{
-		int offset		= ( includeRoot ) ? 1 : 2;
 		fraction coMult	= new fraction(0);
 		
-		for (int i = offset; i < root.highest() + 1; i++)
+		// There are no root multiples if the root is imaginary
+		if(root.norm > 0)
+			return coMult;
+		
+		for (int i = 2; i < root.highest() + 1; i++)
 		{
 			CRoot divRoot = root.div(i);
 			if(divRoot != null)
