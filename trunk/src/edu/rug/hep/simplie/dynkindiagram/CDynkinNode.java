@@ -34,6 +34,10 @@ import java.io.Serializable;
  */
 public class CDynkinNode implements Serializable, Comparable<CDynkinNode>
 {
+	public static final int STATE_ENABLED = 0;
+	public static final int STATE_DISABLED = 1;
+	public static final int STATE_ALWAYS_LEVEL = 2;
+	
 	/** The x-coordinate of the node in the dynkin diagram */
 	public final int x;
 	/** The y-coordinate of the node in the dynkin diagram */
@@ -41,8 +45,8 @@ public class CDynkinNode implements Serializable, Comparable<CDynkinNode>
 	
 	/** The external label */
 	private int label;
-	/** Is the node enabled or not? */
-	private boolean	enabled;
+	/** The state of the node */
+	private int state;
 	/** Is the node compact or not? */
 	private boolean compact;
 	/** The internal list of nodes to which this node has connections. */
@@ -59,7 +63,7 @@ public class CDynkinNode implements Serializable, Comparable<CDynkinNode>
 	 */
 	public CDynkinNode(int x, int y)
 	{
-		this.enabled	= true;
+		this.state		= STATE_ENABLED;
 		this.compact	= false;
 		this.x			= x;
 		this.y			= y;
@@ -90,13 +94,22 @@ public class CDynkinNode implements Serializable, Comparable<CDynkinNode>
 	}
 	
 	/**
-	 * Boolean indicating whether or not the node is enabled ( = not disabled or disconnected).
+	 * Returns the state of the node.
 	 */
-	public boolean isEnabled()
+	public int getState()
 	{
-		return enabled;
+		return state;
 	}
 
+	public boolean setState(int state)
+	{
+		if(!(state == STATE_ENABLED || state == STATE_DISABLED || state == STATE_ALWAYS_LEVEL))
+			return false;
+		
+		this.state = state;
+		return true;
+	}
+	
 	/**
 	 * Boolean indicating whether or not the node is compact.
 	 */
@@ -110,9 +123,20 @@ public class CDynkinNode implements Serializable, Comparable<CDynkinNode>
 	 */
 	public void toggle()
 	{
-		enabled = !enabled;
+		switch(state)
+		{
+			case STATE_ENABLED:
+				state = STATE_DISABLED;
+				return;
+			case STATE_DISABLED:
+				state = STATE_ENABLED;
+				return;
+			case STATE_ALWAYS_LEVEL:
+				state = STATE_ENABLED;
+				return;
+		}
 	}
-
+	
 	/** 
 	 * Toggles a node from non-compact <-> compact.
 	 */
@@ -129,6 +153,14 @@ public class CDynkinNode implements Serializable, Comparable<CDynkinNode>
 	}
 	
 	
+	public boolean isEnabled()
+	{
+		if(state == STATE_ENABLED)
+			return true;
+		else
+			return false;
+	}
+	
 	/**
 	 * The node is "disconnected" if it is part of the disconnected subalgebra,
 	 * i.e. the subalgebra that is disabled and has no connections to enabled nodes.
@@ -137,11 +169,11 @@ public class CDynkinNode implements Serializable, Comparable<CDynkinNode>
 	 */
 	public boolean isDisconnected()
 	{
-		if(enabled)
+		if(state != STATE_DISABLED)
 			return false;
 		for(CDynkinNode toNode : connectionsTo)
 		{
-			if(toNode.enabled)
+			if(toNode.getState() == STATE_ENABLED)
 				return false;
 		}
 		return true;
@@ -154,7 +186,7 @@ public class CDynkinNode implements Serializable, Comparable<CDynkinNode>
 	 */
 	public boolean isLevel()
 	{
-		if(!enabled && !isDisconnected())
+		if(!isEnabled() && !isDisconnected())
 			return true;
 		else
 			return false;
@@ -214,6 +246,7 @@ public class CDynkinNode implements Serializable, Comparable<CDynkinNode>
 	 *							0 if we cannot sort it,
 	 *							-1 if this nodes comes before the other.
 	 */
+	@Override
 	public int compareTo(CDynkinNode compareNode)
 	{
 		final int BEFORE = -1;
@@ -233,6 +266,7 @@ public class CDynkinNode implements Serializable, Comparable<CDynkinNode>
 	 * Checks if nodes are equal.
 	 * @return		True if the nodes are equal, and false otherwise.
 	 */
+	@Override
 	public boolean equals(Object obj)
 	{
 		if(this == obj)
@@ -245,6 +279,14 @@ public class CDynkinNode implements Serializable, Comparable<CDynkinNode>
 			return true;
 		else
 			return false;
+	}
+
+	@Override
+	public int hashCode()
+	{
+		int hash = 5;
+		hash = 67 * hash + this.label;
+		return hash;
 	}
 	
 }

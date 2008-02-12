@@ -165,18 +165,32 @@ public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramLis
 		diagram.repaint();
 	}
 	
-	private void setupMenu(boolean onNode)
+	private void setupMenu(CDynkinNode node)
 	{
+		boolean onNode = (node!=null);
 		menuAddConnection.setVisible(onNode);
 		menuRemoveConnection.setVisible(onNode);
 		menuSeparator1.setVisible(onNode);
 		menuSeparator2.setVisible(onNode);
 		menuAddNode.setVisible(!onNode);
 		menuRemoveNode.setVisible(onNode);
-		menuToggleNode.setVisible(onNode);
 		menuToggleCompact.setVisible(onNode);
 		menuAddCompactPair.setVisible(onNode);
 		menuRemoveCompactPair.setVisible(onNode);
+		menuState.setVisible(onNode);
+		switch (node.getState())
+		{
+			case CDynkinNode.STATE_ENABLED:
+				menuStateEnabled.setSelected(true);
+				break;
+			case CDynkinNode.STATE_DISABLED:
+				menuStateDisabled.setSelected(true);
+				break;
+			case CDynkinNode.STATE_ALWAYS_LEVEL:
+				menuStateLevel.setSelected(true);
+				break;
+		}
+		
 	}
 	
 	private void startModify(int type, int action)
@@ -224,9 +238,13 @@ public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramLis
         menuAddCompactPair = new javax.swing.JMenuItem();
         menuRemoveCompactPair = new javax.swing.JMenuItem();
         menuSeparator2 = new javax.swing.JSeparator();
+        menuState = new javax.swing.JMenu();
+        menuStateEnabled = new javax.swing.JRadioButtonMenuItem();
+        menuStateDisabled = new javax.swing.JRadioButtonMenuItem();
+        menuStateLevel = new javax.swing.JRadioButtonMenuItem();
         menuAddNode = new javax.swing.JMenuItem();
-        menuToggleNode = new javax.swing.JMenuItem();
         menuRemoveNode = new javax.swing.JMenuItem();
+        stateButtonGroup = new javax.swing.ButtonGroup();
         diagram = new javax.swing.JPanel()
         {
             public void paintComponent(Graphics g)
@@ -334,6 +352,44 @@ public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramLis
         contextMenu.add(menuRemoveCompactPair);
         contextMenu.add(menuSeparator2);
 
+        menuState.setText("State");
+
+        stateButtonGroup.add(menuStateEnabled);
+        menuStateEnabled.setSelected(true);
+        menuStateEnabled.setText("Enabled");
+        menuStateEnabled.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                menuStateEnabledActionPerformed(evt);
+            }
+        });
+        menuState.add(menuStateEnabled);
+
+        stateButtonGroup.add(menuStateDisabled);
+        menuStateDisabled.setText("Disabled");
+        menuStateDisabled.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                menuStateDisabledActionPerformed(evt);
+            }
+        });
+        menuState.add(menuStateDisabled);
+
+        stateButtonGroup.add(menuStateLevel);
+        menuStateLevel.setText("Always level");
+        menuStateLevel.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                menuStateLevelActionPerformed(evt);
+            }
+        });
+        menuState.add(menuStateLevel);
+
+        contextMenu.add(menuState);
+
         menuAddNode.setText("Add node");
         menuAddNode.addActionListener(new java.awt.event.ActionListener()
         {
@@ -343,16 +399,6 @@ public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramLis
             }
         });
         contextMenu.add(menuAddNode);
-
-        menuToggleNode.setText("Toggle node");
-        menuToggleNode.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
-                menuToggleNodeActionPerformed(evt);
-            }
-        });
-        contextMenu.add(menuToggleNode);
 
         menuRemoveNode.setText("Remove node");
         menuRemoveNode.addActionListener(new java.awt.event.ActionListener()
@@ -461,7 +507,7 @@ private void diagramMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:ev
 	
 	if(evt.getButton() == MouseEvent.BUTTON3 || evt.isControlDown())
 	{
-		setupMenu((node!=null));
+		setupMenu(node);
 		contextX = x;
 		contextY = y;
 		contextMenu.show(diagram,evt.getX(),evt.getY());
@@ -507,13 +553,7 @@ private void diagramMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:ev
 	{//GEN-HEADEREND:event_menuAddDoubleConnectionActionPerformed
 		startModify(CDynkinConnection.TYPE_DOUBLE, STATUS_ADDCON);
 	}//GEN-LAST:event_menuAddDoubleConnectionActionPerformed
-	
-	private void menuToggleNodeActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_menuToggleNodeActionPerformed
-	{//GEN-HEADEREND:event_menuToggleNodeActionPerformed
-		CDynkinNode node = dd.getNodeByCoor(contextX, contextY);
-		dd.toggleNode(node);
-	}//GEN-LAST:event_menuToggleNodeActionPerformed
-	
+		
 	private void menuRemoveConnectionActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_menuRemoveConnectionActionPerformed
 	{//GEN-HEADEREND:event_menuRemoveConnectionActionPerformed
 		startModify(CDynkinConnection.TYPE_NULL, STATUS_REMCON);
@@ -556,6 +596,21 @@ private void diagramMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:ev
 	{//GEN-HEADEREND:event_menuRemoveCompactPairActionPerformed
 		startModify(CDynkinConnection.TYPE_NULL, STATUS_REMCOMP);
 	}//GEN-LAST:event_menuRemoveCompactPairActionPerformed
+
+	private void menuStateEnabledActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_menuStateEnabledActionPerformed
+	{//GEN-HEADEREND:event_menuStateEnabledActionPerformed
+		tf_status.setText(dd.setNodeState(dd.getNodeByCoor(contextX, contextY),CDynkinNode.STATE_ENABLED));
+	}//GEN-LAST:event_menuStateEnabledActionPerformed
+
+	private void menuStateDisabledActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_menuStateDisabledActionPerformed
+	{//GEN-HEADEREND:event_menuStateDisabledActionPerformed
+		tf_status.setText(dd.setNodeState(dd.getNodeByCoor(contextX, contextY),CDynkinNode.STATE_DISABLED));
+	}//GEN-LAST:event_menuStateDisabledActionPerformed
+
+	private void menuStateLevelActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_menuStateLevelActionPerformed
+	{//GEN-HEADEREND:event_menuStateLevelActionPerformed
+		tf_status.setText(dd.setNodeState(dd.getNodeByCoor(contextX, contextY),CDynkinNode.STATE_ALWAYS_LEVEL));
+	}//GEN-LAST:event_menuStateLevelActionPerformed
 	
 	
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -575,8 +630,12 @@ private void diagramMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:ev
     private javax.swing.JMenuItem menuRemoveNode;
     private javax.swing.JSeparator menuSeparator1;
     private javax.swing.JSeparator menuSeparator2;
+    private javax.swing.JMenu menuState;
+    private javax.swing.JRadioButtonMenuItem menuStateDisabled;
+    private javax.swing.JRadioButtonMenuItem menuStateEnabled;
+    private javax.swing.JRadioButtonMenuItem menuStateLevel;
     private javax.swing.JMenuItem menuToggleCompact;
-    private javax.swing.JMenuItem menuToggleNode;
+    private javax.swing.ButtonGroup stateButtonGroup;
     private javax.swing.JLabel tf_status;
     // End of variables declaration//GEN-END:variables
 	
