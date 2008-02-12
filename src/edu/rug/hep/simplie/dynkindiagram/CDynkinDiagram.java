@@ -433,6 +433,20 @@ public class CDynkinDiagram
 		return "No node to toggle.";
 	}
 	
+	public String setNodeState(CDynkinNode node, int state)
+	{
+		if(locked)
+			return "Diagram is locked.";
+		
+		if(node != null && nodes.contains(node))
+		{
+			node.setState(state);
+			update();
+			return "Node state set.";
+		}
+		return "No node state set.";
+	}
+	
 	/** Removes a node from the diagram. */
 	public String removeNode(CDynkinNode nodeToRemove)
 	{

@@ -195,6 +195,7 @@ public class CRoot implements Serializable
 	 * Overrides default equals() method.
 	 * Roots are equal if their root vectors are equal.
 	 */
+	@Override
 	public boolean equals(Object obj)
 	{
 		if(this == obj)
@@ -218,6 +219,7 @@ public class CRoot implements Serializable
 	}
 	
 	/** Returns a hashcode based on the vector of the root. */
+	@Override
 	public int hashCode()
 	{
 		int hash = 0;
@@ -235,6 +237,7 @@ public class CRoot implements Serializable
 	}
 	
 	/** Overrides default toString method */
+	@Override
 	public String toString()
 	{
 		String output = "height: " + height() +
