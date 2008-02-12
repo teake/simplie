@@ -168,29 +168,33 @@ public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramLis
 	private void setupMenu(CDynkinNode node)
 	{
 		boolean onNode = (node!=null);
+		
+		menuAddNode.setVisible(!onNode);
+		
 		menuAddConnection.setVisible(onNode);
 		menuRemoveConnection.setVisible(onNode);
 		menuSeparator1.setVisible(onNode);
 		menuSeparator2.setVisible(onNode);
-		menuAddNode.setVisible(!onNode);
 		menuRemoveNode.setVisible(onNode);
 		menuToggleCompact.setVisible(onNode);
 		menuAddCompactPair.setVisible(onNode);
 		menuRemoveCompactPair.setVisible(onNode);
 		menuState.setVisible(onNode);
-		switch (node.getState())
+		if(onNode)
 		{
-			case CDynkinNode.STATE_ENABLED:
-				menuStateEnabled.setSelected(true);
-				break;
-			case CDynkinNode.STATE_DISABLED:
-				menuStateDisabled.setSelected(true);
-				break;
-			case CDynkinNode.STATE_ALWAYS_LEVEL:
-				menuStateLevel.setSelected(true);
-				break;
+			switch (node.getState())
+			{
+				case CDynkinNode.STATE_ENABLED:
+					menuStateEnabled.setSelected(true);
+					break;
+				case CDynkinNode.STATE_DISABLED:
+					menuStateDisabled.setSelected(true);
+					break;
+				case CDynkinNode.STATE_ALWAYS_LEVEL:
+					menuStateLevel.setSelected(true);
+					break;
+			}
 		}
-		
 	}
 	
 	private void startModify(int type, int action)
