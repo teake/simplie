@@ -31,7 +31,7 @@ package edu.rug.hep.simplie.group;
 public class CNormHelper implements Comparable<CNormHelper>
 {
 	/** The norm of the root (used for ordering). */
-	public final double norm;
+	public double norm;
 	/** Index to keep track of the original order of the root.  */ 
 	public final int index;
 	
@@ -43,6 +43,7 @@ public class CNormHelper implements Comparable<CNormHelper>
 	}
 	
 	/** Compares normHelpers according to their norm */
+	@Override
 	public int compareTo(CNormHelper compareNH)
 	{
 		final int BEFORE = -1;
@@ -56,6 +57,7 @@ public class CNormHelper implements Comparable<CNormHelper>
 	}
 	
 	/** NormHelpers are equal to each other when their index is the same. */
+	@Override
 	public boolean equals(Object obj)
 	{
 		if(this == obj)
@@ -68,5 +70,12 @@ public class CNormHelper implements Comparable<CNormHelper>
 			return true;
 		else
 			return false;
+	}
+
+	@Override
+	public int hashCode() {
+		int hash = 7;
+		hash = 17 * hash + this.index;
+		return hash;
 	}
 }
