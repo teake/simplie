@@ -233,13 +233,25 @@ public class CGroup
 			Collections.sort(piece);
 			
 			// Set the simple root norms.
-			double	coefficient	= 2 / piece.get(0).norm;
-			for(CNormHelper nh : piece)
+			double coefficient = 1 / piece.get(0).norm;
+			boolean normsOK;
+			do
 			{
-				CRoot root = simpleRoots.get(nh.index);
-				root.norm = (int) Math.round(nh.norm * coefficient);
-				tempMaxNorm = Math.max(tempMaxNorm, root.norm);
-			}
+				normsOK = true;
+				coefficient *= 2;
+				for(CNormHelper nh : piece)
+				{
+					// Make sure that all the root norms are multiples of two. This is 
+					// necessary for making sure that roots are integer multiples of 
+					// their coroots. If this is not the case, innerproducts will not 
+					// always be integers, and all hell will break loose.
+					if((nh.norm * coefficient) % 2 != 0)
+						normsOK = false;
+					CRoot root = simpleRoots.get(nh.index);
+					root.norm = (int) Math.round(nh.norm * coefficient);
+					tempMaxNorm = Math.max(tempMaxNorm, root.norm);
+				}
+			} while(!normsOK);
 			
 		}
 		maxNorm = tempMaxNorm;
@@ -337,32 +349,32 @@ public class CGroup
 		// Now that the simple roots have been created,
 		// we can set the symmetrized Cartan matrix
 		// and the metric on the root space.
-		Matrix symA	= new Matrix(rank,rank);
-		Matrix B	= new Matrix(rank,rank);
+		Matrix symAm	= new Matrix(rank,rank);
+		Matrix Bm		= new Matrix(rank,rank);
 		for (int i = 0; i < rank; i++)
 		{
 			for (int j = 0; j < rank; j++)
 			{
 				this.symA[i][j] = new fraction(this.A[i][j], simpleRootNorms[i]);
 				this.B[i][j]	= this.A[i][j] * simpleRootNorms[j];
-				symA.set(i,j,this.symA[i][j].asDouble());
-				B.set(i,j,this.B[i][j]);
+				symAm.set(i,j,this.symA[i][j].asDouble());
+				Bm.set(i,j,this.B[i][j]);
 			}
 		}
 		
 		// Set the inverse of the Cartan matrix and the quadratic form matrix if possible.
 		if(rank != 0 && A.rank() == rank)
 		{
-			Matrix invA	= A.inverse();
-			Matrix invB	= B.inverse();
-			Matrix G	= symA.inverse();
+			Matrix invAm	= A.inverse();
+			Matrix invBm	= Bm.inverse();
+			Matrix Gm		= symAm.inverse();
 			for (int i = 0; i < rank; i++)
 			{
 				for (int j = 0; j < rank; j++)
 				{
-					this.invA[i][j]	= new fraction(invA.get(i,j));
-					this.invB[i][j]	= new fraction(invB.get(i,j));
-					this.G[i][j]	= new fraction(G.get(i,j));
+					this.invA[i][j]	= new fraction(invAm.get(i,j));
+					this.invB[i][j]	= new fraction(invBm.get(i,j));
+					this.G[i][j]	= new fraction(Gm.get(i,j));
 				}
 			}
 		}
