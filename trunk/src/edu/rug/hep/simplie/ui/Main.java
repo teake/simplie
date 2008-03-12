@@ -19,12 +19,12 @@
  * along with SimpLie.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-
 package edu.rug.hep.simplie.ui;
 
 import edu.rug.hep.simplie.*;
 import edu.rug.hep.simplie.dynkindiagram.*;
 
+import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.*;
@@ -55,6 +55,7 @@ public class Main extends javax.swing.JFrame
 		{
 			this.url = url;
 		}
+		@Override
 		public void actionPerformed(java.awt.event.ActionEvent evt)
 		{
 			algebras.dd.loadFrom(this.url);
@@ -69,7 +70,6 @@ public class Main extends javax.swing.JFrame
 		build = revision.replace("Rev:","").replace("$","");
 		
 		// Try to set the Look and Feel to the system native look and feel.
-		UIManager uiManager = new UIManager();
 		try
 		{
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -249,11 +249,11 @@ public class Main extends javax.swing.JFrame
         TabbedPane.addTab("Level decomposition", levelDecomposition);
 
         MenuFile.setMnemonic('f');
-        MenuFile.setLabel("File");
+        MenuFile.setText("File");
 
         MenuItemLoadDD.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.CTRL_MASK));
         MenuItemLoadDD.setMnemonic('o');
-        MenuItemLoadDD.setLabel("Load Dynkin diagram");
+        MenuItemLoadDD.setText("Load Dynkin diagram");
         MenuItemLoadDD.addActionListener(new java.awt.event.ActionListener()
         {
             public void actionPerformed(java.awt.event.ActionEvent evt)
@@ -265,7 +265,7 @@ public class Main extends javax.swing.JFrame
 
         MenuItemSaveDD.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
         MenuItemSaveDD.setMnemonic('s');
-        MenuItemSaveDD.setLabel("Save Dynkin diagram");
+        MenuItemSaveDD.setText("Save Dynkin diagram");
         MenuItemSaveDD.addActionListener(new java.awt.event.ActionListener()
         {
             public void actionPerformed(java.awt.event.ActionEvent evt)
@@ -440,7 +440,7 @@ public class Main extends javax.swing.JFrame
 		chooser.setDialogTitle("Export root system");
 		int returnVal = chooser.showSaveDialog(this);
 		
-		if ( returnVal == chooser.APPROVE_OPTION )
+		if ( returnVal == JFileChooser.APPROVE_OPTION )
 		{
 		/* To create a URL for a file on the local file-system, we simply
 		 * pre-pend the "file" protocol to the absolute path of the file.
@@ -468,7 +468,7 @@ public class Main extends javax.swing.JFrame
 		chooser.setDialogTitle("Save root system");
 		int returnVal = chooser.showSaveDialog(this);
 		
-		if ( returnVal == chooser.APPROVE_OPTION )
+		if ( returnVal == JFileChooser.APPROVE_OPTION )
 		{
 		/* To create a URL for a file on the local file-system, we simply
 		 * pre-pend the "file" protocol to the absolute path of the file.
@@ -491,7 +491,7 @@ public class Main extends javax.swing.JFrame
 		chooser.setDialogTitle("Open root system");
 		returnVal = chooser.showOpenDialog(this);
 		
-		if ( returnVal == chooser.APPROVE_OPTION )
+		if ( returnVal == JFileChooser.APPROVE_OPTION )
 		{
 		/* To create a URL for a file on the local file-system, we simply
 		 * pre-pend the "file" protocol to the absolute path of the file.
@@ -499,25 +499,25 @@ public class Main extends javax.swing.JFrame
 			fileURL = chooser.getSelectedFile().getAbsolutePath();
 			if(!algebras.group.rs.loadFrom(fileURL))
 			{
-				optionPane.showMessageDialog(
+				JOptionPane.showMessageDialog(
 						popup,
 						"The root system does not belong to this Dynkin diagram.",
 						"Failed to load root system",
-						optionPane.WARNING_MESSAGE);
+						JOptionPane.WARNING_MESSAGE);
 			}
 		}
 	}//GEN-LAST:event_MenuItemLoadRootsActionPerformed
 	
     private void MenuItemHelpActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_MenuItemHelpActionPerformed
     {//GEN-HEADEREND:event_MenuItemHelpActionPerformed
-		optionPane.showMessageDialog(
+		JOptionPane.showMessageDialog(
 				popup,
 				"Dynkin diagram interaction: \n \n" +
 				"Left mouse-click: \n   Add a node. \n" +
 				"Middle mouse-click: \n   Toggle a node. \n" +
 				"Right mouse-click: \n   Bring up context menu.",
 				"Help",
-				optionPane.INFORMATION_MESSAGE);
+				JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_MenuItemHelpActionPerformed
 
 	private void MenuItemSaveDDActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_MenuItemSaveDDActionPerformed
@@ -528,7 +528,7 @@ public class Main extends javax.swing.JFrame
 		chooser.setDialogTitle("Save Dynkin diagram");
 		int returnVal = chooser.showSaveDialog(this);
 		
-		if ( returnVal == chooser.APPROVE_OPTION )
+		if ( returnVal == JFileChooser.APPROVE_OPTION )
 		{
 		/* To create a URL for a file on the local file-system, we simply
 		 * pre-pend the "file" protocol to the absolute path of the file.
@@ -551,7 +551,7 @@ public class Main extends javax.swing.JFrame
 		chooser.setDialogTitle("Open Dynkin diagram");
 		returnVal = chooser.showOpenDialog(this);
 		
-		if ( returnVal == chooser.APPROVE_OPTION )
+		if ( returnVal == JFileChooser.APPROVE_OPTION )
 		{
 		/* To create a URL for a file on the local file-system, we simply
 		 * pre-pend the "file" protocol to the absolute path of the file.
@@ -568,11 +568,11 @@ public class Main extends javax.swing.JFrame
 	
     private void MenuItemAboutActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_MenuItemAboutActionPerformed
     {//GEN-HEADEREND:event_MenuItemAboutActionPerformed
-		optionPane.showMessageDialog(
+		JOptionPane.showMessageDialog(
 				popup,
 				"SimpLie, a simple program for Lie algebras.\nVersion 1.0\n \nWritten by Teake Nutma \nt.a.nutma@rug.nl",
 				"About",
-				optionPane.PLAIN_MESSAGE);
+				JOptionPane.PLAIN_MESSAGE);
     }//GEN-LAST:event_MenuItemAboutActionPerformed
 	
     private void MenuItemExitActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_MenuItemExitActionPerformed
@@ -587,6 +587,7 @@ public class Main extends javax.swing.JFrame
 	{
 		java.awt.EventQueue.invokeLater(new Runnable()
 		{
+			@Override
 			public void run()
 			{
 				new Main().setVisible(true);
