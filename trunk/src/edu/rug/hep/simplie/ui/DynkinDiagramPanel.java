@@ -32,13 +32,15 @@ import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 /**
  * Displays a Dynkin diagram and allows its editing via direct user-interaction.
  * 
  * @author  Teake Nutma
  */
-public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramListener
+public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramListener, KeyListener
 {
 	// Constants indicating the status.
 	public static final int STATUS_IDLE = 0;
@@ -71,6 +73,7 @@ public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramLis
 	private int y;
 	
 	private boolean shiftDown;
+	private boolean contextVisible;
 	
 	/** Creates new form DynkinDiagramPanel */
 	public DynkinDiagramPanel()
@@ -88,8 +91,9 @@ public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramLis
 		x = y = -1;
 		
 		shiftDown = false;
-		
+		contextVisible = false;
 		initComponents();
+		diagram.addKeyListener(this);
 	}
 	
 	public void setDynkinDiagram(CDynkinDiagram dd)
@@ -105,6 +109,31 @@ public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramLis
 		setTitle(dd.getTitle());
 	}
 	
+	@Override
+	public void keyPressed(KeyEvent e)
+	{
+		if(e.isShiftDown())
+		{
+			shiftDown = true;
+			diagram.repaint();
+		}
+	}
+	
+	@Override
+	public void keyReleased(KeyEvent e)
+	{
+		if(!e.isShiftDown())
+		{
+			shiftDown = false;
+			diagram.repaint();
+		}
+	}
+		
+	@Override
+	public void keyTyped(KeyEvent e)
+	{
+	}
+	
 	public void drawDiagram(Graphics g)
 	{
 		Graphics2D g2 = (Graphics2D) g;
@@ -113,34 +142,38 @@ public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramLis
 		int x_mouse = spacing * x + offset;
 		int y_mouse = spacing * y + offset;
 
-		switch(status)
+		// Don't draw a preview is the context menu is visible.
+		if(!contextMenu.isVisible())
 		{
-			case STATUS_PREVIEW:
-				CDynkinNode node = dd.getLastAddedNode();
-				if(shiftDown && node != null)
-				{
-					Helper.drawConnection(g2, 
-							Color.LIGHT_GRAY, 
-							CDynkinConnection.TYPE_SINGLE, 
-							new Point(node.x * spacing + offset, node.y * spacing + offset),
-							new Point(x_mouse,y_mouse),
-							radius);
-				}
-				Helper.drawFilledCircle(g2, Color.WHITE, Color.GRAY, x_mouse, y_mouse, radius);
-				break;
-			case STATUS_ADDCOMP:
-			case STATUS_ADDCON:
-				int x_start = spacing * modificationFrom.x + offset;
-				int y_start = spacing * modificationFrom.y + offset;
-				Point begin = new Point(x_start,y_start);
-				Point end = new Point(x_mouse,y_mouse);
-				if(status == STATUS_ADDCOMP)
-					Helper.drawCompactCon(g2, Color.GRAY, x_start, y_start, x_mouse, y_mouse);
-				else
-					Helper.drawConnection(g2, Color.LIGHT_GRAY, connectionType, begin, end, radius);
-				break;
-			default:
-				break;			
+			switch(status)
+			{
+				case STATUS_PREVIEW:
+					CDynkinNode node = dd.getLastAddedNode();
+					if(shiftDown && node != null)
+					{
+						Helper.drawConnection(g2, 
+								Color.LIGHT_GRAY, 
+								CDynkinConnection.TYPE_SINGLE, 
+								new Point(node.x * spacing + offset, node.y * spacing + offset),
+								new Point(x_mouse,y_mouse),
+								radius);
+					}
+					Helper.drawFilledCircle(g2, Color.WHITE, Color.GRAY, x_mouse, y_mouse, radius);
+					break;
+				case STATUS_ADDCOMP:
+				case STATUS_ADDCON:
+					int x_start = spacing * modificationFrom.x + offset;
+					int y_start = spacing * modificationFrom.y + offset;
+					Point begin = new Point(x_start,y_start);
+					Point end = new Point(x_mouse,y_mouse);
+					if(status == STATUS_ADDCOMP)
+						Helper.drawCompactCon(g2, Color.GRAY, x_start, y_start, x_mouse, y_mouse);
+					else
+						Helper.drawConnection(g2, Color.LIGHT_GRAY, connectionType, begin, end, radius);
+					break;
+				default:
+					break;			
+			}
 		}
 		
 		// Draw the diagram.
@@ -168,7 +201,7 @@ public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramLis
 	private void setupMenu(CDynkinNode node)
 	{
 		boolean onNode = (node!=null);
-		
+	
 		menuAddNode.setVisible(!onNode);
 		
 		menuAddConnection.setVisible(onNode);
@@ -493,9 +526,8 @@ private void diagramMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:even
 private void diagramMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_diagramMouseMoved
 	int x_new = Math.round(((float) evt.getX() - offset) / spacing);
 	int y_new = Math.round(((float) evt.getY() - offset) / spacing);
-	if(x!=x_new || y!=y_new || evt.isShiftDown() != shiftDown)
+	if(x!=x_new || y!=y_new)
 	{
-		shiftDown = evt.isShiftDown();
 		x = x_new;
 		y = y_new;
 		diagram.repaint();
@@ -503,6 +535,13 @@ private void diagramMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event
 }//GEN-LAST:event_diagramMouseMoved
 
 private void diagramMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_diagramMouseReleased
+	if(contextVisible)
+	{
+		contextVisible = false;
+		diagram.repaint();
+		return;
+	}
+	
 	// Don't do anything if the diagram is locked.
 	if(dd.isLocked())
 		return;
@@ -515,6 +554,7 @@ private void diagramMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:ev
 		contextX = x;
 		contextY = y;
 		contextMenu.show(diagram,evt.getX(),evt.getY());
+		contextVisible = true;
 		return;
 	}
 	
@@ -551,40 +591,50 @@ private void diagramMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:ev
 	private void menuAddTripleConnectionActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_menuAddTripleConnectionActionPerformed
 	{//GEN-HEADEREND:event_menuAddTripleConnectionActionPerformed
 		startModify(CDynkinConnection.TYPE_TRIPLE, STATUS_ADDCON);
+		contextVisible = false;
 	}//GEN-LAST:event_menuAddTripleConnectionActionPerformed
 	
 	private void menuAddDoubleConnectionActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_menuAddDoubleConnectionActionPerformed
 	{//GEN-HEADEREND:event_menuAddDoubleConnectionActionPerformed
 		startModify(CDynkinConnection.TYPE_DOUBLE, STATUS_ADDCON);
+		contextVisible = false;
 	}//GEN-LAST:event_menuAddDoubleConnectionActionPerformed
 		
 	private void menuRemoveConnectionActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_menuRemoveConnectionActionPerformed
 	{//GEN-HEADEREND:event_menuRemoveConnectionActionPerformed
 		startModify(CDynkinConnection.TYPE_NULL, STATUS_REMCON);
+		contextVisible = false;
 	}//GEN-LAST:event_menuRemoveConnectionActionPerformed
 	
 	private void menuAddSingleConnectionActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_menuAddSingleConnectionActionPerformed
 	{//GEN-HEADEREND:event_menuAddSingleConnectionActionPerformed
 		startModify(CDynkinConnection.TYPE_SINGLE, STATUS_ADDCON);
+		contextVisible = false;
 	}//GEN-LAST:event_menuAddSingleConnectionActionPerformed
 	
 	private void menuRemoveNodeActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_menuRemoveNodeActionPerformed
 	{//GEN-HEADEREND:event_menuRemoveNodeActionPerformed
 		tf_status.setText(dd.removeNode(dd.getNodeByCoor(contextX, contextY)));
+		contextVisible = false;
 	}//GEN-LAST:event_menuRemoveNodeActionPerformed
 	
 	private void menuAddNodeActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_menuAddNodeActionPerformed
 	{//GEN-HEADEREND:event_menuAddNodeActionPerformed
 		tf_status.setText(dd.addNode(contextX, contextY, 0));
+		contextVisible = false;
 	}//GEN-LAST:event_menuAddNodeActionPerformed
 
 	private void menuToggleCompactActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_menuToggleCompactActionPerformed
 	{//GEN-HEADEREND:event_menuToggleCompactActionPerformed
 		tf_status.setText(dd.toggleCompactNode(dd.getNodeByCoor(contextX, contextY)));
+		contextVisible = false;
 }//GEN-LAST:event_menuToggleCompactActionPerformed
 
 	private void diagramMouseEntered(java.awt.event.MouseEvent evt)//GEN-FIRST:event_diagramMouseEntered
 	{//GEN-HEADEREND:event_diagramMouseEntered
+		// Set the focus to the diagram panel for key events.
+		diagram.requestFocusInWindow();
+		
 		if(prev_status == STATUS_IDLE)
 			status = STATUS_PREVIEW;
 		else
@@ -594,26 +644,31 @@ private void diagramMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:ev
 	private void menuAddCompactPairActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_menuAddCompactPairActionPerformed
 	{//GEN-HEADEREND:event_menuAddCompactPairActionPerformed
 		startModify(CDynkinConnection.TYPE_NULL, STATUS_ADDCOMP);
+		contextVisible = false;
 }//GEN-LAST:event_menuAddCompactPairActionPerformed
 
 	private void menuRemoveCompactPairActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_menuRemoveCompactPairActionPerformed
 	{//GEN-HEADEREND:event_menuRemoveCompactPairActionPerformed
 		startModify(CDynkinConnection.TYPE_NULL, STATUS_REMCOMP);
+		contextVisible = false;
 	}//GEN-LAST:event_menuRemoveCompactPairActionPerformed
 
 	private void menuStateEnabledActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_menuStateEnabledActionPerformed
 	{//GEN-HEADEREND:event_menuStateEnabledActionPerformed
 		tf_status.setText(dd.setNodeState(dd.getNodeByCoor(contextX, contextY),CDynkinNode.STATE_ENABLED));
+		contextVisible = false;
 	}//GEN-LAST:event_menuStateEnabledActionPerformed
 
 	private void menuStateDisabledActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_menuStateDisabledActionPerformed
 	{//GEN-HEADEREND:event_menuStateDisabledActionPerformed
 		tf_status.setText(dd.setNodeState(dd.getNodeByCoor(contextX, contextY),CDynkinNode.STATE_DISABLED));
+		contextVisible = false;
 	}//GEN-LAST:event_menuStateDisabledActionPerformed
 
 	private void menuStateLevelActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_menuStateLevelActionPerformed
 	{//GEN-HEADEREND:event_menuStateLevelActionPerformed
 		tf_status.setText(dd.setNodeState(dd.getNodeByCoor(contextX, contextY),CDynkinNode.STATE_ALWAYS_LEVEL));
+		contextVisible = false;
 	}//GEN-LAST:event_menuStateLevelActionPerformed
 	
 	
