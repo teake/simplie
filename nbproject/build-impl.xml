@@ -316,7 +316,6 @@ is divided into following sections:
         </copy>
     </target>
     <target name="-post-compile">
-		<copydir src="documentation" dest="dist"></copydir>
         <!-- Empty placeholder for easier customization. -->
         <!-- You can override this target in the ../build.xml file. -->
     </target>
@@ -399,8 +398,13 @@ is divided into following sections:
 		   storepass="blabla"
 		   keystore="keyStore"
 		   lazy="true">
-			<fileset dir="dist" includes="**/*.jar"/>
-		</signjar>	</target>
+			<fileset dir="${dist.dir}" includes="**/*.jar"/>
+		</signjar>
+		<delete file="${dist.dir}/README.TXT"/>
+		<copy todir="${dist.dir}">
+			<fileset dir="documentation"/>
+		</copy>
+	</target>
     <target depends="init,compile,-pre-jar,-do-jar-with-manifest,-do-jar-without-manifest,-do-jar-with-mainclass,-do-jar-with-libraries,-post-jar" description="Build JAR." name="jar"/>
     <!--
                 =================
