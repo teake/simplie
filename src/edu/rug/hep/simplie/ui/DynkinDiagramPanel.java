@@ -535,13 +535,6 @@ private void diagramMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event
 }//GEN-LAST:event_diagramMouseMoved
 
 private void diagramMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_diagramMouseReleased
-	if(contextVisible)
-	{
-		contextVisible = false;
-		diagram.repaint();
-		return;
-	}
-	
 	// Don't do anything if the diagram is locked.
 	if(dd.isLocked())
 		return;
@@ -555,6 +548,13 @@ private void diagramMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:ev
 		contextY = y;
 		contextMenu.show(diagram,evt.getX(),evt.getY());
 		contextVisible = true;
+		return;
+	}
+	
+	if(contextVisible)
+	{
+		contextVisible = false;
+		diagram.repaint();
 		return;
 	}
 	
