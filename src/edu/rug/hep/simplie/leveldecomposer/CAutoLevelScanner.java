@@ -23,7 +23,7 @@
 package edu.rug.hep.simplie.leveldecomposer;
 
 import edu.rug.hep.simplie.*;
-import edu.rug.hep.simplie.group.CRoot;
+import edu.rug.hep.simplie.algebra.CRoot;
 import edu.rug.hep.simplie.math.fraction;
 
 import javax.swing.SwingWorker;

@@ -21,7 +21,7 @@
  *
  */
 
-package edu.rug.hep.simplie.group;
+package edu.rug.hep.simplie.algebra;
 
 import edu.rug.hep.simplie.Helper;
 

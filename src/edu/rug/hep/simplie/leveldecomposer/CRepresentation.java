@@ -23,8 +23,8 @@
 package edu.rug.hep.simplie.leveldecomposer;
 
 import edu.rug.hep.simplie.*;
-import edu.rug.hep.simplie.group.CHighestWeightRep;
-import edu.rug.hep.simplie.group.CWeight;
+import edu.rug.hep.simplie.algebra.CHighestWeightRep;
+import edu.rug.hep.simplie.algebra.CWeight;
 
 /**
  * A class for storing valid regular subalgebra representations.
