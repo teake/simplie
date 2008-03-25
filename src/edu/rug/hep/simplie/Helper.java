@@ -515,6 +515,80 @@ public class Helper
 	}
 	
 	/**
+	 * Takes a fractional matrix and returns it as a nicely formatted string,
+	 * with all entries as "numerator / denominator".
+	 * 
+	 * @param matrix	 The fractional matrix to be formatted to a string.
+	 * @return			 A string representing the matrix.
+	 */
+	public static String matrixToString(fraction[][] matrix)
+	{
+		long biggestNum = 0;
+		long biggestDen = 0;
+		int numSize = 0;
+		int denSize = 0;
+		String output = new String("");
+		
+		// First find the biggest numerator and denominator.
+		for (int i = 0; i < matrix.length; i++)
+		{
+			for (int j = 0; j < matrix.length; j++)
+			{
+				if(matrix[i][j] == null)
+					return "";
+				biggestNum = Math.max( biggestNum, Math.abs(matrix[i][j].numerator()) );
+				biggestDen = Math.max( biggestDen, Math.abs(matrix[i][j].denominator()) );
+			}
+		}
+		
+		// Count the number of digits in the biggest numerator and denominator.
+		biggestNum = (long) Math.floor(Math.log10(biggestNum));
+		biggestDen = (long) Math.floor(Math.log10(biggestDen));
+		
+		for (int i = 0; i < matrix.length; i++)
+		{
+			for (int j = 0; j < matrix.length; j++)
+			{
+				if(matrix[i][j].numerator() == 0)
+				{
+					numSize = 0;
+				}
+				else
+				{
+					numSize = (int) Math.floor(Math.log10(Math.abs(matrix[i][j].numerator())));
+				}
+
+				if(matrix[i][j].isInt())
+				{
+					denSize = -2;
+				}
+				else
+				{
+					denSize = (int) Math.floor(Math.log10(Math.abs(matrix[i][j].denominator())));
+				}
+				
+				for(int k = 0; k < biggestNum - numSize; k++)
+				{
+					output += " ";
+				}
+				if(matrix[i][j].asDouble() >= 0)
+				{
+					output += " ";
+				}
+				output += matrix[i][j].toString();
+				for(int k = 0; k < biggestDen - denSize; k++)
+				{
+					output += " ";
+				}
+				output += " ";
+			}
+			output += "\n";
+		}
+		return output;
+	}
+	
+	
+	/**
 	 * Takes a matrix and returns it as a string,
 	 * with all entries formatted to have the given decimal plates.
 	 *

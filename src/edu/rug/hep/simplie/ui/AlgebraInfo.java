@@ -92,11 +92,11 @@ public class AlgebraInfo extends javax.swing.JPanel implements DiagramListener
 		numPosRoots.setText(Helper.intToString((int) algebra.rs.numPosRoots()));
 		
 		cartanMatrix.setText(Helper.matrixToString(algebra.A,0));
-		symCartanMatrix.setText(Helper.matrixToString(algebra.symA,1));
-		cartanMatrixInverse.setText(Helper.matrixToString(algebra.invA,1));
-		qFormMatrix.setText(Helper.matrixToString(algebra.G,1));
+		symCartanMatrix.setText(Helper.matrixToString(algebra.symA));
+		cartanMatrixInverse.setText(Helper.matrixToString(algebra.invA));
+		qFormMatrix.setText(Helper.matrixToString(algebra.G));
 		rootSpaceMetric.setText(Helper.matrixToString(algebra.B, 0));
-		invMetric.setText(Helper.matrixToString(algebra.invB, 1));
+		invMetric.setText(Helper.matrixToString(algebra.invB));
 	}
 	
 	/** This method is called from within the constructor to
