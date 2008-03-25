@@ -23,7 +23,7 @@
 package edu.rug.hep.simplie.ui;
 
 import edu.rug.hep.simplie.*;
-import edu.rug.hep.simplie.group.*;
+import edu.rug.hep.simplie.algebra.*;
 import edu.rug.hep.simplie.leveldecomposer.CAutoLevelScanner;
 
 import java.util.*;

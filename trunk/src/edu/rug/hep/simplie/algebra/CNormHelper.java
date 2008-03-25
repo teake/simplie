@@ -21,7 +21,7 @@
  *
  */
 
-package edu.rug.hep.simplie.group;
+package edu.rug.hep.simplie.algebra;
 
 /**
  * Helper-object for ordering simple roots according to their norm.

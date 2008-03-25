@@ -24,7 +24,7 @@
 package edu.rug.hep.simplie;
 
 import edu.rug.hep.simplie.dynkindiagram.*;
-import edu.rug.hep.simplie.group.*;
+import edu.rug.hep.simplie.algebra.*;
 import edu.rug.hep.simplie.math.*;
 
 /**
