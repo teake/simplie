@@ -104,6 +104,7 @@ public class fraction implements Cloneable, Comparable, java.io.Serializable
 		denominator = den;
 	}
 	
+	@Override
 	public String toString()
 	{
 		if (denominator() == 1)
@@ -112,6 +113,7 @@ public class fraction implements Cloneable, Comparable, java.io.Serializable
 			return numerator() + "/" + denominator();
 	}
 	
+	@Override
 	public Object clone()
 	{
 		return new fraction(this);
@@ -330,6 +332,7 @@ public class fraction implements Cloneable, Comparable, java.io.Serializable
 	 * reflecting whether this fraction is less, equal or greater than
 	 * the value of fraction other.
 	 */
+	@Override
 	public int compareTo(Object other)
 	{
 		fraction b = (fraction)(other);
@@ -357,6 +360,7 @@ public class fraction implements Cloneable, Comparable, java.io.Serializable
 		return (l < r)? -1 : ((l == r)? 0: 1);
 	}
 	
+	@Override
 	public boolean equals(Object other)
 	{
 		return compareTo((fraction)other) == 0;
@@ -367,6 +371,7 @@ public class fraction implements Cloneable, Comparable, java.io.Serializable
 		return compareTo(n) == 0;
 	}
 	
+	@Override
 	public int hashCode()
 	{
 		return (int) (numerator ^ denominator);
