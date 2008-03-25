@@ -35,7 +35,7 @@ import java.util.Comparator;
 
 
 /**
- * A SwingWorker for scanning regular subalgebra representations within a group.
+ * A SwingWorker for scanning regular subalgebra representations within a algebra.
  *
  * @author	Teake Nutma
  */
@@ -93,7 +93,7 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]> implements Com
 		
 		this.levelSign = 0;
 		
-		this.levelOneIndices = new int[algebras.group.rank - algebras.coGroup.rank];
+		this.levelOneIndices = new int[algebras.algebra.rank - algebras.coAlgebra.rank];
 		for (int i = 0; i < levelOneIndices.length; i++)
 		{
 			levelOneIndices[i] = 0;
@@ -142,11 +142,11 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]> implements Com
 		// Some preliminary checks.
 		if(minLevel > maxLevel)
 			return null;
-		if(algebras.group.rank == algebras.coGroup.rank)
+		if(algebras.algebra.rank == algebras.coAlgebra.rank)
 			return null;
 		
 		// How many possibilities of level combinations are there?
-		levelRank	= algebras.group.rank - algebras.coGroup.rank;
+		levelRank	= algebras.algebra.rank - algebras.coAlgebra.rank;
 		base		= maxLevel + 1 - minLevel;
 		num			= (int) Math.pow(base, levelRank);
 		try
@@ -244,7 +244,7 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]> implements Com
 		
 		// Don't scan this level if the number of indices exceeds the number of dimensions
 		// and we don't want to scan for exotic fields.
-		if(!showExotic && minNumIndices > (algebras.subGroup.rank + 1) )
+		if(!showExotic && minNumIndices > (algebras.subAlgebra.rank + 1) )
 		{
 			System.out.print("Skipping levels " + Helper.intArrayToString(levels));
 			System.out.println(", number of indices too large: " + minNumIndices);
@@ -254,7 +254,7 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]> implements Com
 		System.out.println("Scanning levels " + Helper.intArrayToString(levels));
 		
 		// Set up the Dynkin labels
-		int[] dynkinLabels = new int[algebras.coGroup.rank];
+		int[] dynkinLabels = new int[algebras.coAlgebra.rank];
 		for (int i = 0; i < dynkinLabels.length; i++)
 		{
 			dynkinLabels[i] = 0;
@@ -278,7 +278,7 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]> implements Com
 			{
 				fraction rootLength = algebras.calculateRootLength(levels, dynkinLabels);
 				// Only continue if the root length is not bigger than the maximum root length.
-				if(rootLength.asDouble() <= algebras.group.maxNorm)
+				if(rootLength.asDouble() <= algebras.algebra.maxNorm)
 				{
 					if(rootLength.isInt())
 					{
@@ -345,7 +345,7 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]> implements Com
 				repI = repContainer.get(k);
 				
 				// Get and set the root multiplicities.
-				CRoot root = algebras.group.rs.getRoot(repI.rootVector.clone());
+				CRoot root = algebras.algebra.rs.getRoot(repI.rootVector.clone());
 				if(root != null)
 					repI.setRootMult(root.mult);
 				else
@@ -395,8 +395,8 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]> implements Com
 			rowData[2] = Helper.intArrayToString(rep.intDynkinLabels);
 			rowData[3] = Helper.intArrayToString(rep.rootVector);
 			rowData[4] = rep.length;
-			rowData[5] = (long) algebras.subGroup.dimOfRep(rep.subDynkinLabels);
-			rowData[6] = (long) algebras.intGroup.dimOfRep(rep.intDynkinLabels);
+			rowData[5] = (long) algebras.subAlgebra.dimOfRep(rep.subDynkinLabels);
+			rowData[6] = (long) algebras.intAlgebra.dimOfRep(rep.intDynkinLabels);
 			rowData[7] = rep.getRootMult();
 			rowData[8] = rep.getOuterMult();
 			rowData[9] = rep.height;

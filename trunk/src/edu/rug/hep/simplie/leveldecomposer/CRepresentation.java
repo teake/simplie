@@ -97,7 +97,7 @@ public class CRepresentation implements Comparable<CRepresentation>
 		intDynkinLabels = algebras.intDynkinLabels(rootVector);
 		
 		// Instantiate the highest weight rep.
-		hwRep = new CHighestWeightRep(algebras.coGroup, dynkinLabels);
+		hwRep = new CHighestWeightRep(algebras.coAlgebra, dynkinLabels);
 		weightHeight = hwRep.highestHeight;
 		
 		// Calculate the number of indices.
@@ -140,13 +140,13 @@ public class CRepresentation implements Comparable<CRepresentation>
 		return outerMult;
 	}
 	
-	/** Sets the multiplicity of the associated root in the full group. */
+	/** Sets the multiplicity of the associated root in the full algebra. */
 	public void setRootMult(long rootMult)
 	{
 		this.rootMult = rootMult;
 	}
 	
-	/** Gets the multiplicity of the associated root in the full group. */
+	/** Gets the multiplicity of the associated root in the full algebra. */
 	public long getRootMult()
 	{
 		return rootMult;

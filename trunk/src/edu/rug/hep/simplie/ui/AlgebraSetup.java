@@ -51,10 +51,10 @@ public class AlgebraSetup extends javax.swing.JPanel implements DiagramListener
 	
 	public void diagramChanged()
 	{
-		algebraInfo.update(algebras.group);
-		subAlgebraInfo.update(algebras.subGroup);
-		disAlgebraInfo.update(algebras.intGroup);
-		coAlgebraInfo.update(algebras.coGroup);
+		algebraInfo.update(algebras.algebra);
+		subAlgebraInfo.update(algebras.subAlgebra);
+		disAlgebraInfo.update(algebras.intAlgebra);
+		coAlgebraInfo.update(algebras.coAlgebra);
 	}
 	
 	/** This method is called from within the constructor to

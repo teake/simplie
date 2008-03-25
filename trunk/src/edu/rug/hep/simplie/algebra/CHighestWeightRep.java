@@ -33,10 +33,10 @@ import javolution.util.FastList;
 import javolution.util.FastCollection.Record;
 
 /**
- * Given a specific CGroup and a highest weight state, this class creates an object representing
+ * Given a specific CAlgebra and a highest weight state, this class creates an object representing
  * the whole representation. Its main purpose is to determine weight multiplicities.
  *
- * @see CGroup
+ * @see CAlgebra
  * @see CWeight
  * @author Teake Nutma
  */
@@ -46,9 +46,9 @@ public class CHighestWeightRep
 	public final int		highestHeight;
 	/** The dimension of this representation. */
 	public final long dim;
-	/** The group of which this is a weight system. */
-	private final CGroup	group;
-	/** The rank of the group of which this is a weight system. */
+	/** The algebra of which this is a weight system. */
+	private final CAlgebra	algebra;
+	/** The rank of the algebra of which this is a weight system. */
 	private final int		rank;
 	/** The heighest weight of the representation. */
 	private final CWeight	highestWeight;
@@ -65,18 +65,18 @@ public class CHighestWeightRep
 	/**
 	 * Creates a new instance of CHighestWeightRep
 	 *
-	 * @param	group				The group of which this is a representation.
+	 * @param	algebra				The algebra of which this is a representation.
 	 * @param	highestWeightLabels	The dynkin labels of the highest weight state.
 	 */
-	public CHighestWeightRep(CGroup group, int[] highestWeightLabels)
+	public CHighestWeightRep(CAlgebra algebra, int[] highestWeightLabels)
 	{
 		FastList zeroDepthWeight;
 		
-		this.group	= group;
-		this.rank	= group.rank;
+		this.algebra= algebra;
+		this.rank	= algebra.rank;
 		
 		// Get the dimension of this rep.
-		dim = group.dimOfRep(highestWeightLabels);
+		dim = algebra.dimOfRep(highestWeightLabels);
 		
 		// Add the highest weight (construct to depth 0)
 		weightSystem	= new FastList<FastList>();
@@ -88,11 +88,11 @@ public class CHighestWeightRep
 		constructedDepth = 0;
 		
 		// Calculate a common factor in the freudenthal formula
-		highestWeightFactor = group.innerProduct(highestWeight,highestWeight);
-		highestWeightFactor.add(group.innerProduct(highestWeight, group.rho).times(2));
+		highestWeightFactor = algebra.innerProduct(highestWeight,highestWeight);
+		highestWeightFactor.add(algebra.innerProduct(highestWeight, algebra.rho).times(2));
 		
 		// Calculate the height of the highest weight
-		highestHeight = group.weightHeight(highestWeightLabels);
+		highestHeight = algebra.weightHeight(highestWeightLabels);
 	}
 	
 	/** Cancels the construction of the weight system. */
@@ -126,10 +126,10 @@ public class CHighestWeightRep
 		CWeight		wantedWeight;
 		
 		// Preliminary checks
-		if(!group.finite || weightLabels.length != rank)
+		if(!algebra.finite || weightLabels.length != rank)
 			return null;
 		
-		wantedDepth = highestHeight - group.weightHeight(weightLabels);
+		wantedDepth = highestHeight - algebra.weightHeight(weightLabels);
 		
 		if(wantedDepth < 0)
 			// Do not try to get a weight that is outside the weight system.
@@ -168,7 +168,7 @@ public class CHighestWeightRep
 				{
 					if(weightLabels[i] < 0)
 					{
-						weightLabels = group.simpWeylRefl(weightLabels, i);
+						weightLabels = algebra.simpWeylRefl(weightLabels, i);
 						break;
 					}
 					if(i == weightLabels.length - 1)
@@ -193,7 +193,7 @@ public class CHighestWeightRep
 		// Print some info to sout.
 		System.out.println(
 			"Constructing highest weight rep " + Helper.intArrayToString(highestWeight.dynkinLabels) +
-			" to depth " + maxDepth + " of group " + group.type + ".");
+			" to depth " + maxDepth + " of algebra " + algebra.type + ".");
 		
 		// Do the construction.
 		while((constructedDepth < maxDepth || maxDepth == 0) && !cancelConstruction)
@@ -218,7 +218,7 @@ public class CHighestWeightRep
 						int[] newDynkinLabels = new int[rank];
 						for (int j = 0; j < rank; j++)
 						{
-							newDynkinLabels[j] = oldWeight.dynkinLabels[j] - group.A[i][j];
+							newDynkinLabels[j] = oldWeight.dynkinLabels[j] - algebra.A[i][j];
 						}
 						CWeight newWeight = new CWeight(newDynkinLabels);
 						
@@ -286,21 +286,21 @@ public class CHighestWeightRep
 		numerator = 0;
 		
 		// First calculate the denominator.
-		denominator = highestWeightFactor.minus(group.innerProduct(weight,weight));
-		denominator.subtract(group.innerProduct(weight,group.rho).times(2));
+		denominator = highestWeightFactor.minus(algebra.innerProduct(weight,weight));
+		denominator.subtract(algebra.innerProduct(weight,algebra.rho).times(2));
 		
-		maxHeight = Math.min(weight.getDepth(), group.rs.size()-1);
+		maxHeight = Math.min(weight.getDepth(), algebra.rs.size()-1);
 		
 		// Now sum over all positive roots.
 		for (int height = 1; height <= maxHeight; height++)
 		{
-			Collection roots	= group.rs.get(height);
+			Collection roots	= algebra.rs.get(height);
 			Iterator iterator	= roots.iterator();
 			int maxK = (int) Math.floor(weight.getDepth()/height);
 			while(iterator.hasNext())
 			{
 				CRoot root = (CRoot) iterator.next();
-				int rootDotWeight	= group.innerProduct(weight,root);
+				int rootDotWeight	= algebra.innerProduct(weight,root);
 				for (int k = 1; k <= maxK; k++)
 				{
 					// Construct the weight "lambda + k*alpha"
@@ -309,7 +309,7 @@ public class CHighestWeightRep
 					{
 						for (int j = 0; j < rank; j++)
 						{
-							summedLabels[i] += k * group.A[j][i] * root.vector[j];
+							summedLabels[i] += k * algebra.A[j][i] * root.vector[j];
 						}
 					}
 					CWeight summedWeight = new CWeight(summedLabels);

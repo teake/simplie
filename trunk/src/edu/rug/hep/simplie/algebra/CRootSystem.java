@@ -34,16 +34,16 @@ import javolution.util.FastSet;
 import javolution.util.FastCollection.Record;
 
 /**
- * Given a specific CGroup, this class creates the corresponding root system.
+ * Given a specific CAlgebra, this class creates the corresponding root system.
  *
- * @see		CGroup
+ * @see		CAlgebra
  * @author	Teake Nutma
  */
 public class CRootSystem
 {
-	/** The group of which this is the rootsystem. */
-	private final CGroup group;
-	/** The rank of the group of which this is the rootsystem. */
+	/** The algebra of which this is the rootsystem. */
+	private final CAlgebra algebra;
+	/** The rank of the algebra of which this is the rootsystem. */
 	private final int rank;
 	/** The number of positive roots constructed so far. */
 	private long numPosRoots;
@@ -61,10 +61,10 @@ public class CRootSystem
 	private boolean cancelConstruction;
 	
 	/** Creates a new instance of CRootSystem and constructs up to height 1. */
-	public CRootSystem(CGroup group)
+	public CRootSystem(CAlgebra algebra)
 	{
-		this.group			= group;
-		this.rank			= group.rank;
+		this.algebra		= algebra;
+		this.rank			= algebra.rank;
 		
 		rootSystem			= new FastList<FastList>();
 		numPosRoots			= 0;
@@ -87,7 +87,7 @@ public class CRootSystem
 		
 		// Add the simple roots.
 		simpleRoots = new FastList<CRoot>();
-		for(CRoot simpleRoot : group.simpleRoots)
+		for(CRoot simpleRoot : algebra.simpleRoots)
 		{
 			simpleRoots.add(simpleRoot);
 		}
@@ -272,7 +272,7 @@ public class CRootSystem
 		{
 			fos = new FileOutputStream(filename);
 			out = new ObjectOutputStream(fos);
-			out.writeObject(group.A);
+			out.writeObject(algebra.A);
 			out.writeInt(constructedHeight);
 			out.writeLong(numPosRoots);
 			out.writeLong(numPosGenerators);
@@ -304,7 +304,7 @@ public class CRootSystem
 			fis = new FileInputStream(filename);
 			in	= new ObjectInputStream(fis);
 			int[][] savedCM	= (int[][]) in.readObject();
-			if(Helper.sameMatrices(savedCM, group.A))
+			if(Helper.sameMatrices(savedCM, algebra.A))
 			{
 				constructedHeight	= in.readInt();
 				numPosRoots			= in.readLong();
@@ -348,7 +348,7 @@ public class CRootSystem
 		
 		cancelConstruction = false;
 		
-		System.out.println("Constructing roots of " + group.type + " to height " + maxHeight + ".");
+		System.out.println("Constructing roots of " + algebra.type + " to height " + maxHeight + ".");
 		
 		while(constructedHeight < maxHeight || maxHeight == 0)
 		{
@@ -383,7 +383,7 @@ public class CRootSystem
 					if(!rootCache.add(newRoot))
 						continue;
 					
-					innerProduct = group.innerProduct(root,simpleRoot);
+					innerProduct = algebra.innerProduct(root,simpleRoot);
 					if(innerProduct < 0)
 					{
 						// n_plus is always positive, thus (root + simpleRoot) is a root.
@@ -483,7 +483,7 @@ public class CRootSystem
 		
 		// TODO: possibly move this to CRoot
 		
-		root.norm	= group.innerProduct(root,root);
+		root.norm	= algebra.innerProduct(root,root);
 		
 		// Determine its coMult minus the root multiplicity.
 		fraction coMult = calculateCoMult(root);
@@ -564,7 +564,7 @@ public class CRootSystem
 		if(root.height() % 2 == 0)
 			multiplicity.add(petersonPart(root, root.height() / 2));
 		
-		multiplicity.divide( group.innerProduct(root,root) - (2 * group.rho(root) ) );
+		multiplicity.divide( algebra.innerProduct(root,root) - (2 * algebra.rho(root) ) );
 		multiplicity.subtract(coMult);
 		
 		if(!multiplicity.isInt())
@@ -619,7 +619,7 @@ public class CRootSystem
 							continue innerRootLoop;
 					}
 					fraction part = beta.coMult.times(gamma.coMult);
-					part.multiply(group.innerProduct(beta,gamma));
+					part.multiply(algebra.innerProduct(beta,gamma));
 					multiplicity.add(part);
 				}
 		}
