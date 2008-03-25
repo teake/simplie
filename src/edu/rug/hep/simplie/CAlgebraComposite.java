@@ -28,7 +28,7 @@ import edu.rug.hep.simplie.algebra.*;
 import edu.rug.hep.simplie.math.*;
 
 /**
- * The core SimpLie object. It stores the group disintegration
+ * The core SimpLie object. It stores the algebra disintegration
  * information from a decomposed Dynkin diagram. It also stores
  * the Dynkin diagram itself.
  * Implements DiagramListener to obtain the diagram information.
@@ -37,14 +37,14 @@ import edu.rug.hep.simplie.math.*;
  */
 public class CAlgebraComposite implements DiagramListener
 {
-	/** CGroup object for the full group */
-	public CGroup group;
-	/** CGroup object for the regular subgroup */
-	public CGroup subGroup;
-	/** CGroup object for the internal subgroup */
-	public CGroup intGroup;
-	/** CGroup object for the non-level subgroup (which is equal to the direct product of subGroup x intGroup) */
-	public CGroup coGroup;
+	/** CAlgebra object for the full algebra */
+	public CAlgebra algebra;
+	/** CAlgebra object for the regular subalgebra */
+	public CAlgebra subAlgebra;
+	/** CAlgebra object for the internal subalgebra */
+	public CAlgebra intAlgebra;
+	/** CAlgebra object for the non-level subalgebra (which is equal to the direct product of subAlgebra x intAlgebra) */
+	public CAlgebra coAlgebra;
 	/** CDynkinDiagram object */
 	public CDynkinDiagram dd;
 	
@@ -66,35 +66,35 @@ public class CAlgebraComposite implements DiagramListener
 		if(locked)
 			return;
 		
-		// Only construct the full group if the new matrix is different.
-		if(group == null || !Helper.sameMatrices(dd.cartanMatrix(), group.A))
-			group = new CGroup(dd.cartanMatrix());
+		// Only construct the full algebra if the new matrix is different.
+		if(algebra == null || !Helper.sameMatrices(dd.cartanMatrix(), algebra.A))
+			algebra = new CAlgebra(dd.cartanMatrix());
 		
-		// Only construct the cogroup if it is new and different from the full group.
-		if(coGroup == null || !Helper.sameMatrices(dd.cartanSubMatrix("co"), coGroup.A))
+		// Only construct the coalgebra if it is new and different from the full algebra.
+		if(coAlgebra == null || !Helper.sameMatrices(dd.cartanSubMatrix("co"), coAlgebra.A))
 		{
-			if(Helper.sameMatrices(dd.cartanSubMatrix("co"),group.A))
-				coGroup = group;
+			if(Helper.sameMatrices(dd.cartanSubMatrix("co"),algebra.A))
+				coAlgebra = algebra;
 			else
-				coGroup	= new CGroup(dd.cartanSubMatrix("co"));
+				coAlgebra	= new CAlgebra(dd.cartanSubMatrix("co"));
 		}
 		
-		// Only construct the subgroup if it is new and different from the cogroup.
-		if(subGroup == null || !Helper.sameMatrices(dd.cartanSubMatrix("sub"), subGroup.A))
+		// Only construct the subalgebra if it is new and different from the coalgebra.
+		if(subAlgebra == null || !Helper.sameMatrices(dd.cartanSubMatrix("sub"), subAlgebra.A))
 		{
-			if(Helper.sameMatrices(dd.cartanSubMatrix("sub"),coGroup.A))
-				subGroup = coGroup;
+			if(Helper.sameMatrices(dd.cartanSubMatrix("sub"),coAlgebra.A))
+				subAlgebra = coAlgebra;
 			else
-				subGroup = new CGroup(dd.cartanSubMatrix("sub"));
+				subAlgebra = new CAlgebra(dd.cartanSubMatrix("sub"));
 		}
 		
-		// Only construct the intgroup if it is new and different from the cogroup.
-		if(intGroup == null || !Helper.sameMatrices(dd.cartanSubMatrix("int"), intGroup.A))
+		// Only construct the intalgebra if it is new and different from the coalgebra.
+		if(intAlgebra == null || !Helper.sameMatrices(dd.cartanSubMatrix("int"), intAlgebra.A))
 		{
-			if(Helper.sameMatrices(dd.cartanSubMatrix("int"),coGroup.A))
-				intGroup = coGroup;
+			if(Helper.sameMatrices(dd.cartanSubMatrix("int"),coAlgebra.A))
+				intAlgebra = coAlgebra;
 			else
-				intGroup = new CGroup(dd.cartanSubMatrix("int"));
+				intAlgebra = new CAlgebra(dd.cartanSubMatrix("int"));
 		}
 		
 		dd.setTitle(getDynkinDiagramType(false));
@@ -155,24 +155,24 @@ public class CAlgebraComposite implements DiagramListener
 	}
 	
 	/**
-	 * Returns a string representing the type of decomposition of the full group into
-	 * the regular subgroup and the disconnected subgroup.
+	 * Returns a string representing the type of decomposition of the full algebra into
+	 * the regular subalgebra and the disconnected subalgebra.
 	 *
-	 * @return	String of the type "regular subgroup x disconnected subgroup representations in fullgroup".
+	 * @return	String of the type "regular subalgebra x disconnected subalgebra representations in fullalgebra".
 	 * @see		#getDynkinDiagramType
 	 */
 	public String getDecompositionType(boolean TeX)
 	{
 		if(TeX)
-			return coGroup.typeTeX + " representations in " + group.typeTeX;
+			return coAlgebra.typeTeX + " representations in " + algebra.typeTeX;
 		else
-			return coGroup.type + " representations in " + group.type;
+			return coAlgebra.type + " representations in " + algebra.type;
 	}
 	
 	/**
-	 * Returns a string representing the regular subgroup and the disconnected subgroup of the full group.
+	 * Returns a string representing the regular subalgebra and the disconnected subalgebra of the full algebra.
 	 *
-	 * @return	String of the type "fullgroup as regular subgroup x disconnected subgroup".
+	 * @return	String of the type "fullalgebra as regular subalgebra x disconnected subalgebra".
 	 * @see		#getDecompositionType
 	 */
 	public String getDynkinDiagramType(boolean TeX)
@@ -181,15 +181,15 @@ public class CAlgebraComposite implements DiagramListener
 		
 		if(TeX)
 		{
-			output += group.typeTeX;
-			if(group.rank > coGroup.rank)
-				output += " decomposed as " + coGroup.typeTeX;
+			output += algebra.typeTeX;
+			if(algebra.rank > coAlgebra.rank)
+				output += " decomposed as " + coAlgebra.typeTeX;
 		}
 		else
 		{
-			output += group.type;
-			if(group.rank > coGroup.rank)
-				output += " decomposed as " + coGroup.type;
+			output += algebra.type;
+			if(algebra.rank > coAlgebra.rank)
+				output += " decomposed as " + coAlgebra.type;
 		}
 		return output;
 	}
@@ -208,7 +208,7 @@ public class CAlgebraComposite implements DiagramListener
 	 */
 	public int[] levels(int[] rootVector)
 	{
-		int[] levels = new int[group.rank - coGroup.rank];
+		int[] levels = new int[algebra.rank - coAlgebra.rank];
 		for (int i = 0; i < levels.length; i++)
 		{
 			levels[i] = rootVector[dd.translateLevel(i)];
@@ -225,8 +225,8 @@ public class CAlgebraComposite implements DiagramListener
 	 */
 	public int[] subDynkinLabels(int[] rootVector)
 	{
-		int[] subDynkinLabels = new int[subGroup.rank];
-		int[] fullLabels = group.rootToWeight(rootVector);
+		int[] subDynkinLabels = new int[subAlgebra.rank];
+		int[] fullLabels = algebra.rootToWeight(rootVector);
 		for (int i = 0; i < subDynkinLabels.length; i++)
 		{
 			subDynkinLabels[i] = sign * fullLabels[dd.translateSub(i)];
@@ -243,8 +243,8 @@ public class CAlgebraComposite implements DiagramListener
 	 */
 	public int[] intDynkinLabels(int[] rootVector)
 	{
-		int[] intDynkinLabels = new int[intGroup.rank];
-		int[] fullLabels = group.rootToWeight(rootVector);
+		int[] intDynkinLabels = new int[intAlgebra.rank];
+		int[] fullLabels = algebra.rootToWeight(rootVector);
 		for (int i = 0; i < intDynkinLabels.length; i++)
 		{
 			intDynkinLabels[i] = sign * fullLabels[dd.translateInt(i)];
@@ -261,8 +261,8 @@ public class CAlgebraComposite implements DiagramListener
 	 */
 	public int[] coDynkinLabels(int[] rootVector)
 	{
-		int[] coDynkinLabels = new int[coGroup.rank];
-		int[] fullLabels = group.rootToWeight(rootVector);
+		int[] coDynkinLabels = new int[coAlgebra.rank];
+		int[] fullLabels = algebra.rootToWeight(rootVector);
 		for (int i = 0; i < coDynkinLabels.length; i++)
 		{
 			coDynkinLabels[i] = sign * fullLabels[dd.translateCo(i)];
@@ -279,7 +279,7 @@ public class CAlgebraComposite implements DiagramListener
 	 */ 
 	public int[] rootVector(int[] levels, int[] coDynkinLabels)
 	{
-		int[] rootVector = new int[group.rank];
+		int[] rootVector = new int[algebra.rank];
 		
 		fraction[] coLevels = calculateCoLevels(levels, coDynkinLabels);
 		for (int i = 0; i < coLevels.length; i++)
@@ -308,9 +308,9 @@ public class CAlgebraComposite implements DiagramListener
 		{
 			for(int j=0; j < dynkinLabels.length; j++)
 			{
-				fraction contribution = new fraction(group.simpleRootNorms[dd.translateCo(j)],coGroup.simpleRootNorms[j]);
+				fraction contribution = new fraction(algebra.simpleRootNorms[dd.translateCo(j)],coAlgebra.simpleRootNorms[j]);
 				contribution.multiply(dynkinLabels[i] * dynkinLabels[j] - levelComponents[i] * levelComponents[j]);
-				rootLength.add( coGroup.G[i][j].times(contribution) );
+				rootLength.add( coAlgebra.G[i][j].times(contribution) );
 			}
 		}
 		
@@ -318,7 +318,7 @@ public class CAlgebraComposite implements DiagramListener
 		{
 			for(int j=0; j < levels.length; j++)
 			{
-				rootLength.add( group.B[dd.translateLevel(i)][dd.translateLevel(j)] * levels[i] * levels[j] );
+				rootLength.add( algebra.B[dd.translateLevel(i)][dd.translateLevel(j)] * levels[i] * levels[j] );
 			}
 		}
 		
@@ -328,15 +328,15 @@ public class CAlgebraComposite implements DiagramListener
 	/** Returns the levels of the co-algebra. */
 	public fraction[] calculateCoLevels(int[] levels, int[] dynkinLabels)
 	{
-		fraction[] coLevels		= new fraction[coGroup.rank];
+		fraction[] coLevels		= new fraction[coAlgebra.rank];
 		int[] levelComponents	= calculateLevelComponents(levels);
 		
 		for(int i=0; i < coLevels.length; i++)
 		{
 			coLevels[i] = new fraction(0);
-			for(int j=0; j < coGroup.rank; j++)
+			for(int j=0; j < coAlgebra.rank; j++)
 			{
-				coLevels[i].add(coGroup.invA[j][i].times(sign * dynkinLabels[j] - levelComponents[j]));
+				coLevels[i].add(coAlgebra.invA[j][i].times(sign * dynkinLabels[j] - levelComponents[j]));
 			}
 		}
 		
@@ -346,14 +346,14 @@ public class CAlgebraComposite implements DiagramListener
 	/** Calculates the contraction of the levels with the Cartan matrix. */
 	public int[] calculateLevelComponents(int[] levels)
 	{
-		int[] levelComponents = new int[coGroup.rank];
+		int[] levelComponents = new int[coAlgebra.rank];
 		
 		for(int i=0; i < levelComponents.length; i++)
 		{
 			levelComponents[i] = 0;
 			for(int j=0; j < levels.length; j++)
 			{
-				levelComponents[i] += group.A[dd.translateLevel(j)][dd.translateCo(i)] * levels[j];
+				levelComponents[i] += algebra.A[dd.translateLevel(j)][dd.translateCo(i)] * levels[j];
 			}
 		}
 		return levelComponents;

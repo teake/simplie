@@ -1,5 +1,5 @@
 /*
- * CGroup.java
+ * CAlgebra.java
  *
  * Created on 26 maart 2007, 17:17
  *
@@ -33,19 +33,19 @@ import java.util.Iterator;
 import Jama.Matrix;
 
 /**
- * Given a Cartan matrix, this class creates an object which has most properties of a simple Lie group:
+ * Given a Cartan matrix, this class creates an object which has most properties of a simple Lie algebra:
  * rank, dimension, and a root system, to name a few.
  *
  * @see CRootSystem
  * @author Teake Nutma
  */
-public class CGroup
+public class CAlgebra
 {
 	/*********************************
 	 * Public properties
 	 *********************************/
 	
-	/** The Cartan matrix of the group. */
+	/** The Cartan matrix of the algebra. */
 	public final int[][] A;
 	/** The symmetrized Cartan matrix (the inverse of the quadratic form matrix) */
 	public final fraction[][] symA;
@@ -73,23 +73,23 @@ public class CGroup
 	public final int	det;
 	/** The rank of the Cartan matrix */
 	public final int	rankA;
-	/** The rank of the group. */
+	/** The rank of the algebra. */
 	public final int	rank;
-	/** The dimension of the group (the number of generators). Only set for finite groups. */
+	/** The dimension of the algebra (the number of generators). Only set for finite algebras. */
 	public final int	dim;
-	/** String value of dim. "Infinite" if the group is infinite. */
+	/** String value of dim. "Infinite" if the algebra is infinite. */
 	public final String	dimension;
-	/** The type of the group ("A1", "E6", etc) */
+	/** The type of the algebra ("A1", "E6", etc) */
 	public final String	type;
 	/** The same as "type", but now in HTML markup */
 	public final String typeHTML;
 	/** The same as "type", but now in TeX markup */
 	public final String typeTeX;
-	/** Boolean indicating whethet the group is finite or not. */
+	/** Boolean indicating whethet the algebra is finite or not. */
 	public final boolean finite;
 	/** The root system */
 	public final CRootSystem rs;
-	/** The Weyl vector of the group */
+	/** The Weyl vector of the algebra */
 	public final CWeight rho;
 	
 	/** Vector containing the norm of the simple roots divided by two. */
@@ -102,12 +102,12 @@ public class CGroup
 	 **********************************/
 	
 	/**
-	 * Creates a new instance of CGroup.
-	 * If the group is finite, the whole rootsystem is constructed.
+	 * Creates a new instance of CAlgebra.
+	 * If the algebra is finite, the whole rootsystem is constructed.
 	 *
-	 * @param A    The Cartan matrix from which to construct the group.
+	 * @param A    The Cartan matrix from which to construct the algebra.
 	 */
-	public CGroup(Matrix A)
+	public CAlgebra(Matrix A)
 	{
 		// Do some preliminary checks
 		if(A.getColumnDimension() != A.getRowDimension() || A.getColumnDimension() == 0)
@@ -270,7 +270,7 @@ public class CGroup
 		}
 		rho = new CWeight(weylLabels);
 		
-		// Detect the type of Lie group.
+		// Detect the type of Lie algebra.
 		String tType	= "";
 		String tTypeTeX	= "";
 		String tTypeHTML= "";
@@ -379,7 +379,7 @@ public class CGroup
 			}
 		}
 		
-		// If the group is finite, we can construct the root system to all heights.
+		// If the algebra is finite, we can construct the root system to all heights.
 		if(finite)
 			rs.construct(0);
 		
@@ -507,7 +507,7 @@ public class CGroup
 	 * Calculate the action of the Weyl vector on a root.
 	 *
 	 * @param	root	Root alpha.
-	 * @return			rho(alhpa), with rho the Weyl vector of this group.
+	 * @return			rho(alhpa), with rho the Weyl vector of this algebra.
 	 */
 	public int rho(CRoot root)
 	{

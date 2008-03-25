@@ -88,7 +88,7 @@ public class LevelDecomposition extends javax.swing.JPanel
 	{
 		int[] coDynkinLabels = algebras.coDynkinLabels(rootVector);
 		int[] levels = algebras.levels(rootVector);
-		CHighestWeightRep hwRep = new CHighestWeightRep(algebras.coGroup,coDynkinLabels);
+		CHighestWeightRep hwRep = new CHighestWeightRep(algebras.coAlgebra,coDynkinLabels);
 		
 		// Fully construct the weight system.
 		hwRep.construct(0);
@@ -439,7 +439,7 @@ private void rbSignPosStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIR
 		{
 			// The scanner is busy, and the button is a cancel button. So cancel the task.
 			autoScanner.cancel(true);
-			algebras.group.cancelEverything();
+			algebras.algebra.cancelEverything();
 		}
 		else
 		{

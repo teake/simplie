@@ -436,7 +436,7 @@ public class Main extends javax.swing.JFrame
 	private void MenuExportRootSystemActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_MenuExportRootSystemActionPerformed
 	{//GEN-HEADEREND:event_MenuExportRootSystemActionPerformed
 		JFileChooser chooser = new JFileChooser("");
-		chooser.setSelectedFile(new File(algebras.group.type + "_height_" + algebras.group.rs.constructedHeight() + ".txt"));
+		chooser.setSelectedFile(new File(algebras.algebra.type + "_height_" + algebras.algebra.rs.constructedHeight() + ".txt"));
 		chooser.setDialogTitle("Export root system");
 		int returnVal = chooser.showSaveDialog(this);
 		
@@ -446,7 +446,7 @@ public class Main extends javax.swing.JFrame
 		 * pre-pend the "file" protocol to the absolute path of the file.
 		 */
 			String fileURL = chooser.getSelectedFile().getAbsolutePath();
-			algebras.group.rs.writeTxtFile(fileURL);
+			algebras.algebra.rs.writeTxtFile(fileURL);
 		}
 	}//GEN-LAST:event_MenuExportRootSystemActionPerformed
 	
@@ -464,7 +464,7 @@ public class Main extends javax.swing.JFrame
 	{//GEN-HEADEREND:event_MenuItemSaveRootsActionPerformed
 		JFileChooser chooser = new JFileChooser(rsDir);
 		chooser.addChoosableFileFilter(rsFilter);
-		chooser.setSelectedFile(new File(algebras.group.type + "_height_" + algebras.group.rs.constructedHeight()));
+		chooser.setSelectedFile(new File(algebras.algebra.type + "_height_" + algebras.algebra.rs.constructedHeight()));
 		chooser.setDialogTitle("Save root system");
 		int returnVal = chooser.showSaveDialog(this);
 		
@@ -476,7 +476,7 @@ public class Main extends javax.swing.JFrame
 			String fileURL = chooser.getSelectedFile().getAbsolutePath();
 			if(!rsFilter.accept(chooser.getSelectedFile()))
 				fileURL += ".rs";
-			algebras.group.rs.saveTo(fileURL);
+			algebras.algebra.rs.saveTo(fileURL);
 		}
 	}//GEN-LAST:event_MenuItemSaveRootsActionPerformed
 	
@@ -497,7 +497,7 @@ public class Main extends javax.swing.JFrame
 		 * pre-pend the "file" protocol to the absolute path of the file.
 		 */
 			fileURL = chooser.getSelectedFile().getAbsolutePath();
-			if(!algebras.group.rs.loadFrom(fileURL))
+			if(!algebras.algebra.rs.loadFrom(fileURL))
 			{
 				JOptionPane.showMessageDialog(
 						popup,

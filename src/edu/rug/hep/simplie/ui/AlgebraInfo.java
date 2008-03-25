@@ -44,7 +44,7 @@ public class AlgebraInfo extends javax.swing.JPanel implements DiagramListener
 {
 	private DefaultTableModel tableModelRoots;
 	private DefaultTableModel tableModelWeights;
-	private CGroup group;
+	private CAlgebra algebra;
 	private CAlgebraComposite algebras;
 	private CHighestWeightRep HWrep;
 	
@@ -54,7 +54,7 @@ public class AlgebraInfo extends javax.swing.JPanel implements DiagramListener
 		initComponents();
 		tableModelRoots = (DefaultTableModel) rootTable.getModel();
 		tableModelWeights = (DefaultTableModel) repTable.getModel();
-		group = null;
+		algebra = null;
 		HWrep = null;
 	}
 	
@@ -70,33 +70,33 @@ public class AlgebraInfo extends javax.swing.JPanel implements DiagramListener
 		switch(algebrasBox.getSelectedIndex())
 		{
 		case 0:
-			group = algebras.group;
+			algebra = algebras.algebra;
 			break;
 		case 1:
-			group = algebras.subGroup;
+			algebra = algebras.subAlgebra;
 			break;
 		case 2:
-			group = algebras.intGroup;
+			algebra = algebras.intAlgebra;
 			break;
 		case 3:
-			group = algebras.coGroup;
+			algebra = algebras.coAlgebra;
 			break;
 		default:
-			group = null;
+			algebra = null;
 		}
 		
-		if(group == null)
+		if(algebra == null)
 			return;
 		
-		constructedHeight.setText(Helper.intToString(group.rs.constructedHeight()));
-		numPosRoots.setText(Helper.intToString((int) group.rs.numPosRoots()));
+		constructedHeight.setText(Helper.intToString(algebra.rs.constructedHeight()));
+		numPosRoots.setText(Helper.intToString((int) algebra.rs.numPosRoots()));
 		
-		cartanMatrix.setText(Helper.matrixToString(group.A,0));
-		symCartanMatrix.setText(Helper.matrixToString(group.symA,1));
-		cartanMatrixInverse.setText(Helper.matrixToString(group.invA,1));
-		qFormMatrix.setText(Helper.matrixToString(group.G,1));
-		rootSpaceMetric.setText(Helper.matrixToString(group.B, 0));
-		invMetric.setText(Helper.matrixToString(group.invB, 1));
+		cartanMatrix.setText(Helper.matrixToString(algebra.A,0));
+		symCartanMatrix.setText(Helper.matrixToString(algebra.symA,1));
+		cartanMatrixInverse.setText(Helper.matrixToString(algebra.invA,1));
+		qFormMatrix.setText(Helper.matrixToString(algebra.G,1));
+		rootSpaceMetric.setText(Helper.matrixToString(algebra.B, 0));
+		invMetric.setText(Helper.matrixToString(algebra.invB, 1));
 	}
 	
 	/** This method is called from within the constructor to
@@ -652,7 +652,7 @@ public class AlgebraInfo extends javax.swing.JPanel implements DiagramListener
     }// </editor-fold>//GEN-END:initComponents
 	
 private void repFillButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_repFillButtonActionPerformed
-	if(HWrep == null || group == null)
+	if(HWrep == null || algebra == null)
 		return;
 	
 	// Fully construct the weight system.
@@ -673,7 +673,7 @@ private void repFillButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN
 			Object[] rowData = new Object[4];
 			rowData[0] = Helper.intArrayToString(weight.dynkinLabels);
 			rowData[1] = weight.getMult();
-			rowData[2] = (weight.isDominant) ? group.dimOfRep(weight.dynkinLabels) : 0;
+			rowData[2] = (weight.isDominant) ? algebra.dimOfRep(weight.dynkinLabels) : 0;
 			rowData[3] = weight.getDepth();
 			tableModelWeights.addRow(rowData);
 		}
@@ -683,9 +683,9 @@ private void repFillButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN
 	private void repOKbuttonActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_repOKbuttonActionPerformed
 	{//GEN-HEADEREND:event_repOKbuttonActionPerformed
 		int[] labels = Helper.stringToIntArray(tfDynkinLabels.getText());
-		if(group != null && labels.length == group.rank)
+		if(algebra != null && labels.length == algebra.rank)
 		{
-			HWrep = new CHighestWeightRep(group,labels);
+			HWrep = new CHighestWeightRep(algebra,labels);
 			lDynkinLabels.setText(Helper.intArrayToString(labels));
 			Long dim = new Long(HWrep.dim);
 			lDimRep.setText(dim.toString());
@@ -704,15 +704,15 @@ private void repFillButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN
 		// Set the focus to the root table.
 		tabbedPane.setSelectedIndex(1);
 		
-		if(group == null)
+		if(algebra == null)
 			return;
 		
 		// Clear and fill the table.
 		tableModelRoots.setRowCount(0);
 		
-		for (int i = 0; i < group.rs.size(); i++)
+		for (int i = 0; i < algebra.rs.size(); i++)
 		{
-			Collection roots	= group.rs.get(i);
+			Collection roots	= algebra.rs.get(i);
 			Iterator iterator	= roots.iterator();
 			while (iterator.hasNext())
 			{

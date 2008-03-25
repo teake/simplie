@@ -23,7 +23,7 @@
 package edu.rug.hep.simplie.ui.reusable;
 
 import edu.rug.hep.simplie.Helper;
-import edu.rug.hep.simplie.algebra.CGroup;
+import edu.rug.hep.simplie.algebra.CAlgebra;
 
 /**
  *
@@ -45,13 +45,13 @@ public class UIAlgebraInfo extends javax.swing.JPanel
 		setBorder(javax.swing.BorderFactory.createTitledBorder(null, title, javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12)));
 	}
 		
-	public void update(CGroup group)
+	public void update(CAlgebra algebra)
 	{
-		algebraInfoType.setText(group.typeHTML);
-		algebraInfoRank.setText(Helper.intToString(group.rank));
-		algebraInfoDim.setText(group.dimension);
-		algebraInfoCMDet.setText(Helper.intToString(group.det));
-		algebraInfoCMrank.setText(Helper.intToString(group.rankA));
+		algebraInfoType.setText(algebra.typeHTML);
+		algebraInfoRank.setText(Helper.intToString(algebra.rank));
+		algebraInfoDim.setText(algebra.dimension);
+		algebraInfoCMDet.setText(Helper.intToString(algebra.det));
+		algebraInfoCMrank.setText(Helper.intToString(algebra.rankA));
 	}
 	
 	/** This method is called from within the constructor to
