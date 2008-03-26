@@ -3,11 +3,9 @@
 <!-- some examples of how to customize the build. -->
 <!-- (If you delete it and reopen the project it will be recreated.) -->
 <project name="SimpLie" default="default" basedir=".">
-    <description>Builds, tests, and runs the project LevelDecomposition.</description>
+    <description>Builds, tests, and runs the project SimpLie.</description>
     <import file="nbproject/build-impl.xml"/>
-    <import file="nbproject/profiler-build-impl.xml"/>
-    <import file="nbproject/build-jaws-impl.xml"/>
-    <!--
+<!--
 
     There exist several targets which are by default empty and which can be 
     used for execution of your tasks. These targets are usually executed 
@@ -68,4 +66,16 @@
     nbproject/build-impl.xml file. 
 
     -->
+	<target name="-post-jar">
+		<signjar alias="SimpLie" 
+		   storepass="blabla"
+		   keystore="keyStore"
+		   lazy="true">
+			<fileset dir="${dist.dir}" includes="**/*.jar"/>
+		</signjar>
+		<delete file="${dist.dir}/README.TXT"/>
+		<copy todir="${dist.dir}">
+			<fileset dir="documentation"/>
+		</copy>
+	</target>	
 </project>
