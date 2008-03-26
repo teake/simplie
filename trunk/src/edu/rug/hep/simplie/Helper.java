@@ -31,8 +31,6 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.text.DecimalFormat;
-import java.math.BigDecimal;
 import java.awt.BasicStroke;
 import java.awt.Point;
 import java.awt.Shape;
@@ -471,27 +469,6 @@ public class Helper
 	}
 
 	/**
-	 * Takes an integer matrix and returns it as a string,
-	 * with all entries formatted to have the given decimal plates.
-	 *
-	 * @param	matrix		 The integer matrix to be formatted to a string.
-	 * @param	decimalPlates	 The number of decimals each entry will have.
-	 * @return			 A string representing the matrix.
-	 */
-	public static String matrixToString(int[][] matrix)
-	{
-		Matrix newMatrix = new Matrix(matrix.length, matrix.length);
-		for (int i = 0; i < matrix.length; i++)
-		{
-			for (int j = 0; j < matrix.length; j++)
-			{
-				newMatrix.set(i,j,matrix[i][j]);
-			}
-		}
-		return matrixToString(newMatrix,0);
-	}
-	
-	/**
 	 * Takes a fractional matrix and returns it as a nicely formatted string,
 	 * with all entries as "numerator / denominator".
 	 * 
@@ -569,65 +546,49 @@ public class Helper
 	
 	
 	/**
-	 * Takes a matrix and returns it as a string,
+	 * Takes an integer matrix and returns it as a string,
 	 * with all entries formatted to have the given decimal plates.
 	 *
-	 * @param	matrix			 The matrix to be formatted to a string.
-	 * @param	decimalPlates	 The number of decimals each entry will have.
-	 * @return					 A string representing the matrix.
+	 * @param	matrix	 The integer matrix to be formatted to a string.
+	 * @return			 A string representing the matrix.
 	 */
-	public static String matrixToString(Matrix matrix, int decimalPlates)
+	public static String matrixToString(int[][] matrix)
 	{
-		/** Set up the decimal format for double -> string parsing */
-		String dfPattern = new String("0");
-		for (int i = 0; i < decimalPlates; i++)
-		{
-			if(i==0) dfPattern += ".";
-			dfPattern += "0";
-		}
-		DecimalFormat df = new DecimalFormat( dfPattern );
-		
-		double biggestEntry = 0;
+		int biggestEntry = 0;
+		int entrySize = 0;
 		String stringMatrix = new String("");
 		
-		if(matrix.getRowDimension() > 0 && matrix.getColumnDimension() > 0)
+		/** Determine the biggest entry first for the whitespacing */
+		for(int i = 0; i < matrix.length; i++)
 		{
-			/** Determine the biggest entry first for the whitespacing */
-			for(int i = 0; i < matrix.getRowDimension(); i++)
+			for(int j = 0; j < matrix.length; j++)
 			{
-				for(int j = 0; j < matrix.getColumnDimension(); j++)
-				{
-					if(Math.abs(matrix.get(i,j)) > biggestEntry)
-						biggestEntry = Math.abs(matrix.get(i,j));
-				}
-			}
-			int biggestSize = (int) Math.floor(Math.log10(biggestEntry));
-			
-			for(int i = 0; i < matrix.getRowDimension(); i++)
-			{
-				for(int j = 0; j < matrix.getColumnDimension(); j++)
-				{
-					/** Round it properly */
-					BigDecimal bd   = new BigDecimal(matrix.get(i,j));
-					bd				= bd.setScale(decimalPlates,BigDecimal.ROUND_HALF_UP);
-					double entry	= bd.doubleValue();
-					
-					/** Append the correct amount of whitespace */
-					if(entry >= 0)
-						stringMatrix += " "; // for the spacing of the minus signs
-					int entrySize = Math.max( (int) Math.floor(Math.log10(Math.abs(entry))), 0 );
-					for(int k=0; k<biggestSize - entrySize; k++)
-					{
-						stringMatrix += " ";
-					}
-					
-					/** Format it correctly */
-					stringMatrix += df.format(entry);
-					stringMatrix += " ";
-				}
-				stringMatrix += "\n";
+				biggestEntry = Math.max(Math.abs(matrix[i][j]), biggestEntry);
 			}
 		}
+		int biggestSize = (int) Math.floor(Math.log10(biggestEntry));
+
+		for(int i = 0; i < matrix.length; i++)
+		{
+			for(int j = 0; j < matrix.length; j++)
+			{
+				/** Append the correct amount of whitespace */
+				if(matrix[i][j] >= 0)
+					stringMatrix += " "; // for the spacing of the minus signs
+				if(matrix[i][j] == 0)
+					entrySize = 0;
+				else
+					entrySize = (int) Math.floor(Math.log10(Math.abs(matrix[i][j])));
+				for(int k=0; k<biggestSize - entrySize; k++)
+				{
+					stringMatrix += " ";
+				}
+				stringMatrix += matrix[i][j];
+				stringMatrix += " ";
+			}
+			stringMatrix += "\n";
+		}
+		
 		return stringMatrix;
 	}
 	
