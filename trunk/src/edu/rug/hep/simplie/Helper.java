@@ -478,7 +478,7 @@ public class Helper
 	 * @param	decimalPlates	 The number of decimals each entry will have.
 	 * @return			 A string representing the matrix.
 	 */
-	public static String matrixToString(int[][] matrix, int decimalPlates)
+	public static String matrixToString(int[][] matrix)
 	{
 		Matrix newMatrix = new Matrix(matrix.length, matrix.length);
 		for (int i = 0; i < matrix.length; i++)
@@ -488,30 +488,7 @@ public class Helper
 				newMatrix.set(i,j,matrix[i][j]);
 			}
 		}
-		return matrixToString(newMatrix,decimalPlates);
-	}
-	
-	/**
-	 * Takes an fractional matrix and returns it as a string,
-	 * with all entries formatted to have the given decimal plates.
-	 *
-	 * @param	matrix		 The fractional matrix to be formatted to a string.
-	 * @param	decimalPlates	 The number of decimals each entry will have.
-	 * @return			 A string representing the matrix.
-	 */
-	public static String matrixToString(fraction[][] matrix, int decimalPlates)
-	{
-		Matrix newMatrix = new Matrix(matrix.length, matrix.length);
-		for (int i = 0; i < matrix.length; i++)
-		{
-			for (int j = 0; j < matrix.length; j++)
-			{
-				if(matrix[i][j] == null)
-					return "";
-				newMatrix.set(i,j,matrix[i][j].asDouble());
-			}
-		}
-		return matrixToString(newMatrix,decimalPlates);
+		return matrixToString(newMatrix,0);
 	}
 	
 	/**
@@ -527,6 +504,7 @@ public class Helper
 		long biggestDen = 0;
 		int numSize = 0;
 		int denSize = 0;
+		boolean allInt = true;
 		String output = new String("");
 		
 		// First find the biggest numerator and denominator.
@@ -536,6 +514,8 @@ public class Helper
 			{
 				if(matrix[i][j] == null)
 					return "";
+				if(!matrix[i][j].isInt())
+					allInt = false;
 				biggestNum = Math.max( biggestNum, Math.abs(matrix[i][j].numerator()) );
 				biggestDen = Math.max( biggestDen, Math.abs(matrix[i][j].denominator()) );
 			}
@@ -558,7 +538,7 @@ public class Helper
 					numSize = (int) Math.floor(Math.log10(Math.abs(matrix[i][j].numerator())));
 				}
 
-				if(matrix[i][j].isInt())
+				if(!allInt && matrix[i][j].isInt())
 				{
 					denSize = -2;
 				}
