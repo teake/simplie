@@ -53,8 +53,6 @@ public class CAlgebra
 	public final fraction[][] invA;
 	/** The metric on the root space. */
 	public final int[][] B;
-	/** The inverse of the metric on the root space. */
-	public final fraction[][] invB;
 	/** The quadratic form matrix, which acts as a metric on the weight space. */
 	public final fraction[][] G;
 	
@@ -131,7 +129,6 @@ public class CAlgebra
 		this.B		= new int[rank][rank];
 		this.symA	= new fraction[rank][rank];
 		this.invA	= new fraction[rank][rank];
-		this.invB	= new fraction[rank][rank];
 		this.G		= new fraction[rank][rank];
 		this.directProductFactors = new ArrayList<int[][]>();
 		
@@ -366,14 +363,12 @@ public class CAlgebra
 		if(rank != 0 && A.rank() == rank)
 		{
 			Matrix invAm	= A.inverse();
-			Matrix invBm	= Bm.inverse();
 			Matrix Gm		= symAm.inverse();
 			for (int i = 0; i < rank; i++)
 			{
 				for (int j = 0; j < rank; j++)
 				{
 					this.invA[i][j]	= new fraction(invAm.get(i,j));
-					this.invB[i][j]	= new fraction(invBm.get(i,j));
 					this.G[i][j]	= new fraction(Gm.get(i,j));
 				}
 			}
