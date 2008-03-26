@@ -649,8 +649,9 @@ public class CDynkinDiagram
 		
 		// Append a hashcode of this specific diagram to all the labels in the psfigure.
 		// This prevents multiple garbled psfigures on one page.
-		int hashCode = Math.abs(
-				(Helper.matrixToString(cartanMatrix(), 0) + Helper.matrixToString(cartanSubMatrix("sub"), 0)).hashCode());
+		int hashCode = Math.abs(cartanMatrix().hashCode() + cartanSubMatrix("co").hashCode());
+		
+		System.out.println(hashCode);
 		
 		// First determine the min and max values of x and y
 		int xMin = Integer.MAX_VALUE;
