@@ -488,7 +488,48 @@ public class CRootSystem
 		// Determine its coMult minus the root multiplicity.
 		fraction coMult = calculateCoMult(root);
 		
-		root.mult	= calculateMult(root,coMult);
+		// First try to get the multiplicity from another root in 
+		// this roots Weyl-orbit. We only need to do one simple Weyl-reflection 
+		// down, as all the roots below this height have been calculated before.
+		
+		// First determine the first positive Dynkin label.
+		// We will do a simple Weyl reflection in this index later.
+		int[] dynkinLabels = algebra.rootToWeight(root.vector);
+		int reflectIndex;
+		boolean canReflect	= false;
+		boolean calculate	= true;
+		for(reflectIndex = 0; reflectIndex < rank; reflectIndex++)
+		{
+			if(dynkinLabels[reflectIndex] > 0)
+			{
+				canReflect	= true;
+				calculate	= false;
+				break;
+			}
+		}
+
+		if(canReflect)
+		{
+			// We can reflect down, so do it.
+			int[] reflectedVector = algebra.simpWeylReflRoot(root.vector, reflectIndex);
+			// Get the multiplicity.
+			CRoot reflectedRoot = getRoot(reflectedVector);
+			if(reflectedRoot != null)
+			{
+				root.mult = getRoot(reflectedRoot).mult;
+			}
+			else
+			{
+				// If for some reason the reflected root doesn't exist, 
+				// we need to calculate the multiplicity by hand.
+				calculate = true;
+			}
+		}
+		if(calculate)
+		{
+			// We couldn't reflect down, so calculate the multiplicity by hand.
+			root.mult	= calculateMult(root,coMult);
+		}
 		root.coMult = coMult.plus(root.mult);
 		
 		
@@ -520,7 +561,7 @@ public class CRootSystem
 	{
 		fraction coMult	= new fraction(0);
 		
-		// There are no root multiples if the root is imaginary
+		// There are no root multiples if the root is real
 		if(root.norm > 0)
 			return coMult;
 		
@@ -551,28 +592,28 @@ public class CRootSystem
 	private long calculateMult(CRoot root, fraction coMult)
 	{
 		fraction multiplicity	= new fraction(0);
-		
+
 		// We split the Peterson formula into two symmetric halves,
 		// plus a remainder if the root height is even.
 		
 		int halfHeight = (int) Math.ceil(((float) root.height()) / 2);
 		for(int i = 1; i < halfHeight; i++)
 			multiplicity.add(petersonPart(root, i));
-		
+
 		multiplicity.multiply(2);
-		
+
 		if(root.height() % 2 == 0)
 			multiplicity.add(petersonPart(root, root.height() / 2));
-		
+
 		multiplicity.divide( algebra.innerProduct(root,root) - (2 * algebra.rho(root) ) );
 		multiplicity.subtract(coMult);
-		
+
 		if(!multiplicity.isInt())
 		{
 			System.out.println("*WARNING*: fractional multiplicity of root " + root.toString());
 			System.out.println("*WARNING*: actual mult: " + multiplicity.toString());
 		}
-		
+
 		return multiplicity.asLong();
 	}
 	

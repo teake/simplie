@@ -541,13 +541,29 @@ public class CAlgebra
 	 * @param	i				The index of the simple root with which we should reflect.
 	 * @return					The dynkin labels of the reflected weight.
 	 */
-	public int[] simpWeylRefl(int[] weightLabels, int i)
+	public int[] simpWeylReflWeight(int[] weightLabels, int i)
 	{
 		int[] output = new int[weightLabels.length];
 		for (int j = 0; j < output.length; j++)
 		{
 			output[j] = weightLabels[j] - A[i][j] * weightLabels[i];
 		}
+		return output;
+	}
+	
+	/**
+	 * Performs a simple Weyl reflection on vector of a root.
+	 * @param	rootVector	 The vector of the root we want to reflect.
+	 * @param	i			 The i'th simple root in which we will reflect.
+	 * @return				 The vector of the reflected root.
+	 */
+	public int[] simpWeylReflRoot(int[] rootVector, int i)
+	{
+		int[] output		= rootVector.clone();		
+		int[] dynkinLabels	= rootToWeight(rootVector);
+		
+		output[i] = output[i] - dynkinLabels[i];
+		
 		return output;
 	}
 	
