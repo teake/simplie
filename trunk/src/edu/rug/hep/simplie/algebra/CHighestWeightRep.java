@@ -168,7 +168,7 @@ public class CHighestWeightRep
 				{
 					if(weightLabels[i] < 0)
 					{
-						weightLabels = algebra.simpWeylRefl(weightLabels, i);
+						weightLabels = algebra.simpWeylReflWeight(weightLabels, i);
 						break;
 					}
 					if(i == weightLabels.length - 1)
