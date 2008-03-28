@@ -30,7 +30,6 @@ import java.util.Collection;
 import java.io.*;
 
 import javolution.util.FastList;
-import javolution.util.FastSet;
 import javolution.util.FastCollection.Record;
 
 /**
@@ -340,6 +339,7 @@ public class CRootSystem
 		int[]	newVector;
 		int[]	dynkinLabels;
 		int		nextHeight;
+		int		newHeight;
 		
 		cancelConstruction = false;
 		
@@ -365,32 +365,45 @@ public class CRootSystem
 				{
 					// For every negative Dynkin label we can add 
 					// a (partial) root string to the root table.
-					if(dynkinLabels[i] < 0)
+					if(dynkinLabels[i] >= 0)
+						continue;
+					
+					// The root string stops at \gamma = \beta + pMax \apha_i,
+					// with \gamma being the new root, \beta the old, and
+					// pMax equal to -p_i.
+					int pMax = -1 * dynkinLabels[i];
+					for(int j = 1; j <= pMax; j++)
 					{
-						// The root string stops at \gamma = \beta + pMax \apha_i,
-						// with \gamma being the new root, \beta the old, and
-						// pMax equal to -p_i.
-						int pMax			= -1 * dynkinLabels[i];
-						currentMaxHeight	= Math.max(currentMaxHeight, constructedHeight + pMax);
-						for(int j = 1; j <= pMax; j++)
+						if(currentMaxHeight < constructedHeight + j)
 						{
-							newVector		= root.vector.clone();
-							newVector[i]	= newVector[i] + j;
-							newRoot			= new CRoot(newVector);
-							if(j == pMax)
-							{
-								// This is the weyl reflection of the old root.
-								// Thus they have the same multiplicity.
-								newRoot.mult = root.mult;
-								// The other multiplicities will be calculated below.
-							}
-							addRoot(newRoot);
+							// This will be the first time this height will be reached,
+							// so create a new container(s) for these roots.
+							currentMaxHeight = constructedHeight + j;
+							rootSystem.add(currentMaxHeight,new FastList<CRoot>());	
+						}
+						newVector		= root.vector.clone();
+						newVector[i]	= newVector[i] + j;
+						newRoot			= new CRoot(newVector);
+						newHeight		= constructedHeight + j;
+						if(j == pMax)
+						{
+							// This is the Weyl reflection of the old root.
+							// Thus they have the same multiplicity.
+							newRoot.mult = root.mult;
+							// The other multiplicities will be calculated below.
+						}
+						// Add the new root to the root table if it isn't there already.
+						newRoots = rootSystem.get(newHeight);
+						if(!newRoots.contains(newRoot))
+						{
+							newRoots.add(newRoot);
+							newRoot.norm = algebra.innerProduct(root,root);
 						}
 					}
 				} // ... for(i<rank)
 			} // ... for(all roots @ this height)
 			
-			if(!(nextHeight <= currentMaxHeight))
+			if(nextHeight > currentMaxHeight)
 			{
 				// We did nothing, and thus reached the highest root.
 				break;
@@ -494,41 +507,7 @@ public class CRootSystem
 		} // ... while(constructedHeight < maxHeight)
 	}
 	
-	/**
-	 * Adds a root to the root table.
-	 *
-	 * @param	root	The root to add.
-	 * @return			True if succesfull, false if it already was present.
-	 */
-	private boolean addRoot(CRoot root)
-	{
-		FastList<CRoot> roots;
-		
-		// Where should we add it, if we shoud add it at all?
-		if(rootSystem.size() > root.height())
-		{
-			roots = rootSystem.get(root.height());
-			if(roots.contains(root))
-				return false;
-		}
-		else
-		{
-			roots = new FastList<CRoot>();
-			rootSystem.add(root.height(),roots);
-		}
-		
-		// TODO: possibly move this to CRoot
-		
-		root.norm	= algebra.innerProduct(root,root);
-	
-		// Add finally it to the table.
-		roots.add(root);
-		
-		return true;
-	}
-	
-	
-	
+
 	/********************************
 	 * Multiplicity functions below *
 	 ********************************/
