@@ -57,6 +57,8 @@ public class CRootSystem
 	private FastList<CRoot> simpleRoots;
 	/** The height up to and included to which we constructed the root system. */
 	private int constructedHeight;
+	/** The maximum height of a root at any given stage. */
+	private int currentMaxHeight;
 	/** Boolean to indicate whether the root system construction should be canceled */
 	private boolean cancelConstruction;
 	
@@ -65,12 +67,8 @@ public class CRootSystem
 	{
 		this.algebra		= algebra;
 		this.rank			= algebra.rank;
-		
 		rootSystem			= new FastList<FastList>();
-		numPosRoots			= 0;
-		numPosGenerators	= 0;
-		constructedHeight	= 0;
-		
+	
 		if(rank==0)
 		{
 			return;
@@ -96,7 +94,8 @@ public class CRootSystem
 		numPosRoots			= rank;
 		
 		// And we've constructed to height 1.
-		constructedHeight = 1;
+		constructedHeight	= 1;
+		currentMaxHeight	= 1;
 		
 		// Set the table of root multiples.
 		rootMultiples = new FastList<FastList>();
@@ -335,16 +334,12 @@ public class CRootSystem
 	public void construct(int maxHeight)
 	{
 		FastList<CRoot> prevRoots;
-		FastSet<CRoot> rootCache;
+		FastList<CRoot> newRoots;
 		CRoot	root;
-		CRoot	simpleRoot;
-		CRoot	oldRoot;
 		CRoot	newRoot;
-		long	prevNumPosRoots;
-		int		innerProduct;
-		int		n_minus;
-		int		newHeight;
-		int		oldHeight;
+		int[]	newVector;
+		int[]	dynkinLabels;
+		int		nextHeight;
 		
 		cancelConstruction = false;
 		
@@ -352,88 +347,131 @@ public class CRootSystem
 		
 		while(constructedHeight < maxHeight || maxHeight == 0)
 		{
-			prevRoots	    = rootSystem.get(constructedHeight);
-			rootCache		= new FastSet<CRoot>();
-			prevNumPosRoots = numPosRoots;
-			newHeight	    = constructedHeight + 1;
+			prevRoots	= rootSystem.get(constructedHeight);
+			nextHeight	= constructedHeight + 1;
 			
-			System.out.println("... height: " + newHeight);
+			System.out.println("... height: " + nextHeight);
 			
-			//
-			// Try to add the simple roots to all the previous roots.
-			// The main formula employed here is
-			//
-			//		<alpha, beta> = n_minus - n_plus ,
-			//
-			// where alpha and beta are roots.
-			// If n_plus is positive, then alpha + beta is again a root.
-			//
+			// First determine all the possible new roots that can be obtained from the
+			// roots at the old height by simple Weyl reflections.
 			for (Record r1 = prevRoots.head(), end1 = prevRoots.tail(); (r1 = r1.getNext()) != end1;)
 			{
+				if(cancelConstruction)
+					return;
 				root = prevRoots.valueOf(r1);
-				for (Record r2 = simpleRoots.head(), end2 = simpleRoots.tail(); (r2 = r2.getNext()) != end2;)
+				// Calculate the Dynkin labels
+				dynkinLabels = algebra.rootToWeight(root.vector);
+				for (int i = 0; i < rank; i++)
 				{
-					simpleRoot = simpleRoots.valueOf(r2);
-					if(cancelConstruction)
-						return;
-					
-					newRoot = root.plus(simpleRoot);
-					
-					// First check if we didn't do this root before.
-					if(!rootCache.add(newRoot))
-						continue;
-					
-					innerProduct = algebra.innerProduct(root,simpleRoot);
-					if(innerProduct < 0)
+					// For every negative Dynkin label we can add 
+					// a (partial) root string to the root table.
+					if(dynkinLabels[i] < 0)
 					{
-						// n_plus is always positive, thus (root + simpleRoot) is a root.
-						// Add it to the root table.
-						addRoot(newRoot);
-						continue;
-					}
-					
-					// Multiply by 2 and divide by the norm of the simple root
-					// to get the correct value.
-					// Because this is equal to (n_minus - n_plus), it is always an integer.
-					innerProduct = innerProduct * 2 / simpleRoot.norm;
-					
-					if(innerProduct >= 0)
-					{
-						// Iterate through the previous heights to obtain n_minus.
-						n_minus		= 0;
-						oldHeight	= constructedHeight - 1;
-						oldRoot		= getRoot(root.minus(simpleRoot), oldHeight);
-						while(oldRoot != null)
+						// The root string stops at \gamma = \beta + pMax \apha_i,
+						// with \gamma being the new root, \beta the old, and
+						// pMax equal to -p_i.
+						int pMax			= -1 * dynkinLabels[i];
+						currentMaxHeight	= Math.max(currentMaxHeight, constructedHeight + pMax);
+						for(int j = 1; j <= pMax; j++)
 						{
-							n_minus++;
-							if(n_minus > innerProduct)
+							newVector		= root.vector.clone();
+							newVector[i]	= newVector[i] + j;
+							newRoot			= new CRoot(newVector);
+							if(j == pMax)
 							{
-								// n_plus is positive.
-								addRoot(newRoot);
-								break;
+								// This is the weyl reflection of the old root.
+								// Thus they have the same multiplicity.
+								newRoot.mult = root.mult;
+								// The other multiplicities will be calculated below.
 							}
-							oldHeight--;
-							oldRoot = getRoot(oldRoot.minus(simpleRoot), oldHeight);
+							addRoot(newRoot);
 						}
 					}
-				}
-			}
+				} // ... for(i<rank)
+			} // ... for(all roots @ this height)
 			
-			if(numPosRoots > prevNumPosRoots)
+			if(!(nextHeight <= currentMaxHeight))
 			{
-				constructedHeight++;
+				// We did nothing, and thus reached the highest root.
+				break;
+			}
+			else
+			{
+				// Calculate the coMult and the mult for all the added roots
+				// at the first new height.
+				newRoots = rootSystem.get(nextHeight);
 				
+				for (Record r1 = newRoots.head(), end1 = newRoots.tail(); (r1 = r1.getNext()) != end1;)
+				{
+					root = newRoots.valueOf(r1);
+				
+					// Determine its coMult minus the root multiplicity.
+					fraction coMult = calculateCoMult(root);
+					
+					// Only calculate the mult if it hasn't been set before.
+					if(root.mult == 0)
+					{
+						// First try to get the multiplicity from another root in 
+						// this roots Weyl-orbit. We only need to do one simple Weyl-reflection 
+						// down, as all the roots below this height have been calculated before.
+
+						// First determine the first positive Dynkin label.
+						// We will do a simple Weyl reflection in this index later.
+						dynkinLabels = algebra.rootToWeight(root.vector);
+						int reflectIndex;
+						boolean canReflect	= false;
+						boolean calculate	= true;
+						for(reflectIndex = 0; reflectIndex < rank; reflectIndex++)
+						{
+							if(dynkinLabels[reflectIndex] > 0)
+							{
+								canReflect	= true;
+								calculate	= false;
+								break;
+							}
+						}
+
+						if(canReflect)
+						{
+							// We can reflect down, so do it.
+							int[] reflectedVector = algebra.simpWeylReflRoot(root.vector, reflectIndex);
+							// Get the multiplicity.
+							CRoot reflectedRoot = getRoot(reflectedVector);
+							if(reflectedRoot != null)
+							{
+								root.mult = getRoot(reflectedRoot).mult;
+							}
+							else
+							{
+								// If for some reason the reflected root doesn't exist, 
+								// we need to calculate the multiplicity by hand.
+								calculate = true;
+							}
+						}
+						if(calculate)
+						{
+							// We couldn't reflect down, so calculate the multiplicity by hand.
+							root.mult = calculateMult(root,coMult);
+						}
+					} // ... if(root.mult == 0)
+					
+					root.coMult = coMult.plus(root.mult);
+					
+					// Increment numPosRoots.
+					numPosRoots++;
+					numPosGenerators += root.mult;
+				} // ... for(all new roots)
+
 				//
-				// Construct all the root multiples of this height
+				// Construct all the root multiples of the roots at the new height
 				//
-				FastList multiplesList	= new FastList<CRoot>();
-				FastList properList	= rootSystem.get(newHeight);
-				for (int i = 1; i < Math.floor(newHeight / 2) + 1; i++)
+				FastList multiplesList = new FastList<CRoot>();
+				for (int i = 1; i < Math.floor(nextHeight / 2) + 1; i++)
 				{
 					// We're only interested in i's with zero divisor.
-					if(newHeight % i != 0)
+					if(nextHeight % i != 0)
 						continue;
-					int factor = newHeight / i;
+					int factor = nextHeight / i;
 					FastList<CRoot> roots = rootSystem.get(i);
 					for (Record r = roots.head(), end = roots.tail(); (r = r.getNext()) != end;)
 					{
@@ -441,25 +479,23 @@ public class CRootSystem
 						CRoot rootMultiple = root.times(factor);
 						// Don't add it if it's already in the 'proper' root list.
 						// Else we would count this one double.
-						if(properList.contains(rootMultiple))
+						if(newRoots.contains(rootMultiple))
 							continue;
 						rootMultiple.coMult	= calculateCoMult(rootMultiple);
 						multiplesList.add(rootMultiple);
 					}
 				}
-				rootMultiples.add(newHeight,multiplesList);
+				rootMultiples.add(nextHeight,multiplesList);
 				
-			}
-			else
-			{
-				// We did nothing, and thus reached the highest root.
-				break;
-			}
-		}
+				
+				// Finally bump the constructed height number.
+				constructedHeight++;	
+			} // ... if(nextHeight <= currentMaxHeight)
+		} // ... while(constructedHeight < maxHeight)
 	}
 	
 	/**
-	 * Adds a root to the root table and increments numPosRoots.
+	 * Adds a root to the root table.
 	 *
 	 * @param	root	The root to add.
 	 * @return			True if succesfull, false if it already was present.
@@ -484,59 +520,7 @@ public class CRootSystem
 		// TODO: possibly move this to CRoot
 		
 		root.norm	= algebra.innerProduct(root,root);
-		
-		// Determine its coMult minus the root multiplicity.
-		fraction coMult = calculateCoMult(root);
-		
-		// First try to get the multiplicity from another root in 
-		// this roots Weyl-orbit. We only need to do one simple Weyl-reflection 
-		// down, as all the roots below this height have been calculated before.
-		
-		// First determine the first positive Dynkin label.
-		// We will do a simple Weyl reflection in this index later.
-		int[] dynkinLabels = algebra.rootToWeight(root.vector);
-		int reflectIndex;
-		boolean canReflect	= false;
-		boolean calculate	= true;
-		for(reflectIndex = 0; reflectIndex < rank; reflectIndex++)
-		{
-			if(dynkinLabels[reflectIndex] > 0)
-			{
-				canReflect	= true;
-				calculate	= false;
-				break;
-			}
-		}
-
-		if(canReflect)
-		{
-			// We can reflect down, so do it.
-			int[] reflectedVector = algebra.simpWeylReflRoot(root.vector, reflectIndex);
-			// Get the multiplicity.
-			CRoot reflectedRoot = getRoot(reflectedVector);
-			if(reflectedRoot != null)
-			{
-				root.mult = getRoot(reflectedRoot).mult;
-			}
-			else
-			{
-				// If for some reason the reflected root doesn't exist, 
-				// we need to calculate the multiplicity by hand.
-				calculate = true;
-			}
-		}
-		if(calculate)
-		{
-			// We couldn't reflect down, so calculate the multiplicity by hand.
-			root.mult	= calculateMult(root,coMult);
-		}
-		root.coMult = coMult.plus(root.mult);
-		
-		
-		// Increment numPosRoots.
-		numPosRoots++;
-		numPosGenerators += root.mult;
-		
+	
 		// Add finally it to the table.
 		roots.add(root);
 		
