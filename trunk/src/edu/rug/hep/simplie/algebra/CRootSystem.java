@@ -377,7 +377,7 @@ public class CRootSystem
 						if(currentMaxHeight < constructedHeight + j)
 						{
 							// This will be the first time this height will be reached,
-							// so create a new container(s) for these roots.
+							// so create a new container for these roots.
 							currentMaxHeight = constructedHeight + j;
 							rootSystem.add(currentMaxHeight,new FastList<CRoot>());	
 						}
@@ -397,7 +397,7 @@ public class CRootSystem
 						if(!newRoots.contains(newRoot))
 						{
 							newRoots.add(newRoot);
-							newRoot.norm = algebra.innerProduct(root,root);
+							newRoot.norm = algebra.innerProduct(newRoot,newRoot);
 						}
 					}
 				} // ... for(i<rank)
