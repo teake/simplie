@@ -56,8 +56,6 @@ public class CRootSystem
 	private HashSet<CRoot> simpleRoots;
 	/** The height up to and included to which we constructed the root system. */
 	private int constructedHeight;
-	/** The maximum height of a root at any given stage. */
-	private int currentMaxHeight;
 	/** Boolean to indicate whether the root system construction should be canceled */
 	private boolean cancelConstruction;
 	
@@ -94,7 +92,6 @@ public class CRootSystem
 		
 		// And we've constructed to height 1.
 		constructedHeight	= 1;
-		currentMaxHeight	= 1;
 		
 		// Set the table of root multiples.
 		rootMultiples = new ArrayList<ArrayList>();
@@ -377,12 +374,11 @@ public class CRootSystem
 					int pMax = -1 * dynkinLabels[i];
 					for(int j = 1; j <= pMax; j++)
 					{
-						if(currentMaxHeight < constructedHeight + j)
+						if(rootSystem.size() - 1 < constructedHeight + j)
 						{
 							// This will be the first time this height will be reached,
 							// so create a new container for these roots.
-							currentMaxHeight = constructedHeight + j;
-							rootSystem.add(currentMaxHeight,new HashSet<CRoot>());	
+							rootSystem.add(constructedHeight + j,new HashSet<CRoot>());	
 						}
 						newVector		= root.vector.clone();
 						newVector[i]	= newVector[i] + j;
@@ -405,7 +401,7 @@ public class CRootSystem
 				} // ... for(i<rank)
 			} // ... for(all roots @ this height)
 			
-			if(nextHeight > currentMaxHeight)
+			if(nextHeight > rootSystem.size() - 1)
 			{
 				// We did nothing, and thus reached the highest root.
 				break;
