@@ -23,14 +23,12 @@
 
 package edu.rug.hep.simplie.algebra;
 
-import edu.rug.hep.simplie.Helper;
 import edu.rug.hep.simplie.math.fraction;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
-
-import javolution.util.FastList;
-import javolution.util.FastCollection.Record;
 
 /**
  * Given a specific CAlgebra and a highest weight state, this class creates an object representing
@@ -45,7 +43,7 @@ public class CHighestWeightRep
 	/** The height of the highest weight. */
 	public final int		highestHeight;
 	/** The dimension of this representation. */
-	public final long dim;
+	public final long		dim;
 	/** The algebra of which this is a weight system. */
 	private final CAlgebra	algebra;
 	/** The rank of the algebra of which this is a weight system. */
@@ -56,7 +54,7 @@ public class CHighestWeightRep
 	private final fraction	highestWeightFactor;
 	
 	/** The internal table containing the weights. */
-	private FastList<FastList> weightSystem;
+	private ArrayList<HashSet> weightSystem;
 	/** Integer specifying how deep we constructed the weight system. */
 	private int		constructedDepth;
 	/** Cancel the construction or not? */
@@ -70,7 +68,7 @@ public class CHighestWeightRep
 	 */
 	public CHighestWeightRep(CAlgebra algebra, int[] highestWeightLabels)
 	{
-		FastList zeroDepthWeight;
+		HashSet<CWeight> zeroDepthWeight;
 		
 		this.algebra= algebra;
 		this.rank	= algebra.rank;
@@ -79,9 +77,9 @@ public class CHighestWeightRep
 		dim = algebra.dimOfRep(highestWeightLabels);
 		
 		// Add the highest weight (construct to depth 0)
-		weightSystem	= new FastList<FastList>();
+		weightSystem	= new ArrayList<HashSet>();
 		highestWeight	= new CWeight(highestWeightLabels);
-		zeroDepthWeight = new FastList<CWeight>();
+		zeroDepthWeight = new HashSet<CWeight>();
 		zeroDepthWeight.add(highestWeight);
 		
 		weightSystem.add(0,zeroDepthWeight);
@@ -142,13 +140,22 @@ public class CHighestWeightRep
 			construct(wantedDepth);
 		
 		// Fetch the weight we wanted and return it.
-		FastList<CWeight> wantedWeights = weightSystem.get(wantedDepth);
-		int wantedIndex = wantedWeights.indexOf(wantedWeight);
-		if(wantedIndex == -1)
+		HashSet<CWeight> wantedWeights = weightSystem.get(wantedDepth);
+		if(!wantedWeights.contains(wantedWeight))
 			// It's not here, return 0.
 			return null;
 		
-		return wantedWeights.get(wantedIndex);
+		for(Iterator it = wantedWeights.iterator(); it.hasNext();)
+		{
+			CWeight weight = (CWeight) it.next();
+			if(weight.equals(wantedWeight))
+			{
+				return weight;
+			}
+		}
+		
+		// We shouldn't get here, but return null anyway.
+		return null;
 	}
 	
 	/**
@@ -183,91 +190,93 @@ public class CHighestWeightRep
 	/** Construct the weight system down to the given depth */
 	public void construct(int maxDepth)
 	{
-		int		newDepth;
-		boolean	addedSomething;
-		int[]	newSubtractable;
+		HashSet<CWeight> prevDepthWeights;
+		HashSet<CWeight> newWeights;
+		int		nextDepth;
 		CWeight	oldWeight;
+		CWeight newWeight;
 		
 		cancelConstruction = false;
 		
 		// Print some info to sout.
 		System.out.println(
-			"Constructing highest weight rep " + Helper.intArrayToString(highestWeight.dynkinLabels) +
-			" to depth " + maxDepth + " of algebra " + algebra.type + ".");
+			"Constructing highest weight rep " + dim + " of algebra " + algebra.type +
+			" to depth " + maxDepth  + ".");
 		
 		// Do the construction.
 		while((constructedDepth < maxDepth || maxDepth == 0) && !cancelConstruction)
 		{
-			addedSomething	= false;
-			newDepth		= constructedDepth + 1;
+			nextDepth = constructedDepth + 1;
 			
 			// Print some info to sout.
-			System.out.println("... depth: " + newDepth);
+			System.out.println("... depth: " + nextDepth);
 			
-			FastList<CWeight> prevDepthWeights = weightSystem.get(constructedDepth);
-			FastList<CWeight> thisDepthWeights = new FastList<CWeight>();
-			for (Record r = prevDepthWeights.head(), end = prevDepthWeights.tail(); (r = r.getNext()) != end;)
+			prevDepthWeights = weightSystem.get(constructedDepth);
+			for (Iterator it = prevDepthWeights.iterator(); it.hasNext();)
 			{
-				oldWeight = prevDepthWeights.valueOf(r);
+				oldWeight = (CWeight) it.next();
 				// See if the we can subtract a simple root from this weight.
 				for (int i = 0; i < rank; i++)
 				{
-					if(oldWeight.getSimpRootSubtractable(i) > 0)
+					if(oldWeight.dynkinLabels[i] <= 0)
+						continue;
+					
+					int pMax = oldWeight.dynkinLabels[i];
+					// Ok we can do it pMax times.
+					for(int j = 1; j <= pMax; j++)
 					{
-						// Ok we can. What are the new dynkin labels?
+						if(weightSystem.size() - 1 < constructedDepth + j)
+						{
+							// This will be the first time this depth will be reached,
+							// so create a new container for these weights.
+							weightSystem.add(constructedDepth + j, new HashSet<CWeight>());
+						}
+						// What are the new dynkin labels?
 						int[] newDynkinLabels = new int[rank];
-						for (int j = 0; j < rank; j++)
+						for (int k = 0; k < rank; k++)
 						{
-							newDynkinLabels[j] = oldWeight.dynkinLabels[j] - algebra.A[i][j];
+							newDynkinLabels[k] = oldWeight.dynkinLabels[k] -  j * algebra.A[i][k];
 						}
-						CWeight newWeight = new CWeight(newDynkinLabels);
-						
-						// How many times can we subtract a simple root from this weight?
-						newSubtractable = oldWeight.getSimpRootSubtractable();
-						newSubtractable[i]--;
-						newWeight.setSimpRootSubtractable(newSubtractable);
-						
-						// Only possibly increase simpRootSubtractable if this root is already present.
-						int existingIndex = thisDepthWeights.indexOf(newWeight);
-						if(existingIndex != -1)
-						{
-							thisDepthWeights.get(existingIndex).setSimpRootSubtractable(newWeight.getSimpRootSubtractable());
-							continue;
-						}
-						
+						newWeight = new CWeight(newDynkinLabels);
+
 						// Set the depth and the multiplicity
-						newWeight.setDepth(newDepth);
-						
+						newWeight.setDepth(constructedDepth + j);
+
 						// If the new weight is not dominant, we do not have to calculate its multiplicity.
 						// Just simply get the multiplicity of the closest dominant weight.
-						if(!newWeight.isDominant)
+						if(j == pMax)
 						{
-							int[]	dominantLabels	= makeDominant(newWeight.dynkinLabels);
-							CWeight dominantWeight	= getWeight(dominantLabels);
-							if(dominantWeight != null)
-								newWeight.setMult(dominantWeight.getMult());
-							else
-								// If the closest dominant weight is not part of the root system,
-								// then the new weight also isn't part of the root system.
-								continue;
-						}
-						else
-						{
-							newWeight.setMult(calculateMult(newWeight));
+							// This is the Weyl reflection of the old weight.
+							// Thus they have the same multiplicity.
+							newWeight.setMult(oldWeight.getMult());
 						}
 						
 						// And add it.
-						thisDepthWeights.add(newWeight);
-						addedSomething = true;
+						newWeights = weightSystem.get(constructedDepth + j);						
+						newWeights.add(newWeight);
 					}
 				}
 			}
 			
-			if(!addedSomething)
-				// If we didn't add something we should break, avoiding infinite loops.
+			// If we didn't add something we should break, avoiding infinite loops.
+			if(nextDepth > weightSystem.size() - 1)
 				break;
-			
-			weightSystem.add(newDepth, thisDepthWeights);
+
+			// Calculate the multiplicities of all the weights at the next height.
+			newWeights = weightSystem.get(nextDepth);
+			for(Iterator it = newWeights.iterator(); it.hasNext();)
+			{
+				newWeight = (CWeight) it.next();
+				if(newWeight.isDominant)
+				{
+					newWeight.setMult(calculateMult(newWeight));
+				}
+				else
+				{
+					CWeight dominantWeight = getWeight(makeDominant(newWeight.dynkinLabels));
+					newWeight.setMult(dominantWeight.getMult());
+				}
+			}
 			constructedDepth++;
 		}
 		
@@ -312,13 +321,10 @@ public class CHighestWeightRep
 							summedLabels[i] += k * algebra.A[j][i] * root.vector[j];
 						}
 					}
-					CWeight summedWeight = new CWeight(summedLabels);
-					FastList<CWeight> summedWeights = weightSystem.get(weight.getDepth()-height*k);
-					int summedIndex = summedWeights.indexOf(summedWeight);
-					if(summedIndex == -1)
-						// It's not a weight
+					CWeight summedWeight = getWeight(summedLabels);
+					if(summedWeight == null)
 						continue;
-					numerator += (k*root.norm + rootDotWeight) * summedWeights.get(summedIndex).getMult();
+					numerator += (k*root.norm + rootDotWeight) * summedWeight.getMult();
 				}
 			}
 		}
