@@ -402,106 +402,102 @@ public class CRootSystem
 			} // ... for(all roots @ this height)
 			
 			if(nextHeight > rootSystem.size() - 1)
-			{
 				// We did nothing, and thus reached the highest root.
 				break;
-			}
-			else
+
+			// Calculate the coMult and the mult for all the added roots
+			// at the first new height.
+			newRoots = rootSystem.get(nextHeight);
+
+			for (Iterator it = newRoots.iterator(); it.hasNext();)
 			{
-				// Calculate the coMult and the mult for all the added roots
-				// at the first new height.
-				newRoots = rootSystem.get(nextHeight);
-				
-				for (Iterator it = newRoots.iterator(); it.hasNext();)
+				root = (CRoot) it.next();
+
+				// Determine its coMult minus the root multiplicity.
+				fraction coMult = calculateCoMult(root);
+
+				// Only calculate the mult if it hasn't been set before.
+				if(root.mult == 0)
+				{
+					// First try to get the multiplicity from another root in 
+					// this roots Weyl-orbit. We only need to do one simple Weyl-reflection 
+					// down, as all the roots below this height have been calculated before.
+
+					// First determine the first positive Dynkin label.
+					// We will do a simple Weyl reflection in this index later.
+					dynkinLabels = algebra.rootToWeight(root.vector);
+					int reflectIndex;
+					boolean canReflect	= false;
+					boolean calculate	= true;
+					for(reflectIndex = 0; reflectIndex < rank; reflectIndex++)
+					{
+						if(dynkinLabels[reflectIndex] > 0)
+						{
+							canReflect	= true;
+							calculate	= false;
+							break;
+						}
+					}
+
+					if(canReflect)
+					{
+						// We can reflect down, so do it.
+						int[] reflectedVector = algebra.simpWeylReflRoot(root.vector, reflectIndex);
+						// Get the multiplicity.
+						CRoot reflectedRoot = getRoot(reflectedVector);
+						if(reflectedRoot != null)
+						{
+							root.mult = getRoot(reflectedRoot).mult;
+						}
+						else
+						{
+							// If for some reason the reflected root doesn't exist, 
+							// we need to calculate the multiplicity by hand.
+							calculate = true;
+						}
+					}
+					if(calculate)
+					{
+						// We couldn't reflect down, so calculate the multiplicity by hand.
+						root.mult = calculateMult(root,coMult);
+					}
+				} // ... if(root.mult == 0)
+
+				root.coMult = coMult.plus(root.mult);
+
+				// Increment numPosRoots.
+				numPosRoots++;
+				numPosGenerators += root.mult;
+			} // ... for(all new roots)
+
+			//
+			// Construct all the root multiples of the roots at the new height
+			//
+			ArrayList multiplesList = new ArrayList<CRoot>();
+			for (int i = 1; i < Math.floor(nextHeight / 2) + 1; i++)
+			{
+				// We're only interested in i's with zero divisor.
+				if(nextHeight % i != 0)
+					continue;
+				int factor = nextHeight / i;
+				HashSet<CRoot> roots = rootSystem.get(i);
+				for (Iterator it = roots.iterator(); it.hasNext();)
 				{
 					root = (CRoot) it.next();
-				
-					// Determine its coMult minus the root multiplicity.
-					fraction coMult = calculateCoMult(root);
-					
-					// Only calculate the mult if it hasn't been set before.
-					if(root.mult == 0)
-					{
-						// First try to get the multiplicity from another root in 
-						// this roots Weyl-orbit. We only need to do one simple Weyl-reflection 
-						// down, as all the roots below this height have been calculated before.
-
-						// First determine the first positive Dynkin label.
-						// We will do a simple Weyl reflection in this index later.
-						dynkinLabels = algebra.rootToWeight(root.vector);
-						int reflectIndex;
-						boolean canReflect	= false;
-						boolean calculate	= true;
-						for(reflectIndex = 0; reflectIndex < rank; reflectIndex++)
-						{
-							if(dynkinLabels[reflectIndex] > 0)
-							{
-								canReflect	= true;
-								calculate	= false;
-								break;
-							}
-						}
-
-						if(canReflect)
-						{
-							// We can reflect down, so do it.
-							int[] reflectedVector = algebra.simpWeylReflRoot(root.vector, reflectIndex);
-							// Get the multiplicity.
-							CRoot reflectedRoot = getRoot(reflectedVector);
-							if(reflectedRoot != null)
-							{
-								root.mult = getRoot(reflectedRoot).mult;
-							}
-							else
-							{
-								// If for some reason the reflected root doesn't exist, 
-								// we need to calculate the multiplicity by hand.
-								calculate = true;
-							}
-						}
-						if(calculate)
-						{
-							// We couldn't reflect down, so calculate the multiplicity by hand.
-							root.mult = calculateMult(root,coMult);
-						}
-					} // ... if(root.mult == 0)
-					
-					root.coMult = coMult.plus(root.mult);
-					
-					// Increment numPosRoots.
-					numPosRoots++;
-					numPosGenerators += root.mult;
-				} // ... for(all new roots)
-
-				//
-				// Construct all the root multiples of the roots at the new height
-				//
-				ArrayList multiplesList = new ArrayList<CRoot>();
-				for (int i = 1; i < Math.floor(nextHeight / 2) + 1; i++)
-				{
-					// We're only interested in i's with zero divisor.
-					if(nextHeight % i != 0)
+					CRoot rootMultiple = root.times(factor);
+					// Don't add it if it's already in the 'proper' root list.
+					// Else we would count this one double.
+					if(newRoots.contains(rootMultiple))
 						continue;
-					int factor = nextHeight / i;
-					HashSet<CRoot> roots = rootSystem.get(i);
-					for (Iterator it = roots.iterator(); it.hasNext();)
-					{
-						root = (CRoot) it.next();
-						CRoot rootMultiple = root.times(factor);
-						// Don't add it if it's already in the 'proper' root list.
-						// Else we would count this one double.
-						if(newRoots.contains(rootMultiple))
-							continue;
-						rootMultiple.coMult	= calculateCoMult(rootMultiple);
-						multiplesList.add(rootMultiple);
-					}
+					rootMultiple.coMult	= calculateCoMult(rootMultiple);
+					multiplesList.add(rootMultiple);
 				}
-				rootMultiples.add(nextHeight,multiplesList);
-				
-				
-				// Finally bump the constructed height number.
-				constructedHeight++;	
-			} // ... if(nextHeight <= currentMaxHeight)
+			}
+			rootMultiples.add(nextHeight,multiplesList);
+
+
+			// Finally bump the constructed height number.
+			constructedHeight++;	
 		} // ... while(constructedHeight < maxHeight)
 	}
 	

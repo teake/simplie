@@ -37,9 +37,6 @@ public class CWeight
 	public final int[] dynkinLabels;
 	/** Indicates whether this weight is domimant or not. */
 	public final boolean isDominant;
-	
-	/** Integer array indicating how many times we can subtract simple roots from this weight. */
-	private	int[]	simpRootSubtractable;
 	/** The root multiplicity. */
 	private long	mult;
 	/** Boolean indicating wether or not the multiplicity already has been set. */
@@ -59,14 +56,15 @@ public class CWeight
 		this.mult					= 1;
 		this.multSet				= false;
 		this.depth					= 0;
-		this.simpRootSubtractable	= new int[dynkinLabels.length];
 		
 		boolean dominant = true;
 		for (int i = 0; i < dynkinLabels.length; i++)
 		{
-			simpRootSubtractable[i] = Math.max(dynkinLabels[i],0);
 			if(dynkinLabels[i] < 0)
+			{
 				dominant = false;
+				break;
+			}			
 		}
 		this.isDominant = dominant;
 	}
@@ -99,44 +97,10 @@ public class CWeight
 	}
 	
 	/**
-	 * How many times can we subtract a simple root from this weight?
-	 *
-	 * @param	index	The index of the simple root.
-	 * @return			An integer representing how many times the simple root can be subtracted.	 
-	 */
-	public int getSimpRootSubtractable(int index)
-	{
-		return simpRootSubtractable[index];
-	}
-	
-	/** 
-	 * How many times can we subtract the simple roots from this weight?
-	 *
-	 * @return	An integer array representing how many times the simple roots can be subtracted.
-	 */
-	public int[] getSimpRootSubtractable()
-	{
-		return simpRootSubtractable.clone();
-	}
-	
-	/** 
-	 * Sets how many times can we subtract the simple roots from this weight.
-	 * 
-	 * @param newMinimumValues	The new minimum values. If the old values were
-	 *							bigger, they won't get overridden.
-	 */
-	public void setSimpRootSubtractable(int[] newMinimumValues)
-	{
-		for (int i = 0; i < simpRootSubtractable.length; i++)
-		{
-			simpRootSubtractable[i] = Math.max(simpRootSubtractable[i], newMinimumValues[i]);
-		}
-	}
-	
-	/**
 	 * Overrides default equals() method.
 	 * Weights are equal if their Dynkin labels are equal.
 	 */
+	@Override
 	public boolean equals(Object obj)
 	{
 		if(this == obj)
@@ -159,11 +123,29 @@ public class CWeight
 		return true;
 	}
 	
+	/** Returns a hashcode based on the dynkin labels. */
+	@Override
+	public int hashCode()
+	{
+		int hash = 0;
+		int len = dynkinLabels.length;
+		for ( int i=0; i<len; i++ )
+		{
+			hash <<= 1;
+			if ( hash < 0 )
+			{
+				hash |= 1;
+			}
+			hash ^= dynkinLabels[ i ];
+		}
+		return hash;
+	}
+	
+	@Override
 	public String toString()
 	{
 		return "depth: " + getDepth() + 
 				", labels: " + Helper.intArrayToString(dynkinLabels) + 
-				", mult: " + getMult() +
-				", simp subtractable: " + Helper.intArrayToString(simpRootSubtractable);
+				", mult: " + getMult();
 	}
 }
