@@ -73,7 +73,12 @@ public class CRootSystem
 		
 		// Add the CSA to the root table.
 		HashSet<CRoot> csa = new HashSet<CRoot>();
-		CRoot csaRoot	= new CRoot(rank);
+		int[] csaVector		= new int[rank];
+		for (int i = 0; i < rank; i++)
+		{
+			csaVector[i] = 0;
+		}
+		CRoot csaRoot	= new CRoot(csaVector);
 		csaRoot.mult	= rank;
 		csaRoot.coMult	= new fraction(0);
 		csaRoot.norm	= 0;
@@ -214,19 +219,7 @@ public class CRootSystem
 	 */
 	public CRoot getRoot(CRoot rootToGet)
 	{
-		return getRoot(rootToGet, rootToGet.height());
-	}
-	
-	
-	/**
-	 * Check if a root is in the root system.
-	 *
-	 * @param rootToGet		The root of which we should check if it's in the root system.
-	 * @param rootHeight	The height of the root.
-	 * @return				A pointer to the root if found, and null if not found.
-	 */
-	public CRoot getRoot(CRoot rootToGet, int rootHeight)
-	{
+		int rootHeight = rootToGet.height();
 		HashSet<CRoot> roots;
 		
 		if(rootHeight < 0)
@@ -252,6 +245,8 @@ public class CRootSystem
 				}
 			}
 		}
+		
+		// The root is not in the root system, so return null. 
 		return null;
 	}
 	
@@ -447,7 +442,7 @@ public class CRootSystem
 						CRoot reflectedRoot = getRoot(reflectedVector);
 						if(reflectedRoot != null)
 						{
-							root.mult = getRoot(reflectedRoot).mult;
+							root.mult = reflectedRoot.mult;
 						}
 						else
 						{
@@ -546,9 +541,9 @@ public class CRootSystem
 	 * @param	coMult	The co-multiplicity of that root.
 	 * @return			The multiplicity of the root.
 	 */
-	private long calculateMult(CRoot root, fraction coMult)
+	private int calculateMult(CRoot root, fraction coMult)
 	{
-		fraction multiplicity	= new fraction(0);
+		fraction multiplicity = new fraction(0);
 
 		// We split the Peterson formula into two symmetric halves,
 		// plus a remainder if the root height is even.
@@ -571,7 +566,7 @@ public class CRootSystem
 			System.out.println("*WARNING*: actual mult: " + multiplicity.toString());
 		}
 
-		return multiplicity.asLong();
+		return multiplicity.asInt();
 	}
 	
 	/**

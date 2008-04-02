@@ -40,15 +40,11 @@ public class CRoot implements Serializable
 	/** The root vector. */
 	public final int[] vector;
 	/** The norm of the root (the innerproduct with itself). */
-	public int norm;
+	public short norm;
 	/** The root multiplicity. */
-	public long	mult;
+	public int	mult;
 	/** Sum over multiplicities of roots that are fractionals of this one (used in Peterson's formula). */
 	public fraction	coMult;
-	/** The height of the root (lazily calculated). */
-	private Integer	height;
-	/** The highest component (lazily calculated). */
-	private Integer highest;
 	
 	/**
 	 * Creates a new instance of CRoot.
@@ -63,23 +59,6 @@ public class CRoot implements Serializable
 	}
 	
 	/**
-	 * Creates a new instance of CRoot with a zero vector.
-	 *
-	 * @param	rank	 The size of the zero-valued vector.
-	 */
-	public CRoot(int rank)
-	{
-		vector = new int[rank];
-		for (int i = 0; i < rank; i++)
-		{
-			vector[i] = 0;
-		}
-		height	= 0;
-		highest = 0;
-		mult	= 0;
-	}
-	
-	/**
 	 * Returns the height of the root,
 	 * that is the sum of the components of its vector.
 	 *
@@ -87,13 +66,10 @@ public class CRoot implements Serializable
 	 */
 	public int height()
 	{
-		if(height == null)
+		int height = 0;
+		for (int i = 0; i < vector.length; i++)
 		{
-			height = 0;
-			for (int i = 0; i < vector.length; i++)
-			{
-				height += vector[i];
-			}
+			height += vector[i];
 		}
 		return height;
 	}
@@ -105,14 +81,11 @@ public class CRoot implements Serializable
 	 */
 	public int highest()
 	{
-		if(highest == null)
+		int	highest = 0;
+		for (int i = 0; i < vector.length; i++)
 		{
-			highest = 0;
-			for (int i = 0; i < vector.length; i++)
-			{
-				if(vector[i] > highest)
-					highest = vector[i];
-			}
+			if(vector[i] > highest)
+				highest = vector[i];
 		}
 		return highest;
 	}
@@ -123,38 +96,7 @@ public class CRoot implements Serializable
 	 *  functions listed below.
 	 **********************************/
 	
-	/**
-	 * Adds the root vector of "root" to this one and returns the corresponding new root.
-	 *
-	 * @param	root	The root whose vector we should add to this one.
-	 * @return			A new root with summed vector.
-	 */
-	public CRoot plus(CRoot root)
-	{
-		int[] newVector = new int[vector.length];
-		for (int i = 0; i < vector.length; i++)
-		{
-			newVector[i] = root.vector[i] + vector[i];
-		}
-		return new CRoot(newVector);
-	}
-	
-	/**
-	 * Subtracts the root vector of "root" to this one and returns the corresponding new root.
-	 *
-	 * @param	root	The root whose vector we should subtract from this one.
-	 * @return			A new root with subtracted vector.
-	 */
-	public CRoot minus(CRoot root)
-	{
-		int[] newVector = new int[vector.length];
-		for (int i = 0; i < vector.length; i++)
-		{
-			newVector[i] = vector[i] - root.vector[i];
-		}
-		return new CRoot(newVector);
-	}
-	
+
 	/**
 	 * Divides the root vector with an integral value and returns a new root with that vector.
 	 *

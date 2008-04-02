@@ -245,7 +245,7 @@ public class CAlgebra
 					if((nh.norm * coefficient) % 2 != 0)
 						normsOK = false;
 					CRoot root = simpleRoots.get(nh.index);
-					root.norm = (int) Math.round(nh.norm * coefficient);
+					root.norm = (short) Math.round(nh.norm * coefficient);
 					tempMaxNorm = Math.max(tempMaxNorm, root.norm);
 				}
 			} while(!normsOK);
@@ -446,9 +446,9 @@ public class CAlgebra
 	 * @param	root2	Root beta.
 	 * @return			The innerproduct (alpha, beta), which is an integer.
 	 */
-	public int innerProduct(CRoot root1, CRoot root2)
+	public short innerProduct(CRoot root1, CRoot root2)
 	{
-		int result = 0;
+		short result = 0;
 		for (int i = 0; i < rank; i++)
 		{
 			for (int j = 0; j < rank; j++)
