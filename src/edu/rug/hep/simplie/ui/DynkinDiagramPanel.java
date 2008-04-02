@@ -639,6 +639,8 @@ private void diagramMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:ev
 			status = STATUS_PREVIEW;
 		else
 			status = prev_status;
+		
+		shiftDown = evt.isShiftDown();
 	}//GEN-LAST:event_diagramMouseEntered
 
 	private void menuAddCompactPairActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_menuAddCompactPairActionPerformed
