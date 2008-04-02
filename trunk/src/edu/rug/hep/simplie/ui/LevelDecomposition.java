@@ -435,6 +435,9 @@ private void rbSignPosStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIR
 
     private void bAutoScanActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_bAutoScanActionPerformed
     {//GEN-HEADEREND:event_bAutoScanActionPerformed
+		if(algebras.coAlgebra == null)
+			return;
+		
 		if(!(autoScanner == null || autoScanner.isDone()))
 		{
 			// The scanner is busy, and the button is a cancel button. So cancel the task.

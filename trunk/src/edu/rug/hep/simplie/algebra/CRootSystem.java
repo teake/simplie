@@ -58,6 +58,8 @@ public class CRootSystem
 	private int constructedHeight;
 	/** Boolean to indicate whether the root system construction should be canceled */
 	private boolean cancelConstruction;
+	/** Indicates whether the root system is fully constructed or not. */
+	private boolean fullyConstructed;
 	
 	/** Creates a new instance of CRootSystem and constructs up to height 1. */
 	public CRootSystem(CAlgebra algebra)
@@ -97,6 +99,7 @@ public class CRootSystem
 		
 		// And we've constructed to height 1.
 		constructedHeight	= 1;
+		fullyConstructed	= false;
 		
 		// Set the table of root multiples.
 		rootMultiples = new ArrayList<ArrayList>();
@@ -228,7 +231,7 @@ public class CRootSystem
 		}
 		
 		// If we haven't constructed the root system this far, do so now.
-		if(rootHeight > constructedHeight)
+		if(rootHeight > constructedHeight && !fullyConstructed)
 			construct(rootHeight);
 		
 		// Try to fetch the root.
@@ -327,6 +330,10 @@ public class CRootSystem
 	 */
 	public void construct(int maxHeight)
 	{
+		// If the root system is already fully constructed, just do nothing and return.
+		if(fullyConstructed)
+			return;
+		
 		HashSet<CRoot> prevRoots;
 		HashSet<CRoot> newRoots;
 		CRoot	root;
@@ -390,16 +397,20 @@ public class CRootSystem
 						newRoots = rootSystem.get(newHeight);
 						if(newRoots.add(newRoot))
 						{
-							newRoot.norm = algebra.innerProduct(newRoot,newRoot);
+							newRoot.norm = (short) algebra.innerProduct(newRoot,newRoot);
 						}
 					}
 				} // ... for(i<rank)
 			} // ... for(all roots @ this height)
 			
 			if(nextHeight > rootSystem.size() - 1)
+			{
 				// We did nothing, and thus reached the highest root.
-				break;
-
+				// Make a note that we constructed the root system fully, and return.
+				fullyConstructed = true;
+				return;
+			}
+			
 			// Calculate the coMult and the mult for all the added roots
 			// at the first new height.
 			newRoots = rootSystem.get(nextHeight);
