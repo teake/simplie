@@ -446,9 +446,9 @@ public class CAlgebra
 	 * @param	root2	Root beta.
 	 * @return			The innerproduct (alpha, beta), which is an integer.
 	 */
-	public short innerProduct(CRoot root1, CRoot root2)
+	public int innerProduct(CRoot root1, CRoot root2)
 	{
-		short result = 0;
+		int result = 0;
 		for (int i = 0; i < rank; i++)
 		{
 			for (int j = 0; j < rank; j++)
