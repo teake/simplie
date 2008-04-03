@@ -68,7 +68,7 @@
     -->
 	<target name="-post-jar">
 		<delete file="${dist.dir}/README.TXT"/>
-		<copy todir="${dist.dir}">
+		<copy todir="${dist.dir}/doc">
 			<fileset dir="documentation"/>
 		</copy>
 	</target>
