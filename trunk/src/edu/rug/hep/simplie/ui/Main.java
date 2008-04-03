@@ -80,8 +80,8 @@ public class Main extends javax.swing.JFrame
 		
 		// Set the custom SimpLie icons.
 		ArrayList iconList = new ArrayList<Image>();
-		iconList.add(java.awt.Toolkit.getDefaultToolkit().getImage(java.net.URLClassLoader.getSystemResource("icon32.png")));
-		iconList.add(java.awt.Toolkit.getDefaultToolkit().getImage(java.net.URLClassLoader.getSystemResource("icon16.png")));
+		iconList.add(java.awt.Toolkit.getDefaultToolkit().getImage(this.getClass().getClassLoader().getResource("icon32.png")));
+		iconList.add(java.awt.Toolkit.getDefaultToolkit().getImage(this.getClass().getClassLoader().getResource("icon16.png")));
 		this.setIconImages(iconList);
 		
 		initComponents();
