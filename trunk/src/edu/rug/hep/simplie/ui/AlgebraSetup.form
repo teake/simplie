@@ -14,20 +14,16 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" alignment="0" attributes="0">
+          <Group type="102" alignment="1" attributes="0">
               <EmptySpace min="-2" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="dynkinDiagramPanel" alignment="0" pref="590" max="32767" attributes="0"/>
-                  <Group type="102" alignment="0" attributes="0">
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="disAlgebraInfo" pref="292" max="32767" attributes="2"/>
-                          <Component id="algebraInfo" alignment="1" pref="292" max="32767" attributes="2"/>
-                      </Group>
-                      <EmptySpace min="-2" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="subAlgebraInfo" pref="292" max="32767" attributes="0"/>
-                          <Component id="coAlgebraInfo" alignment="0" pref="292" max="32767" attributes="0"/>
-                      </Group>
+              <Group type="103" groupAlignment="1" attributes="0">
+                  <Component id="dynkinDiagramPanel" alignment="0" pref="654" max="32767" attributes="0"/>
+                  <Group type="102" alignment="1" attributes="0">
+                      <Component id="algebraInfo" pref="190" max="32767" attributes="2"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="subAlgebraInfo" min="-2" pref="227" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="disAlgebraInfo" min="-2" pref="225" max="-2" attributes="2"/>
                   </Group>
               </Group>
               <EmptySpace min="-2" max="-2" attributes="0"/>
@@ -38,16 +34,12 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="1" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="dynkinDiagramPanel" pref="200" max="32767" attributes="0"/>
+              <Component id="dynkinDiagramPanel" pref="344" max="32767" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="disAlgebraInfo" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="algebraInfo" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="subAlgebraInfo" alignment="3" min="-2" max="-2" attributes="0"/>
-              </Group>
-              <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="coAlgebraInfo" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="disAlgebraInfo" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -68,11 +60,6 @@
     <Component class="edu.rug.hep.simplie.ui.reusable.UIAlgebraInfo" name="disAlgebraInfo">
       <Properties>
         <Property name="title" type="java.lang.String" value="Internal algebra"/>
-      </Properties>
-    </Component>
-    <Component class="edu.rug.hep.simplie.ui.reusable.UIAlgebraInfo" name="coAlgebraInfo">
-      <Properties>
-        <Property name="title" type="java.lang.String" value="Co-algebra (regular x internal)"/>
       </Properties>
     </Component>
     <Component class="edu.rug.hep.simplie.ui.DynkinDiagramPanel" name="dynkinDiagramPanel">

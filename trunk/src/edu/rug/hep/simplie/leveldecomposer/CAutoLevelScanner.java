@@ -46,15 +46,12 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]> implements Com
 	private final boolean calcRepMult;
 	private final boolean showZeroMultRoot;
 	private final boolean showZeroMultRep;
-	private final boolean showExotic;
 	private final int minLevel;
 	private final int maxLevel;
 	private final DefaultTableModel tableModel;
 	
 	private int levelSign;
-	
-	private int[] levelOneIndices;
-	
+
 	/**
 	 * Creates a new instance of CAutoLevelScanner.
 	 *
@@ -65,7 +62,6 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]> implements Com
 	 * @param	showZeroMultRoot	Indicates wethere or not to show reps that correspond to non-existing roots.
 	 * @param	showZeroMultRep		In case this and the above two parameters are true,
 	 *								representations with zero outer multiplicity will not be shown.
-	 * @param	showExotic			If true, show exotic fields with more indices than the space-time dimension.
 	 * @param	tableModel			The DefaultTableModel in which the results of the scan should be put.
 	 * @param	minLevel			The minimum value of the levels.
 	 * @param	maxLevel			The maximum value of the levels.
@@ -76,7 +72,6 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]> implements Com
 			boolean calcRepMult,
 			boolean showZeroMultRoot,
 			boolean showZeroMultRep,
-			boolean showExotic,
 			DefaultTableModel tableModel,
 			int minLevel,
 			int maxLevel)
@@ -89,16 +84,8 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]> implements Com
 		this.calcRepMult	= calcRepMult;
 		this.showZeroMultRoot	= showZeroMultRoot;
 		this.showZeroMultRep	= showZeroMultRep;
-		this.showExotic		= showExotic;
 		
 		this.levelSign = 0;
-		
-		this.levelOneIndices = new int[algebras.algebra.rank - algebras.coAlgebra.rank];
-		for (int i = 0; i < levelOneIndices.length; i++)
-		{
-			levelOneIndices[i] = 0;
-		}
-		
 	}
 	
 	/** This comparator sorts levels according to their squared sum. */
@@ -128,16 +115,11 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]> implements Com
 	public Void doInBackground()
 	{
 		ArrayList<CRepresentation> repContainer;
-		ArrayList<CRepresentation> levelOneReps;
-		
 		ArrayList<int[]> levels;
 		
 		int levelRank;
 		int base;
 		int num;
-		
-		int[] levelOne;
-		int[] tempLevelOneIndices;
 		
 		// Some preliminary checks.
 		if(minLevel > maxLevel)
@@ -158,28 +140,6 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]> implements Com
 				levels.add(Helper.numberToVector(i,base,levelRank,minLevel));
 			}
 			Collections.sort(levels,this);
-			
-			// Calculate the level one reps
-			if(!showExotic)
-			{
-				tempLevelOneIndices = new int[levelRank];
-				for (int i = 0; i < levelRank; i++)
-				{
-					tempLevelOneIndices[i]	= Integer.MAX_VALUE;
-					levelOneReps			= new ArrayList<CRepresentation>();
-					levelOne				= new int[levelRank];
-					for (int j = 0; j < levelRank; j++)
-					{
-						levelOne[j] = (i == j) ? 1 : 0;
-					}
-					Scan(levelOne, levelOneReps);
-					for(CRepresentation levelOneRep : levelOneReps)
-					{
-						tempLevelOneIndices[i] = Math.min(levelOneRep.numIndices, tempLevelOneIndices[i]);
-					}
-				}
-				levelOneIndices = tempLevelOneIndices;
-			}
 			
 			// Perform the scan.
 			for (int i = 0; i < levels.size(); i++)
@@ -234,22 +194,6 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]> implements Com
 			levelSign = 1;
 		if(negative)
 			levelSign = -1;
-		
-		// Calculate the minimum number of indices at this level
-		int minNumIndices = 0;
-		for (int i = 0; i < levels.length; i++)
-		{
-			minNumIndices += levels[i] * levelOneIndices[i];
-		}
-		
-		// Don't scan this level if the number of indices exceeds the number of dimensions
-		// and we don't want to scan for exotic fields.
-		if(!showExotic && minNumIndices > (algebras.subAlgebra.rank + 1) )
-		{
-			System.out.print("Skipping levels " + Helper.intArrayToString(levels));
-			System.out.println(", number of indices too large: " + minNumIndices);
-			return;
-		}
 		
 		System.out.println("Scanning levels " + Helper.intArrayToString(levels));
 		
@@ -401,7 +345,6 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]> implements Com
 			rowData[8] = rep.getOuterMult();
 			rowData[9] = rep.height;
 			rowData[10] = algebras.isSignPos() ? rep.height : rep.height + 2 * rep.weightHeight;
-			rowData[11] = rep.numIndices;
 			publish(rowData);
 		}
 	}
