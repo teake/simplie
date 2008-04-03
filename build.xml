@@ -5,8 +5,7 @@
 <project name="SimpLie" default="default" basedir=".">
     <description>Builds, tests, and runs the project SimpLie.</description>
     <import file="nbproject/build-impl.xml"/>
-    <import file="nbproject/profiler-build-impl.xml"/>
-<!--
+    <!--
 
     There exist several targets which are by default empty and which can be 
     used for execution of your tasks. These targets are usually executed 
@@ -55,7 +54,7 @@
 
     An example of overriding the target for project execution could look like this:
 
-        <target name="run" depends="LevelDecomposition-impl.jar">
+        <target name="run" depends="SimpLie-impl.jar">
             <exec dir="bin" executable="launcher.exe">
                 <arg file="${dist.jar}"/>
             </exec>
@@ -68,15 +67,9 @@
 
     -->
 	<target name="-post-jar">
-		<signjar alias="SimpLie" 
-		   storepass="blabla"
-		   keystore="keyStore"
-		   lazy="true">
-			<fileset dir="${dist.dir}" includes="**/*.jar"/>
-		</signjar>
 		<delete file="${dist.dir}/README.TXT"/>
 		<copy todir="${dist.dir}">
 			<fileset dir="documentation"/>
 		</copy>
-	</target>	
+	</target>
 </project>
