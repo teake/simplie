@@ -54,9 +54,6 @@ public class CRepresentation implements Comparable<CRepresentation>
 	/** The height of the highest weight state */
 	public final int weightHeight;
 	
-	/** The number of indices */
-	public final int numIndices;
-	
 	private long outerMult;
 	private long rootMult;
 	
@@ -99,17 +96,6 @@ public class CRepresentation implements Comparable<CRepresentation>
 		// Instantiate the highest weight rep.
 		hwRep = new CHighestWeightRep(algebras.coAlgebra, dynkinLabels);
 		weightHeight = hwRep.highestHeight;
-		
-		// Calculate the number of indices.
-		int tempNumIndices = 0;
-		for (int i = 0; i < subDynkinLabels.length; i++)
-		{
-			int j = i;
-			if(algebras.isSignPos())
-				j = subDynkinLabels.length - i - 1;
-			tempNumIndices += subDynkinLabels[j] * (i+1);
-		}
-		numIndices = tempNumIndices;
 	}
 	
 	/**
