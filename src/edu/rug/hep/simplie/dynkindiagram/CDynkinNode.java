@@ -253,8 +253,8 @@ public class CDynkinNode implements Serializable, Comparable<CDynkinNode>
 		final int EQUAL = 0;
 		final int AFTER = 1;
 		
-		if(this.y > compareNode.y) return AFTER;
-		if(this.y < compareNode.y) return BEFORE;
+		if(this.y < compareNode.y) return AFTER;
+		if(this.y > compareNode.y) return BEFORE;
 		
 		if(this.x > compareNode.x) return AFTER;
 		if(this.x < compareNode.x) return BEFORE;
