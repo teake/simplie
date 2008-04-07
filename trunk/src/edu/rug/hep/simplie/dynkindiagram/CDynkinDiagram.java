@@ -381,11 +381,11 @@ public class CDynkinDiagram
 		}
 		else
 		{
+			nodes.add(newNode);
 			if(connectionToLast > 0 && lastAddedNode != null)
 			{
 				modifyConnection(lastAddedNode, newNode, connectionToLast, true);
 			}
-			nodes.add(newNode);
 			lastAddedNode = newNode;
 			update();
 			return "Node added.";
