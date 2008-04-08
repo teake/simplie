@@ -41,7 +41,7 @@ import java.util.Iterator;
 public class CHighestWeightRep
 {
 	/** The height of the highest weight. */
-	public final int		highestHeight;
+	public final fraction	highestHeight;
 	/** The dimension of this representation. */
 	public final long		dim;
 	/** The algebra of which this is a weight system. */
@@ -127,7 +127,7 @@ public class CHighestWeightRep
 		if(!algebra.finite || weightLabels.length != rank)
 			return null;
 		
-		wantedDepth = highestHeight - algebra.weightHeight(weightLabels);
+		wantedDepth = highestHeight.minus(algebra.weightHeight(weightLabels)).asInt();
 		
 		if(wantedDepth < 0)
 			// Do not try to get a weight that is outside the weight system.

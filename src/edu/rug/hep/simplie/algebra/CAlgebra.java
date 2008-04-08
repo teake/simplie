@@ -521,7 +521,7 @@ public class CAlgebra
 	 * @param	weightLabels	The dynkinlabels of the weight.
 	 * @return					The height of the weight.
 	 */
-	public int weightHeight(int[] weightLabels)
+	public fraction weightHeight(int[] weightLabels)
 	{
 		fraction height = new fraction(0);
 		for (int i = 0; i < rank; i++)
@@ -531,7 +531,7 @@ public class CAlgebra
 				height.add(invA[j][i].times(weightLabels[j]));
 			}
 		}
-		return height.asInt();
+		return height;
 	}
 	
 	/**

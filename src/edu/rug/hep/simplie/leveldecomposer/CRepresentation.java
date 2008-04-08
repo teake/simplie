@@ -25,6 +25,7 @@ package edu.rug.hep.simplie.leveldecomposer;
 import edu.rug.hep.simplie.*;
 import edu.rug.hep.simplie.algebra.CHighestWeightRep;
 import edu.rug.hep.simplie.algebra.CWeight;
+import edu.rug.hep.simplie.math.fraction;
 
 /**
  * A class for storing valid regular subalgebra representations.
@@ -52,7 +53,7 @@ public class CRepresentation implements Comparable<CRepresentation>
 	/** The height of the root of the heighest weight. */
 	public final int height;
 	/** The height of the highest weight state */
-	public final int weightHeight;
+	public final fraction weightHeight;
 	
 	private long outerMult;
 	private long rootMult;
@@ -95,7 +96,7 @@ public class CRepresentation implements Comparable<CRepresentation>
 		{
 			tHeight += rootVector[i];
 		}
-		this.height = algebras.isSignPos() ? tHeight : tHeight + 2 * weightHeight;
+		this.height = algebras.isSignPos() ? tHeight : tHeight + weightHeight.times(2).asInt();
 	}
 	
 	/**
