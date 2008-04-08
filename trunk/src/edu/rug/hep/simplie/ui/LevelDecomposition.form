@@ -154,9 +154,9 @@
                           <Component id="rbSignNeg" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <Component id="cbZeroMultRoot" alignment="0" min="-2" max="-2" attributes="0"/>
-                      <Group type="102" alignment="0" attributes="0">
+                      <Group type="102" alignment="1" attributes="0">
                           <Component id="cbZeroMultRep" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace pref="40" max="32767" attributes="0"/>
+                          <EmptySpace pref="24" max="32767" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="cbRootMult" alignment="0" min="-2" max="-2" attributes="0"/>
                               <Component id="cbRepMult" alignment="0" min="-2" max="-2" attributes="0"/>
@@ -210,7 +210,7 @@
         </Component>
         <Component class="javax.swing.JCheckBox" name="cbZeroMultRep">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Show 0 mu reps"/>
+            <Property name="text" type="java.lang.String" value="Show zero mu reps"/>
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
               <Border info="org.netbeans.modules.form.compat2.border.EmptyBorderInfo">
                 <EmptyBorder bottom="0" left="0" right="0" top="0"/>
