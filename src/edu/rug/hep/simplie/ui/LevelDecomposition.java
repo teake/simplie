@@ -192,7 +192,7 @@ public class LevelDecomposition extends javax.swing.JPanel
         cbRootMult.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
         cbRootMult.setMargin(new java.awt.Insets(0, 0, 0, 0));
 
-        cbZeroMultRep.setText("Show 0 mu reps");
+        cbZeroMultRep.setText("Show zero mu reps");
         cbZeroMultRep.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
         cbZeroMultRep.setMargin(new java.awt.Insets(0, 0, 0, 0));
 
@@ -239,9 +239,9 @@ public class LevelDecomposition extends javax.swing.JPanel
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(rbSignNeg))
                     .addComponent(cbZeroMultRoot)
-                    .addGroup(settingsPanelLayout.createSequentialGroup()
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, settingsPanelLayout.createSequentialGroup()
                         .addComponent(cbZeroMultRep)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
                         .addGroup(settingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(cbRootMult)
                             .addComponent(cbRepMult))))

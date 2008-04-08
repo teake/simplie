@@ -62,8 +62,6 @@ public class CAlgebra
 	 * a^2 = 2 for the *longest* root, and I use it for the *shortest* root.
 	 */
 	
-	/** The simple roots */
-	public final ArrayList<CRoot> simpleRoots;
 	/** The maximum root norm. */
 	public final int maxNorm;
 	
@@ -91,7 +89,7 @@ public class CAlgebra
 	public final CWeight rho;
 	
 	/** Vector containing the norm of the simple roots divided by two. */
-	public final int[] simpleRootNorms;
+	public final int[] halfNorms;
 	/** List of matrices into which the Cartan matrix factorizes */
 	private final ArrayList<int[][]> directProductFactors;
 	
@@ -142,22 +140,13 @@ public class CAlgebra
 		this.G		= new fraction[rank][rank];
 		this.directProductFactors = new ArrayList<int[][]>();
 		
-
-		
-		// Set the simple roots
-		simpleRoots = new ArrayList<CRoot>();
+		// Begin with setting the simple root norms.
+		halfNorms = new int[rank];
 		for (int i = 0; i < rank; i++)
 		{
-			int[] rootVector = new int[rank];
-			for (int j = 0; j < rank; j++)
-			{
-				rootVector[j] = ( i == j) ? 1 : 0;
-			}
-			CRoot simpleRoot	= new CRoot(rootVector);
-			simpleRoot.mult		= 1;
-			simpleRoot.coMult	= new fraction(1);
-			simpleRoot.norm		= 0; // these will be set later on.
-			simpleRoots.add(simpleRoot);
+			// No simple root can have norm 0.
+			// The norms will be set below.
+			halfNorms[i] = 0;
 		}
 		
 		// Set the root norms for every disconnected piece.
@@ -170,8 +159,7 @@ public class CAlgebra
 			// Grab the first simple root that hasn't been set yet.
 			for (int i = 0; i < rank; i++)
 			{
-				CRoot simpleRoot = simpleRoots.get(i);
-				if(simpleRoot.norm == 0)
+				if(halfNorms[i] == 0)
 				{
 					startIndex = i;
 					break;
@@ -247,20 +235,14 @@ public class CAlgebra
 					// always be integers, and all hell will break loose.
 					if((nh.norm * coefficient) % 2 != 0)
 						normsOK = false;
-					CRoot root = simpleRoots.get(nh.index);
-					root.norm = (short) Math.round(nh.norm * coefficient);
-					tempMaxNorm = Math.max(tempMaxNorm, root.norm);
+					halfNorms[nh.index] = (int) Math.round(nh.norm * coefficient) / 2;
+					tempMaxNorm = Math.max(tempMaxNorm, 2*halfNorms[nh.index]);
 				}
 			} while(!normsOK);
 			
 		}
 		maxNorm = tempMaxNorm;
-		simpleRootNorms	= new int[rank];
-		for (int i = 0; i < rank; i++)
-		{
-			// The norm of the simple roots are always a multiple of 2.
-			simpleRootNorms[i] = simpleRoots.get(i).norm / 2;
-		}
+
 		
 		// Construct the Weyl vector
 		int[] weylLabels = new int[rank];
@@ -343,9 +325,6 @@ public class CAlgebra
 			typeHTML	= "<html>" + tTypeHTML + "</html>";
 		}
 		
-		// Set up the root system.
-		rs = new CRootSystem(this);
-		
 		// Now that the simple roots have been created,
 		// we can set the symmetrized Cartan matrix
 		// and the metric on the root space.
@@ -355,8 +334,8 @@ public class CAlgebra
 		{
 			for (int j = 0; j < rank; j++)
 			{
-				this.symA[i][j] = new fraction(this.A[i][j], simpleRootNorms[i]);
-				this.B[i][j]	= this.A[i][j] * simpleRootNorms[j];
+				this.symA[i][j] = new fraction(this.A[i][j], halfNorms[i]);
+				this.B[i][j]	= this.A[i][j] * halfNorms[j];
 				symAm.set(i,j,this.symA[i][j].asDouble());
 				Bm.set(i,j,this.B[i][j]);
 			}
@@ -377,9 +356,8 @@ public class CAlgebra
 			}
 		}
 		
-		// If the algebra is finite, we can construct the root system to all heights.
-		if(finite)
-			rs.construct(0);
+		// Set up the root system.
+		rs = new CRootSystem(this);
 		
 		// Determine the dimension.
 		if(det > 0 || rank == 0)
@@ -496,7 +474,7 @@ public class CAlgebra
 		int result = 0;
 		for (int i = 0; i < rank; i++)
 		{
-			result += weight.dynkinLabels[i] * root.vector[i] * simpleRootNorms[i];
+			result += weight.dynkinLabels[i] * root.vector[i] * halfNorms[i];
 		}
 		return result;
 	}
@@ -512,7 +490,7 @@ public class CAlgebra
 		int result = 0;
 		for (int i = 0; i < rank; i++)
 		{
-			result += root.vector[i] * simpleRootNorms[i];
+			result += root.vector[i] * halfNorms[i];
 		}
 		return result;
 	}

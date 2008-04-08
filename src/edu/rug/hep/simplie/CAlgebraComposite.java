@@ -308,7 +308,7 @@ public class CAlgebraComposite implements DiagramListener
 		{
 			for(int j=0; j < dynkinLabels.length; j++)
 			{
-				fraction contribution = new fraction(algebra.simpleRootNorms[dd.translateCo(j)],coAlgebra.simpleRootNorms[j]);
+				fraction contribution = new fraction(algebra.halfNorms[dd.translateCo(j)],coAlgebra.halfNorms[j]);
 				contribution.multiply(dynkinLabels[i] * dynkinLabels[j] - levelComponents[i] * levelComponents[j]);
 				rootLength.add( coAlgebra.G[i][j].times(contribution) );
 			}

@@ -89,8 +89,17 @@ public class CRootSystem
 		
 		// Add the simple roots.
 		simpleRoots = new HashSet<CRoot>();
-		for(CRoot simpleRoot : algebra.simpleRoots)
+		for (int i = 0; i < rank; i++)
 		{
+			int[] rootVector = new int[rank];
+			for (int j = 0; j < rank; j++)
+			{
+				rootVector[j] = ( i == j) ? 1 : 0;
+			}
+			CRoot simpleRoot	= new CRoot(rootVector);
+			simpleRoot.mult		= 1;
+			simpleRoot.coMult	= new fraction(1);
+			simpleRoot.norm		= (short) (2 * algebra.halfNorms[i]);
 			simpleRoots.add(simpleRoot);
 		}
 		rootSystem.add(1, simpleRoots);
@@ -105,6 +114,11 @@ public class CRootSystem
 		rootMultiples = new ArrayList<ArrayList>();
 		rootMultiples.add(0,new ArrayList<CRoot>());
 		rootMultiples.add(1,new ArrayList<CRoot>());
+		
+		// If the algebra is finite, we can construct the root system to all heights.
+		if(algebra.finite)
+			construct(0);
+
 	}
 	
 
@@ -328,7 +342,7 @@ public class CRootSystem
 	 * @param maxHeight	The height up to and including which we should construct the root system.
 	 *					Construct the whole root system if maxHeight == 0.
 	 */
-	public void construct(int maxHeight)
+	private void construct(int maxHeight)
 	{
 		// If the root system is already fully constructed, just do nothing and return.
 		if(fullyConstructed)
