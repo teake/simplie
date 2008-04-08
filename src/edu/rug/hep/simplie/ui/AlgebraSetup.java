@@ -25,8 +25,6 @@ package edu.rug.hep.simplie.ui;
 import edu.rug.hep.simplie.*;
 import edu.rug.hep.simplie.dynkindiagram.*;
 
-import Jama.Matrix.*;
-
 /**
  * Panel that displays a Dynkin diagram and information on the 4 derived algebras.
  * 
