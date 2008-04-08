@@ -105,10 +105,20 @@ public class CAlgebra
 	 *
 	 * @param A    The Cartan matrix from which to construct the algebra.
 	 */
-	public CAlgebra(Matrix A)
+	public CAlgebra(int[][] A)
 	{
-		// Do some preliminary checks
-		if(A.getColumnDimension() != A.getRowDimension() || A.getColumnDimension() == 0)
+		// Convert the Cartan matrix to a matrix object.
+		Matrix cartanMatrix = new Matrix(A.length,A.length);
+		for(int i=0; i<A.length; i++)
+		{
+			for(int j=0; j<A.length; j++)
+			{
+				cartanMatrix.set(i,j,A[i][j]);
+			}
+		}
+		// Do some preliminary checks.
+		// Assume that A is a square matrix.
+		if(A.length == 0)
 		{
 			rank	= 0;
 			rankA	= 0;
@@ -116,30 +126,23 @@ public class CAlgebra
 		}
 		else
 		{
-			rank	= A.getColumnDimension();
-			rankA	= A.rank();
-			det		= (int) Math.round(A.det());
+			rank	= A.length;
+			rankA	= cartanMatrix.rank();
+			det		= (int) Math.round(cartanMatrix.det());
 		}
 		if(det > 0)
 			finite = true;
 		else
 			finite = false;
 		
-		this.A		= new int[rank][rank];
+		this.A		= A.clone();
 		this.B		= new int[rank][rank];
 		this.symA	= new fraction[rank][rank];
 		this.invA	= new fraction[rank][rank];
 		this.G		= new fraction[rank][rank];
 		this.directProductFactors = new ArrayList<int[][]>();
 		
-		// Set the cartan matrix
-		for(int i=0; i<rank; i++)
-		{
-			for(int j=0; j<rank; j++)
-			{
-				this.A[i][j] = (int) Math.round(A.get(i,j));
-			}
-		}
+
 		
 		// Set the simple roots
 		simpleRoots = new ArrayList<CRoot>();
@@ -360,9 +363,9 @@ public class CAlgebra
 		}
 		
 		// Set the inverse of the Cartan matrix and the quadratic form matrix if possible.
-		if(rank != 0 && A.rank() == rank)
+		if(rank != 0 && rankA == rank)
 		{
-			Matrix invAm	= A.inverse();
+			Matrix invAm	= cartanMatrix.inverse();
 			Matrix Gm		= symAm.inverse();
 			for (int i = 0; i < rank; i++)
 			{

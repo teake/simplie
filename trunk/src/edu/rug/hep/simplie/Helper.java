@@ -342,32 +342,6 @@ public class Helper
 		return true;
 	}
 	
-	/**
-	 * Compares two Matrices.
-	 * The matrices are the same if all their values are the same.
-	 *
-	 * @param	matrix1	The first matrix we compare against the second.
-	 * @param	matrix2	The second matrix we compare against the first.
-	 * @return			True if the matrices are the same, false otherwise.
-	 */
-	public static boolean sameMatrices(Matrix matrix1, Matrix matrix2)
-	{
-		if(matrix1 == null || matrix2 == null)
-			return false;
-		if(matrix1.getColumnDimension() != matrix2.getColumnDimension())
-			return false;
-		if(matrix1.getRowDimension() != matrix2.getRowDimension())
-			return false;
-		for (int i = 0; i < matrix1.getRowDimension(); i++)
-		{
-			for (int j = 0; j < matrix1.getColumnDimension(); j++)
-			{
-				if(matrix1.get(i,j) != matrix2.get(i,j))
-					return false;
-			}
-		}
-		return true;
-	}
 	
 	/**
 	 * Compares two matrices of integers.
@@ -394,54 +368,7 @@ public class Helper
 		return true;
 	}
 	
-	/**
-	 * Compares a matrix of integers against a Matrix.
-	 * They are the same if the values of the Matrix cast to integers are the same
-	 * as those of the integer matrix.
-	 *
-	 * @param	matrix1	The first matrix we compare against the second.
-	 * @param	matrix2	The second matrix we compare against the first.
-	 * @return			True if the matrices are the same, false otherwise.
-	 */
-	public static boolean sameMatrices(Matrix matrix1, int[][] matrix2)
-	{
-		if(matrix1 == null || matrix2 == null)
-			return false;
-		if(matrix1.getColumnDimension() != matrix2.length || matrix1.getColumnDimension() != matrix2.length)
-			return false;
-		for (int i = 0; i < matrix2.length; i++)
-		{
-			for (int j = 0; j < matrix2.length; j++)
-			{
-				if(matrix1.get(i,j) != (double) matrix2[i][j])
-					return false;
-			}
-		}
-		return true;
-	}
-	
-	/**
-	 * Compares two integer arrays.
-	 * The arrays are the same if all their are equal.
-	 *
-	 * @param	array1	The first array to compare against the second.
-	 * @param	array2	The second array to compare against the first.
-	 * @return			True if the arrays are the same, false otherwise.
-	 */
-	public static boolean sameArrays(int[] array1, int[] array2)
-	{
-		if(array1 == null || array2 == null)
-			return false;
-		if(array1.length != array2.length)
-			return false;
-		for (int i = 0; i < array1.length; i++)
-		{
-			if(array1[i] != array2[i])
-				return false;
-		}
-		return true;
-	}
-	
+
 	/**
 	 * Convert a decimal number to a vector of the given size in the given basis,
 	 * with given offset.

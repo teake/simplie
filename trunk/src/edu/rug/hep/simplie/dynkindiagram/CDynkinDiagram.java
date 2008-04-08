@@ -34,7 +34,6 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Color;
 import java.awt.Font;
-import Jama.Matrix;
 
 
 /**
@@ -259,14 +258,17 @@ public class CDynkinDiagram
 	}
 	
 	/** Returns the Cartan matrix of the whole algebra. */
-	public Matrix cartanMatrix()
+	public int[][] cartanMatrix()
 	{
 		// Creates a rank x rank matrix filled with zeros.
-		Matrix cartanMatrix = new Matrix(rank(),rank());
-		
-		// Set the diagonals to two.
-		for(int i = 0; i < rank(); i++)
-			cartanMatrix.set(i,i,2);
+		int[][] cartanMatrix = new int[rank()][rank()];
+		for (int i = 0; i < rank(); i++)
+		{
+			for(int j = 0; j < rank(); j++)
+			{
+				cartanMatrix[i][j] = (i == j) ? 2 : 0;
+			}
+		}
 		
 		// Set the off-diagonal parts.
 		for (CDynkinConnection connection : connections)
@@ -276,28 +278,26 @@ public class CDynkinDiagram
 			switch(connection.type)
 			{
 			case CDynkinConnection.TYPE_SINGLE:
-				cartanMatrix.set(i,j,-1);
-				cartanMatrix.set(j,i,-1);
+				cartanMatrix[i][j] = -1;
+				cartanMatrix[j][i] = -1;
 				break;
 			case CDynkinConnection.TYPE_DOUBLE:
-				cartanMatrix.set(i,j,-2);
-				cartanMatrix.set(j,i,-1);
+				cartanMatrix[i][j] = -2;
+				cartanMatrix[j][i] = -1;
 				break;
 			case CDynkinConnection.TYPE_TRIPLE:
-				cartanMatrix.set(i,j,-3);
-				cartanMatrix.set(j,i,-1);
+				cartanMatrix[i][j] = -3;
+				cartanMatrix[j][i] = -1;
 				break;
 			case CDynkinConnection.TYPE_QUADRUPLE:
-				cartanMatrix.set(i,j,-4);
-				cartanMatrix.set(j,i,-1);
+				cartanMatrix[i][j] = -4;
+				cartanMatrix[j][i] = -1;
 				break;
 			case CDynkinConnection.TYPE_SPECIAL_DOUBLE:
-				cartanMatrix.set(i,j,-2);
-				cartanMatrix.set(j,i,-2);
+				cartanMatrix[i][j] = -2;
+				cartanMatrix[j][i] = -2;
 				break;
 			default:
-				cartanMatrix.set(i,j,0);
-				cartanMatrix.set(j,i,0);
 				break;
 			}
 		}
@@ -312,7 +312,7 @@ public class CDynkinDiagram
 	 * @return			The cartan matrix of the regular ("sub"),
 	 *					the internal ("int"), or the sub x dis ("co") subalgebra.
 	 */
-	public Matrix cartanSubMatrix(String type)
+	public int[][] cartanSubMatrix(String type)
 	{
 		if( !( type == "sub" || type == "int" || type == "co") )
 			return null;
@@ -330,8 +330,8 @@ public class CDynkinDiagram
 				subRank++;
 			}
 		}
-		Matrix cartanSubMatrix	= new Matrix(subRank,subRank);
-		Matrix cartanMatrix	= cartanMatrix();
+		int[][] cartanSubMatrix	= new int[subRank][subRank];
+		int[][] cartanMatrix	= cartanMatrix();
 		
 		// Copy the Cartan matrix elements into the submatrix.
 		for(int i = 0; i < subRank; i++)
@@ -350,7 +350,7 @@ public class CDynkinDiagram
 					indexJ = translateCo(j);
 				else
 					indexJ = translateInt(j);
-				cartanSubMatrix.set(i,j, cartanMatrix.get(indexI,indexJ));
+				cartanSubMatrix[i][j] = cartanMatrix[indexI][indexJ];
 			}
 		}
 		
@@ -650,8 +650,6 @@ public class CDynkinDiagram
 		// Append a hashcode of this specific diagram to all the labels in the psfigure.
 		// This prevents multiple garbled psfigures on one page.
 		int hashCode = Math.abs(cartanMatrix().hashCode() + cartanSubMatrix("co").hashCode());
-		
-		System.out.println(hashCode);
 		
 		// First determine the min and max values of x and y
 		int xMin = Integer.MAX_VALUE;
