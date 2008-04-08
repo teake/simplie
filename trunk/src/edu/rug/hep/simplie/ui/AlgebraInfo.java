@@ -670,7 +670,7 @@ private void repFillButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN
 			lDynkinLabels.setText(Helper.intArrayToString(labels));
 			Long dim = new Long(HWrep.dim);
 			lDimRep.setText(dim.toString());
-			lHeight.setText(Helper.intToString(HWrep.highestHeight));
+			lHeight.setText(HWrep.highestHeight.toString());
 		}
 		
 }//GEN-LAST:event_repOKbuttonActionPerformed
