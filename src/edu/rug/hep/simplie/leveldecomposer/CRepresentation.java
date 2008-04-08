@@ -49,7 +49,7 @@ public class CRepresentation implements Comparable<CRepresentation>
 	
 	/** The length of the associated root (i.e. the innerproduct with itself). */
 	public final int length;
-	/** The height of the associated root. */
+	/** The height of the root of the heighest weight. */
 	public final int height;
 	/** The height of the highest weight state */
 	public final int weightHeight;
@@ -81,14 +81,6 @@ public class CRepresentation implements Comparable<CRepresentation>
 		// Construct the whole root vector.
 		this.rootVector	= algebras.rootVector(levels, dynkinLabels);
 		
-		// Calculate the height.
-		int tHeight = 0;
-		for (int i = 0; i < rootVector.length; i++)
-		{
-			tHeight += rootVector[i];
-		}
-		this.height = tHeight;
-		
 		// Get the Dynkin labels of the internal- and sub-algebra.
 		subDynkinLabels = algebras.subDynkinLabels(rootVector);
 		intDynkinLabels = algebras.intDynkinLabels(rootVector);
@@ -96,6 +88,14 @@ public class CRepresentation implements Comparable<CRepresentation>
 		// Instantiate the highest weight rep.
 		hwRep = new CHighestWeightRep(algebras.coAlgebra, dynkinLabels);
 		weightHeight = hwRep.highestHeight;
+		
+		// Calculate the height.
+		int tHeight = 0;
+		for (int i = 0; i < rootVector.length; i++)
+		{
+			tHeight += rootVector[i];
+		}
+		this.height = algebras.isSignPos() ? tHeight : tHeight + 2 * weightHeight;
 	}
 	
 	/**
@@ -145,9 +145,9 @@ public class CRepresentation implements Comparable<CRepresentation>
 		final int EQUAL = 0;
 		final int AFTER = 1;
 		
-		if(height > rep.height)
-			return AFTER;
 		if(height < rep.height)
+			return AFTER;
+		if(height > rep.height)
 			return BEFORE;
 		
 		return EQUAL;

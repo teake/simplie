@@ -276,17 +276,9 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]> implements Com
 		
 		if(calcRootMult)
 		{
-			int k;
-			int l;
-			
 			for (int i = 0; i < repContainer.size(); i++)
 			{
-				// Reverse the order if the sign is positive.
-				if(algebras.isSignPos())
-					k = repContainer.size() - i - 1;
-				else
-					k = i;
-				repI = repContainer.get(k);
+				repI = repContainer.get(i);
 				
 				// Get and set the root multiplicities.
 				CRoot root = algebras.algebra.rs.getRoot(repI.rootVector.clone());
@@ -306,11 +298,7 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]> implements Com
 				outerMult = repI.getRootMult();
 				for (int j = 0; j < i; j++)
 				{
-					if(algebras.isSignPos())
-						l = repContainer.size() - j - 1;
-					else
-						l = j;
-					repJ = repContainer.get(l);
+					repJ = repContainer.get(j);
 					
 					if(repJ.length <= repI.length)
 						continue;
@@ -344,7 +332,6 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]> implements Com
 			rowData[7] = rep.getRootMult();
 			rowData[8] = rep.getOuterMult();
 			rowData[9] = rep.height;
-			rowData[10] = algebras.isSignPos() ? rep.height : rep.height + 2 * rep.weightHeight;
 			publish(rowData);
 		}
 	}
