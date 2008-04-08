@@ -101,13 +101,34 @@ public class CLevel implements Comparable<CLevel>
 		return repContainer.get(index);
 	}
 	
-	/** Compares levels to each other based on the height of their highest root. */
+	/** 
+	 * Compares levels to each other based on first a partial ordering 
+	 * and next the height of their highest root. 
+	 */
 	public int compareTo(CLevel level)
 	{
 		final int BEFORE = -1;
 		final int EQUAL = 0;
 		final int AFTER = 1;
 		
+		// First try a partial ordering.
+		if(level.levelVector.length == levelVector.length)
+		{
+			boolean bigger	= false;
+			boolean smaller = false;
+			for (int i = 0; i < levelVector.length; i++)
+			{
+				int diff = levelVector[i] - level.levelVector[i];
+				if(diff > 0) bigger	 = true;
+				if(diff < 0) smaller = true;
+			}
+			if(bigger && !smaller)
+				return AFTER;
+			if(smaller && !bigger)
+				return BEFORE;
+		}
+		
+		// If the partial ordering didn't work sort by height.
 		if(heighest > level.heighest)
 			return AFTER;
 		if(heighest < level.heighest)

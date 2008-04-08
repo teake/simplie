@@ -114,8 +114,10 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 			for (int i = 0; i < num; i++)
 			{
 				CLevel level = new CLevel(Helper.numberToVector(i,base,levelRank,minLevel), algebras);
+				System.out.println("Scanning levels " + Helper.intArrayToString(level.levelVector));
 				Scan(level);
 				levels.add(level);
+				System.out.println("... max height: " + level.heighest() + ", number of reps: " + level.size());
 			}
 			
 			// Sort the levels
@@ -173,8 +175,6 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 			levelSign = 1;
 		if(negative)
 			levelSign = -1;
-		
-		System.out.println("Scanning levels " + Helper.intArrayToString(level.levelVector));
 		
 		// Set up the Dynkin labels
 		int[] dynkinLabels = new int[algebras.coAlgebra.rank];
@@ -281,7 +281,7 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 		}
 		
 		// Publish the representations to the output table.
-		for(int i = 0; i < level.size(); i++)
+		for(int i = level.size() - 1; i > -1; i--)
 		{
 			CRepresentation rep = level.get(i);
 			// Don't add this representation if its root has zero multiplicity and we don't show those
