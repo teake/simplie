@@ -1,4 +1,5 @@
 LICENSE
+-------
 
 SimpLie, a simple program for Lie algebras.
 Copyright (C) 2007  Teake Nutma
@@ -19,6 +20,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 RUNNING SIMPLIE
+---------------
 
 For finite-dimensional Lie algebra it is sufficient to run SimpLie 
 with the default Java parameters. You can do so with the following
@@ -37,6 +39,7 @@ maximum memory settings to your liking.
 
 
 ALGEBRA SETUP
+-------------
 
 Within the white Dynkin diagram panel of the Algebra Setup tab one
 can interactively 'click' a Dykin diagram together. The relevant
@@ -60,6 +63,7 @@ regular subalgebra nodes remain white.
 
 
 LEVEL DECOMPOSITION
+-------------------
 
 In this tab a level decomposition of the Dynkin diagram set up 
 previously can be calculated.
@@ -73,11 +77,6 @@ previously can be calculated.
             as a root.
           o Show zero mu representations: show representations which
             have zero outer multiplicity (mu).
-          o Show > D indices representations: show representations which
-            have more indices than the number of undisabled nodes plus one.
-          o All weightst: Show all the weight of a representation in the
-            "Weights of selected representation" panel, instead of only
-            the dominant weights.
           o Calculate root representations: Calculate the root multiplicities
             while scanning.
           o Calculate representation multiplicities: Calculate the outer
@@ -97,5 +96,9 @@ previously can be calculated.
           o mult : The root multiplicity.
           o mu : The outer multiplicity of the representation.
           o h : The height of lowest / highest weight.
-          o h' : The height of highest weight.
-          o ind : The number indices of the regular subalgebra part.
+    * Weights of selected representation:
+          o Dominant weights: Show the dominant weights of the representation
+            selected in the representation table.
+          o All weightst: Show all the weights of a representation in the
+            "Weights of selected representation" panel, instead of only
+            the dominant weights.
