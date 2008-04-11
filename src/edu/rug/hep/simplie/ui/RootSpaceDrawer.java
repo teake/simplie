@@ -46,11 +46,11 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements GLEventListen
 	private GLContext context;
 	
 	// Define some colors for the roots.
-	private float red[]		= { 0.6f, 0.1f, 0.0f, 1.0f };
-	private float green[]	= { 0.0f, 0.6f, 0.1f, 1.0f };
-	private float imGreen[] = { 0.2f, 1.0f, 0.4f, 1.0f };
-	private float imRed[]	= { 1.0f, 0.2f, 0.0f, 1.0f };
-	private float reflCol[]	= { 1.0f, 1.0f, 1.0f, 1.0f };
+	private float negCol[]	= { 0.8f, 0.2f, 0.0f, 1.0f };
+	private float posCol[]	= { 0.0f, 0.8f, 0.2f, 1.0f };
+	private float imPosCol[]= { 0.13f, 0.7f, 0.66f, 1.0f };
+	private float imNegCol[]= { 1.0f, 0.84f, 0.0f, 1.0f };
+	private float reflCol[]	= { 0.8f, 0.8f, 0.8f, 1.0f };
 	
 	private float view_rotx = 0.0f, view_roty = 0.0f;
 	private float zoom		= 1.0f;
@@ -59,12 +59,11 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements GLEventListen
 	
 	private CAlgebraComposite algebras;
 	
-	
 	/** Creates new form RootSpaceDrawer */
 	public RootSpaceDrawer()
 	{
 		initComponents();
-
+		
 		canvas.addGLEventListener(this);
 		canvas.addMouseMotionListener(this);
 	}
@@ -84,11 +83,12 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements GLEventListen
     {
 
         bDrawRoots = new javax.swing.JButton();
-        canvas = new javax.media.opengl.GLJPanel();
         bReset = new javax.swing.JButton();
         cbRealRoots = new javax.swing.JCheckBox();
         cbImRoots = new javax.swing.JCheckBox();
         cbReflections = new javax.swing.JCheckBox();
+        container = new javax.swing.JPanel();
+        canvas = new javax.media.opengl.GLCanvas();
 
         bDrawRoots.setText("Draw root space");
         bDrawRoots.addActionListener(new java.awt.event.ActionListener()
@@ -98,20 +98,6 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements GLEventListen
                 bDrawRootsActionPerformed(evt);
             }
         });
-
-        canvas.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
-        canvas.setOpaque(false);
-
-        javax.swing.GroupLayout canvasLayout = new javax.swing.GroupLayout(canvas);
-        canvas.setLayout(canvasLayout);
-        canvasLayout.setHorizontalGroup(
-            canvasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 586, Short.MAX_VALUE)
-        );
-        canvasLayout.setVerticalGroup(
-            canvasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 296, Short.MAX_VALUE)
-        );
 
         bReset.setText("Reset position");
         bReset.addActionListener(new java.awt.event.ActionListener()
@@ -152,6 +138,24 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements GLEventListen
             }
         });
 
+        container.setBorder(javax.swing.BorderFactory.createTitledBorder("Root space"));
+
+        javax.swing.GroupLayout containerLayout = new javax.swing.GroupLayout(container);
+        container.setLayout(containerLayout);
+        containerLayout.setHorizontalGroup(
+            containerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(containerLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(canvas, javax.swing.GroupLayout.DEFAULT_SIZE, 578, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        containerLayout.setVerticalGroup(
+            containerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(containerLayout.createSequentialGroup()
+                .addComponent(canvas, javax.swing.GroupLayout.DEFAULT_SIZE, 286, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -159,7 +163,7 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements GLEventListen
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(canvas, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(container, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(bDrawRoots)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -175,15 +179,15 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements GLEventListen
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(12, 12, 12)
+                .addGap(24, 24, 24)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(bDrawRoots)
                     .addComponent(bReset)
                     .addComponent(cbRealRoots)
                     .addComponent(cbImRoots)
-                    .addComponent(cbReflections))
+                    .addComponent(cbReflections)
+                    .addComponent(bDrawRoots))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(canvas, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(container, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -193,7 +197,10 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements GLEventListen
 		if(algebras.algebra == null)
 			return;	
 		updateRoots();
-		canvas.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Root space of " + algebras.algebra.type, javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12)));
+		String text = "Root space of " + algebras.algebra.type;
+		if(!algebras.algebra.finite)
+			text += " up to height " + (algebras.algebra.rs.size() - 1);
+		container.setBorder(javax.swing.BorderFactory.createTitledBorder(null, text, javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12)));
 }//GEN-LAST:event_bDrawRootsActionPerformed
 
 	private void bResetActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_bResetActionPerformed
@@ -222,10 +229,11 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements GLEventListen
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton bDrawRoots;
     private javax.swing.JButton bReset;
-    private javax.media.opengl.GLJPanel canvas;
+    private javax.media.opengl.GLCanvas canvas;
     private javax.swing.JCheckBox cbImRoots;
     private javax.swing.JCheckBox cbRealRoots;
     private javax.swing.JCheckBox cbReflections;
+    private javax.swing.JPanel container;
     // End of variables declaration//GEN-END:variables
 
 	public void init(GLAutoDrawable drawable)
@@ -240,6 +248,8 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements GLEventListen
 		gl.glEnable(GL.GL_DEPTH_TEST);
 		gl.glEnable(GL.GL_POINT_SMOOTH);
 		gl.glEnable(GL.GL_NORMALIZE);
+		
+		gl.glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 		
 		// TODO: implement the following
 		/*
@@ -369,9 +379,9 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements GLEventListen
 					}
 					
 					// Draw a positive root.
-					drawRoot((root.norm > 0 ? green : imGreen),pos[0],pos[1],pos[2]);
+					drawRoot((root.norm > 0 ? posCol : imPosCol),pos[0],pos[1],pos[2]);
 					// Draw a negative root.
-					drawRoot((root.norm > 0 ? red : imRed),-pos[0],-pos[1],-pos[2]);
+					drawRoot((root.norm > 0 ? negCol : imNegCol),-pos[0],-pos[1],-pos[2]);
 				}
 			}
 		}
