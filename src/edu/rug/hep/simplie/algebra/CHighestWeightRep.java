@@ -112,26 +112,31 @@ public class CHighestWeightRep
 	}
 	
 	/**
-	 * Fetch a weight by its dynkin labels.
-	 * Useful for getting a weight multiplicity.
+	 * Fetch the multiplicity of a weight by its dynkin labels.
 	 *
 	 * @param	weightLabels		The Dynkin labels of the weight for which the multiplicity is calculated.
-	 * @return						The weight, or null if something's wrong.
+	 * @return						The multiplicity of the weight, or 0 if it's not a weight in the representation.
 	 */
-	public CWeight getWeight(int[] weightLabels)
+	public long getWeightMult(int[] weightLabels)
 	{
+		fraction	wantedDepthF;
 		int			wantedDepth;
 		CWeight		wantedWeight;
 		
 		// Preliminary checks
 		if(!algebra.finite || weightLabels.length != rank)
-			return null;
+			return 0;
 		
-		wantedDepth = highestHeight.minus(algebra.weightHeight(weightLabels)).asInt();
+		wantedDepthF = highestHeight.minus(algebra.weightHeight(weightLabels));
+		
+		if(!wantedDepthF.isInt())
+			return 0;
+		
+		wantedDepth = wantedDepthF.asInt();
 		
 		if(wantedDepth < 0)
 			// Do not try to get a weight that is outside the weight system.
-			return null;
+			return 0;
 		
 		wantedWeight = new CWeight(weightLabels);
 		
@@ -143,19 +148,19 @@ public class CHighestWeightRep
 		HashSet<CWeight> wantedWeights = weightSystem.get(wantedDepth);
 		if(!wantedWeights.contains(wantedWeight))
 			// It's not here, return 0.
-			return null;
+			return 0;
 		
 		for(Iterator it = wantedWeights.iterator(); it.hasNext();)
 		{
 			CWeight weight = (CWeight) it.next();
 			if(weight.equals(wantedWeight))
 			{
-				return weight;
+				return weight.getMult();
 			}
 		}
 		
 		// We shouldn't get here, but return null anyway.
-		return null;
+		return 0;
 	}
 	
 	/**
@@ -273,8 +278,7 @@ public class CHighestWeightRep
 				}
 				else
 				{
-					CWeight dominantWeight = getWeight(makeDominant(newWeight.dynkinLabels));
-					newWeight.setMult(dominantWeight.getMult());
+					newWeight.setMult(getWeightMult(makeDominant(newWeight.dynkinLabels)));
 				}
 			}
 			constructedDepth++;
@@ -321,10 +325,7 @@ public class CHighestWeightRep
 							summedLabels[i] += k * algebra.A[j][i] * root.vector[j];
 						}
 					}
-					CWeight summedWeight = getWeight(summedLabels);
-					if(summedWeight == null)
-						continue;
-					numerator += (k*root.norm + rootDotWeight) * summedWeight.getMult();
+					numerator += getWeightMult(summedLabels) * (k*root.norm + rootDotWeight);
 				}
 			}
 		}
