@@ -251,7 +251,7 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 				repI = level.get(i);
 				
 				// Get and set the root multiplicities.
-				int mult = algebras.algebra.rs.getRootMult(repI.rootVector.clone());
+				long mult = algebras.algebra.rs.getRootMult(repI.rootVector.clone());
 				if(mult != 0)
 					repI.setRootMult(mult);
 				else
