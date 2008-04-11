@@ -23,7 +23,6 @@
 package edu.rug.hep.simplie.leveldecomposer;
 
 import edu.rug.hep.simplie.*;
-import edu.rug.hep.simplie.algebra.CRoot;
 import edu.rug.hep.simplie.math.fraction;
 
 import javax.swing.SwingWorker;
@@ -252,9 +251,9 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 				repI = level.get(i);
 				
 				// Get and set the root multiplicities.
-				CRoot root = algebras.algebra.rs.getRoot(repI.rootVector.clone());
-				if(root != null)
-					repI.setRootMult(root.mult);
+				int mult = algebras.algebra.rs.getRootMult(repI.rootVector.clone());
+				if(mult != 0)
+					repI.setRootMult(mult);
 				else
 					continue;
 				

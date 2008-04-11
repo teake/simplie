@@ -212,12 +212,12 @@ public class CRootSystem
 	}
 	
 	/**
-	 * Get a root by its root vector.
+	 * Get a root multiplicity by its root vector.
 	 *
 	 * @param	vector	The root vector of the root we should get.
-	 * @return			A pointer to the root if found, and null if not found.
+	 * @return			The root multiplicity, 0 if it's not a root.
 	 */
-	public CRoot getRoot(int[] vector)
+	public int getRootMult(int[] vector)
 	{
 		// Dirty hack to check for negative roots.
 		// TODO: implement this better.
@@ -225,23 +225,23 @@ public class CRootSystem
 		{
 			vector[i] = Math.abs(vector[i]);
 		}
-		return getRoot(new CRoot(vector));
+		return getRootMult(new CRoot(vector));
 	}
 	
 	/**
-	 * Check if a root is in the root system.
+	 * Get a root multiplicity.
 	 *
-	 * @param rootToGet		The root of which we should check if it's in the root system.
-	 * @return				A pointer to the root if found, and null if not found.
+	 * @param rootToGet		The root of which the multiplicity should be returned.
+	 * @return				The root multiplicity, 0 if it's not a root.
 	 */
-	public CRoot getRoot(CRoot rootToGet)
+	public int getRootMult(CRoot rootToGet)
 	{
 		int rootHeight = rootToGet.height();
 		HashSet<CRoot> roots;
 		
 		if(rootHeight < 0)
 		{
-			return null;
+			return 0;
 		}
 		
 		// If we haven't constructed the root system this far, do so now.
@@ -258,13 +258,13 @@ public class CRootSystem
 				{
 					CRoot root = (CRoot) it.next();
 					if(root.equals(rootToGet))
-						return root;
+						return root.mult;
 				}
 			}
 		}
 		
 		// The root is not in the root system, so return null. 
-		return null;
+		return 0;
 	}
 	
 	/**
@@ -448,13 +448,11 @@ public class CRootSystem
 					dynkinLabels = algebra.rootToWeight(root.vector);
 					int reflectIndex;
 					boolean canReflect	= false;
-					boolean calculate	= true;
 					for(reflectIndex = 0; reflectIndex < rank; reflectIndex++)
 					{
 						if(dynkinLabels[reflectIndex] > 0)
 						{
 							canReflect	= true;
-							calculate	= false;
 							break;
 						}
 					}
@@ -464,19 +462,9 @@ public class CRootSystem
 						// We can reflect down, so do it.
 						int[] reflectedVector = algebra.simpWeylReflRoot(root.vector, reflectIndex);
 						// Get the multiplicity.
-						CRoot reflectedRoot = getRoot(reflectedVector);
-						if(reflectedRoot != null)
-						{
-							root.mult = reflectedRoot.mult;
-						}
-						else
-						{
-							// If for some reason the reflected root doesn't exist, 
-							// we need to calculate the multiplicity by hand.
-							calculate = true;
-						}
+						root.mult = getRootMult(reflectedVector);
 					}
-					if(calculate)
+					else
 					{
 						// We couldn't reflect down, so calculate the multiplicity by hand.
 						root.mult = calculateMult(root,coMult);
@@ -547,11 +535,7 @@ public class CRootSystem
 			CRoot divRoot = root.div(i);
 			if(divRoot != null)
 			{
-				CRoot alpha = getRoot(divRoot);
-				if(alpha != null)
-				{
-					coMult.add(new fraction(alpha.mult,i));
-				}
+				coMult.add(new fraction(getRootMult(divRoot),i));
 			}
 		}
 		return coMult;

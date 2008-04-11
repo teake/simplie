@@ -24,7 +24,6 @@ package edu.rug.hep.simplie.leveldecomposer;
 
 import edu.rug.hep.simplie.*;
 import edu.rug.hep.simplie.algebra.CHighestWeightRep;
-import edu.rug.hep.simplie.algebra.CWeight;
 import edu.rug.hep.simplie.math.fraction;
 
 /**
@@ -108,11 +107,7 @@ public class CRepresentation implements Comparable<CRepresentation>
 	 */
 	public long getWeightMult(int[] weightLabels)
 	{
-		CWeight weight = hwRep.getWeight(weightLabels);
-		if(weight != null)
-			return weight.getMult();
-		else
-			return 0;
+		return hwRep.getWeightMult(weightLabels);
 	}
 	
 	/** Sets the outer multiplicty of this representation. */
