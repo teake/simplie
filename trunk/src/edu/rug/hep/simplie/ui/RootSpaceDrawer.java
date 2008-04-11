@@ -48,9 +48,9 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements GLEventListen
 	// Define some colors for the roots.
 	private float red[]		= { 0.6f, 0.1f, 0.0f, 1.0f };
 	private float green[]	= { 0.0f, 0.6f, 0.1f, 1.0f };
-	private float blue[]	= { 0.1f, 0.1f, 0.8f, 1.0f };
 	private float imGreen[] = { 0.2f, 1.0f, 0.4f, 1.0f };
 	private float imRed[]	= { 1.0f, 0.2f, 0.0f, 1.0f };
+	private float reflCol[]	= { 1.0f, 1.0f, 1.0f, 1.0f };
 	
 	private float view_rotx = 0.0f, view_roty = 0.0f;
 	private float zoom		= 1.0f;
@@ -88,6 +88,7 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements GLEventListen
         bReset = new javax.swing.JButton();
         cbRealRoots = new javax.swing.JCheckBox();
         cbImRoots = new javax.swing.JCheckBox();
+        cbReflections = new javax.swing.JCheckBox();
 
         bDrawRoots.setText("Draw root space");
         bDrawRoots.addActionListener(new java.awt.event.ActionListener()
@@ -105,7 +106,7 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements GLEventListen
         canvas.setLayout(canvasLayout);
         canvasLayout.setHorizontalGroup(
             canvasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 509, Short.MAX_VALUE)
+            .addGap(0, 586, Short.MAX_VALUE)
         );
         canvasLayout.setVerticalGroup(
             canvasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -141,6 +142,16 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements GLEventListen
             }
         });
 
+        cbReflections.setSelected(true);
+        cbReflections.setText("Draw Weyl reflections");
+        cbReflections.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                cbReflectionsActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -156,7 +167,9 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements GLEventListen
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(cbRealRoots)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cbImRoots)))
+                        .addComponent(cbImRoots)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cbReflections)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -167,7 +180,8 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements GLEventListen
                     .addComponent(bDrawRoots)
                     .addComponent(bReset)
                     .addComponent(cbRealRoots)
-                    .addComponent(cbImRoots))
+                    .addComponent(cbImRoots)
+                    .addComponent(cbReflections))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(canvas, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
@@ -198,6 +212,11 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements GLEventListen
 	{//GEN-HEADEREND:event_cbImRootsActionPerformed
 		updateRoots();
 	}//GEN-LAST:event_cbImRootsActionPerformed
+
+	private void cbReflectionsActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_cbReflectionsActionPerformed
+	{//GEN-HEADEREND:event_cbReflectionsActionPerformed
+		updateRoots();
+}//GEN-LAST:event_cbReflectionsActionPerformed
 	
 	
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -206,6 +225,7 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements GLEventListen
     private javax.media.opengl.GLJPanel canvas;
     private javax.swing.JCheckBox cbImRoots;
     private javax.swing.JCheckBox cbRealRoots;
+    private javax.swing.JCheckBox cbReflections;
     // End of variables declaration//GEN-END:variables
 
 	public void init(GLAutoDrawable drawable)
@@ -321,36 +341,33 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements GLEventListen
 			int rank		= algebras.algebra.rank;
 			int numPerCoor	= (int) Math.floor(rank / 3);
 			int remainder	= rank % 3;
-			
-			// First do the CSA
-			drawRoot(blue,0.0f,0.0f,0.0f);
-			
+					
 			// The rest of the roots.
 			for(int i = 1; i < algebras.algebra.rs.size(); i++)
 			{
 				Collection<CRoot> roots = algebras.algebra.rs.get(i);
 				for(Iterator it = roots.iterator(); it.hasNext();)
 				{
-					CRoot root = (CRoot) it.next();
+					CRoot root	= (CRoot) it.next();
 					
 					if(root.norm > 0 && !cbRealRoots.isSelected())
 						continue;
 					if(root.norm <= 0 && !cbImRoots.isSelected())
 						continue;
 					
-					// Calculate the coordinates.
-					float pos[] = { 0.0f, 0.0f, 0.0f };
-					for(int j = 0; j < 3; j++)
+					float[] pos	= calcPos(root.vector, numPerCoor, remainder);
+					
+					if(cbReflections.isSelected())
 					{
-						for(int k = 0; k < numPerCoor; k++)
+						int[] dynkinLabels = algebras.algebra.rootToWeight(root.vector);
+						for(int j = 0; j < rank; j++)
 						{
-							pos[j] += root.vector[remainder + numPerCoor*j + k];
-						}
-						if(j < remainder)
-						{
-							pos[j] += root.vector[j];
+							int[] reflVector = root.vector.clone();
+							reflVector[j] -= dynkinLabels[j];
+							drawReflection(pos, calcPos(reflVector, numPerCoor, remainder));
 						}
 					}
+					
 					// Draw a positive root.
 					drawRoot((root.norm > 0 ? green : imGreen),pos[0],pos[1],pos[2]);
 					// Draw a negative root.
@@ -363,11 +380,41 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements GLEventListen
 		canvas.repaint();
 	}
 	
+	private float[] calcPos(int[] rootVector, int numPerCoor, int remainder)
+	{
+		float pos[] = { 0.0f, 0.0f, 0.0f };
+		for(int j = 0; j < 3; j++)
+		{
+			for(int k = 0; k < numPerCoor; k++)
+			{
+				pos[j] += rootVector[remainder + numPerCoor*j + k];
+			}
+			if(j < remainder)
+			{
+				pos[j] += rootVector[j];
+			}
+		}
+		return pos;
+	}
+	
 	private void drawRoot(float[] color, float x, float y, float z)
 	{
 		gl.glColor3f(color[0],color[1],color[2]);
 		gl.glBegin(GL.GL_POINTS);
 			gl.glVertex3f(x, y, z);
 		gl.glEnd();				
-	}	
+	}
+	
+	private void drawReflection(float[] pos1, float[] pos2)
+	{
+		gl.glColor3f(reflCol[0],reflCol[1],reflCol[2]);
+		gl.glBegin(GL.GL_LINES);
+			gl.glVertex3f(pos1[0],pos1[1],pos1[2]);
+			gl.glVertex3f(pos2[0],pos2[1],pos2[2]);
+		gl.glEnd();
+		gl.glBegin(GL.GL_LINES);
+			gl.glVertex3f(-pos1[0],-pos1[1],-pos1[2]);
+			gl.glVertex3f(-pos2[0],-pos2[1],-pos2[2]);
+		gl.glEnd();
+	}
 }
