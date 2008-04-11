@@ -243,6 +243,7 @@ public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramLis
 		tf_status.setText("Modifying ...");
 		modificationFrom = node;
 		this.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		contextVisible = false;
 	}
 	
 	private void stopModify()
@@ -591,25 +592,21 @@ private void diagramMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:ev
 	private void menuAddTripleConnectionActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_menuAddTripleConnectionActionPerformed
 	{//GEN-HEADEREND:event_menuAddTripleConnectionActionPerformed
 		startModify(CDynkinConnection.TYPE_TRIPLE, STATUS_ADDCON);
-		contextVisible = false;
 	}//GEN-LAST:event_menuAddTripleConnectionActionPerformed
 	
 	private void menuAddDoubleConnectionActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_menuAddDoubleConnectionActionPerformed
 	{//GEN-HEADEREND:event_menuAddDoubleConnectionActionPerformed
 		startModify(CDynkinConnection.TYPE_DOUBLE, STATUS_ADDCON);
-		contextVisible = false;
 	}//GEN-LAST:event_menuAddDoubleConnectionActionPerformed
 		
 	private void menuRemoveConnectionActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_menuRemoveConnectionActionPerformed
 	{//GEN-HEADEREND:event_menuRemoveConnectionActionPerformed
 		startModify(CDynkinConnection.TYPE_NULL, STATUS_REMCON);
-		contextVisible = false;
 	}//GEN-LAST:event_menuRemoveConnectionActionPerformed
 	
 	private void menuAddSingleConnectionActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_menuAddSingleConnectionActionPerformed
 	{//GEN-HEADEREND:event_menuAddSingleConnectionActionPerformed
 		startModify(CDynkinConnection.TYPE_SINGLE, STATUS_ADDCON);
-		contextVisible = false;
 	}//GEN-LAST:event_menuAddSingleConnectionActionPerformed
 	
 	private void menuRemoveNodeActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_menuRemoveNodeActionPerformed
@@ -646,13 +643,11 @@ private void diagramMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:ev
 	private void menuAddCompactPairActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_menuAddCompactPairActionPerformed
 	{//GEN-HEADEREND:event_menuAddCompactPairActionPerformed
 		startModify(CDynkinConnection.TYPE_NULL, STATUS_ADDCOMP);
-		contextVisible = false;
 }//GEN-LAST:event_menuAddCompactPairActionPerformed
 
 	private void menuRemoveCompactPairActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_menuRemoveCompactPairActionPerformed
 	{//GEN-HEADEREND:event_menuRemoveCompactPairActionPerformed
 		startModify(CDynkinConnection.TYPE_NULL, STATUS_REMCOMP);
-		contextVisible = false;
 	}//GEN-LAST:event_menuRemoveCompactPairActionPerformed
 
 	private void menuStateEnabledActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_menuStateEnabledActionPerformed

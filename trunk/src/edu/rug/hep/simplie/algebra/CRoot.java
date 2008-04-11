@@ -42,7 +42,7 @@ public class CRoot implements Serializable
 	/** The norm of the root (the innerproduct with itself). */
 	public short norm;
 	/** The root multiplicity. */
-	public int	mult;
+	public long	mult;
 	/** Sum over multiplicities of roots that are fractionals of this one (used in Peterson's formula). */
 	public fraction	coMult;
 	

@@ -217,7 +217,7 @@ public class CRootSystem
 	 * @param	vector	The root vector of the root we should get.
 	 * @return			The root multiplicity, 0 if it's not a root.
 	 */
-	public int getRootMult(int[] vector)
+	public long getRootMult(int[] vector)
 	{
 		// Dirty hack to check for negative roots.
 		// TODO: implement this better.
@@ -234,7 +234,7 @@ public class CRootSystem
 	 * @param rootToGet		The root of which the multiplicity should be returned.
 	 * @return				The root multiplicity, 0 if it's not a root.
 	 */
-	public int getRootMult(CRoot rootToGet)
+	public long getRootMult(CRoot rootToGet)
 	{
 		int rootHeight = rootToGet.height();
 		HashSet<CRoot> roots;
@@ -550,7 +550,7 @@ public class CRootSystem
 	 * @param	coMult	The co-multiplicity of that root.
 	 * @return			The multiplicity of the root.
 	 */
-	private int calculateMult(CRoot root, fraction coMult)
+	private long calculateMult(CRoot root, fraction coMult)
 	{
 		fraction multiplicity = new fraction(0);
 
@@ -575,7 +575,7 @@ public class CRootSystem
 			System.out.println("*WARNING*: actual mult: " + multiplicity.toString());
 		}
 
-		return multiplicity.asInt();
+		return multiplicity.asLong();
 	}
 	
 	/**
