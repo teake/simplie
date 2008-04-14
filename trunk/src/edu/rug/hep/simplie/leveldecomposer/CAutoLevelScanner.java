@@ -25,11 +25,11 @@ package edu.rug.hep.simplie.leveldecomposer;
 import edu.rug.hep.simplie.*;
 import edu.rug.hep.simplie.math.fraction;
 
-import javax.swing.SwingWorker;
 import javax.swing.table.DefaultTableModel;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Collections;
+import org.jdesktop.swingworker.SwingWorker;
 
 
 /**

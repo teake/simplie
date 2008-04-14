@@ -89,7 +89,7 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements GLEventListen
         cbImRoots = new javax.swing.JCheckBox();
         cbReflections = new javax.swing.JCheckBox();
         container = new javax.swing.JPanel();
-        canvas = new javax.media.opengl.GLCanvas();
+        canvas = new javax.media.opengl.GLJPanel();
 
         bDrawRoots.setText("Draw root space");
         bDrawRoots.addActionListener(new java.awt.event.ActionListener()
@@ -141,56 +141,65 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements GLEventListen
 
         container.setBorder(javax.swing.BorderFactory.createTitledBorder("Root space"));
 
-        canvas.setVisible(false);
+        org.jdesktop.layout.GroupLayout canvasLayout = new org.jdesktop.layout.GroupLayout(canvas);
+        canvas.setLayout(canvasLayout);
+        canvasLayout.setHorizontalGroup(
+            canvasLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(0, 577, Short.MAX_VALUE)
+        );
+        canvasLayout.setVerticalGroup(
+            canvasLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(0, 107, Short.MAX_VALUE)
+        );
 
-        javax.swing.GroupLayout containerLayout = new javax.swing.GroupLayout(container);
+        org.jdesktop.layout.GroupLayout containerLayout = new org.jdesktop.layout.GroupLayout(container);
         container.setLayout(containerLayout);
         containerLayout.setHorizontalGroup(
-            containerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(containerLayout.createSequentialGroup()
+            containerLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(containerLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(canvas, javax.swing.GroupLayout.DEFAULT_SIZE, 0, Short.MAX_VALUE)
+                .add(canvas, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
         containerLayout.setVerticalGroup(
-            containerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(containerLayout.createSequentialGroup()
-                .addComponent(canvas, javax.swing.GroupLayout.DEFAULT_SIZE, 0, Short.MAX_VALUE)
+            containerLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(containerLayout.createSequentialGroup()
+                .add(canvas, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+        org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(container, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(bDrawRoots)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(bReset)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cbRealRoots)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cbImRoots)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cbReflections)))
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(container, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .add(layout.createSequentialGroup()
+                        .add(bDrawRoots)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(bReset)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(cbRealRoots)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(cbImRoots)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(cbReflections)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(bReset)
-                    .addComponent(cbRealRoots)
-                    .addComponent(cbImRoots)
-                    .addComponent(cbReflections)
-                    .addComponent(bDrawRoots))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(container, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(bReset)
+                    .add(cbRealRoots)
+                    .add(cbImRoots)
+                    .add(cbReflections)
+                    .add(bDrawRoots))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(container, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -232,7 +241,7 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements GLEventListen
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton bDrawRoots;
     private javax.swing.JButton bReset;
-    private javax.media.opengl.GLCanvas canvas;
+    private javax.media.opengl.GLJPanel canvas;
     private javax.swing.JCheckBox cbImRoots;
     private javax.swing.JCheckBox cbRealRoots;
     private javax.swing.JCheckBox cbReflections;

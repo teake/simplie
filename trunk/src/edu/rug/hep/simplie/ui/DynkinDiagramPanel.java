@@ -102,14 +102,12 @@ public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramLis
 		this.dd.addListener(this);
 	}
 	
-	@Override
 	public void diagramChanged()
 	{
 		diagram.repaint();
 		setTitle(dd.getTitle());
 	}
 	
-	@Override
 	public void keyPressed(KeyEvent e)
 	{
 		if(e.isShiftDown())
@@ -119,7 +117,6 @@ public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramLis
 		}
 	}
 	
-	@Override
 	public void keyReleased(KeyEvent e)
 	{
 		if(!e.isShiftDown())
@@ -129,7 +126,6 @@ public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramLis
 		}
 	}
 		
-	@Override
 	public void keyTyped(KeyEvent e)
 	{
 	}
@@ -478,32 +474,32 @@ public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramLis
         tf_status.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         tf_status.setText("(Right) click to add a node to the diagram.");
 
-        javax.swing.GroupLayout diagramLayout = new javax.swing.GroupLayout(diagram);
+        org.jdesktop.layout.GroupLayout diagramLayout = new org.jdesktop.layout.GroupLayout(diagram);
         diagram.setLayout(diagramLayout);
         diagramLayout.setHorizontalGroup(
-            diagramLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(tf_status, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 355, Short.MAX_VALUE)
+            diagramLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, tf_status, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 355, Short.MAX_VALUE)
         );
         diagramLayout.setVerticalGroup(
-            diagramLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(diagramLayout.createSequentialGroup()
+            diagramLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(diagramLayout.createSequentialGroup()
                 .addContainerGap(140, Short.MAX_VALUE)
-                .addComponent(tf_status))
+                .add(tf_status))
         );
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+        org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(diagram, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .add(diagram, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(diagram, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(layout.createSequentialGroup()
+                .add(diagram, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents

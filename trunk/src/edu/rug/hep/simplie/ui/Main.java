@@ -40,8 +40,10 @@ import javax.swing.JPopupMenu;
  */
 public class Main extends javax.swing.JFrame
 {
-	private final FileFilter ddFilter;
-	private final FileFilter rsFilter;
+	// TODO: make this work for JDK5
+	//private final FileFilter ddFilter;
+	//private final FileFilter rsFilter;
+	
 	private final File workDir;
 	private final File ddDir;
 	private final File rsDir;
@@ -56,7 +58,6 @@ public class Main extends javax.swing.JFrame
 		{
 			this.url = url;
 		}
-		@Override
 		public void actionPerformed(java.awt.event.ActionEvent evt)
 		{
 			algebras.dd.loadFrom(this.url);
@@ -83,7 +84,8 @@ public class Main extends javax.swing.JFrame
 		ArrayList iconList = new ArrayList<Image>();
 		iconList.add(java.awt.Toolkit.getDefaultToolkit().getImage(this.getClass().getClassLoader().getResource("icon32.png")));
 		iconList.add(java.awt.Toolkit.getDefaultToolkit().getImage(this.getClass().getClassLoader().getResource("icon16.png")));
-		this.setIconImages(iconList);
+		// TODO: make this work for JDK5
+		//this.setIconImages(iconList);
 		
 		// Allow the menubars to draw on top of the GLCanvas
 		JPopupMenu.setDefaultLightWeightPopupEnabled(false);
@@ -104,8 +106,9 @@ public class Main extends javax.swing.JFrame
 		exportDialog.setLocation(300,250);
 		exportToTex.setup(exportDialog,levelDecomposition.getRepTable(),algebras);
 		
-		ddFilter = new FileNameExtensionFilter("Dynkin diagram (*.dd)", "dd");
-		rsFilter = new FileNameExtensionFilter("Root system (*.rs)", "rs");
+		// TODO: make this work for JDK5
+		//ddFilter = new FileNameExtensionFilter("Dynkin diagram (*.dd)", "dd");
+		//rsFilter = new FileNameExtensionFilter("Root system (*.rs)", "rs");
 		
 		// Check what the working dir is.
 		String userDir	= java.lang.System.getProperty("user.home");
@@ -141,8 +144,9 @@ public class Main extends javax.swing.JFrame
 		int pos = 0;
 		for(File file : ddDir.listFiles())
 		{
-			if(!ddFilter.accept(file))
-				continue;
+			// TODO: make this work for JDK5
+			//if(!ddFilter.accept(file))
+				//continue;
 			
 			// Add the menu item.
 			javax.swing.JMenuItem ddPreset = new javax.swing.JMenuItem();
@@ -205,46 +209,46 @@ public class Main extends javax.swing.JFrame
         popup.setMinimumSize(new java.awt.Dimension(220, 180));
         popup.setResizable(false);
 
-        javax.swing.GroupLayout popupLayout = new javax.swing.GroupLayout(popup.getContentPane());
+        org.jdesktop.layout.GroupLayout popupLayout = new org.jdesktop.layout.GroupLayout(popup.getContentPane());
         popup.getContentPane().setLayout(popupLayout);
         popupLayout.setHorizontalGroup(
-            popupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(optionPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            popupLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(optionPane, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
         );
         popupLayout.setVerticalGroup(
-            popupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(optionPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            popupLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(optionPane, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
         );
 
         exportDialog.setTitle("Export to TeX");
         exportDialog.setMinimumSize(new java.awt.Dimension(430, 316));
         exportDialog.setResizable(false);
 
-        javax.swing.GroupLayout exportDialogLayout = new javax.swing.GroupLayout(exportDialog.getContentPane());
+        org.jdesktop.layout.GroupLayout exportDialogLayout = new org.jdesktop.layout.GroupLayout(exportDialog.getContentPane());
         exportDialog.getContentPane().setLayout(exportDialogLayout);
         exportDialogLayout.setHorizontalGroup(
-            exportDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(exportDialogLayout.createSequentialGroup()
-                .addComponent(exportToTex, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            exportDialogLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(exportDialogLayout.createSequentialGroup()
+                .add(exportToTex, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         exportDialogLayout.setVerticalGroup(
-            exportDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(exportToTex, javax.swing.GroupLayout.DEFAULT_SIZE, 294, Short.MAX_VALUE)
+            exportDialogLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(exportToTex, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 294, Short.MAX_VALUE)
         );
 
         systemOutputDialog.setTitle("System output");
         systemOutputDialog.setMinimumSize(new java.awt.Dimension(360, 360));
 
-        javax.swing.GroupLayout systemOutputDialogLayout = new javax.swing.GroupLayout(systemOutputDialog.getContentPane());
+        org.jdesktop.layout.GroupLayout systemOutputDialogLayout = new org.jdesktop.layout.GroupLayout(systemOutputDialog.getContentPane());
         systemOutputDialog.getContentPane().setLayout(systemOutputDialogLayout);
         systemOutputDialogLayout.setHorizontalGroup(
-            systemOutputDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(systemOutTextArea, javax.swing.GroupLayout.DEFAULT_SIZE, 410, Short.MAX_VALUE)
+            systemOutputDialogLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(systemOutTextArea, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 410, Short.MAX_VALUE)
         );
         systemOutputDialogLayout.setVerticalGroup(
-            systemOutputDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(systemOutTextArea, javax.swing.GroupLayout.DEFAULT_SIZE, 362, Short.MAX_VALUE)
+            systemOutputDialogLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(systemOutTextArea, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 362, Short.MAX_VALUE)
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -419,15 +423,15 @@ public class Main extends javax.swing.JFrame
 
         setJMenuBar(MenuBar);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(TabbedPane, javax.swing.GroupLayout.DEFAULT_SIZE, 763, Short.MAX_VALUE)
+            layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(TabbedPane, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 763, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(TabbedPane, javax.swing.GroupLayout.DEFAULT_SIZE, 579, Short.MAX_VALUE)
+            layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(TabbedPane, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 579, Short.MAX_VALUE)
         );
 
         TabbedPane.getAccessibleContext().setAccessibleName("");
@@ -470,7 +474,8 @@ public class Main extends javax.swing.JFrame
 	private void MenuItemSaveRootsActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_MenuItemSaveRootsActionPerformed
 	{//GEN-HEADEREND:event_MenuItemSaveRootsActionPerformed
 		JFileChooser chooser = new JFileChooser(rsDir);
-		chooser.addChoosableFileFilter(rsFilter);
+		// TODO: make this work for JDK5
+		//chooser.addChoosableFileFilter(rsFilter);
 		chooser.setSelectedFile(new File(algebras.algebra.type + "_height_" + algebras.algebra.rs.constructedHeight()));
 		chooser.setDialogTitle("Save root system");
 		int returnVal = chooser.showSaveDialog(this);
@@ -481,8 +486,9 @@ public class Main extends javax.swing.JFrame
 		 * pre-pend the "file" protocol to the absolute path of the file.
 		 */
 			String fileURL = chooser.getSelectedFile().getAbsolutePath();
-			if(!rsFilter.accept(chooser.getSelectedFile()))
-				fileURL += ".rs";
+			// TODO: make this work for JDK5
+			//if(!rsFilter.accept(chooser.getSelectedFile()))
+				//fileURL += ".rs";
 			algebras.algebra.rs.saveTo(fileURL);
 		}
 	}//GEN-LAST:event_MenuItemSaveRootsActionPerformed
@@ -494,7 +500,8 @@ public class Main extends javax.swing.JFrame
 		int returnVal;
 		
 		chooser = new JFileChooser(rsDir);
-		chooser.addChoosableFileFilter(rsFilter);
+		// TODO: make this work for JDK5
+		//chooser.addChoosableFileFilter(rsFilter);
 		chooser.setDialogTitle("Open root system");
 		returnVal = chooser.showOpenDialog(this);
 		
@@ -530,7 +537,8 @@ public class Main extends javax.swing.JFrame
 	private void MenuItemSaveDDActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_MenuItemSaveDDActionPerformed
 	{//GEN-HEADEREND:event_MenuItemSaveDDActionPerformed
 		JFileChooser chooser = new JFileChooser(ddDir);
-		chooser.addChoosableFileFilter(ddFilter);
+		// TODO: make this work for JDK5
+		//chooser.addChoosableFileFilter(ddFilter);
 		chooser.setSelectedFile(new File(algebras.getDynkinDiagramType(false) + ".dd"));
 		chooser.setDialogTitle("Save Dynkin diagram");
 		int returnVal = chooser.showSaveDialog(this);
@@ -541,8 +549,9 @@ public class Main extends javax.swing.JFrame
 		 * pre-pend the "file" protocol to the absolute path of the file.
 		 */
 			String fileURL = chooser.getSelectedFile().getAbsolutePath();
-			if(!ddFilter.accept(chooser.getSelectedFile()))
-				fileURL += ".dd";
+			// TODO: make this work for JDK5
+			//if(!ddFilter.accept(chooser.getSelectedFile()))
+				//fileURL += ".dd";
 			algebras.dd.saveTo(fileURL);
 		}
 	}//GEN-LAST:event_MenuItemSaveDDActionPerformed
@@ -554,7 +563,8 @@ public class Main extends javax.swing.JFrame
 		int returnVal;
 		
 		chooser = new JFileChooser(ddDir);
-		chooser.addChoosableFileFilter(ddFilter);
+		// TODO: make this work for JDK5
+		//chooser.addChoosableFileFilter(ddFilter);
 		chooser.setDialogTitle("Open Dynkin diagram");
 		returnVal = chooser.showOpenDialog(this);
 		
@@ -594,7 +604,6 @@ public class Main extends javax.swing.JFrame
 	{
 		java.awt.EventQueue.invokeLater(new Runnable()
 		{
-			@Override
 			public void run()
 			{
 				new Main().setVisible(true);
