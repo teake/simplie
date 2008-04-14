@@ -43,7 +43,6 @@ public class CNormHelper implements Comparable<CNormHelper>
 	}
 	
 	/** Compares normHelpers according to their norm */
-	@Override
 	public int compareTo(CNormHelper compareNH)
 	{
 		final int BEFORE = -1;

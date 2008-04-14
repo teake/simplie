@@ -246,7 +246,6 @@ public class CDynkinNode implements Serializable, Comparable<CDynkinNode>
 	 *							0 if we cannot sort it,
 	 *							-1 if this nodes comes before the other.
 	 */
-	@Override
 	public int compareTo(CDynkinNode compareNode)
 	{
 		final int BEFORE = -1;

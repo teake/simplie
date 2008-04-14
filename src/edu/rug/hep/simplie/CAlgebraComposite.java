@@ -59,7 +59,6 @@ public class CAlgebraComposite implements DiagramListener
 		this.locked = false;
 	}
 	
-	@Override
 	public void diagramChanged()
 	{
 		// Don't do anything if the algebras are locked.

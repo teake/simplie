@@ -332,7 +332,6 @@ public class fraction implements Cloneable, Comparable, java.io.Serializable
 	 * reflecting whether this fraction is less, equal or greater than
 	 * the value of fraction other.
 	 */
-	@Override
 	public int compareTo(Object other)
 	{
 		fraction b = (fraction)(other);
