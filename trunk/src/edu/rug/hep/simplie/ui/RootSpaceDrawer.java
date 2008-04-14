@@ -64,6 +64,7 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements GLEventListen
 	{
 		initComponents();
 		
+		canvas.setVisible(true);
 		canvas.addGLEventListener(this);
 		canvas.addMouseMotionListener(this);
 	}
@@ -140,19 +141,21 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements GLEventListen
 
         container.setBorder(javax.swing.BorderFactory.createTitledBorder("Root space"));
 
+        canvas.setVisible(false);
+
         javax.swing.GroupLayout containerLayout = new javax.swing.GroupLayout(container);
         container.setLayout(containerLayout);
         containerLayout.setHorizontalGroup(
             containerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(containerLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(canvas, javax.swing.GroupLayout.DEFAULT_SIZE, 578, Short.MAX_VALUE)
+                .addComponent(canvas, javax.swing.GroupLayout.DEFAULT_SIZE, 0, Short.MAX_VALUE)
                 .addContainerGap())
         );
         containerLayout.setVerticalGroup(
             containerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(containerLayout.createSequentialGroup()
-                .addComponent(canvas, javax.swing.GroupLayout.DEFAULT_SIZE, 286, Short.MAX_VALUE)
+                .addComponent(canvas, javax.swing.GroupLayout.DEFAULT_SIZE, 0, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -179,7 +182,7 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements GLEventListen
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(24, 24, 24)
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(bReset)
                     .addComponent(cbRealRoots)
@@ -299,6 +302,8 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements GLEventListen
 		gl.glMatrixMode(GL.GL_MODELVIEW);
 		gl.glLoadIdentity();
 		gl.glTranslatef(0.0f, 0.0f, -40.0f);
+		
+		canvas.repaint();
 	}
 
 	public void displayChanged(GLAutoDrawable drawable, boolean modeChanged, boolean deviceChanged)

@@ -31,6 +31,7 @@ import javax.swing.filechooser.*;
 import java.io.File;
 import java.util.ArrayList;
 import java.awt.Image;
+import javax.swing.JPopupMenu;
 
 /**
  * The runnable of SimpLie, also displays all of its sub-windows.
@@ -83,6 +84,9 @@ public class Main extends javax.swing.JFrame
 		iconList.add(java.awt.Toolkit.getDefaultToolkit().getImage(this.getClass().getClassLoader().getResource("icon32.png")));
 		iconList.add(java.awt.Toolkit.getDefaultToolkit().getImage(this.getClass().getClassLoader().getResource("icon16.png")));
 		this.setIconImages(iconList);
+		
+		// Allow the menubars to draw on top of the GLCanvas
+		JPopupMenu.setDefaultLightWeightPopupEnabled(false);
 		
 		initComponents();
 		
