@@ -87,9 +87,6 @@ public class Main extends javax.swing.JFrame
 		// TODO: make this work for JDK5
 		//this.setIconImages(iconList);
 		
-		// Allow the menubars to draw on top of the GLCanvas
-		JPopupMenu.setDefaultLightWeightPopupEnabled(false);
-		
 		initComponents();
 		
 		// Create the algebras and initialize the other components.
