@@ -141,15 +141,17 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements GLEventListen
 
         container.setBorder(javax.swing.BorderFactory.createTitledBorder("Root space"));
 
+        canvas.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+
         org.jdesktop.layout.GroupLayout canvasLayout = new org.jdesktop.layout.GroupLayout(canvas);
         canvas.setLayout(canvasLayout);
         canvasLayout.setHorizontalGroup(
             canvasLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 577, Short.MAX_VALUE)
+            .add(0, 566, Short.MAX_VALUE)
         );
         canvasLayout.setVerticalGroup(
             canvasLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 107, Short.MAX_VALUE)
+            .add(0, 124, Short.MAX_VALUE)
         );
 
         org.jdesktop.layout.GroupLayout containerLayout = new org.jdesktop.layout.GroupLayout(container);
