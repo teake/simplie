@@ -22,6 +22,7 @@
 
 package edu.rug.hep.simplie.ui;
 
+import com.sun.opengl.util.GLUT;
 import edu.rug.hep.simplie.CAlgebraComposite;
 import edu.rug.hep.simplie.algebra.CRoot;
 import java.awt.Dimension;
@@ -43,6 +44,7 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements GLEventListen
 {
 	private GLAutoDrawable glDrawable;
 	private GL gl;
+	private GLUT glut;
 	private GLContext context;
 	
 	// Define some colors for the roots.
@@ -55,7 +57,9 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements GLEventListen
 	private float view_rotx = 0.0f, view_roty = 0.0f;
 	private float zoom		= 1.0f;
 	private int prevMouseX, prevMouseY;
+	
 	private int rootsObj;
+	private int rootObj;;
 	
 	private CAlgebraComposite algebras;
 	
@@ -257,23 +261,23 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements GLEventListen
 		this.context	= drawable.getContext();
 		
 		rootsObj = gl.glGenLists(1);
+		rootObj = gl.glGenLists(1);
 		
+		glut = new GLUT();
+		
+		gl.glNewList(rootObj, GL.GL_COMPILE);
+		glut.glutSolidSphere(0.12d, 8, 8);
+		gl.glEndList();
+		
+		float pos[] = { 5.0f, 5.0f, 10.0f, 0.0f };
+		gl.glLightfv(GL.GL_LIGHT0, GL.GL_POSITION, pos, 0);
 		gl.glEnable(GL.GL_CULL_FACE);
+		gl.glEnable(GL.GL_LIGHTING);
+		gl.glEnable(GL.GL_LIGHT0);
 		gl.glEnable(GL.GL_DEPTH_TEST);
-		gl.glEnable(GL.GL_POINT_SMOOTH);
 		gl.glEnable(GL.GL_NORMALIZE);
 		
 		gl.glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-		
-		// TODO: implement the following
-		/*
-		if(gl.isExtensionAvailable("GL_EXT_point_parameters"))
-		{
-			float[] quadratic = { 0.25f, 0.0f, 1/60.0f };
-			gl.glPointParameterfvEXT(GL.GL_DISTANCE_ATTENUATION_EXT, quadratic, 0);
-			gl.glPointParameterfEXT(GL.GL_POINT_FADE_THRESHOLD_SIZE_EXT, 1.0f);
-		}
-		 */
 	}
 
 	public void display(GLAutoDrawable drawable)
@@ -294,7 +298,6 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements GLEventListen
 		gl.glRotatef(view_rotx,1.0f,0.0f,0.0f);
 		gl.glRotatef(view_roty,0.0f,1.0f,0.0f);
 		gl.glScalef(zoom, zoom, zoom);
-		gl.glPointSize(16.0f * zoom);
 		
 		// Draw the roots.
 		gl.glCallList(rootsObj);
@@ -425,15 +428,17 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements GLEventListen
 	
 	private void drawRoot(float[] color, float x, float y, float z)
 	{
-		gl.glColor3f(color[0],color[1],color[2]);
-		gl.glBegin(GL.GL_POINTS);
-			gl.glVertex3f(x, y, z);
-		gl.glEnd();				
+		gl.glMaterialfv(GL.GL_FRONT, GL.GL_AMBIENT_AND_DIFFUSE, color, 0);
+		gl.glPushMatrix();
+		gl.glTranslatef(x, y, z);
+		gl.glCallList(rootObj);
+		gl.glPopMatrix();
+				
 	}
 	
 	private void drawReflection(float[] pos1, float[] pos2)
 	{
-		gl.glColor3f(reflCol[0],reflCol[1],reflCol[2]);
+		gl.glMaterialfv(GL.GL_FRONT, GL.GL_AMBIENT_AND_DIFFUSE, reflCol, 0);
 		gl.glBegin(GL.GL_LINES);
 			gl.glVertex3f(pos1[0],pos1[1],pos1[2]);
 			gl.glVertex3f(pos2[0],pos2[1],pos2[2]);
