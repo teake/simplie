@@ -29,9 +29,6 @@ import javax.swing.UIManager;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.*;
 import java.io.File;
-import java.util.ArrayList;
-import java.awt.Image;
-import javax.swing.JPopupMenu;
 
 /**
  * The runnable of SimpLie, also displays all of its sub-windows.
@@ -40,9 +37,8 @@ import javax.swing.JPopupMenu;
  */
 public class Main extends javax.swing.JFrame
 {
-	// TODO: make this work for JDK5
-	//private final FileFilter ddFilter;
-	//private final FileFilter rsFilter;
+	private final FileFilter ddFilter;
+	private final FileFilter rsFilter;
 	
 	private final File workDir;
 	private final File ddDir;
@@ -80,12 +76,8 @@ public class Main extends javax.swing.JFrame
 		{
 		}
 		
-		// Set the custom SimpLie icons.
-		ArrayList iconList = new ArrayList<Image>();
-		iconList.add(java.awt.Toolkit.getDefaultToolkit().getImage(this.getClass().getClassLoader().getResource("icon32.png")));
-		iconList.add(java.awt.Toolkit.getDefaultToolkit().getImage(this.getClass().getClassLoader().getResource("icon16.png")));
-		// TODO: make this work for JDK5
-		//this.setIconImages(iconList);
+		// Set the custom SimpLie icon.
+		this.setIconImage(java.awt.Toolkit.getDefaultToolkit().getImage(this.getClass().getClassLoader().getResource("icon16.png")));
 		
 		initComponents();
 		
@@ -103,9 +95,8 @@ public class Main extends javax.swing.JFrame
 		exportDialog.setLocation(300,250);
 		exportToTex.setup(exportDialog,levelDecomposition.getRepTable(),algebras);
 		
-		// TODO: make this work for JDK5
-		//ddFilter = new FileNameExtensionFilter("Dynkin diagram (*.dd)", "dd");
-		//rsFilter = new FileNameExtensionFilter("Root system (*.rs)", "rs");
+		ddFilter = new FileNameExtensionFilter("Dynkin diagram (*.dd)", "dd");
+		rsFilter = new FileNameExtensionFilter("Root system (*.rs)", "rs");
 		
 		// Check what the working dir is.
 		String userDir	= java.lang.System.getProperty("user.home");
@@ -141,9 +132,8 @@ public class Main extends javax.swing.JFrame
 		int pos = 0;
 		for(File file : ddDir.listFiles())
 		{
-			// TODO: make this work for JDK5
-			//if(!ddFilter.accept(file))
-				//continue;
+			if(!ddFilter.accept(file))
+				continue;
 			
 			// Add the menu item.
 			javax.swing.JMenuItem ddPreset = new javax.swing.JMenuItem();
@@ -172,10 +162,10 @@ public class Main extends javax.swing.JFrame
 
         popup = new javax.swing.JFrame();
         optionPane = new javax.swing.JOptionPane();
-        exportDialog = new javax.swing.JDialog();
-        exportToTex = new edu.rug.hep.simplie.ui.ExportToTex();
         systemOutputDialog = new javax.swing.JDialog();
         systemOutTextArea = new edu.rug.hep.simplie.ui.SystemOutTextArea();
+        exportDialog = new javax.swing.JDialog();
+        exportToTex = new edu.rug.hep.simplie.ui.ExportToTex();
         TabbedPane = new javax.swing.JTabbedPane();
         algebraSetup = new edu.rug.hep.simplie.ui.AlgebraSetup();
         rootSpaceDrawer = new edu.rug.hep.simplie.ui.RootSpaceDrawer();
@@ -217,23 +207,6 @@ public class Main extends javax.swing.JFrame
             .add(optionPane, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
         );
 
-        exportDialog.setTitle("Export to TeX");
-        exportDialog.setMinimumSize(new java.awt.Dimension(430, 316));
-        exportDialog.setResizable(false);
-
-        org.jdesktop.layout.GroupLayout exportDialogLayout = new org.jdesktop.layout.GroupLayout(exportDialog.getContentPane());
-        exportDialog.getContentPane().setLayout(exportDialogLayout);
-        exportDialogLayout.setHorizontalGroup(
-            exportDialogLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(exportDialogLayout.createSequentialGroup()
-                .add(exportToTex, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        exportDialogLayout.setVerticalGroup(
-            exportDialogLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(exportToTex, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 294, Short.MAX_VALUE)
-        );
-
         systemOutputDialog.setTitle("System output");
         systemOutputDialog.setMinimumSize(new java.awt.Dimension(360, 360));
 
@@ -246,6 +219,21 @@ public class Main extends javax.swing.JFrame
         systemOutputDialogLayout.setVerticalGroup(
             systemOutputDialogLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(systemOutTextArea, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 362, Short.MAX_VALUE)
+        );
+
+        org.jdesktop.layout.GroupLayout exportDialogLayout = new org.jdesktop.layout.GroupLayout(exportDialog.getContentPane());
+        exportDialog.getContentPane().setLayout(exportDialogLayout);
+        exportDialogLayout.setHorizontalGroup(
+            exportDialogLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(exportDialogLayout.createSequentialGroup()
+                .add(exportToTex, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        exportDialogLayout.setVerticalGroup(
+            exportDialogLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(exportDialogLayout.createSequentialGroup()
+                .add(exportToTex, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -471,8 +459,7 @@ public class Main extends javax.swing.JFrame
 	private void MenuItemSaveRootsActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_MenuItemSaveRootsActionPerformed
 	{//GEN-HEADEREND:event_MenuItemSaveRootsActionPerformed
 		JFileChooser chooser = new JFileChooser(rsDir);
-		// TODO: make this work for JDK5
-		//chooser.addChoosableFileFilter(rsFilter);
+		chooser.addChoosableFileFilter(rsFilter);
 		chooser.setSelectedFile(new File(algebras.algebra.type + "_height_" + algebras.algebra.rs.constructedHeight()));
 		chooser.setDialogTitle("Save root system");
 		int returnVal = chooser.showSaveDialog(this);
@@ -483,9 +470,8 @@ public class Main extends javax.swing.JFrame
 		 * pre-pend the "file" protocol to the absolute path of the file.
 		 */
 			String fileURL = chooser.getSelectedFile().getAbsolutePath();
-			// TODO: make this work for JDK5
-			//if(!rsFilter.accept(chooser.getSelectedFile()))
-				//fileURL += ".rs";
+			if(!rsFilter.accept(chooser.getSelectedFile()))
+				fileURL += ".rs";
 			algebras.algebra.rs.saveTo(fileURL);
 		}
 	}//GEN-LAST:event_MenuItemSaveRootsActionPerformed
@@ -497,8 +483,7 @@ public class Main extends javax.swing.JFrame
 		int returnVal;
 		
 		chooser = new JFileChooser(rsDir);
-		// TODO: make this work for JDK5
-		//chooser.addChoosableFileFilter(rsFilter);
+		chooser.addChoosableFileFilter(rsFilter);
 		chooser.setDialogTitle("Open root system");
 		returnVal = chooser.showOpenDialog(this);
 		
@@ -534,8 +519,7 @@ public class Main extends javax.swing.JFrame
 	private void MenuItemSaveDDActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_MenuItemSaveDDActionPerformed
 	{//GEN-HEADEREND:event_MenuItemSaveDDActionPerformed
 		JFileChooser chooser = new JFileChooser(ddDir);
-		// TODO: make this work for JDK5
-		//chooser.addChoosableFileFilter(ddFilter);
+		chooser.addChoosableFileFilter(ddFilter);
 		chooser.setSelectedFile(new File(algebras.getDynkinDiagramType(false) + ".dd"));
 		chooser.setDialogTitle("Save Dynkin diagram");
 		int returnVal = chooser.showSaveDialog(this);
@@ -546,9 +530,8 @@ public class Main extends javax.swing.JFrame
 		 * pre-pend the "file" protocol to the absolute path of the file.
 		 */
 			String fileURL = chooser.getSelectedFile().getAbsolutePath();
-			// TODO: make this work for JDK5
-			//if(!ddFilter.accept(chooser.getSelectedFile()))
-				//fileURL += ".dd";
+			if(!ddFilter.accept(chooser.getSelectedFile()))
+				fileURL += ".dd";
 			algebras.dd.saveTo(fileURL);
 		}
 	}//GEN-LAST:event_MenuItemSaveDDActionPerformed
@@ -560,8 +543,7 @@ public class Main extends javax.swing.JFrame
 		int returnVal;
 		
 		chooser = new JFileChooser(ddDir);
-		// TODO: make this work for JDK5
-		//chooser.addChoosableFileFilter(ddFilter);
+		chooser.addChoosableFileFilter(ddFilter);
 		chooser.setDialogTitle("Open Dynkin diagram");
 		returnVal = chooser.showOpenDialog(this);
 		
