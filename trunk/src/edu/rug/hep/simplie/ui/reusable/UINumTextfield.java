@@ -1,5 +1,5 @@
 /*
- * UILevelTextfield.java
+ * UINumTextfield.java
  *
  * Created on 14 maart 2007, 9:33
  *
@@ -32,36 +32,15 @@ import javax.swing.event.*;
  *
  * @author  Teake Nutma
  */
-public class UILevelTextfield extends javax.swing.JPanel
+public class UINumTextfield extends javax.swing.JPanel
 {
-	private UILevelTextfield linkedTo;
-	private int previousValue;
 	
 	/**
-	 * Creates new form UILevelTextfield
+	 * Creates new form UINumTextfield
 	 */
-	public UILevelTextfield()
+	public UINumTextfield()
 	{
 		initComponents();
-		
-		linkedTo = null;
-		previousValue = getValue();
-		
-		tfLevel.getDocument().addDocumentListener(new DocumentListener()
-		{
-			public void removeUpdate(DocumentEvent e)
-			{
-				updateLinked();
-			}
-			public void insertUpdate(DocumentEvent e)
-			{
-				updateLinked();
-			}
-			public void changedUpdate(DocumentEvent e)
-			{
-				
-			}
-		});
 		
 		tfLevel.addKeyListener(new KeyListener()
 		{
@@ -99,22 +78,8 @@ public class UILevelTextfield extends javax.swing.JPanel
 		tfLevel.setText(Helper.intToString(value));
 	}
 	
-	public void linkTo(UILevelTextfield linkTo)
-	{
-		linkedTo = linkTo;
-	}
 	
-	private void updateLinked()
-	{
-		if(linkedTo != null && (tfLevel.isFocusOwner() || buttonMinus.isFocusOwner() || buttonPlus.isFocusOwner() ) )
-		{
-			int diff = getValue() - previousValue;
-			if(linkedTo != null)
-				linkedTo.setValue(linkedTo.getValue()+diff);
-			previousValue = getValue();
-		}
-		previousValue = getValue();
-	}
+
 	
 	/** This method is called from within the constructor to
 	 * initialize the form.
@@ -127,20 +92,18 @@ public class UILevelTextfield extends javax.swing.JPanel
 
         textField = new javax.swing.JLabel();
         tfLevel = new javax.swing.JTextField();
-        buttonPlus = new javax.swing.JButton();
         buttonMinus = new javax.swing.JButton();
+        buttonPlus = new javax.swing.JButton();
 
         textField.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         textField.setText("<text>:");
 
         tfLevel.setText("0");
-
-        buttonPlus.setText("+");
-        buttonPlus.addActionListener(new java.awt.event.ActionListener()
+        tfLevel.addActionListener(new java.awt.event.ActionListener()
         {
             public void actionPerformed(java.awt.event.ActionEvent evt)
             {
-                buttonPlusActionPerformed(evt);
+                tfLevelActionPerformed(evt);
             }
         });
 
@@ -153,40 +116,55 @@ public class UILevelTextfield extends javax.swing.JPanel
             }
         });
 
+        buttonPlus.setText("+");
+        buttonPlus.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                buttonPlusActionPerformed(evt);
+            }
+        });
+
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
-                .add(textField, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 85, Short.MAX_VALUE)
+                .addContainerGap()
+                .add(textField, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 98, Short.MAX_VALUE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(tfLevel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 32, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(buttonPlus)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(buttonMinus, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 39, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .add(buttonMinus))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(layout.createSequentialGroup()
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(tfLevel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                     .add(buttonMinus)
                     .add(buttonPlus)
-                    .add(tfLevel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                     .add(textField))
                 .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
-	
-    private void buttonPlusActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_buttonPlusActionPerformed
-    {//GEN-HEADEREND:event_buttonPlusActionPerformed
-		setValue(getValue()+1);
-    }//GEN-LAST:event_buttonPlusActionPerformed
-	
-    private void buttonMinusActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_buttonMinusActionPerformed
-    {//GEN-HEADEREND:event_buttonMinusActionPerformed
+		
+	private void tfLevelActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_tfLevelActionPerformed
+	{//GEN-HEADEREND:event_tfLevelActionPerformed
+		// TODO add your handling code here:
+	}//GEN-LAST:event_tfLevelActionPerformed
+
+	private void buttonMinusActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_buttonMinusActionPerformed
+	{//GEN-HEADEREND:event_buttonMinusActionPerformed
 		setValue(getValue()-1);
-    }//GEN-LAST:event_buttonMinusActionPerformed
+}//GEN-LAST:event_buttonMinusActionPerformed
+
+	private void buttonPlusActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_buttonPlusActionPerformed
+	{//GEN-HEADEREND:event_buttonPlusActionPerformed
+		setValue(getValue()+1);
+}//GEN-LAST:event_buttonPlusActionPerformed
 	
 	
     // Variables declaration - do not modify//GEN-BEGIN:variables

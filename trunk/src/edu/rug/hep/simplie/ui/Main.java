@@ -91,9 +91,10 @@ public class Main extends javax.swing.JFrame
 		this.setLocation(20,20);
 		
 		systemOutputDialog.setLocation(100,100);
-		systemOutputDialog.setMinimumSize(new java.awt.Dimension(0,0));
+		systemOutputDialog.pack();
 		exportDialog.setLocation(300,250);
 		exportToTex.setup(exportDialog,levelDecomposition.getRepTable(),algebras);
+		exportDialog.pack();
 		
 		ddFilter = new FileNameExtensionFilter("Dynkin diagram (*.dd)", "dd");
 		rsFilter = new FileNameExtensionFilter("Root system (*.rs)", "rs");
@@ -225,15 +226,11 @@ public class Main extends javax.swing.JFrame
         exportDialog.getContentPane().setLayout(exportDialogLayout);
         exportDialogLayout.setHorizontalGroup(
             exportDialogLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(exportDialogLayout.createSequentialGroup()
-                .add(exportToTex, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .add(exportToTex, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
         );
         exportDialogLayout.setVerticalGroup(
             exportDialogLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(exportDialogLayout.createSequentialGroup()
-                .add(exportToTex, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .add(exportToTex, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -566,7 +563,7 @@ public class Main extends javax.swing.JFrame
     {//GEN-HEADEREND:event_MenuItemAboutActionPerformed
 		JOptionPane.showMessageDialog(
 				popup,
-				"SimpLie, a simple program for Lie algebras.\nVersion 1.0\n \nWritten by Teake Nutma \nt.a.nutma@rug.nl",
+				"SimpLie, a simple program for Lie algebras.\nRevision " + build + "\n \nWritten by Teake Nutma \nt.a.nutma@rug.nl",
 				"About",
 				JOptionPane.PLAIN_MESSAGE);
     }//GEN-LAST:event_MenuItemAboutActionPerformed

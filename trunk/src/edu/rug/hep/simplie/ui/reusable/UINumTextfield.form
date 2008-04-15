@@ -16,13 +16,14 @@
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="1" attributes="0">
-              <Component id="textField" pref="85" max="32767" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="textField" pref="98" max="32767" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="tfLevel" min="-2" pref="32" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="buttonPlus" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="buttonMinus" min="-2" pref="39" max="-2" attributes="0"/>
+              <Component id="buttonMinus" min="-2" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -30,9 +31,9 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" attributes="0">
               <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="tfLevel" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="buttonMinus" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="buttonPlus" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="tfLevel" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="textField" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="32767" attributes="0"/>
@@ -51,13 +52,8 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="0"/>
       </Properties>
-    </Component>
-    <Component class="javax.swing.JButton" name="buttonPlus">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="+"/>
-      </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="buttonPlusActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="tfLevelActionPerformed"/>
       </Events>
     </Component>
     <Component class="javax.swing.JButton" name="buttonMinus">
@@ -66,6 +62,14 @@
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="buttonMinusActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="buttonPlus">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="+"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="buttonPlusActionPerformed"/>
       </Events>
     </Component>
   </SubComponents>
