@@ -46,8 +46,6 @@ public class UIPrintableColorTable extends JTable
 	public UIPrintableColorTable()
 	{
 		super.setShowGrid(false);
-		// TODO: make this work for JDK5
-		//super.setAutoCreateRowSorter(true);
 	}
 	public void print(Graphics g)
 	{
