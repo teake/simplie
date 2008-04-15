@@ -616,6 +616,7 @@ public class CDynkinDiagram
 			nodes	= (Vector<CDynkinNode>) in.readObject();
 			connections = (Vector<CDynkinConnection>) in.readObject();
 			compactPairs = (Vector<CCompactPair>) in.readObject();
+			lastAddedNode = null;
 			in.close();
 			update();
 		}
