@@ -556,7 +556,7 @@ private void diagramMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:ev
 	}
 	
 	// Left click and not modifying connection: add a node.
-	if(evt.getButton() == MouseEvent.BUTTON1 && status == STATUS_PREVIEW)
+	if(evt.getButton() == MouseEvent.BUTTON1 && status == STATUS_PREVIEW && !evt.isAltDown())
 	{
 		int connectionToLast = (evt.isShiftDown()) ? 1 : 0;
 		tf_status.setText(dd.addNode(x, y, connectionToLast));
