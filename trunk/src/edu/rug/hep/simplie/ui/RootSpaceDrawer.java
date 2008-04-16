@@ -50,18 +50,24 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements GLEventListen
 	private GLContext context;
 	
 	// Define some colors for the roots.
-	private float negCol[]	= { 0.8f, 0.2f, 0.0f, 1.0f };
-	private float posCol[]	= { 0.0f, 0.8f, 0.2f, 1.0f };
-	private float imPosCol[]= { 0.13f, 0.7f, 0.66f, 1.0f };
-	private float imNegCol[]= { 1.0f, 0.84f, 0.0f, 1.0f };
-	private float reflCol[]	= { 0.8f, 0.8f, 0.8f, 1.0f };
+	private float negCol[]	= { 0.8f, 0.2f, 0.0f };
+	private float posCol[]	= { 0.0f, 0.8f, 0.2f };
+	private float imPosCol[]= { 0.13f, 0.7f, 0.66f };
+	private float imNegCol[]= { 1.0f, 0.84f, 0.0f };
+	private float reflCol[]	= { 0.6f, 0.6f, 0.6f };
 	
+	// Variables for rotations and zoom.
 	private float view_rotx = 0.0f, view_roty = 0.0f;
 	private float zoom		= 1.0f;
 	private int prevMouseX, prevMouseY;
 	
-	private int rootsObj;
-	private int rootObj;;
+	// Indices for the GL display lists.
+	private int realReflsObj;
+	private int imReflsObj;
+	private int realRootsObj;
+	private int imRootsObj;
+	private int sphereObj;
+	private int[] listContainer;
 	
 	private CAlgebraComposite algebras;
 	
@@ -218,6 +224,7 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements GLEventListen
 		if(algebras.algebra == null)
 			return;	
 		updateRoots();
+		canvas.repaint();
 		String text = "Root space of " + algebras.algebra.type;
 		if(!algebras.algebra.finite)
 			text += " up to height " + (algebras.algebra.rs.size() - 1);
@@ -233,17 +240,17 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements GLEventListen
 
 	private void cbRealRootsActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_cbRealRootsActionPerformed
 	{//GEN-HEADEREND:event_cbRealRootsActionPerformed
-		updateRoots();
+		canvas.repaint();
 	}//GEN-LAST:event_cbRealRootsActionPerformed
 
 	private void cbImRootsActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_cbImRootsActionPerformed
 	{//GEN-HEADEREND:event_cbImRootsActionPerformed
-		updateRoots();
+		canvas.repaint();
 	}//GEN-LAST:event_cbImRootsActionPerformed
 
 	private void cbReflectionsActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_cbReflectionsActionPerformed
 	{//GEN-HEADEREND:event_cbReflectionsActionPerformed
-		updateRoots();
+		canvas.repaint();
 }//GEN-LAST:event_cbReflectionsActionPerformed
 	
 	
@@ -263,26 +270,33 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements GLEventListen
 		this.glDrawable	= drawable;
 		this.context	= drawable.getContext();
 		
-		rootsObj = gl.glGenLists(1);
-		rootObj = gl.glGenLists(1);
+		sphereObj = gl.glGenLists(1);
+		realRootsObj	= gl.glGenLists(1);
+		imRootsObj		= gl.glGenLists(1);
+		realReflsObj	= gl.glGenLists(1);
+		imReflsObj		= gl.glGenLists(1);
+		
+		listContainer = new int[4];
+		listContainer[0] = realRootsObj;
+		listContainer[1] = imRootsObj;
+		listContainer[2] = realReflsObj;
+		listContainer[3] = imReflsObj;
 		
 		glut = new GLUT();
 		
-		gl.glNewList(rootObj, GL.GL_COMPILE);
+		gl.glNewList(sphereObj, GL.GL_COMPILE);
 		glut.glutSolidSphere(0.12d, 8, 8);
 		gl.glEndList();
 		
-		float pos[] = { 5.0f, 5.0f, 10.0f, 0.0f };
-		gl.glLightfv(GL.GL_LIGHT0, GL.GL_POSITION, pos, 0);
 		gl.glEnable(GL.GL_CULL_FACE);
 		gl.glEnable(GL.GL_LIGHTING);
 		gl.glEnable(GL.GL_LIGHT0);
 		gl.glEnable(GL.GL_DEPTH_TEST);
 		gl.glEnable(GL.GL_NORMALIZE);
-		gl.glColorMaterial(GL.GL_FRONT_AND_BACK, GL.GL_AMBIENT_AND_DIFFUSE);
+		gl.glColorMaterial(GL.GL_FRONT, GL.GL_AMBIENT_AND_DIFFUSE);
 		gl.glEnable(GL.GL_COLOR_MATERIAL);
 		
-		gl.glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+		gl.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	}
 
 	public void display(GLAutoDrawable drawable)
@@ -303,9 +317,26 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements GLEventListen
 		gl.glRotatef(view_rotx,1.0f,0.0f,0.0f);
 		gl.glRotatef(view_roty,0.0f,1.0f,0.0f);
 		gl.glScalef(zoom, zoom, zoom);
+		
+		// Draw the real roots.
+		if(cbRealRoots.isSelected())
+			gl.glCallList(realRootsObj);
 
-		// Draw the roots.
-		gl.glCallList(rootsObj);
+		// Draw the imaginary roots.
+		if(cbImRoots.isSelected())
+			gl.glCallList(imRootsObj);
+		
+		// Draw the weyl reflections.
+		if(cbReflections.isSelected())
+		{
+			gl.glDisable(GL.GL_LIGHTING);
+			gl.glColor3f(reflCol[0], reflCol[1], reflCol[2]);
+			if(cbRealRoots.isSelected())
+				gl.glCallList(realReflsObj);
+			if(cbImRoots.isSelected())
+				gl.glCallList(imReflsObj);
+			gl.glEnable(GL.GL_LIGHTING);
+		}
 		
 		gl.glPopMatrix();
 	}
@@ -355,54 +386,52 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements GLEventListen
 
 	private void updateRoots()
 	{
+		// Make sure we're in the right GL context.
 		if(context == null)
 			return;
 		context.makeCurrent();
 		
-		gl.glNewList(rootsObj, GL.GL_COMPILE);
-		
-		if(algebras.algebra != null && algebras.algebra.rank > 0)
+		// Reset the lists.
+		for(int j = 0; j < listContainer.length; j++)
 		{
-			int rank		= algebras.algebra.rank;
-			int numPerCoor	= (int) Math.floor(rank / 3);
-			int remainder	= rank % 3;
-					
-			// The rest of the roots.
+			gl.glNewList(listContainer[j], GL.GL_COMPILE);
+			gl.glEndList();
+		}
+		
+		// Don't do anything if the algebra is empty.
+		if(algebras.algebra == null || algebras.algebra.rank == 0)
+			return;
+		
+		// Determine some variables for positional calculation.
+		int rank		= algebras.algebra.rank;
+		int numPerCoor	= (int) Math.floor(rank / 3);
+		int remainder	= rank % 3;
+
+		// Construct the roots list.
+		for(int j = 0; j < listContainer.length; j++)
+		{
+			int index = listContainer[j];
+			gl.glNewList(index, GL.GL_COMPILE);
 			for(int i = 1; i < algebras.algebra.rs.size(); i++)
 			{
 				Collection<CRoot> roots = algebras.algebra.rs.get(i);
 				for(Iterator it = roots.iterator(); it.hasNext();)
 				{
 					CRoot root	= (CRoot) it.next();
-					
-					if(root.norm > 0 && !cbRealRoots.isSelected())
-						continue;
-					if(root.norm <= 0 && !cbImRoots.isSelected())
-						continue;
-					
 					float[] pos	= calcPos(root.vector, numPerCoor, remainder);
 					
-					if(cbReflections.isSelected())
-					{
-						int[] dynkinLabels = algebras.algebra.rootToWeight(root.vector);
-						for(int j = 0; j < rank; j++)
-						{
-							int[] reflVector = root.vector.clone();
-							reflVector[j] -= dynkinLabels[j];
-							drawReflection(pos, calcPos(reflVector, numPerCoor, remainder));
-						}
-					}
-					
-					// Draw a positive root.
-					drawRoot((root.norm > 0 ? posCol : imPosCol),pos[0],pos[1],pos[2]);
-					// Draw a negative root.
-					drawRoot((root.norm > 0 ? negCol : imNegCol),-pos[0],-pos[1],-pos[2]);
+					if(index == realReflsObj && root.norm > 0)
+						addReflections(index, pos, root.vector, numPerCoor, remainder);
+					if(index == imReflsObj && root.norm <= 0)
+						addReflections(index, pos, root.vector, numPerCoor, remainder);
+					if(index == realRootsObj && root.norm > 0)
+						addRoot(pos, true);
+					if(index == imRootsObj && root.norm <= 0)
+						addRoot(pos, false);
 				}
 			}
+			gl.glEndList();
 		}
-		gl.glEndList();
-		
-		canvas.repaint();
 	}
 	
 	private float[] calcPos(int[] rootVector, int numPerCoor, int remainder)
@@ -422,19 +451,36 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements GLEventListen
 		return pos;
 	}
 	
+	private void addRoot(float[] pos, boolean real)
+	{
+		// Draw a positive root.
+		drawRoot(real ? posCol : imPosCol,pos[0],pos[1],pos[2]);
+		// Draw a negative root.
+		drawRoot(real ? negCol : imNegCol,-pos[0],-pos[1],-pos[2]);
+	}
+	
+	private void addReflections(int index, float[] pos, int[] vector, int numPerCoor, int remainder)
+	{
+		int[] dynkinLabels = algebras.algebra.rootToWeight(vector);
+		for(int k = 0; k < vector.length; k++)
+		{
+			int[] reflVector = vector.clone();
+			reflVector[k] -= dynkinLabels[k];
+			drawReflection(pos, calcPos(reflVector, numPerCoor, remainder));
+		}
+	}
+	
 	private void drawRoot(float[] color, float x, float y, float z)
 	{
 		gl.glColor3f(color[0], color[1], color[2]);
 		gl.glPushMatrix();
 		gl.glTranslatef(x, y, z);
-		gl.glCallList(rootObj);
+		gl.glCallList(sphereObj);
 		gl.glPopMatrix();
-				
 	}
 	
 	private void drawReflection(float[] pos1, float[] pos2)
 	{
-		gl.glColor3f(reflCol[0], reflCol[1], reflCol[2]);
 		gl.glBegin(GL.GL_LINES);
 			gl.glVertex3f(pos1[0],pos1[1],pos1[2]);
 			gl.glVertex3f(pos2[0],pos2[1],pos2[2]);
