@@ -421,9 +421,9 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements GLEventListen
 					float[] pos	= calcPos(root.vector, numPerCoor, remainder);
 					
 					if(index == realReflsObj && root.norm > 0)
-						addReflections(index, pos, root.vector, numPerCoor, remainder);
+						addReflections(pos, root.vector, numPerCoor, remainder);
 					if(index == imReflsObj && root.norm <= 0)
-						addReflections(index, pos, root.vector, numPerCoor, remainder);
+						addReflections(pos, root.vector, numPerCoor, remainder);
 					if(index == realRootsObj && root.norm > 0)
 						addRoot(pos, true);
 					if(index == imRootsObj && root.norm <= 0)
@@ -459,7 +459,7 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements GLEventListen
 		drawRoot(real ? negCol : imNegCol,-pos[0],-pos[1],-pos[2]);
 	}
 	
-	private void addReflections(int index, float[] pos, int[] vector, int numPerCoor, int remainder)
+	private void addReflections(float[] pos, int[] vector, int numPerCoor, int remainder)
 	{
 		int[] dynkinLabels = algebras.algebra.rootToWeight(vector);
 		for(int k = 0; k < vector.length; k++)
