@@ -27,6 +27,7 @@ import edu.rug.hep.simplie.CAlgebraComposite;
 import edu.rug.hep.simplie.algebra.CRoot;
 import java.awt.Dimension;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
@@ -42,7 +43,11 @@ import javax.media.opengl.GLJPanel;
  *
  * @author  Teake Nutma
  */
-public class RootSpaceDrawer extends javax.swing.JPanel implements GLEventListener, MouseMotionListener, MouseWheelListener
+public class RootSpaceDrawer extends javax.swing.JPanel implements 
+		GLEventListener, 
+		MouseMotionListener, 
+		MouseWheelListener, 
+		MouseListener
 {
 	private GLAutoDrawable glDrawable;
 	private GL gl;
@@ -56,10 +61,12 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements GLEventListen
 	private float imNegCol[]= { 1.0f, 0.84f, 0.0f };
 	private float reflCol[]	= { 0.6f, 0.6f, 0.6f };
 	
-	// Variables for rotations and zoom.
-	private float view_rotx = 0.0f, view_roty = 0.0f;
-	private float zoom		= 1.0f;
+	// Variables for rotations, translation and zoom.
+	private float viewRotX = 0.0f, viewRotY = 0.0f;
+	private float viewTransX = 0.0f, viewTransY = 0.0f;
+	private float zoom = 1.0f;
 	private int prevMouseX, prevMouseY;
+	private boolean rightMouseDown = false;
 	
 	// Indices for the GL display lists.
 	private int realReflsObj;
@@ -80,6 +87,7 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements GLEventListen
 		canvas.addGLEventListener(this);
 		canvas.addMouseMotionListener(this);
 		canvas.addMouseWheelListener(this);
+		canvas.addMouseListener(this);
 	}
 	
 	public void setAlgebrasComposite(CAlgebraComposite algebras)
@@ -233,7 +241,7 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements GLEventListen
 
 	private void bResetActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_bResetActionPerformed
 	{//GEN-HEADEREND:event_bResetActionPerformed
-		view_rotx = view_roty = 0.0f;
+		viewRotX = viewRotY = viewTransX = viewTransY = 0.0f;
 		zoom = 1.0f;
 		canvas.repaint();
 	}//GEN-LAST:event_bResetActionPerformed
@@ -314,9 +322,10 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements GLEventListen
 		gl.glPushMatrix();
 		
 		// Rotate and zoom the coordinate system.
-		gl.glRotatef(view_rotx,1.0f,0.0f,0.0f);
-		gl.glRotatef(view_roty,0.0f,1.0f,0.0f);
 		gl.glScalef(zoom, zoom, zoom);
+		gl.glTranslatef(viewTransX, viewTransY, 0.0f);
+		gl.glRotatef(viewRotX,1.0f,0.0f,0.0f);
+		gl.glRotatef(viewRotY,0.0f,1.0f,0.0f);
 		
 		// Draw the real roots.
 		if(cbRealRoots.isSelected())
@@ -366,11 +375,19 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements GLEventListen
 		int y = e.getY();
 		
 		Dimension size = e.getComponent().getSize();
+		float diffX = ( (float)(x-prevMouseX)/(float)size.width );
+		float diffY = ( (float)(prevMouseY-y)/(float)size.height );
 		
-		float thetaY = 240.0f * ( (float)(x-prevMouseX)/(float)size.width);
-		float thetaX = 240.0f * ( (float)(prevMouseY-y)/(float)size.height);
-		view_rotx -= thetaX;
-		view_roty -= thetaY;
+		if(rightMouseDown)
+		{	
+			viewRotX += 240.0f * diffY;
+			viewRotY += 240.0f * diffX;
+		}
+		else
+		{
+			viewTransX += 8.0f * diffX / zoom;
+			viewTransY += 8.0f * diffY / zoom;
+		}
 		
 		prevMouseX = x;
 		prevMouseY = y;
@@ -383,7 +400,28 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements GLEventListen
 		prevMouseX = e.getX();
 		prevMouseY = e.getY();
 	}
+	
+	public void mouseWheelMoved(MouseWheelEvent e) 
+	{
+		zoom *= 1.0f - (float) e.getWheelRotation() / 12;
+		canvas.repaint();
+	}
+	
+	public void mouseReleased(MouseEvent e)
+	{
+		rightMouseDown = false;
+	}
 
+	public void mousePressed(MouseEvent e)
+	{
+		rightMouseDown = (e.getButton() == MouseEvent.BUTTON3);
+	}
+	
+	public void mouseClicked(MouseEvent e){}
+	public void mouseEntered(MouseEvent e){}
+	public void mouseExited(MouseEvent e){}
+
+	
 	private void updateRoots()
 	{
 		// Make sure we're in the right GL context.
@@ -410,8 +448,8 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements GLEventListen
 		float coeffZ = (bounds[2] == bounds[3]) ? 0 : 2 / (float) (bounds[3] - bounds[2]);
 		for (int i = 0; i < algebras.algebra.rank; i++)
 		{
-			posX[i] = (bounds[1] == bounds[0]) ? 0 : (float) algebras.dd.getNodeByIndex(i).x * coeffX - 1;
-			posZ[i] = (bounds[2] == bounds[3]) ? 0 : (float) algebras.dd.getNodeByIndex(i).y * coeffZ - 1;
+			posX[i] = (bounds[1] == bounds[0]) ? 0 : (float) (algebras.dd.getNodeByIndex(i).x - bounds[0]) * coeffX - 1;
+			posZ[i] = (bounds[2] == bounds[3]) ? 0 : (float) (algebras.dd.getNodeByIndex(i).y - bounds[2]) * coeffZ - 1;
 		}
 		
 		// Construct the roots list.
@@ -491,11 +529,5 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements GLEventListen
 			gl.glVertex3f(-pos1[0],-pos1[1],-pos1[2]);
 			gl.glVertex3f(-pos2[0],-pos2[1],-pos2[2]);
 		gl.glEnd();
-	}
-
-	public void mouseWheelMoved(MouseWheelEvent e) 
-	{
-		zoom *= 1.0f - (float) e.getWheelRotation() / 12;
-		canvas.repaint();
 	}
 }
