@@ -200,7 +200,7 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 			{
 				fraction rootLength = algebras.calculateRootLength(level.levelVector, dynkinLabels);
 				// Only continue if the root length is not bigger than the maximum root length.
-				if(rootLength.asDouble() <= algebras.algebra.maxNorm)
+				if(rootLength.asDouble() <= algebras.algebra.rs.maxNorm())
 				{
 					if(rootLength.isInt())
 					{

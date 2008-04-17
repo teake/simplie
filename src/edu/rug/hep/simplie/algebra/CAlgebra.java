@@ -62,9 +62,6 @@ public class CAlgebra
 	 * a^2 = 2 for the *longest* root, and I use it for the *shortest* root.
 	 */
 	
-	/** The maximum root norm. */
-	public final int maxNorm;
-	
 	/** The determinant of the Cartan Matrix. */
 	public final int	det;
 	/** The rank of the Cartan matrix */
@@ -151,7 +148,6 @@ public class CAlgebra
 		
 		// Set the root norms for every disconnected piece.
 		// Set the highest norm simultaneously.
-		int tempMaxNorm = 0;
 		while(true)
 		{
 			int startIndex = -1;
@@ -236,13 +232,10 @@ public class CAlgebra
 					if((nh.norm * coefficient) % 2 != 0)
 						normsOK = false;
 					halfNorms[nh.index] = (int) Math.round(nh.norm * coefficient) / 2;
-					tempMaxNorm = Math.max(tempMaxNorm, 2*halfNorms[nh.index]);
 				}
 			} while(!normsOK);
 			
 		}
-		maxNorm = tempMaxNorm;
-
 		
 		// Construct the Weyl vector
 		int[] weylLabels = new int[rank];

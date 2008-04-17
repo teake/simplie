@@ -60,6 +60,10 @@ public class CRootSystem
 	private boolean cancelConstruction;
 	/** Indicates whether the root system is fully constructed or not. */
 	private boolean fullyConstructed;
+	/** The maximum root norm */
+	private int maxNorm;
+	/** The minimum root norm (as constructed so far) */
+	private int minNorm;
 	
 	/** Creates a new instance of CRootSystem and constructs up to height 1. */
 	public CRootSystem(CAlgebra algebra)
@@ -87,8 +91,10 @@ public class CRootSystem
 		csa.add(csaRoot);
 		rootSystem.add(0,csa);
 		
-		// Add the simple roots.
+		// Add the simple roots and set the max and min norms.
 		simpleRoots = new HashSet<CRoot>();
+		maxNorm = 0;
+		minNorm = Integer.MAX_VALUE;
 		for (int i = 0; i < rank; i++)
 		{
 			int[] rootVector = new int[rank];
@@ -101,6 +107,8 @@ public class CRootSystem
 			simpleRoot.coMult	= new fraction(1);
 			simpleRoot.norm		= (short) (2 * algebra.halfNorms[i]);
 			simpleRoots.add(simpleRoot);
+			maxNorm = Math.max(simpleRoot.norm, maxNorm);
+			minNorm = Math.min(simpleRoot.norm, minNorm);
 		}
 		rootSystem.add(1, simpleRoots);
 		numPosGenerators	= rank;
@@ -198,6 +206,18 @@ public class CRootSystem
 	public int constructedHeight()
 	{
 		return constructedHeight;
+	}
+	
+	/** Returns the maximum norm of the roots */
+	public int maxNorm()
+	{
+		return maxNorm;
+	}
+	
+	/** Returns the minimum norm of the roots constructed thus far */
+	public int minNorm()
+	{
+		return minNorm;
 	}
 	
 	/**
@@ -412,6 +432,7 @@ public class CRootSystem
 						if(newRoots.add(newRoot))
 						{
 							newRoot.norm = (short) algebra.innerProduct(newRoot,newRoot);
+							minNorm = Math.min(minNorm, newRoot.norm);
 						}
 					}
 				} // ... for(i<rank)
