@@ -197,6 +197,31 @@ public class CDynkinDiagram
 		return null;
 	}
 	
+	public CDynkinNode getNodeByIndex(int index)
+	{
+		// TODO: check for out of bounds, return clone.
+		return nodes.get(index);
+	}
+	
+	/** returns [minX, maxX, minY, maxY] */
+	public int[] getDiagramBounds()
+	{
+		int[] bounds = new int[4];
+		bounds[0] = bounds[1] = nodes.get(0).x;
+		bounds[2] = bounds[3] = nodes.get(0).y;
+		for (int i = 1; i < rank(); i++)
+		{
+			int x = nodes.get(i).x;
+			int y = nodes.get(i).y;
+			bounds[0] = Math.min(bounds[0], x);
+			bounds[1] = Math.max(bounds[1], x);
+			bounds[2] = Math.min(bounds[2], y);
+			bounds[3] = Math.max(bounds[3], y);
+		}
+		
+		return bounds;
+	}
+	
 	/** Translates an index of the submatrix into an index of the full matrix */
 	public int translateSub(int index)
 	{
@@ -652,19 +677,8 @@ public class CDynkinDiagram
 		// This prevents multiple garbled psfigures on one page.
 		int hashCode = Math.abs(cartanMatrix().hashCode() + cartanSubMatrix("co").hashCode());
 		
-		// First determine the min and max values of x and y
-		int xMin = Integer.MAX_VALUE;
-		int yMin = Integer.MAX_VALUE;
-		int xMax = 0;
-		int yMax = 0;
-		
-		for(CDynkinNode node : nodes)
-		{
-			xMin = Math.min(node.x,xMin);
-			yMin = Math.min(node.y,yMin);
-			xMax = Math.max(node.x,xMax);
-			yMax = Math.max(node.y,yMax);
-		}
+		// Get the bounds of the diagram
+		int[] bounds = getDiagramBounds();
 		
 		String output = new String();
 		
@@ -674,7 +688,7 @@ public class CDynkinDiagram
 			output += "\\begin{figure}[H]\n";
 			output += "\\begin{center}\n";
 		}
-		output += "\\begin{pspicture}(" + xMin + "," + yMin + ")(" + xMax + "," + yMax + ")\n";
+		output += "\\begin{pspicture}(" + bounds[0] + "," + bounds[2] + ")(" + bounds[1] + "," + bounds[3] + ")\n";
 		
 		// The nodes.
 		for(CDynkinNode node : nodes)
@@ -685,7 +699,7 @@ public class CDynkinDiagram
 				output += "\\dualityNode";
 			if(node.isLevel())
 				output += "\\disabledNode";
-			output += "{" + node.x + "," + (yMax - node.y) + "}{N" + node.getLabel() + hashCode + "} \n";
+			output += "{" + node.x + "," + (bounds[3] - node.y) + "}{N" + node.getLabel() + hashCode + "} \n";
 			if(includeLabels)
 				output += "\\nodeLabel{N" + node.getLabel() + hashCode + "}{" + node.getLabel() + "}\n";
 		}
