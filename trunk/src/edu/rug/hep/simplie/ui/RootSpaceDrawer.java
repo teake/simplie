@@ -24,6 +24,7 @@ package edu.rug.hep.simplie.ui;
 
 import com.sun.opengl.util.GLUT;
 import edu.rug.hep.simplie.CAlgebraComposite;
+import edu.rug.hep.simplie.Helper;
 import edu.rug.hep.simplie.algebra.CRoot;
 import java.awt.Dimension;
 import java.awt.event.MouseEvent;
@@ -55,11 +56,12 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements
 	private GLContext context;
 	
 	// Define some colors for the roots.
-	private float negCol[]	= { 0.8f, 0.2f, 0.0f };
-	private float posCol[]	= { 0.0f, 0.8f, 0.2f };
-	private float imPosCol[]= { 0.13f, 0.7f, 0.66f };
-	private float imNegCol[]= { 1.0f, 0.84f, 0.0f };
-	private float reflCol[]	= { 0.6f, 0.6f, 0.6f };
+	private float reflCol[]		= { 0.6f, 0.6f, 0.6f };
+	private float maxColorIm[]	= { 1.0f, 0.84f, 0.0f };
+	private float minColorIm[]	= { 0.8f, 0.2f, 0.0f };
+	private float maxColorReal[]= { 0.13f, 0.7f, 0.66f };
+	private float minColorReal[]= { 0.0f, 0.8f, 0.2f };
+	
 	
 	// Variables for rotations, translation and zoom.
 	private float viewRotX = 0.0f, viewRotY = 0.0f;
@@ -452,6 +454,12 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements
 			posZ[i] = (bounds[2] == bounds[3]) ? 0 : (float) (algebras.dd.getNodeByIndex(i).y - bounds[2]) * coeffZ - 1;
 		}
 		
+		// Stuff for color mixing.
+		float normMinReal	= algebras.algebra.rs.minNormReal();
+		float normDiffReal	= algebras.algebra.rs.maxNorm() - normMinReal;
+		float normMinIm		= algebras.algebra.rs.minNorm();
+		float[] col;
+		
 		// Construct the roots list.
 		for(int j = 0; j < listContainer.length; j++)
 		{
@@ -470,9 +478,23 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements
 					if(index == imReflsObj && root.norm <= 0)
 						addReflections(pos, root.vector, posX, posZ);
 					if(index == realRootsObj && root.norm > 0)
-						addRoot(pos, true);
+					{
+						if(normDiffReal == 0)
+							col = maxColorReal;
+						else
+							col = Helper.mixColors(maxColorReal, minColorReal, ((float) root.norm - normMinReal) / normDiffReal);
+						addRoot(pos, col);
+						System.out.println(root);
+						System.out.println(((float) root.norm - normMinReal) / normDiffReal);
+					}
 					if(index == imRootsObj && root.norm <= 0)
-						addRoot(pos, false);
+					{
+						if(normMinIm == 0)
+							col = maxColorIm;
+						else
+							col = Helper.mixColors(maxColorIm, minColorIm,(normMinIm - (float) root.norm) / normMinIm);
+						addRoot(pos, col);
+					}
 				}
 			}
 			gl.glEndList();
@@ -491,12 +513,12 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements
 		return pos;
 	}
 	
-	private void addRoot(float[] pos, boolean real)
+	private void addRoot(float[] pos, float[] col)
 	{
 		// Draw a positive root.
-		drawRoot(real ? posCol : imPosCol,pos[0],pos[1],pos[2]);
+		drawRoot(col,pos[0],pos[1],pos[2]);
 		// Draw a negative root.
-		drawRoot(real ? negCol : imNegCol,-pos[0],-pos[1],-pos[2]);
+		drawRoot(col,-pos[0],-pos[1],-pos[2]);
 	}
 	
 	private void addReflections(float[] pos, int[] vector, float[] posX, float[] posZ)
