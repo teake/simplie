@@ -502,10 +502,10 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements
 	private void addReflections(float[] pos, int[] vector, float[] posX, float[] posZ)
 	{
 		int[] dynkinLabels = algebras.algebra.rootToWeight(vector);
-		for(int k = 0; k < vector.length; k++)
+		for(int i = 0; i < vector.length; i++)
 		{
 			int[] reflVector = vector.clone();
-			reflVector[k] -= dynkinLabels[k];
+			reflVector[i] -= dynkinLabels[i];
 			drawReflection(pos, calcPos(reflVector, posX, posZ));
 		}
 	}
