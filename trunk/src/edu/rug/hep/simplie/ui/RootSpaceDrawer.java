@@ -359,7 +359,7 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements
 		gl.glMatrixMode(GL.GL_PROJECTION);
 
 		gl.glLoadIdentity();
-		gl.glFrustum(-1.0f, 1.0f, -h, h, 10.0f, 60.0f);
+		gl.glFrustum(-1.0f, 1.0f, -h, h, 4.0f, 100.0f);
 		gl.glMatrixMode(GL.GL_MODELVIEW);
 		gl.glLoadIdentity();
 		gl.glTranslatef(0.0f, 0.0f, -40.0f);
