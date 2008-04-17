@@ -403,10 +403,17 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements GLEventListen
 			return;
 		
 		// Determine some variables for positional calculation.
-		int rank		= algebras.algebra.rank;
-		int numPerCoor	= (int) Math.floor(rank / 3);
-		int remainder	= rank % 3;
-
+		float[] posX = new float[algebras.algebra.rank];
+		float[] posZ = new float[algebras.algebra.rank];
+		int[] bounds = algebras.dd.getDiagramBounds();
+		float coeffX = (bounds[1] == bounds[0]) ? 0 : 2 / (float) (bounds[1] - bounds[0]);
+		float coeffZ = (bounds[2] == bounds[3]) ? 0 : 2 / (float) (bounds[3] - bounds[2]);
+		for (int i = 0; i < algebras.algebra.rank; i++)
+		{
+			posX[i] = (bounds[1] == bounds[0]) ? 0 : (float) algebras.dd.getNodeByIndex(i).x * coeffX - 1;
+			posZ[i] = (bounds[2] == bounds[3]) ? 0 : (float) algebras.dd.getNodeByIndex(i).y * coeffZ - 1;
+		}
+		
 		// Construct the roots list.
 		for(int j = 0; j < listContainer.length; j++)
 		{
@@ -418,12 +425,12 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements GLEventListen
 				for(Iterator it = roots.iterator(); it.hasNext();)
 				{
 					CRoot root	= (CRoot) it.next();
-					float[] pos	= calcPos(root.vector, numPerCoor, remainder);
+					float[] pos	= calcPos(root.vector, posX, posZ);
 					
 					if(index == realReflsObj && root.norm > 0)
-						addReflections(pos, root.vector, numPerCoor, remainder);
+						addReflections(pos, root.vector, posX, posZ);
 					if(index == imReflsObj && root.norm <= 0)
-						addReflections(pos, root.vector, numPerCoor, remainder);
+						addReflections(pos, root.vector, posX, posZ);
 					if(index == realRootsObj && root.norm > 0)
 						addRoot(pos, true);
 					if(index == imRootsObj && root.norm <= 0)
@@ -434,19 +441,14 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements GLEventListen
 		}
 	}
 	
-	private float[] calcPos(int[] rootVector, int numPerCoor, int remainder)
+	private float[] calcPos(int[] rootVector, float[] posX, float[] posZ)
 	{
 		float pos[] = { 0.0f, 0.0f, 0.0f };
-		for(int j = 0; j < 3; j++)
+		for (int i = 0; i < rootVector.length; i++)
 		{
-			for(int k = 0; k < numPerCoor; k++)
-			{
-				pos[j] += rootVector[remainder + numPerCoor*j + k];
-			}
-			if(j < remainder)
-			{
-				pos[j] += rootVector[j];
-			}
+			pos[0] += rootVector[i] * posX[i];
+			pos[2] += rootVector[i] * posZ[i];
+			pos[1] += rootVector[i];
 		}
 		return pos;
 	}
@@ -459,14 +461,14 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements GLEventListen
 		drawRoot(real ? negCol : imNegCol,-pos[0],-pos[1],-pos[2]);
 	}
 	
-	private void addReflections(float[] pos, int[] vector, int numPerCoor, int remainder)
+	private void addReflections(float[] pos, int[] vector, float[] posX, float[] posZ)
 	{
 		int[] dynkinLabels = algebras.algebra.rootToWeight(vector);
 		for(int k = 0; k < vector.length; k++)
 		{
 			int[] reflVector = vector.clone();
 			reflVector[k] -= dynkinLabels[k];
-			drawReflection(pos, calcPos(reflVector, numPerCoor, remainder));
+			drawReflection(pos, calcPos(reflVector, posX, posZ));
 		}
 	}
 	
