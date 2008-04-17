@@ -565,4 +565,22 @@ public class Helper
 		if(line != null)
 			g.draw(line);	
 	}
+	
+	/**
+	 * Mixes two colors based on a percentage.
+	 * 
+	 * @param col1	 The first color to mix.
+	 * @param col2	 The second color to mix.
+	 * @param perc	 Percentage indicating how much of the first color should be used.
+	 * @return		 The mixed color.
+	 */
+	public static float[] mixColors(float[] col1, float[] col2, float perc)
+	{
+		float[] newCol = new float[col1.length];
+		for (int i = 0; i < col1.length; i++)
+		{
+			newCol[i] = perc * col1[i] + (1-perc) * col2[i];
+		}
+		return newCol;
+	}
 }

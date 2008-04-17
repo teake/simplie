@@ -64,6 +64,8 @@ public class CRootSystem
 	private int maxNorm;
 	/** The minimum root norm (as constructed so far) */
 	private int minNorm;
+	/** The minimum real root norm */
+	private int minNormReal;
 	
 	/** Creates a new instance of CRootSystem and constructs up to height 1. */
 	public CRootSystem(CAlgebra algebra)
@@ -109,6 +111,7 @@ public class CRootSystem
 			simpleRoots.add(simpleRoot);
 			maxNorm = Math.max(simpleRoot.norm, maxNorm);
 			minNorm = Math.min(simpleRoot.norm, minNorm);
+			minNormReal = minNorm;
 		}
 		rootSystem.add(1, simpleRoots);
 		numPosGenerators	= rank;
@@ -219,6 +222,13 @@ public class CRootSystem
 	{
 		return minNorm;
 	}
+	
+	/** Returns the minimum norm of the real roots. */
+	public int minNormReal()
+	{
+		return minNormReal;
+	}
+	
 	
 	/**
 	 * Returns the roots of a given height.
