@@ -550,13 +550,16 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements
 			posZ[i] = (bounds[2] == bounds[3]) ? 0 : (float) (algebras.dd.getNodeByIndex(i).y - bounds[2]) * coeffZ - 1;
 		}
 		
-		// Stuff for color mixing.
+		// Stuff for color coding.
+		float[] col;
 		float colPerc;
-		// For root norm color coding.
+		float colOff = 2.0f /3.0f;
+		// Stuff for root norm color coding.
 		float normMin	= algebras.algebra.rs.minNorm();
 		float normDiff	= algebras.algebra.rs.maxNorm() - normMin;
-		float normDiv	= normDiff + algebras.algebra.rs.maxNorm() / 2;
-		// For level decomposition color coding.
+		float normOff	= (normDiff == 0) ? 0 : 1 / normDiff;
+		float normFact	= (normDiff == 0) ? 0 : normOff * (1 - normOff);
+		// Stuff for level decomposition color coding.
 		int numLevels		= algebras.algebra.rank - algebras.coAlgebra.rank;
 		int numLevelColors	= (int) Math.pow(2, numLevels);
 		
@@ -613,7 +616,7 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements
 							if(normDiff == 0) 
 								colPerc = 0.0f;
 							else
-								colPerc = ((float) root.norm - normMin) / normDiv;
+								colPerc = ((float) root.norm - normMin) * normFact + normOff;
 						}
 						else
 						{
@@ -630,7 +633,7 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements
 								colPerc = (float) colorIndex / (float) numLevelColors;
 							}
 						}
-						float[] col = Helper.colorSpectrum(0.5f + colPerc);
+						col = Helper.colorSpectrum(colOff + colPerc);
 						gl.glColor3f(col[0], col[1], col[2]);
 						gl.glPushMatrix();
 						gl.glTranslatef(pos[0],pos[1],pos[2]);
