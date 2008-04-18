@@ -59,7 +59,7 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements
 	private float reflCol[]		= { 0.6f, 0.6f, 0.6f };
 	private float maxColorIm[]	= { 1.0f, 0.84f, 0.0f };
 	private float minColorIm[]	= { 0.8f, 0.2f, 0.0f };
-	private float maxColorReal[]= { 0.0f, 0.0f, 1.0f };
+	private float maxColorReal[]= { 0.0f, 0.5f, 0.5f };
 	private float minColorReal[]= { 0.0f, 0.8f, 0.2f };
 	
 	// Variables for rotations, translation and zoom.
@@ -606,7 +606,7 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements
 						else
 						{
 							if(numLevels == 0)
-								col = Helper.colorSpectrum(1.0f);
+								col = Helper.colorSpectrum(0.5f);
 							else
 							{
 								int[] levels = algebras.levels(root.vector);
@@ -615,7 +615,7 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements
 								{
 									colorIndex += (levels[k] % 2) * Math.pow(2,k);
 								}
-								col = Helper.colorSpectrum(1 - (float) colorIndex / (float) (numLevelColors-1));
+								col = Helper.colorSpectrum(0.5f + (float) colorIndex / (float) numLevelColors);
 							}
 						}
 						addRoot(pos, col);
