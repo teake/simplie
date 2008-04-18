@@ -583,4 +583,28 @@ public class Helper
 		}
 		return newCol;
 	}
+	
+	/**
+	 * Returns a color in the color spectrum R-G-B, based on percentage.
+	 * 
+	 * @param perc	 A float in the range 0 - 1.
+	 * @return		 0.0: Red, 0.5: Green, 1.0: Blue, and in between a mixture.
+	 */
+	public static float[] colorSpectrum(float perc)
+	{
+		float[] newCol = {0.0f, 0.0f, 0.0f};
+		if(perc < 0.5f)
+		{
+			perc = perc * 2;
+			newCol[1] = perc;
+			newCol[0] = 1 - perc;
+		}
+		else
+		{
+			perc = (perc - 0.5f) * 2;
+			newCol[2] = perc;
+			newCol[1] = 1 - perc;
+		}
+		return newCol;
+	}
 }
