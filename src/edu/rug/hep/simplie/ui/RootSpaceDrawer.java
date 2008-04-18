@@ -106,31 +106,48 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements
     private void initComponents()
     {
 
-        bDrawRoots = new javax.swing.JButton();
-        bReset = new javax.swing.JButton();
+        container = new javax.swing.JPanel();
+        canvas = new javax.media.opengl.GLJPanel();
+        jPanel1 = new javax.swing.JPanel();
         cbRealRoots = new javax.swing.JCheckBox();
         cbImRoots = new javax.swing.JCheckBox();
         cbReflections = new javax.swing.JCheckBox();
-        container = new javax.swing.JPanel();
-        canvas = new javax.media.opengl.GLJPanel();
+        jPanel2 = new javax.swing.JPanel();
+        bReset = new javax.swing.JButton();
+        bDrawRoots = new javax.swing.JButton();
 
-        bDrawRoots.setText("Draw root space");
-        bDrawRoots.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
-                bDrawRootsActionPerformed(evt);
-            }
-        });
+        container.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Root space", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12)));
 
-        bReset.setText("Reset position");
-        bReset.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
-                bResetActionPerformed(evt);
-            }
-        });
+        canvas.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+
+        org.jdesktop.layout.GroupLayout canvasLayout = new org.jdesktop.layout.GroupLayout(canvas);
+        canvas.setLayout(canvasLayout);
+        canvasLayout.setHorizontalGroup(
+            canvasLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(0, 414, Short.MAX_VALUE)
+        );
+        canvasLayout.setVerticalGroup(
+            canvasLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(0, 123, Short.MAX_VALUE)
+        );
+
+        org.jdesktop.layout.GroupLayout containerLayout = new org.jdesktop.layout.GroupLayout(container);
+        container.setLayout(containerLayout);
+        containerLayout.setHorizontalGroup(
+            containerLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(containerLayout.createSequentialGroup()
+                .addContainerGap()
+                .add(canvas, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        containerLayout.setVerticalGroup(
+            containerLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(containerLayout.createSequentialGroup()
+                .add(canvas, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Settings", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12)));
 
         cbRealRoots.setSelected(true);
         cbRealRoots.setText("Draw real roots");
@@ -162,35 +179,68 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements
             }
         });
 
-        container.setBorder(javax.swing.BorderFactory.createTitledBorder("Root space"));
-
-        canvas.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-
-        org.jdesktop.layout.GroupLayout canvasLayout = new org.jdesktop.layout.GroupLayout(canvas);
-        canvas.setLayout(canvasLayout);
-        canvasLayout.setHorizontalGroup(
-            canvasLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 566, Short.MAX_VALUE)
-        );
-        canvasLayout.setVerticalGroup(
-            canvasLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 124, Short.MAX_VALUE)
-        );
-
-        org.jdesktop.layout.GroupLayout containerLayout = new org.jdesktop.layout.GroupLayout(container);
-        container.setLayout(containerLayout);
-        containerLayout.setHorizontalGroup(
-            containerLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(containerLayout.createSequentialGroup()
+        org.jdesktop.layout.GroupLayout jPanel1Layout = new org.jdesktop.layout.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .add(canvas, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(cbRealRoots)
+                    .add(cbImRoots)
+                    .add(cbReflections))
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel1Layout.createSequentialGroup()
+                .add(cbRealRoots)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(cbImRoots)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(cbReflections)
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Actions", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12)));
+
+        bReset.setText("Reset position");
+        bReset.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                bResetActionPerformed(evt);
+            }
+        });
+
+        bDrawRoots.setText("Draw root space");
+        bDrawRoots.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                bDrawRootsActionPerformed(evt);
+            }
+        });
+
+        org.jdesktop.layout.GroupLayout jPanel2Layout = new org.jdesktop.layout.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(bReset, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 113, Short.MAX_VALUE)
+                    .add(bDrawRoots))
                 .addContainerGap())
         );
-        containerLayout.setVerticalGroup(
-            containerLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(containerLayout.createSequentialGroup()
-                .add(canvas, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel2Layout.createSequentialGroup()
+                .add(6, 6, 6)
+                .add(bDrawRoots)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                .add(bReset)
+                .addContainerGap(12, Short.MAX_VALUE))
         );
 
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
@@ -202,27 +252,18 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(container, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .add(layout.createSequentialGroup()
-                        .add(bDrawRoots)
+                        .add(jPanel2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(bReset)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(cbRealRoots)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(cbImRoots)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(cbReflections)))
+                        .add(jPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(layout.createSequentialGroup()
                 .addContainerGap()
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(bReset)
-                    .add(cbRealRoots)
-                    .add(cbImRoots)
-                    .add(cbReflections)
-                    .add(bDrawRoots))
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(jPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(jPanel2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(container, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
@@ -272,6 +313,8 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements
     private javax.swing.JCheckBox cbRealRoots;
     private javax.swing.JCheckBox cbReflections;
     private javax.swing.JPanel container;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     // End of variables declaration//GEN-END:variables
 
 	public void init(GLAutoDrawable drawable)
@@ -484,8 +527,6 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements
 						else
 							col = Helper.mixColors(maxColorReal, minColorReal, ((float) root.norm - normMinReal) / normDiffReal);
 						addRoot(pos, col);
-						System.out.println(root);
-						System.out.println(((float) root.norm - normMinReal) / normDiffReal);
 					}
 					if(index == imRootsObj && root.norm <= 0)
 					{
