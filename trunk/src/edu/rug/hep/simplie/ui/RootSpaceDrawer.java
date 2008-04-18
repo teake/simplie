@@ -55,13 +55,6 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements
 	private GLUT glut;
 	private GLContext context;
 	
-	// Define some colors for the roots.
-	private float reflCol[]		= { 0.6f, 0.6f, 0.6f };
-	private float maxColorIm[]	= { 1.0f, 0.84f, 0.0f };
-	private float minColorIm[]	= { 0.8f, 0.2f, 0.0f };
-	private float maxColorReal[]= { 0.0f, 0.5f, 0.5f };
-	private float minColorReal[]= { 0.0f, 0.8f, 0.2f };
-	
 	// Variables for rotations, translation and zoom.
 	private float viewRotX = 0.0f, viewRotY = 0.0f;
 	private float viewTransX = 0.0f, viewTransY = 0.0f;
@@ -203,7 +196,7 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements
             }
         });
 
-        jLabel1.setText("Color code for:");
+        jLabel1.setText("Color coding:");
 
         org.jdesktop.layout.GroupLayout jpSettingsLayout = new org.jdesktop.layout.GroupLayout(jpSettings);
         jpSettings.setLayout(jpSettingsLayout);
@@ -217,7 +210,7 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements
                         .add(jpSettingsLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                             .add(cbImRoots)
                             .add(cbRealRoots))
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 13, Short.MAX_VALUE)
                         .add(jLabel1)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
                         .add(jpSettingsLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -439,7 +432,7 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements
 		if(cbReflections.isSelected())
 		{
 			gl.glDisable(GL.GL_LIGHTING);
-			gl.glColor3f(reflCol[0], reflCol[1], reflCol[2]);
+			gl.glColor3f(0.6f, 0.6f, 0.6f);
 			if(cbRealRoots.isSelected())
 				gl.glCallList(realReflsObj);
 			if(cbImRoots.isSelected())
@@ -553,11 +546,11 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements
 		}
 		
 		// Stuff for color mixing.
-		float[] col;
+		float colPerc;
 		// For root norm color coding.
-		float normMinReal	= algebras.algebra.rs.minNormReal();
-		float normDiffReal	= algebras.algebra.rs.maxNorm() - normMinReal;
-		float normMinIm		= algebras.algebra.rs.minNorm();
+		float normMin	= algebras.algebra.rs.minNorm();
+		float normDiff	= algebras.algebra.rs.maxNorm() - normMin;
+		float normDiv	= normDiff + algebras.algebra.rs.maxNorm() / 2;
 		// For level decomposition color coding.
 		int numLevels		= algebras.algebra.rank - algebras.coAlgebra.rank;
 		int numLevelColors	= (int) Math.pow(2, numLevels);
@@ -588,25 +581,15 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements
 							continue;
 						if(rbColorNorms.isSelected())
 						{
-							if(real)
-							{
-								if(normDiffReal == 0) 
-									col = maxColorReal;
-								else
-									col = Helper.mixColors(maxColorReal, minColorReal, ((float) root.norm - normMinReal) / normDiffReal);
-							}
+							if(normDiff == 0) 
+								colPerc = 0.0f;
 							else
-							{
-								if(normMinIm == 0)
-									col = maxColorIm;
-								else
-									col = Helper.mixColors(maxColorIm, minColorIm,(normMinIm - (float) root.norm) / normMinIm);
-							}
+								colPerc = ((float) root.norm - normMin) / normDiv;
 						}
 						else
 						{
 							if(numLevels == 0)
-								col = Helper.colorSpectrum(0.5f);
+								colPerc = 0.0f;
 							else
 							{
 								int[] levels = algebras.levels(root.vector);
@@ -615,10 +598,10 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements
 								{
 									colorIndex += (levels[k] % 2) * Math.pow(2,k);
 								}
-								col = Helper.colorSpectrum(0.5f + (float) colorIndex / (float) numLevelColors);
+								colPerc = (float) colorIndex / (float) numLevelColors;
 							}
 						}
-						addRoot(pos, col);
+						addRoot(pos, Helper.colorSpectrum(0.5f + colPerc));
 					}
 				}
 			}

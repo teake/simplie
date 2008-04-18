@@ -127,7 +127,7 @@
                               <Component id="cbImRoots" alignment="0" min="-2" max="-2" attributes="0"/>
                               <Component id="cbRealRoots" alignment="0" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <EmptySpace max="32767" attributes="0"/>
+                          <EmptySpace pref="13" max="32767" attributes="0"/>
                           <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
@@ -213,7 +213,7 @@
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel1">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Color code for:"/>
+            <Property name="text" type="java.lang.String" value="Color coding:"/>
           </Properties>
         </Component>
       </SubComponents>
