@@ -307,7 +307,7 @@ public class ExportToTex extends javax.swing.JPanel
 			{
 				String fileURL = chooser.getSelectedFile().getAbsolutePath();
 				if(!texFilter.accept(chooser.getSelectedFile()))
-					fileURL += ".rs";
+					fileURL += ".tex";
 				// write it out
 				FileWriter outputStream = null;
 				try

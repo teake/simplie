@@ -125,7 +125,7 @@ public class CAlgebra
 			rankA	= cartanMatrix.rank();
 			det		= (int) Math.round(cartanMatrix.det());
 		}
-		if(det > 0)
+		if(det > 0 || rank == 0)
 			finite = true;
 		else
 			finite = false;

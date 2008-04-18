@@ -96,8 +96,8 @@ public class CAlgebraComposite implements DiagramListener
 				intAlgebra = new CAlgebra(dd.cartanSubMatrix("int"));
 		}
 		
-		dd.setTitle(getDynkinDiagramType(false));
-		dd.setTitleTeX(getDynkinDiagramType(true));
+		dd.setTitle("Dynkin diagram of " + getDynkinDiagramType(false));
+		dd.setTitleTeX("Dynkin diagram of " + getDynkinDiagramType(true));
 		
 	}
 	
