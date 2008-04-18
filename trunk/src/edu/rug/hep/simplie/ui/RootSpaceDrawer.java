@@ -61,6 +61,7 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements
 	private float zoom = 1.0f;
 	private int prevMouseX, prevMouseY;
 	private boolean rightMouseDown = false;
+	private float[] offset = {0.0f, 0.0f, 0.0f};
 	
 	// Indices for the GL display lists.
 	private int realReflsObj;
@@ -419,6 +420,7 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements
 		gl.glTranslatef(viewTransX, viewTransY, 0.0f);
 		gl.glRotatef(viewRotX,1.0f,0.0f,0.0f);
 		gl.glRotatef(viewRotY,0.0f,1.0f,0.0f);
+		gl.glTranslatef(offset[0],offset[1],offset[2]);
 		
 		// Draw the real roots.
 		if(cbRealRoots.isSelected())
@@ -529,6 +531,9 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements
 			gl.glEndList();
 		}
 		
+		float[] maxCoor = {0.0f,0.0f,0.0f};
+		float[] minCoor = {Float.MAX_VALUE, Float.MAX_VALUE,Float.MAX_VALUE};
+		
 		// Don't do anything if the algebra is empty.
 		if(algebras.algebra == null || algebras.algebra.rank == 0)
 			return;
@@ -565,20 +570,44 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements
 				Collection<CRoot> roots = algebras.algebra.rs.get(i);
 				for(Iterator it = roots.iterator(); it.hasNext();)
 				{
-					CRoot root	= (CRoot) it.next();
-					float[] pos	= calcPos(root.vector, posX, posZ);
+					CRoot	root	= (CRoot) it.next();
+					float[] pos		= calcPos(root.vector, posX, posZ);
+					boolean real	= (root.norm > 0);
 					
-					if(index == realReflsObj && root.norm > 0)
-						addReflections(pos, root.vector, posX, posZ);
-					if(index == imReflsObj && root.norm <= 0)
-						addReflections(pos, root.vector, posX, posZ);
+					for (int k = 0; k < 3; k++)
+					{
+						maxCoor[k] = Math.max(maxCoor[k],pos[k]);
+						minCoor[k] = Math.min(minCoor[k],pos[k]);
+					}
+					
+					// Draw the Weyl reflections.
+					if(index == realReflsObj || index == imReflsObj)
+					{
+						if( (index == imReflsObj && real) || (index == realReflsObj && !real) )
+							continue;
+						
+						int[] dynkinLabels = algebras.algebra.rootToWeight(root.vector);
+						for(int k = 0; k < root.vector.length; k++)
+						{
+							// Only draw reflections upward.
+							if(dynkinLabels[k] >= 0)
+								continue;
+							int[] reflVector = root.vector.clone();
+							reflVector[k] -= dynkinLabels[k];
+							float[] newPos = calcPos(reflVector, posX, posZ);
+							gl.glBegin(GL.GL_LINES);
+							gl.glVertex3f(pos[0],pos[1],pos[2]);
+							gl.glVertex3f(newPos[0],newPos[1],newPos[2]);
+							gl.glEnd();
+						}
+					}
+					
+					// Draw the roots.
 					if(index == realRootsObj || index == imRootsObj)
 					{
-						boolean real = (root.norm > 0);
-						if(index == imRootsObj && real)
+						if( (index == imRootsObj && real) || (index == realRootsObj && !real) )
 							continue;
-						if(index == realRootsObj && !real)
-							continue;
+						
 						if(rbColorNorms.isSelected())
 						{
 							if(normDiff == 0) 
@@ -601,12 +630,23 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements
 								colPerc = (float) colorIndex / (float) numLevelColors;
 							}
 						}
-						addRoot(pos, Helper.colorSpectrum(0.5f + colPerc));
+						float[] col = Helper.colorSpectrum(0.5f + colPerc);
+						gl.glColor3f(col[0], col[1], col[2]);
+						gl.glPushMatrix();
+						gl.glTranslatef(pos[0],pos[1],pos[2]);
+						gl.glCallList(sphereObj);
+						gl.glPopMatrix();
 					}
 				}
 			}
 			gl.glEndList();
 		}
+		
+		for (int i = 0; i < 3; i++)
+		{
+			offset[i] = -1 * (maxCoor[i]+minCoor[i]) / 2;
+		}
+
 	}
 	
 	private float[] calcPos(int[] rootVector, float[] posX, float[] posZ)
@@ -619,45 +659,5 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements
 			pos[1] += rootVector[i];
 		}
 		return pos;
-	}
-	
-	private void addRoot(float[] pos, float[] col)
-	{
-		// Draw a positive root.
-		drawRoot(col,pos[0],pos[1],pos[2]);
-		// Draw a negative root.
-		drawRoot(col,-pos[0],-pos[1],-pos[2]);
-	}
-	
-	private void addReflections(float[] pos, int[] vector, float[] posX, float[] posZ)
-	{
-		int[] dynkinLabels = algebras.algebra.rootToWeight(vector);
-		for(int i = 0; i < vector.length; i++)
-		{
-			int[] reflVector = vector.clone();
-			reflVector[i] -= dynkinLabels[i];
-			drawReflection(pos, calcPos(reflVector, posX, posZ));
-		}
-	}
-	
-	private void drawRoot(float[] color, float x, float y, float z)
-	{
-		gl.glColor3f(color[0], color[1], color[2]);
-		gl.glPushMatrix();
-		gl.glTranslatef(x, y, z);
-		gl.glCallList(sphereObj);
-		gl.glPopMatrix();
-	}
-	
-	private void drawReflection(float[] pos1, float[] pos2)
-	{
-		gl.glBegin(GL.GL_LINES);
-			gl.glVertex3f(pos1[0],pos1[1],pos1[2]);
-			gl.glVertex3f(pos2[0],pos2[1],pos2[2]);
-		gl.glEnd();
-		gl.glBegin(GL.GL_LINES);
-			gl.glVertex3f(-pos1[0],-pos1[1],-pos1[2]);
-			gl.glVertex3f(-pos2[0],-pos2[1],-pos2[2]);
-		gl.glEnd();
 	}
 }
