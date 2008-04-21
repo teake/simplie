@@ -597,20 +597,20 @@ public class Helper
 		if(perc < 1/3.0f)
 		{
 			perc = perc * 3;
-			newCol[0] = 1 - perc;
-			newCol[1] = perc;
+			newCol[0] = (float) Math.sqrt(1 - perc);
+			newCol[1] = (float) Math.sqrt(perc);
 		}
 		else if (perc < 2/3.0f)
 		{
 			perc = (perc - 1/3.0f) * 3;
-			newCol[1] = 1 - perc;
-			newCol[2] = perc;
+			newCol[1] = (float) Math.sqrt(1 - perc);
+			newCol[2] = (float) Math.sqrt(perc);
 		}
 		else
 		{
 			perc = (perc - 2/3.0f) * 3;
-			newCol[2] = 1 - perc;
-			newCol[0] = perc;
+			newCol[2] = (float) Math.sqrt(1 - perc);
+			newCol[0] = (float) Math.sqrt(perc);
 		}
 		return newCol;
 	}
