@@ -465,7 +465,7 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements
 					gl.glCallList(realReflsObj);
 				if(cbImRoots.isSelected())
 					gl.glCallList(imReflsObj);
-				if(i == 0)
+				if(i == 0 && cbRealRoots.isSelected())
 					gl.glCallList(simpReflsObj);
 				gl.glEnable(GL.GL_LIGHTING);
 			}
