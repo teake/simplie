@@ -345,7 +345,10 @@ public class CAlgebra
 			}
 		}
 		
-		if((det > 0 || rank == 0) && !type.contains("Unknown"))
+		// Dirty hack to check for infinite algebras that might have positive determinant
+		// and infinite direct product algebras that also might have positive determinant.
+		// TODO: implement this better.
+		if((det > 0 || rank == 0) && !type.contains("Unknown") && !type.contains("+"))
 			finite = true;
 		else
 			finite = false;
