@@ -57,6 +57,7 @@ public class CAlgebraComposite implements DiagramListener
 		dd.addListener(this);
 		this.sign = 1;
 		this.locked = false;
+		diagramChanged();
 	}
 	
 	public void diagramChanged()
