@@ -208,7 +208,7 @@ public class Main extends javax.swing.JFrame
             .add(optionPane, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
         );
 
-        systemOutputDialog.setTitle("System output");
+        systemOutputDialog.setTitle("Output");
         systemOutputDialog.setMinimumSize(new java.awt.Dimension(360, 360));
 
         org.jdesktop.layout.GroupLayout systemOutputDialogLayout = new org.jdesktop.layout.GroupLayout(systemOutputDialog.getContentPane());
@@ -363,7 +363,7 @@ public class Main extends javax.swing.JFrame
 
         MenuShowOutput.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
         MenuShowOutput.setMnemonic('s');
-        MenuShowOutput.setText("Show system output");
+        MenuShowOutput.setText("Show output");
         MenuShowOutput.addActionListener(new java.awt.event.ActionListener()
         {
             public void actionPerformed(java.awt.event.ActionEvent evt)
