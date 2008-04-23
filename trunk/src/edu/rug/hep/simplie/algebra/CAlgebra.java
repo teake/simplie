@@ -125,10 +125,6 @@ public class CAlgebra
 			rankA	= cartanMatrix.rank();
 			det		= (int) Math.round(cartanMatrix.det());
 		}
-		if(det > 0 || rank == 0)
-			finite = true;
-		else
-			finite = false;
 		
 		this.A		= A.clone();
 		this.B		= new int[rank][rank];
@@ -309,7 +305,7 @@ public class CAlgebra
 				tTypeTeX	+= " \\otimes ";
 			}
 		}
-		if(tType == "")
+		if(tType.equals(""))
 			type = typeHTML = typeTeX = "Empty";
 		else
 		{
@@ -349,11 +345,16 @@ public class CAlgebra
 			}
 		}
 		
+		if((det > 0 || rank == 0) && !type.contains("Unknown"))
+			finite = true;
+		else
+			finite = false;
+		
 		// Set up the root system.
 		rs = new CRootSystem(this);
 		
 		// Determine the dimension.
-		if(det > 0 || rank == 0)
+		if(finite)
 		{
 			dim			= 2 * (int) rs.numPosGenerators() + rank;
 			dimension	= Helper.intToString(dim);
@@ -384,7 +385,7 @@ public class CAlgebra
 		if(!finite || highestWeightLabels.length != rank)
 			return 0;
 		
-		dimOfRep				= new fraction(1);
+		dimOfRep		= new fraction(1);
 		highestWeight	= new CWeight(highestWeightLabels);
 		
 		for (int i = 1; i < rs.size(); i++)
