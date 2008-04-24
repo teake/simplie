@@ -339,7 +339,7 @@ public class CDynkinDiagram
 	 */
 	public int[][] cartanSubMatrix(String type)
 	{
-		if( !( type == "sub" || type == "int" || type == "co") )
+		if( !( type.equals("sub") || type.equals("int") || type.equals("co")) )
 			return null;
 		
 		int indexI;
@@ -348,9 +348,9 @@ public class CDynkinDiagram
 		
 		for (CDynkinNode node : nodes)
 		{
-			if((node.isEnabled() && type == "sub")
-					|| (node.isDisconnected() && type == "int")
-					|| (!node.isLevel() && type == "co") )
+			if((node.isEnabled() && type.equals("sub"))
+					|| (node.isDisconnected() && type.equals("int"))
+					|| (!node.isLevel() && type.equals("co")) )
 			{
 				subRank++;
 			}
@@ -361,17 +361,17 @@ public class CDynkinDiagram
 		// Copy the Cartan matrix elements into the submatrix.
 		for(int i = 0; i < subRank; i++)
 		{
-			if(type == "sub")
+			if(type.equals("sub"))
 				indexI = translateSub(i);
-			else if(type == "co")
+			else if(type.equals("co"))
 				indexI = translateCo(i);
 			else
 				indexI = translateInt(i);
 			for(int j = 0; j < subRank; j++)
 			{
-				if(type == "sub")
+				if(type.equals("sub"))
 					indexJ = translateSub(j);
-				else if(type == "co")
+				else if(type.equals("co"))
 					indexJ = translateCo(j);
 				else
 					indexJ = translateInt(j);
@@ -626,6 +626,7 @@ public class CDynkinDiagram
 	 * Loads the dynkindiagram from a file.
 	 * Returns true on succes, false on failure.
 	 */
+	@SuppressWarnings("unchecked")
 	public boolean loadFrom(String filename)
 	{
 		if(locked)

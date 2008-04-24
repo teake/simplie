@@ -172,7 +172,7 @@ public class Helper
 		
 		// And now the deviations from it.
 		
-		if(type == "A")
+		if(type.equals("A"))
 		{
 			if(extended > 0)
 			{
@@ -184,7 +184,7 @@ public class Helper
 			return matrix;
 		}
 		
-		if(type == "B" && simpleRank > 1)
+		if(type.equals("B") && simpleRank > 1)
 		{
 			matrix[1][0] = -2;
 			if(extended > 0)
@@ -195,7 +195,7 @@ public class Helper
 			return matrix;
 		}
 		
-		if(type == "C" && simpleRank > 1)
+		if(type.equals("C") && simpleRank > 1)
 		{
 			matrix[0][1] = -2;
 			if(extended > 0)
@@ -203,7 +203,7 @@ public class Helper
 			return matrix;
 		}
 		
-		if(type == "D" && simpleRank > 3)
+		if(type.equals("D") && simpleRank > 3)
 		{
 			matrix[0][1] = matrix[1][0] = 0;
 			matrix[0][2] = matrix[2][0] = -1;
@@ -215,7 +215,7 @@ public class Helper
 			return matrix;
 		}
 		
-		if(type == "E" && simpleRank > 5 && simpleRank < 9)
+		if(type.equals("E") && simpleRank > 5 && simpleRank < 9)
 		{
 			matrix[0][3] = matrix[3][0] = -1;
 			matrix[0][1] = matrix[1][0] = 0;
@@ -236,13 +236,13 @@ public class Helper
 			return matrix;
 		}
 		
-		if(type == "F" && simpleRank == 4)
+		if(type.equals("F") && simpleRank == 4)
 		{
 			matrix[1][2] = -2;
 			return matrix;
 		}
 		
-		if(type == "G" && simpleRank == 2)
+		if(type.equals("G") && simpleRank == 2)
 		{
 			matrix[1][0] = -3;
 			return matrix;
@@ -279,7 +279,7 @@ public class Helper
 		int[] nodeConnA = new int[matrix1.length];
 		int[] nodeConnB = new int[matrix1.length];
 		for (int i = 0; i < nodeConnB.length; i++)
-			nodeConnB[i] = nodeConnA[i] =0;
+			nodeConnB[i] = nodeConnA[i] = 0;
 		
 		// Calculate the sum of each column and sort these later on
 		int[] columnSums1 = new int[matrix1.length];
