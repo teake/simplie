@@ -54,7 +54,7 @@ public class CHighestWeightRep
 	private final fraction	highestWeightFactor;
 	
 	/** The internal table containing the weights. */
-	private ArrayList<HashSet> weightSystem;
+	private ArrayList<HashSet<CWeight>> weightSystem;
 	/** Integer specifying how deep we constructed the weight system. */
 	private int		constructedDepth;
 	/** Cancel the construction or not? */
@@ -77,7 +77,7 @@ public class CHighestWeightRep
 		dim = algebra.dimOfRep(highestWeightLabels);
 		
 		// Add the highest weight (construct to depth 0)
-		weightSystem	= new ArrayList<HashSet>();
+		weightSystem	= new ArrayList<HashSet<CWeight>>();
 		highestWeight	= new CWeight(highestWeightLabels);
 		zeroDepthWeight = new HashSet<CWeight>();
 		zeroDepthWeight.add(highestWeight);

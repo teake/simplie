@@ -49,9 +49,9 @@ public class CRootSystem
 	/** The number of positive generators constructed so far. */
 	private long numPosGenerators;
 	/** The table containing all the (positive) roots. */
-	private ArrayList<HashSet> rootSystem;
+	private ArrayList<HashSet<CRoot>> rootSystem;
 	/** The table containing all the multiples of roots that aren't roots themselves (used in the Peterson formula). */
-	private ArrayList<ArrayList> rootMultiples;
+	private ArrayList<ArrayList<CRoot>> rootMultiples;
 	/** The simple roots. */
 	private HashSet<CRoot> simpleRoots;
 	/** The height up to and included to which we constructed the root system. */
@@ -70,7 +70,7 @@ public class CRootSystem
 	{
 		this.algebra	= algebra;
 		this.rank		= algebra.rank;
-		rootSystem		= new ArrayList<HashSet>();
+		rootSystem		= new ArrayList<HashSet<CRoot>>();
 	
 		if(rank==0)
 		{
@@ -119,7 +119,7 @@ public class CRootSystem
 		fullyConstructed	= false;
 		
 		// Set the table of root multiples.
-		rootMultiples = new ArrayList<ArrayList>();
+		rootMultiples = new ArrayList<ArrayList<CRoot>>();
 		rootMultiples.add(0,new ArrayList<CRoot>());
 		rootMultiples.add(1,new ArrayList<CRoot>());
 		
@@ -324,6 +324,7 @@ public class CRootSystem
 	 * @param	filename	The file from which to load the root system.
 	 * @return				True on succes, false on failure.
 	 */
+	@SuppressWarnings("unchecked")
 	public boolean loadFrom(String filename)
 	{
 		filename.trim();
@@ -339,8 +340,8 @@ public class CRootSystem
 				constructedHeight	= in.readInt();
 				numPosRoots			= in.readLong();
 				numPosGenerators	= in.readLong();
-				rootSystem			= (ArrayList<HashSet>) in.readObject();
-				rootMultiples		= (ArrayList<ArrayList>) in.readObject();
+				rootSystem			= (ArrayList<HashSet<CRoot>>) in.readObject();
+				rootMultiples		= (ArrayList<ArrayList<CRoot>>) in.readObject();
 			}
 			else
 			{
@@ -502,7 +503,7 @@ public class CRootSystem
 			//
 			// Construct all the root multiples of the roots at the new height
 			//
-			ArrayList multiplesList = new ArrayList<CRoot>();
+			ArrayList<CRoot> multiplesList = new ArrayList<CRoot>();
 			for (int i = 1; i < Math.floor(nextHeight / 2) + 1; i++)
 			{
 				// We're only interested in i's with zero divisor.
@@ -523,7 +524,6 @@ public class CRootSystem
 				}
 			}
 			rootMultiples.add(nextHeight,multiplesList);
-
 
 			// Finally bump the constructed height number.
 			constructedHeight++;	
