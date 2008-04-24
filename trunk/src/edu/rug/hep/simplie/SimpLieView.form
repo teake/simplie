@@ -21,7 +21,7 @@
             <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
           </AuxValues>
           <SubComponents>
-            <MenuItem class="javax.swing.JMenuItem" name="jMenuItem4">
+            <MenuItem class="javax.swing.JMenuItem" name="loadDiagramItem">
               <Properties>
                 <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
                   <action class="edu.rug.hep.simplie.SimpLieView" id="loadDiagram" methodName="loadDiagram"/>
@@ -29,15 +29,15 @@
                 <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.editors.KeyStrokeEditor">
                   <KeyStroke key="Ctrl+O"/>
                 </Property>
-                <Property name="name" type="java.lang.String" value="jMenuItem4" noResource="true"/>
+                <Property name="name" type="java.lang.String" value="loadDiagramItem" noResource="true"/>
               </Properties>
             </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="jMenuItem5">
+            <MenuItem class="javax.swing.JMenuItem" name="saveDiagramItem">
               <Properties>
                 <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
                   <action class="edu.rug.hep.simplie.SimpLieView" id="saveDiagram" methodName="saveDiagram"/>
                 </Property>
-                <Property name="name" type="java.lang.String" value="jMenuItem5" noResource="true"/>
+                <Property name="name" type="java.lang.String" value="saveDiagramItem" noResource="true"/>
               </Properties>
             </MenuItem>
             <MenuItem class="javax.swing.JSeparator" name="jSeparator2">
@@ -45,20 +45,20 @@
                 <Property name="name" type="java.lang.String" value="jSeparator2" noResource="true"/>
               </Properties>
             </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="jMenuItem7">
+            <MenuItem class="javax.swing.JMenuItem" name="loadRootsItem">
               <Properties>
                 <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
                   <action class="edu.rug.hep.simplie.SimpLieView" id="loadRoots" methodName="loadRoots"/>
                 </Property>
-                <Property name="name" type="java.lang.String" value="jMenuItem7" noResource="true"/>
+                <Property name="name" type="java.lang.String" value="loadRootsItem" noResource="true"/>
               </Properties>
             </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="jMenuItem6">
+            <MenuItem class="javax.swing.JMenuItem" name="saveRootsItem">
               <Properties>
                 <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
                   <action class="edu.rug.hep.simplie.SimpLieView" id="saveRoots" methodName="saveRoots"/>
                 </Property>
-                <Property name="name" type="java.lang.String" value="jMenuItem6" noResource="true"/>
+                <Property name="name" type="java.lang.String" value="saveRootsItem" noResource="true"/>
               </Properties>
             </MenuItem>
             <MenuItem class="javax.swing.JSeparator" name="jSeparator3">
@@ -80,10 +80,10 @@
             </MenuItem>
           </SubComponents>
         </Menu>
-        <Menu class="javax.swing.JMenu" name="MenuPresets">
+        <Menu class="javax.swing.JMenu" name="presetMenu">
           <Properties>
-            <Property name="text" type="java.lang.String" resourceKey="MenuPresets.text"/>
-            <Property name="name" type="java.lang.String" value="MenuPresets" noResource="true"/>
+            <Property name="text" type="java.lang.String" resourceKey="presetMenu.text"/>
+            <Property name="name" type="java.lang.String" value="presetMenu" noResource="true"/>
           </Properties>
           <SubComponents>
             <MenuItem class="javax.swing.JSeparator" name="jSeparator1">
@@ -91,7 +91,7 @@
                 <Property name="name" type="java.lang.String" value="jSeparator1" noResource="true"/>
               </Properties>
             </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="jMenuItem2">
+            <MenuItem class="javax.swing.JMenuItem" name="clearItem">
               <Properties>
                 <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
                   <action class="edu.rug.hep.simplie.SimpLieView" id="clearDiagram" methodName="clearDiagram"/>
@@ -99,17 +99,8 @@
                 <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.editors.KeyStrokeEditor">
                   <KeyStroke key="Shift+X"/>
                 </Property>
-                <Property name="text" type="java.lang.String" resourceKey="jMenuItem2.text"/>
-                <Property name="name" type="java.lang.String" value="jMenuItem2" noResource="true"/>
-              </Properties>
-            </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="jMenuItem3">
-              <Properties>
-                <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
-                  <action class="edu.rug.hep.simplie.SimpLieView" id="reloadPresets" methodName="reloadPresets"/>
-                </Property>
-                <Property name="text" type="java.lang.String" resourceKey="jMenuItem3.text"/>
-                <Property name="name" type="java.lang.String" value="jMenuItem3" noResource="true"/>
+                <Property name="text" type="java.lang.String" resourceKey="clearItem.text"/>
+                <Property name="name" type="java.lang.String" value="clearItem" noResource="true"/>
               </Properties>
             </MenuItem>
           </SubComponents>
@@ -132,15 +123,15 @@
                 <Property name="name" type="java.lang.String" value="exportToTexItem" noResource="true"/>
               </Properties>
             </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="jMenuItem8">
+            <MenuItem class="javax.swing.JMenuItem" name="exporRootsItem">
               <Properties>
                 <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
                   <action class="edu.rug.hep.simplie.SimpLieView" id="exportRoots" methodName="exportRoots"/>
                 </Property>
-                <Property name="name" type="java.lang.String" value="jMenuItem8" noResource="true"/>
+                <Property name="name" type="java.lang.String" value="exporRootsItem" noResource="true"/>
               </Properties>
             </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="jMenuItem1">
+            <MenuItem class="javax.swing.JMenuItem" name="outputItem">
               <Properties>
                 <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
                   <action class="edu.rug.hep.simplie.SimpLieView" id="showOutput" methodName="showOutput"/>
@@ -148,8 +139,8 @@
                 <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.editors.KeyStrokeEditor">
                   <KeyStroke key="Shift+Ctrl+S"/>
                 </Property>
-                <Property name="text" type="java.lang.String" resourceKey="jMenuItem1.text"/>
-                <Property name="name" type="java.lang.String" value="jMenuItem1" noResource="true"/>
+                <Property name="text" type="java.lang.String" resourceKey="outputItem.text"/>
+                <Property name="name" type="java.lang.String" value="outputItem" noResource="true"/>
               </Properties>
             </MenuItem>
           </SubComponents>

@@ -159,21 +159,20 @@ public class SimpLieView extends FrameView {
 
         menuBar = new javax.swing.JMenuBar();
         javax.swing.JMenu fileMenu = new javax.swing.JMenu();
-        jMenuItem4 = new javax.swing.JMenuItem();
-        jMenuItem5 = new javax.swing.JMenuItem();
+        loadDiagramItem = new javax.swing.JMenuItem();
+        saveDiagramItem = new javax.swing.JMenuItem();
         jSeparator2 = new javax.swing.JSeparator();
-        jMenuItem7 = new javax.swing.JMenuItem();
-        jMenuItem6 = new javax.swing.JMenuItem();
+        loadRootsItem = new javax.swing.JMenuItem();
+        saveRootsItem = new javax.swing.JMenuItem();
         jSeparator3 = new javax.swing.JSeparator();
         javax.swing.JMenuItem exitMenuItem = new javax.swing.JMenuItem();
-        MenuPresets = new javax.swing.JMenu();
+        presetMenu = new javax.swing.JMenu();
         jSeparator1 = new javax.swing.JSeparator();
-        jMenuItem2 = new javax.swing.JMenuItem();
-        jMenuItem3 = new javax.swing.JMenuItem();
+        clearItem = new javax.swing.JMenuItem();
         toolsMenu = new javax.swing.JMenu();
         exportToTexItem = new javax.swing.JMenuItem();
-        jMenuItem8 = new javax.swing.JMenuItem();
-        jMenuItem1 = new javax.swing.JMenuItem();
+        exporRootsItem = new javax.swing.JMenuItem();
+        outputItem = new javax.swing.JMenuItem();
         javax.swing.JMenu helpMenu = new javax.swing.JMenu();
         javax.swing.JMenuItem aboutMenuItem = new javax.swing.JMenuItem();
         exportToTex = new edu.rug.hep.simplie.ui.ExportToTex();
@@ -196,25 +195,25 @@ public class SimpLieView extends FrameView {
         fileMenu.setName("fileMenu"); // NOI18N
 
         javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance(edu.rug.hep.simplie.SimpLieApp.class).getContext().getActionMap(SimpLieView.class, this);
-        jMenuItem4.setAction(actionMap.get("loadDiagram")); // NOI18N
-        jMenuItem4.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.CTRL_MASK));
-        jMenuItem4.setName("jMenuItem4"); // NOI18N
-        fileMenu.add(jMenuItem4);
+        loadDiagramItem.setAction(actionMap.get("loadDiagram")); // NOI18N
+        loadDiagramItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.CTRL_MASK));
+        loadDiagramItem.setName("loadDiagramItem"); // NOI18N
+        fileMenu.add(loadDiagramItem);
 
-        jMenuItem5.setAction(actionMap.get("saveDiagram")); // NOI18N
-        jMenuItem5.setName("jMenuItem5"); // NOI18N
-        fileMenu.add(jMenuItem5);
+        saveDiagramItem.setAction(actionMap.get("saveDiagram")); // NOI18N
+        saveDiagramItem.setName("saveDiagramItem"); // NOI18N
+        fileMenu.add(saveDiagramItem);
 
         jSeparator2.setName("jSeparator2"); // NOI18N
         fileMenu.add(jSeparator2);
 
-        jMenuItem7.setAction(actionMap.get("loadRoots")); // NOI18N
-        jMenuItem7.setName("jMenuItem7"); // NOI18N
-        fileMenu.add(jMenuItem7);
+        loadRootsItem.setAction(actionMap.get("loadRoots")); // NOI18N
+        loadRootsItem.setName("loadRootsItem"); // NOI18N
+        fileMenu.add(loadRootsItem);
 
-        jMenuItem6.setAction(actionMap.get("saveRoots")); // NOI18N
-        jMenuItem6.setName("jMenuItem6"); // NOI18N
-        fileMenu.add(jMenuItem6);
+        saveRootsItem.setAction(actionMap.get("saveRoots")); // NOI18N
+        saveRootsItem.setName("saveRootsItem"); // NOI18N
+        fileMenu.add(saveRootsItem);
 
         jSeparator3.setName("jSeparator3"); // NOI18N
         fileMenu.add(jSeparator3);
@@ -225,24 +224,19 @@ public class SimpLieView extends FrameView {
 
         menuBar.add(fileMenu);
 
-        MenuPresets.setText(resourceMap.getString("MenuPresets.text")); // NOI18N
-        MenuPresets.setName("MenuPresets"); // NOI18N
+        presetMenu.setText(resourceMap.getString("presetMenu.text")); // NOI18N
+        presetMenu.setName("presetMenu"); // NOI18N
 
         jSeparator1.setName("jSeparator1"); // NOI18N
-        MenuPresets.add(jSeparator1);
+        presetMenu.add(jSeparator1);
 
-        jMenuItem2.setAction(actionMap.get("clearDiagram")); // NOI18N
-        jMenuItem2.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_X, java.awt.event.InputEvent.SHIFT_MASK));
-        jMenuItem2.setText(resourceMap.getString("jMenuItem2.text")); // NOI18N
-        jMenuItem2.setName("jMenuItem2"); // NOI18N
-        MenuPresets.add(jMenuItem2);
+        clearItem.setAction(actionMap.get("clearDiagram")); // NOI18N
+        clearItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_X, java.awt.event.InputEvent.SHIFT_MASK));
+        clearItem.setText(resourceMap.getString("clearItem.text")); // NOI18N
+        clearItem.setName("clearItem"); // NOI18N
+        presetMenu.add(clearItem);
 
-        jMenuItem3.setAction(actionMap.get("reloadPresets")); // NOI18N
-        jMenuItem3.setText(resourceMap.getString("jMenuItem3.text")); // NOI18N
-        jMenuItem3.setName("jMenuItem3"); // NOI18N
-        MenuPresets.add(jMenuItem3);
-
-        menuBar.add(MenuPresets);
+        menuBar.add(presetMenu);
 
         toolsMenu.setText(resourceMap.getString("toolsMenu.text")); // NOI18N
         toolsMenu.setName("toolsMenu"); // NOI18N
@@ -253,15 +247,15 @@ public class SimpLieView extends FrameView {
         exportToTexItem.setName("exportToTexItem"); // NOI18N
         toolsMenu.add(exportToTexItem);
 
-        jMenuItem8.setAction(actionMap.get("exportRoots")); // NOI18N
-        jMenuItem8.setName("jMenuItem8"); // NOI18N
-        toolsMenu.add(jMenuItem8);
+        exporRootsItem.setAction(actionMap.get("exportRoots")); // NOI18N
+        exporRootsItem.setName("exporRootsItem"); // NOI18N
+        toolsMenu.add(exporRootsItem);
 
-        jMenuItem1.setAction(actionMap.get("showOutput")); // NOI18N
-        jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
-        jMenuItem1.setText(resourceMap.getString("jMenuItem1.text")); // NOI18N
-        jMenuItem1.setName("jMenuItem1"); // NOI18N
-        toolsMenu.add(jMenuItem1);
+        outputItem.setAction(actionMap.get("showOutput")); // NOI18N
+        outputItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
+        outputItem.setText(resourceMap.getString("outputItem.text")); // NOI18N
+        outputItem.setName("outputItem"); // NOI18N
+        toolsMenu.add(outputItem);
 
         menuBar.add(toolsMenu);
 
@@ -372,9 +366,9 @@ public class SimpLieView extends FrameView {
 	public void reloadPresets()
 	{
 		// Clear everything except the reset button
-		while(MenuPresets.getItemCount() > 3)
+		while(presetMenu.getItemCount() > 2)
 		{
-			MenuPresets.remove(0);
+			presetMenu.remove(0);
 		}
 		
 		// Add the diagram presets to the UI.
@@ -394,7 +388,7 @@ public class SimpLieView extends FrameView {
 				String shiftKey = "F" + (pos + 1);
 				ddPreset.setAccelerator(javax.swing.KeyStroke.getKeyStroke("shift " + shiftKey));
 			}
-			MenuPresets.add(ddPreset, pos++);
+			presetMenu.add(ddPreset, pos++);
 		}
 	}
 
@@ -431,6 +425,8 @@ public class SimpLieView extends FrameView {
 				fileURL += ".dd";
 			algebras.dd.saveTo(fileURL);
 		}
+		// Reload the presets.
+		reloadPresets();
 	}
 
 	@Action
@@ -497,27 +493,26 @@ public class SimpLieView extends FrameView {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JMenu MenuPresets;
     private edu.rug.hep.simplie.ui.AlgebraInfo algebraInfo;
     private edu.rug.hep.simplie.ui.AlgebraSetup algebraSetup;
+    private javax.swing.JMenuItem clearItem;
+    private javax.swing.JMenuItem exporRootsItem;
     private edu.rug.hep.simplie.ui.ExportToTex exportToTex;
     private javax.swing.JMenuItem exportToTexItem;
-    private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JMenuItem jMenuItem2;
-    private javax.swing.JMenuItem jMenuItem3;
-    private javax.swing.JMenuItem jMenuItem4;
-    private javax.swing.JMenuItem jMenuItem5;
-    private javax.swing.JMenuItem jMenuItem6;
-    private javax.swing.JMenuItem jMenuItem7;
-    private javax.swing.JMenuItem jMenuItem8;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
     private edu.rug.hep.simplie.ui.LevelDecomposition levelDecomposition;
+    private javax.swing.JMenuItem loadDiagramItem;
+    private javax.swing.JMenuItem loadRootsItem;
     private javax.swing.JTabbedPane mainPane;
     private javax.swing.JMenuBar menuBar;
+    private javax.swing.JMenuItem outputItem;
+    private javax.swing.JMenu presetMenu;
     private javax.swing.JProgressBar progressBar;
     private edu.rug.hep.simplie.ui.RootSpaceDrawer rootSpaceDrawer;
+    private javax.swing.JMenuItem saveDiagramItem;
+    private javax.swing.JMenuItem saveRootsItem;
     private javax.swing.JLabel statusAnimationLabel;
     private javax.swing.JLabel statusMessageLabel;
     private javax.swing.JPanel statusPanel;
