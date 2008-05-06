@@ -57,6 +57,22 @@ public class Helper
 	}
 	
 	/**
+	 * Clones a two-dimensional integer array.
+	 * 
+	 * @param matrix	 The matrix to be cloned.
+	 * @return			 A clone of the original matrix.
+	 */
+	public static int[][] cloneMatrix(int[][] matrix)
+	{
+		int[][] clone = matrix.clone();
+		for(int i = 0; i < clone.length; i++)
+		{
+			clone[i] = matrix[i].clone();			
+		}
+		return clone;
+	}
+	
+	/**
 	 * Converts a string into an integer. If the string cannot be parsed into an integer,
 	 * it returns 0.
 	 *

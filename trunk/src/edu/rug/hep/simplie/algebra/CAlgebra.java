@@ -126,7 +126,7 @@ public class CAlgebra
 			det		= (int) Math.round(cartanMatrix.det());
 		}
 		
-		this.A		= A.clone();
+		this.A		= Helper.cloneMatrix(A);
 		this.B		= new int[rank][rank];
 		this.symA	= new fraction[rank][rank];
 		this.invA	= new fraction[rank][rank];
