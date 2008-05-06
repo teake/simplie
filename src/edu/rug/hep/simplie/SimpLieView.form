@@ -26,9 +26,6 @@
                 <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
                   <action class="edu.rug.hep.simplie.SimpLieView" id="loadDiagram" methodName="loadDiagram"/>
                 </Property>
-                <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.editors.KeyStrokeEditor">
-                  <KeyStroke key="Ctrl+O"/>
-                </Property>
                 <Property name="name" type="java.lang.String" value="loadDiagramItem" noResource="true"/>
               </Properties>
             </MenuItem>
@@ -96,9 +93,6 @@
                 <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
                   <action class="edu.rug.hep.simplie.SimpLieView" id="clearDiagram" methodName="clearDiagram"/>
                 </Property>
-                <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.editors.KeyStrokeEditor">
-                  <KeyStroke key="Shift+X"/>
-                </Property>
                 <Property name="text" type="java.lang.String" resourceKey="clearItem.text"/>
                 <Property name="name" type="java.lang.String" value="clearItem" noResource="true"/>
               </Properties>
@@ -116,9 +110,6 @@
                 <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
                   <action class="edu.rug.hep.simplie.SimpLieView" id="showExportTexDialog" methodName="showExportTexDialog"/>
                 </Property>
-                <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.editors.KeyStrokeEditor">
-                  <KeyStroke key="Ctrl+E"/>
-                </Property>
                 <Property name="text" type="java.lang.String" resourceKey="exportToTexItem.text"/>
                 <Property name="name" type="java.lang.String" value="exportToTexItem" noResource="true"/>
               </Properties>
@@ -135,9 +126,6 @@
               <Properties>
                 <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
                   <action class="edu.rug.hep.simplie.SimpLieView" id="showOutput" methodName="showOutput"/>
-                </Property>
-                <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.editors.KeyStrokeEditor">
-                  <KeyStroke key="Shift+Ctrl+S"/>
                 </Property>
                 <Property name="text" type="java.lang.String" resourceKey="outputItem.text"/>
                 <Property name="name" type="java.lang.String" value="outputItem" noResource="true"/>

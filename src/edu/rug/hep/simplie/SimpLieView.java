@@ -345,7 +345,7 @@ public class SimpLieView extends FrameView {
 	@Action
 	public void showOutput()
 	{
-		if (exportDialog == null)
+		if (outputDialog == null)
 		{
             JFrame mainFrame = SimpLieApp.getApplication().getMainFrame();
             outputDialog = new JDialog(mainFrame);
