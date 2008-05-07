@@ -5,6 +5,8 @@
 package edu.rug.hep.simplie;
 
 import edu.rug.hep.simplie.*;
+import java.awt.Image;
+import java.awt.Toolkit;
 import org.jdesktop.application.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -49,7 +51,7 @@ public class SimpLieView extends FrameView {
     public SimpLieView(SingleFrameApplication app) 
 	{
         super(app);
-		
+				
         initComponents();
 
         // status bar initialization - message timeout, idle icon and busy animation, etc
@@ -105,6 +107,8 @@ public class SimpLieView extends FrameView {
                 }
             }
         });
+		
+		this.getFrame().setIconImage(resourceMap.getImageIcon("icon16").getImage());
 				
 		algebras = new CAlgebraComposite();
 		algebraSetup.setAlgebraComposite(algebras);
@@ -353,7 +357,8 @@ public class SimpLieView extends FrameView {
             outputDialog.setLocationRelativeTo(mainFrame);
 			outputDialog.setTitle("Program output");
         }
-        SimpLieApp.getApplication().show(outputDialog);		
+        SimpLieApp.getApplication().show(outputDialog);
+		SimpLieApp.getApplication().show(this);
 	}
 	
 	@Action
