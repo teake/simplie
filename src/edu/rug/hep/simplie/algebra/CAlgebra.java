@@ -31,6 +31,7 @@ import java.util.Collection;
 import java.util.ArrayList;
 import java.util.Iterator;
 import Jama.Matrix;
+import java.util.HashMap;
 
 /**
  * Given a Cartan matrix, this class creates an object which has most properties of a simple Lie algebra:
@@ -89,7 +90,7 @@ public class CAlgebra
 	public final int[] halfNorms;
 	/** List of matrices into which the Cartan matrix factorizes */
 	private final ArrayList<int[][]> directProductFactors;
-	
+		
 	/**********************************
 	 * Public methods
 	 **********************************/
@@ -133,106 +134,89 @@ public class CAlgebra
 		this.G		= new fraction[rank][rank];
 		this.directProductFactors = new ArrayList<int[][]>();
 		
-		// Begin with setting the simple root norms.
-		halfNorms = new int[rank];
-		for (int i = 0; i < rank; i++)
+		this.halfNorms = new int[rank];
+		ArrayList<ArrayList<Integer>> indecomposables = new ArrayList<ArrayList<Integer>>();
+		HashMap<Integer,Float> norms = new HashMap<Integer,Float>();
+				
+		// Factorize the Cartan matrix.
+		for(int i = 0; i < rank; i++)
 		{
-			// No simple root can have norm 0.
-			// The norms will be set below.
-			halfNorms[i] = 0;
-		}
-		
-		// Set the root norms for every disconnected piece.
-		// Set the highest norm simultaneously.
-		while(true)
-		{
-			int startIndex = -1;
+			// Don't do anything if this index is already done.
+			if(norms.containsKey(i))
+				continue;
 			
-			// Grab the first simple root that hasn't been set yet.
-			for (int i = 0; i < rank; i++)
+			// Set the first norm to 1.
+			float smallestNorm = 1.0f;
+			norms.put(i, smallestNorm);
+			
+			// Add the first index.
+			ArrayList<Integer> indecomposable = new ArrayList<Integer>();
+			indecomposable.add(i);
+			indecomposables.add(indecomposable);
+			
+			// Walk over this connected piece.
+			int indexToAdd;
+			do
 			{
-				if(halfNorms[i] == 0)
-				{
-					startIndex = i;
-					break;
-				}
-			}
-			
-			// Are we done?
-			if(startIndex == -1)
-				break;
-			
-			// If we're still here then we're not done.
-			// First detect all the simple roots in this piece.
-			ArrayList<CNormHelper> piece = new ArrayList<CNormHelper>();
-			piece.add(new CNormHelper(startIndex,1));
-			while(true)
-			{
-				CNormHelper add	 = null;
-				CNormHelper from = null;
-				// Try to see if this piece has connections to roots we've missed so far.
+				indexToAdd = -1;
 				loopToBreak:
-					for(CNormHelper nh : piece)
+				for(Integer j : indecomposable)
+				{
+					// Find every index with a connection to J.
+					for(int k = 0; k < rank; k++)
 					{
-						from = nh;
-						for (int i = 0; i < rank; i++)
+						if(A[j][k] != 0 && !indecomposable.contains(k))
 						{
-							if(nh.index != i && this.A[i][nh.index] != 0)
-							{
-								CNormHelper normHelper = new CNormHelper(i,1);
-								if(!piece.contains(normHelper))
-								{
-									add = normHelper;
-									break loopToBreak;
-								}
-							}
+							// Found one that hasn't been added.
+							// Set it's norm first.
+							float norm = norms.get(j) * A[k][j] / A[j][k];
+							norms.put(k, norm);
+							smallestNorm = Math.min(norm, smallestNorm);
+							
+							// Remember to add it later on.
+							indexToAdd = k;
+							break loopToBreak;
 						}
 					}
-					
-					if(add != null)
-					{
-						double norm = from.norm * this.A[add.index][from.index] / this.A[from.index][add.index];
-						piece.add(new CNormHelper(add.index,norm));
-					}
-					else
-						break;
-			}
+				}
+				// Add the newly found connected index.
+				if(indexToAdd != -1)
+					indecomposable.add(indexToAdd);
+
+			} while(indexToAdd != -1); // Break if there's no new index found.
 			
 			// Add the cartan matrix of this piece to the direct product factors.
-			int[][] pieceMatrix = new int[piece.size()][piece.size()];
-			for (int i = 0; i < pieceMatrix.length; i++)
+			int[][] pieceMatrix = new int[indecomposable.size()][indecomposable.size()];
+			for (int j = 0; j < pieceMatrix.length; j++)
 			{
-				for (int j = 0; j < pieceMatrix.length; j++)
+				for (int k = 0; k < pieceMatrix.length; k++)
 				{
-					pieceMatrix[i][j] = this.A[piece.get(i).index][piece.get(j).index];
+					pieceMatrix[j][k] = this.A[indecomposable.get(j)][indecomposable.get(k)];
 				}
 			}
 			directProductFactors.add(pieceMatrix);
 			
-			// Sort this piece according to norm.
-			Collections.sort(piece);
-			
-			// Set the simple root norms.
-			double coefficient = 1 / piece.get(0).norm;
+			// Lastly set the simple root norms.
+			// Make sure that all the root norms are multiples of two. This is 
+			// necessary for making sure that roots are integer multiples of 
+			// their coroots. If this is not the case, innerproducts will not 
+			// always be integers, and all hell will break loose.
+			float coefficient = 1 / (2 * smallestNorm);
 			boolean normsOK;
 			do
 			{
 				normsOK = true;
 				coefficient *= 2;
-				for(CNormHelper nh : piece)
+				for(Integer j : indecomposable)
 				{
-					// Make sure that all the root norms are multiples of two. This is 
-					// necessary for making sure that roots are integer multiples of 
-					// their coroots. If this is not the case, innerproducts will not 
-					// always be integers, and all hell will break loose.
-					if((nh.norm * coefficient) % 2 != 0)
+					float norm = norms.get(j) * coefficient;
+					halfNorms[j] = Math.round(norm);
+					if(norm % 1 != 0)
 						normsOK = false;
-					halfNorms[nh.index] = (int) Math.round(nh.norm * coefficient) / 2;
 				}
 			} while(!normsOK);
-			
 		}
-		
+
 		// Construct the Weyl vector
 		int[] weylLabels = new int[rank];
 		for (int i = 0; i < rank; i++)
