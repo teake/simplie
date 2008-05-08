@@ -44,7 +44,7 @@ import edu.simplie.ui.reusable.UIPrintableColorTable;
  */
 public class ExportToTex extends javax.swing.JPanel
 {
-	private CAlgebraComposite algebras;
+	private AlgebraComposite algebras;
 	private FileFilter texFilter;
 	private JDialog parent;
 	private UIPrintableColorTable repTable;
@@ -58,7 +58,7 @@ public class ExportToTex extends javax.swing.JPanel
 		clipboard = java.awt.Toolkit.getDefaultToolkit().getSystemClipboard();
 	}
 	
-	public void setup(JDialog parent, UIPrintableColorTable repTable, CAlgebraComposite algebras)
+	public void setup(JDialog parent, UIPrintableColorTable repTable, AlgebraComposite algebras)
 	{
 		this.algebras = algebras;
 		this.parent = parent;

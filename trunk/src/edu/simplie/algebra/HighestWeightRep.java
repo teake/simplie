@@ -1,5 +1,5 @@
 /*
- * CHighestWeightRep.java
+ * HighestWeightRep.java
  *
  * Created on 19 april 2007, 13:43
  *
@@ -31,44 +31,44 @@ import java.util.HashSet;
 import java.util.Iterator;
 
 /**
- * Given a specific CAlgebra and a highest weight state, this class creates an object representing
+ * Given a specific Algebra and a highest weight state, this class creates an object representing
  * the whole representation. Its main purpose is to determine weight multiplicities.
  *
- * @see CAlgebra
- * @see CWeight
+ * @see Algebra
+ * @see Weight
  * @author Teake Nutma
  */
-public class CHighestWeightRep
+public class HighestWeightRep
 {
 	/** The height of the highest weight. */
 	public final fraction	highestHeight;
 	/** The dimension of this representation. */
 	public final long		dim;
 	/** The algebra of which this is a weight system. */
-	private final CAlgebra	algebra;
+	private final Algebra	algebra;
 	/** The rank of the algebra of which this is a weight system. */
 	private final int		rank;
 	/** The heighest weight of the representation. */
-	private final CWeight	highestWeight;
+	private final Weight	highestWeight;
 	/** A constant used in the Freudenthal formula. */
 	private final fraction	highestWeightFactor;
 	
 	/** The internal table containing the weights. */
-	private ArrayList<HashSet<CWeight>> weightSystem;
+	private ArrayList<HashSet<Weight>> weightSystem;
 	/** Integer specifying how deep we constructed the weight system. */
 	private int		constructedDepth;
 	/** Cancel the construction or not? */
 	private boolean	cancelConstruction;
 	
 	/**
-	 * Creates a new instance of CHighestWeightRep
+	 * Creates a new instance of HighestWeightRep
 	 *
 	 * @param	algebra				The algebra of which this is a representation.
 	 * @param	highestWeightLabels	The dynkin labels of the highest weight state.
 	 */
-	public CHighestWeightRep(CAlgebra algebra, int[] highestWeightLabels)
+	public HighestWeightRep(Algebra algebra, int[] highestWeightLabels)
 	{
-		HashSet<CWeight> zeroDepthWeight;
+		HashSet<Weight> zeroDepthWeight;
 		
 		this.algebra= algebra;
 		this.rank	= algebra.rank;
@@ -77,9 +77,9 @@ public class CHighestWeightRep
 		dim = algebra.dimOfRep(highestWeightLabels);
 		
 		// Add the highest weight (construct to depth 0)
-		weightSystem	= new ArrayList<HashSet<CWeight>>();
-		highestWeight	= new CWeight(highestWeightLabels);
-		zeroDepthWeight = new HashSet<CWeight>();
+		weightSystem	= new ArrayList<HashSet<Weight>>();
+		highestWeight	= new Weight(highestWeightLabels);
+		zeroDepthWeight = new HashSet<Weight>();
 		zeroDepthWeight.add(highestWeight);
 		
 		weightSystem.add(0,zeroDepthWeight);
@@ -106,7 +106,7 @@ public class CHighestWeightRep
 	}
 	
 	/** Returns the weights in this rep at the given index, which is equal to the depth. */
-	public Collection<CWeight> get(int index)
+	public Collection<Weight> get(int index)
 	{
 		return weightSystem.get(index);
 	}
@@ -121,7 +121,7 @@ public class CHighestWeightRep
 	{
 		fraction	wantedDepthF;
 		int			wantedDepth;
-		CWeight		wantedWeight;
+		Weight		wantedWeight;
 		
 		// Preliminary checks
 		if(!algebra.finite || weightLabels.length != rank)
@@ -138,21 +138,21 @@ public class CHighestWeightRep
 			// Do not try to get a weight that is outside the weight system.
 			return 0;
 		
-		wantedWeight = new CWeight(weightLabels);
+		wantedWeight = new Weight(weightLabels);
 		
 		// Construct the weight system down to the depth just calculated.
 		if(wantedDepth > constructedDepth)
 			construct(wantedDepth);
 		
 		// Fetch the weight we wanted and return it.
-		HashSet<CWeight> wantedWeights = weightSystem.get(wantedDepth);
+		HashSet<Weight> wantedWeights = weightSystem.get(wantedDepth);
 		if(!wantedWeights.contains(wantedWeight))
 			// It's not here, return 0.
 			return 0;
 		
 		for(Iterator it = wantedWeights.iterator(); it.hasNext();)
 		{
-			CWeight weight = (CWeight) it.next();
+			Weight weight = (Weight) it.next();
 			if(weight.equals(wantedWeight))
 			{
 				return weight.getMult();
@@ -195,11 +195,11 @@ public class CHighestWeightRep
 	/** Construct the weight system down to the given depth */
 	public void construct(int maxDepth)
 	{
-		HashSet<CWeight> prevDepthWeights;
-		HashSet<CWeight> newWeights;
+		HashSet<Weight> prevDepthWeights;
+		HashSet<Weight> newWeights;
 		int		nextDepth;
-		CWeight	oldWeight;
-		CWeight newWeight;
+		Weight	oldWeight;
+		Weight newWeight;
 		
 		cancelConstruction = false;
 		
@@ -219,7 +219,7 @@ public class CHighestWeightRep
 			prevDepthWeights = weightSystem.get(constructedDepth);
 			for (Iterator it = prevDepthWeights.iterator(); it.hasNext();)
 			{
-				oldWeight = (CWeight) it.next();
+				oldWeight = (Weight) it.next();
 				// See if the we can subtract a simple root from this weight.
 				for (int i = 0; i < rank; i++)
 				{
@@ -234,7 +234,7 @@ public class CHighestWeightRep
 						{
 							// This will be the first time this depth will be reached,
 							// so create a new container for these weights.
-							weightSystem.add(constructedDepth + j, new HashSet<CWeight>());
+							weightSystem.add(constructedDepth + j, new HashSet<Weight>());
 						}
 						// What are the new dynkin labels?
 						int[] newDynkinLabels = new int[rank];
@@ -242,7 +242,7 @@ public class CHighestWeightRep
 						{
 							newDynkinLabels[k] = oldWeight.dynkinLabels[k] -  j * algebra.A[i][k];
 						}
-						newWeight = new CWeight(newDynkinLabels);
+						newWeight = new Weight(newDynkinLabels);
 
 						// Set the depth and the multiplicity
 						newWeight.setDepth(constructedDepth + j);
@@ -271,7 +271,7 @@ public class CHighestWeightRep
 			newWeights = weightSystem.get(nextDepth);
 			for(Iterator it = newWeights.iterator(); it.hasNext();)
 			{
-				newWeight = (CWeight) it.next();
+				newWeight = (Weight) it.next();
 				if(newWeight.isDominant)
 				{
 					newWeight.setMult(calculateMult(newWeight));
@@ -290,7 +290,7 @@ public class CHighestWeightRep
 	 * Sets the multiplicity of a new weight.
 	 * Basically an implementation of the Freudenthal recursion formula.
 	 */
-	private long calculateMult(CWeight weight)
+	private long calculateMult(Weight weight)
 	{
 		fraction	denominator;
 		long		numerator;
@@ -312,7 +312,7 @@ public class CHighestWeightRep
 			int maxK = (int) Math.floor(weight.getDepth()/height);
 			while(iterator.hasNext())
 			{
-				CRoot root = (CRoot) iterator.next();
+				Root root = (Root) iterator.next();
 				int rootDotWeight	= algebra.innerProduct(weight,root);
 				for (int k = 1; k <= maxK; k++)
 				{

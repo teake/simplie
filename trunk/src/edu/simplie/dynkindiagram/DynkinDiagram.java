@@ -1,5 +1,5 @@
 /*
- * CDynkinDiagram.java
+ * DynkinDiagram.java
  *
  * Created on 8 maart 2007, 14:38
  *
@@ -42,18 +42,18 @@ import java.awt.Font;
  *
  * @author Teake Nutma
  */
-public class CDynkinDiagram
+public class DynkinDiagram
 {
 	/** Vector containing all nodes of this diagram. */
-	private Vector<CDynkinNode> nodes;
+	private Vector<DynkinNode> nodes;
 	/** Vector containing all connections of this diagram */
-	private Vector<CDynkinConnection> connections;
+	private Vector<DynkinConnection> connections;
 	/** Vector containing all the compact pairs of this diagram */
-	private Vector<CCompactPair> compactPairs;
+	private Vector<CompactPair> compactPairs;
 	/** Font for drawing the diagram. */
 	private Font font;
 	/** The node that was added last. */
-	private CDynkinNode lastAddedNode;
+	private DynkinNode lastAddedNode;
 	/** The internal list of listeners */
 	private Vector<DiagramListener> listeners;
 	/** Internal boolean to keep if the diagram is locked or not */
@@ -64,14 +64,14 @@ public class CDynkinDiagram
 	private String titleTeX;
 	
 	/**
-	 * Creates a new instance of CDynkinDiagram
+	 * Creates a new instance of DynkinDiagram
 	 */
-	public CDynkinDiagram()
+	public DynkinDiagram()
 	{
 		locked		= false;
-		nodes		= new Vector<CDynkinNode>();
-		connections	= new Vector<CDynkinConnection>();
-		compactPairs= new Vector<CCompactPair>();
+		nodes		= new Vector<DynkinNode>();
+		connections	= new Vector<DynkinConnection>();
+		compactPairs= new Vector<CompactPair>();
 		font		= new Font("Monospaced", Font.PLAIN, 12);
 		lastAddedNode	= null;
 		listeners	= new Vector<DiagramListener>();
@@ -153,7 +153,7 @@ public class CDynkinDiagram
 		return this.titleTeX;
 	}
 	
-	public CDynkinNode getLastAddedNode()
+	public DynkinNode getLastAddedNode()
 	{
 		return lastAddedNode;
 	}
@@ -184,9 +184,9 @@ public class CDynkinDiagram
 	 * @param	y	The y-coordinate of the node in the diagram.
 	 * @return		The node itself.
 	 */
-	public CDynkinNode getNodeByCoor(int x, int y)
+	public DynkinNode getNodeByCoor(int x, int y)
 	{
-		for (CDynkinNode node : nodes)
+		for (DynkinNode node : nodes)
 		{
 			if(node.x == x && node.y == y)
 			{
@@ -196,7 +196,7 @@ public class CDynkinDiagram
 		return null;
 	}
 	
-	public CDynkinNode getNodeByIndex(int index)
+	public DynkinNode getNodeByIndex(int index)
 	{
 		// TODO: check for out of bounds, return clone.
 		return nodes.get(index);
@@ -227,7 +227,7 @@ public class CDynkinDiagram
 		int subIndex = 0;
 		for(int i = 0; i < rank(); i++)
 		{
-			CDynkinNode node = nodes.get(i);
+			DynkinNode node = nodes.get(i);
 			if(node.isEnabled())
 				subIndex++;
 			if(subIndex == index + 1)
@@ -242,7 +242,7 @@ public class CDynkinDiagram
 		int subIndex = 0;
 		for(int i = 0; i < rank(); i++)
 		{
-			CDynkinNode node = nodes.get(i);
+			DynkinNode node = nodes.get(i);
 			if(!node.isLevel())
 				subIndex++;
 			if(subIndex == index + 1)
@@ -257,7 +257,7 @@ public class CDynkinDiagram
 		int subIndex = 0;
 		for(int i = 0; i < rank(); i++)
 		{
-			CDynkinNode node = nodes.get(i);
+			DynkinNode node = nodes.get(i);
 			if(node.isDisconnected())
 				subIndex++;
 			if(subIndex == index + 1)
@@ -272,7 +272,7 @@ public class CDynkinDiagram
 		int subIndex = 0;
 		for(int i = 0; i < rank(); i++)
 		{
-			CDynkinNode node = nodes.get(i);
+			DynkinNode node = nodes.get(i);
 			if(node.isLevel())
 				subIndex++;
 			if(subIndex == index + 1)
@@ -295,29 +295,29 @@ public class CDynkinDiagram
 		}
 		
 		// Set the off-diagonal parts.
-		for (CDynkinConnection connection : connections)
+		for (DynkinConnection connection : connections)
 		{
 			int i		= connection.fromNode.getLabel() - 1;
 			int j		= connection.toNode.getLabel() - 1;
 			switch(connection.type)
 			{
-			case CDynkinConnection.TYPE_SINGLE:
+			case DynkinConnection.TYPE_SINGLE:
 				cartanMatrix[i][j] = -1;
 				cartanMatrix[j][i] = -1;
 				break;
-			case CDynkinConnection.TYPE_DOUBLE:
+			case DynkinConnection.TYPE_DOUBLE:
 				cartanMatrix[i][j] = -2;
 				cartanMatrix[j][i] = -1;
 				break;
-			case CDynkinConnection.TYPE_TRIPLE:
+			case DynkinConnection.TYPE_TRIPLE:
 				cartanMatrix[i][j] = -3;
 				cartanMatrix[j][i] = -1;
 				break;
-			case CDynkinConnection.TYPE_QUADRUPLE:
+			case DynkinConnection.TYPE_QUADRUPLE:
 				cartanMatrix[i][j] = -4;
 				cartanMatrix[j][i] = -1;
 				break;
-			case CDynkinConnection.TYPE_SPECIAL_DOUBLE:
+			case DynkinConnection.TYPE_SPECIAL_DOUBLE:
 				cartanMatrix[i][j] = -2;
 				cartanMatrix[j][i] = -2;
 				break;
@@ -345,7 +345,7 @@ public class CDynkinDiagram
 		int indexJ;
 		int subRank = 0;
 		
-		for (CDynkinNode node : nodes)
+		for (DynkinNode node : nodes)
 		{
 			if((node.isEnabled() && type.equals("sub"))
 					|| (node.isDisconnected() && type.equals("int"))
@@ -397,7 +397,7 @@ public class CDynkinDiagram
 		if(locked)
 			return "Diagram is locked.";
 		
-		CDynkinNode newNode = new CDynkinNode(x, y);
+		DynkinNode newNode = new DynkinNode(x, y);
 		
 		if(nodes.contains(newNode))
 		{
@@ -416,7 +416,7 @@ public class CDynkinDiagram
 		}
 	}
 	 
-	public String toggleCompactNode(CDynkinNode node)
+	public String toggleCompactNode(DynkinNode node)
 	{
 		if(locked)
 			return "Diagram is locked.";
@@ -443,7 +443,7 @@ public class CDynkinDiagram
 	 * @param   node    The node to be toggled.
 	 * @return	    String containing info on the action taken.
 	 */
-	public String toggleNode(CDynkinNode node)
+	public String toggleNode(DynkinNode node)
 	{
 		if(locked)
 			return "Diagram is locked.";
@@ -457,7 +457,7 @@ public class CDynkinDiagram
 		return "No node to toggle.";
 	}
 	
-	public String setNodeState(CDynkinNode node, int state)
+	public String setNodeState(DynkinNode node, int state)
 	{
 		if(locked)
 			return "Diagram is locked.";
@@ -472,7 +472,7 @@ public class CDynkinDiagram
 	}
 	
 	/** Removes a node from the diagram. */
-	public String removeNode(CDynkinNode nodeToRemove)
+	public String removeNode(DynkinNode nodeToRemove)
 	{
 		Iterator it;
 		
@@ -486,7 +486,7 @@ public class CDynkinDiagram
 			lastAddedNode = null;
 		}
 		nodes.remove(nodeToRemove);
-		for(CDynkinNode node : nodes)
+		for(DynkinNode node : nodes)
 		{
 			node.removeConnection(nodeToRemove);
 		}
@@ -494,7 +494,7 @@ public class CDynkinDiagram
 		it = connections.iterator();
 		while(it.hasNext())
 		{
-			CDynkinConnection connection = (CDynkinConnection) it.next();
+			DynkinConnection connection = (DynkinConnection) it.next();
 			if(connection.fromNode.equals(nodeToRemove)
 					|| connection.toNode.equals(nodeToRemove) )
 			{
@@ -505,7 +505,7 @@ public class CDynkinDiagram
 		it = compactPairs.iterator();
 		while(it.hasNext())
 		{
-			CCompactPair pair = (CCompactPair) it.next();
+			CompactPair pair = (CompactPair) it.next();
 			if(pair.node1.equals(nodeToRemove))
 			{
 				pair.node2.setCompactPartner(null);
@@ -534,7 +534,7 @@ public class CDynkinDiagram
 	 * @param toNode		The node to which the connection points.
 	 * @param add			True: add the connection. False: remove the connection.
 	 */
-	public String modifyConnection(CDynkinNode fromNode, CDynkinNode toNode, int laced, boolean add)
+	public String modifyConnection(DynkinNode fromNode, DynkinNode toNode, int laced, boolean add)
 	{
 		if(locked)
 			return "Diagram is locked.";
@@ -544,7 +544,7 @@ public class CDynkinDiagram
 		if( fromNode == null || toNode == null || fromNode.equals(toNode) )
 			return "No connection " + action + ", begin and / or end point incorrect.";
 		
-		CDynkinConnection connection = new CDynkinConnection(fromNode, toNode, laced);
+		DynkinConnection connection = new DynkinConnection(fromNode, toNode, laced);
 		
 		if(add)
 		{
@@ -565,7 +565,7 @@ public class CDynkinDiagram
 		return "Connection " + action + ".";
 	}
 
-	public String modifyCompactPair(CDynkinNode n1, CDynkinNode n2, boolean add)
+	public String modifyCompactPair(DynkinNode n1, DynkinNode n2, boolean add)
 	{
 		if(locked)
 			return "Diagram is locked.";
@@ -575,7 +575,7 @@ public class CDynkinDiagram
 		if( n1 == null || n2 == null || n1.equals(n2) )
 			return "No compact pair " + action + ", begin and / or end point incorrect.";
 		
-		CCompactPair pair = new CCompactPair(n1, n2);
+		CompactPair pair = new CompactPair(n1, n2);
 		
 		if(add)
 		{
@@ -638,9 +638,9 @@ public class CDynkinDiagram
 		{
 			fis		= new FileInputStream(filename);
 			in		= new ObjectInputStream(fis);
-			nodes	= (Vector<CDynkinNode>) in.readObject();
-			connections = (Vector<CDynkinConnection>) in.readObject();
-			compactPairs = (Vector<CCompactPair>) in.readObject();
+			nodes	= (Vector<DynkinNode>) in.readObject();
+			connections = (Vector<DynkinConnection>) in.readObject();
+			compactPairs = (Vector<CompactPair>) in.readObject();
 			lastAddedNode = null;
 			in.close();
 			update();
@@ -691,7 +691,7 @@ public class CDynkinDiagram
 		output += "\\begin{pspicture}(" + bounds[0] + "," + bounds[2] + ")(" + bounds[1] + "," + bounds[3] + ")\n";
 		
 		// The nodes.
-		for(CDynkinNode node : nodes)
+		for(DynkinNode node : nodes)
 		{
 			if(node.isEnabled())
 				output += "\\normalNode";
@@ -705,25 +705,25 @@ public class CDynkinDiagram
 		}
 		
 		// The connections.
-		for(CDynkinConnection connection : connections)
+		for(DynkinConnection connection : connections)
 		{
 			String toFrom= "{N" + connection.fromNode.getLabel() + hashCode + "}"
 					+ "{N" + connection.toNode.getLabel() + hashCode + "}\n";
 			switch(connection.type)
 			{
-			case CDynkinConnection.TYPE_SINGLE:
+			case DynkinConnection.TYPE_SINGLE:
 				output += "\\singleConnection" + toFrom;
 				break;
-			case CDynkinConnection.TYPE_DOUBLE:
+			case DynkinConnection.TYPE_DOUBLE:
 				output += "\\doubleConnection" + toFrom;
 				break;
-			case CDynkinConnection.TYPE_TRIPLE:
+			case DynkinConnection.TYPE_TRIPLE:
 				output += "\\tripleConnection" + toFrom;
 				break;
-			case CDynkinConnection.TYPE_QUADRUPLE:
+			case DynkinConnection.TYPE_QUADRUPLE:
 				output += "\\quadrupleConnection" + toFrom;
 				break;
-			case CDynkinConnection.TYPE_SPECIAL_DOUBLE:
+			case DynkinConnection.TYPE_SPECIAL_DOUBLE:
 				output += "\\specialDoubleConnection" + toFrom;
 				break;
 			default:
@@ -756,19 +756,19 @@ public class CDynkinDiagram
 	{
 		// Draw the connections first.
 		g2.setColor(Color.BLACK);
-		for (CDynkinConnection connection : connections)
+		for (DynkinConnection connection : connections)
 		{
-			CDynkinNode node1 = connection.fromNode;
-			CDynkinNode node2 = connection.toNode;
+			DynkinNode node1 = connection.fromNode;
+			DynkinNode node2 = connection.toNode;
 			Point begin	= new Point(spacing * node1.x + offset, spacing * node1.y + offset);
 			Point end	= new Point(spacing * node2.x + offset, spacing * node2.y + offset);
 			Helper.drawConnection(g2, Color.BLACK, connection.type, begin, end, radius);
 		}
 		// Secondly the compact pair indicators.
-		for(CCompactPair pair : compactPairs)
+		for(CompactPair pair : compactPairs)
 		{
-			CDynkinNode node1 = pair.node1;
-			CDynkinNode node2 = pair.node2;
+			DynkinNode node1 = pair.node1;
+			DynkinNode node2 = pair.node2;
 			int x1 = spacing * node1.x + offset;
 			int y1 = spacing * node1.y + offset;
 			int x2 = spacing * node2.x + offset;
@@ -776,7 +776,7 @@ public class CDynkinDiagram
 			Helper.drawCompactCon(g2, Color.BLACK, x1, y1, x2, y2);
 		}
 		// Now draw the nodes.
-		for (CDynkinNode node : nodes)
+		for (DynkinNode node : nodes)
 		{
 			int x = spacing * node.x + offset;
 			int y = spacing * node.y + offset;

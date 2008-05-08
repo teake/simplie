@@ -1,5 +1,5 @@
 /*
- * CAlgebraComposite.java
+ * AlgebraComposite.java
  *
  * Created on 18-jun-2007, 14:47:23
  *
@@ -34,26 +34,27 @@ import edu.simplie.math.*;
  * Implements DiagramListener to obtain the diagram information.
  * 
  * @author  Teake Nutma
+ * @version $Revision$, $Date$
  */
-public class CAlgebraComposite implements DiagramListener
+public class AlgebraComposite implements DiagramListener
 {
-	/** CAlgebra object for the full algebra */
-	public CAlgebra algebra;
-	/** CAlgebra object for the regular subalgebra */
-	public CAlgebra subAlgebra;
-	/** CAlgebra object for the internal subalgebra */
-	public CAlgebra intAlgebra;
-	/** CAlgebra object for the non-level subalgebra (which is equal to the direct product of subAlgebra x intAlgebra) */
-	public CAlgebra coAlgebra;
-	/** CDynkinDiagram object */
-	public CDynkinDiagram dd;
+	/** Algebra object for the full algebra */
+	public Algebra algebra;
+	/** Algebra object for the regular subalgebra */
+	public Algebra subAlgebra;
+	/** Algebra object for the internal subalgebra */
+	public Algebra intAlgebra;
+	/** Algebra object for the non-level subalgebra (which is equal to the direct product of subAlgebra x intAlgebra) */
+	public Algebra coAlgebra;
+	/** DynkinDiagram object */
+	public DynkinDiagram dd;
 	
 	private int sign;
 	private boolean locked;
 	
-	public CAlgebraComposite()
+	public AlgebraComposite()
 	{
-		dd = new CDynkinDiagram();
+		dd = new DynkinDiagram();
 		dd.addListener(this);
 		this.sign = 1;
 		this.locked = false;
@@ -68,7 +69,7 @@ public class CAlgebraComposite implements DiagramListener
 		
 		// Only construct the full algebra if the new matrix is different.
 		if(algebra == null || !Helper.sameMatrices(dd.cartanMatrix(), algebra.A))
-			algebra = new CAlgebra(dd.cartanMatrix());
+			algebra = new Algebra(dd.cartanMatrix());
 		
 		// Only construct the coalgebra if it is new and different from the full algebra.
 		if(coAlgebra == null || !Helper.sameMatrices(dd.cartanSubMatrix("co"), coAlgebra.A))
@@ -76,7 +77,7 @@ public class CAlgebraComposite implements DiagramListener
 			if(Helper.sameMatrices(dd.cartanSubMatrix("co"),algebra.A))
 				coAlgebra = algebra;
 			else
-				coAlgebra	= new CAlgebra(dd.cartanSubMatrix("co"));
+				coAlgebra	= new Algebra(dd.cartanSubMatrix("co"));
 		}
 		
 		// Only construct the subalgebra if it is new and different from the coalgebra.
@@ -85,7 +86,7 @@ public class CAlgebraComposite implements DiagramListener
 			if(Helper.sameMatrices(dd.cartanSubMatrix("sub"),coAlgebra.A))
 				subAlgebra = coAlgebra;
 			else
-				subAlgebra = new CAlgebra(dd.cartanSubMatrix("sub"));
+				subAlgebra = new Algebra(dd.cartanSubMatrix("sub"));
 		}
 		
 		// Only construct the intalgebra if it is new and different from the coalgebra.
@@ -94,7 +95,7 @@ public class CAlgebraComposite implements DiagramListener
 			if(Helper.sameMatrices(dd.cartanSubMatrix("int"),coAlgebra.A))
 				intAlgebra = coAlgebra;
 			else
-				intAlgebra = new CAlgebra(dd.cartanSubMatrix("int"));
+				intAlgebra = new Algebra(dd.cartanSubMatrix("int"));
 		}
 		
 		dd.setTitle("Dynkin diagram of " + getDynkinDiagramType(false));

@@ -1,5 +1,5 @@
 /*
- * CWeight.java
+ * Weight.java
  *
  * Created on 11 april 2007, 17:42
  *
@@ -31,7 +31,7 @@ import edu.simplie.Helper;
  *
  * @author Teake Nutma
  */
-public class CWeight
+public class Weight
 {
 	/** The dynkin labels of this weight. */
 	public final int[] dynkinLabels;
@@ -46,11 +46,11 @@ public class CWeight
 	
 	
 	/** 
-	 * Creates a new instance of CWeight
+	 * Creates a new instance of Weight
 	 *
 	 * @param dynkinLabels	The dynkin labels of the weight.
 	 */
-	public CWeight(int[] dynkinLabels)
+	public Weight(int[] dynkinLabels)
 	{
 		this.dynkinLabels			= dynkinLabels.clone();
 		this.mult					= 1;
@@ -109,7 +109,7 @@ public class CWeight
 		if((obj == null) || (obj.getClass() != this.getClass()))
 			return false;
 		
-		CWeight weight = (CWeight) obj;
+		Weight weight = (Weight) obj;
 		
 		if(dynkinLabels.length != weight.dynkinLabels.length)
 			return false;

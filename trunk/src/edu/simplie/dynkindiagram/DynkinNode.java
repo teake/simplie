@@ -1,5 +1,5 @@
 /*
- * CDynkinNode.java
+ * DynkinNode.java
  *
  * Created on 8 maart 2007, 14:39
  *
@@ -32,7 +32,7 @@ import java.io.Serializable;
  * @see		CDynkinDiagram
  * @author	Teake Nutma
  */
-public class CDynkinNode implements Serializable, Comparable<CDynkinNode>
+public class DynkinNode implements Serializable, Comparable<DynkinNode>
 {
 	public static final int STATE_ENABLED = 0;
 	public static final int STATE_DISABLED = 1;
@@ -50,18 +50,18 @@ public class CDynkinNode implements Serializable, Comparable<CDynkinNode>
 	/** Is the node compact or not? */
 	private boolean compact;
 	/** The internal list of nodes to which this node has connections. */
-	private ArrayList<CDynkinNode> connectionsTo;
+	private ArrayList<DynkinNode> connectionsTo;
 	/** The compact partner, if any. */
-	private CDynkinNode compactPartner;
+	private DynkinNode compactPartner;
 	
 	/**
-	 * Creates a new instance of CDynkinNode.
+	 * Creates a new instance of DynkinNode.
 	 * When instantiated, it is enabled.
 	 *
 	 * @param	x		The x-coordinate of the node in the dynkin diagram.
 	 * @param	y		The y-coordinate of the node in the dynkin diagram.
 	 */
-	public CDynkinNode(int x, int y)
+	public DynkinNode(int x, int y)
 	{
 		this.state		= STATE_ENABLED;
 		this.compact	= false;
@@ -70,7 +70,7 @@ public class CDynkinNode implements Serializable, Comparable<CDynkinNode>
 		this.label		= 1;
 		this.compactPartner = null;
 		
-		this.connectionsTo = new ArrayList<CDynkinNode>();
+		this.connectionsTo = new ArrayList<DynkinNode>();
 	}
 	
 	/**
@@ -171,7 +171,7 @@ public class CDynkinNode implements Serializable, Comparable<CDynkinNode>
 	{
 		if(state != STATE_DISABLED)
 			return false;
-		for(CDynkinNode toNode : connectionsTo)
+		for(DynkinNode toNode : connectionsTo)
 		{
 			if(toNode.getState() == STATE_ENABLED)
 				return false;
@@ -192,7 +192,7 @@ public class CDynkinNode implements Serializable, Comparable<CDynkinNode>
 			return false;
 	}
 	
-	public void setCompactPartner(CDynkinNode partner)
+	public void setCompactPartner(DynkinNode partner)
 	{
 		if(partner != null)
 			compact = false;
@@ -205,7 +205,7 @@ public class CDynkinNode implements Serializable, Comparable<CDynkinNode>
 	 * @param	toNode	The node to which we should lay a connection
 	 * @return			True if succesfull, false if the connection already existed.
 	 */
-	public boolean addConnection(CDynkinNode toNode)
+	public boolean addConnection(DynkinNode toNode)
 	{
 		if(connectionsTo.contains(toNode))
 			return false;
@@ -221,7 +221,7 @@ public class CDynkinNode implements Serializable, Comparable<CDynkinNode>
 	 * @param	toNode	The node to which we should delete the connection.
 	 * @return			True if succesfull, false if there was no connection.
 	 */
-	public boolean removeConnection(CDynkinNode toNode)
+	public boolean removeConnection(DynkinNode toNode)
 	{
 		return connectionsTo.remove(toNode);
 	}
@@ -232,7 +232,7 @@ public class CDynkinNode implements Serializable, Comparable<CDynkinNode>
 	 * @param toNode	The node to which this node should have connection.
 	 * @return			True if the connection exists, false otherwise.
 	 */
-	public boolean hasConnectionTo(CDynkinNode toNode)
+	public boolean hasConnectionTo(DynkinNode toNode)
 	{
 		return connectionsTo.contains(toNode);
 	}
@@ -246,7 +246,7 @@ public class CDynkinNode implements Serializable, Comparable<CDynkinNode>
 	 *							0 if we cannot sort it,
 	 *							-1 if this nodes comes before the other.
 	 */
-	public int compareTo(CDynkinNode compareNode)
+	public int compareTo(DynkinNode compareNode)
 	{
 		final int BEFORE = -1;
 		final int EQUAL = 0;
@@ -273,7 +273,7 @@ public class CDynkinNode implements Serializable, Comparable<CDynkinNode>
 		
 		if((obj == null) || (obj.getClass() != this.getClass()))
 			return false;
-		CDynkinNode compareNode = (CDynkinNode) obj;
+		DynkinNode compareNode = (DynkinNode) obj;
 		if(compareNode.x == x && compareNode.y == y)
 			return true;
 		else

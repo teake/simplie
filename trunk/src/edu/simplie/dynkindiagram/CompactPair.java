@@ -1,5 +1,5 @@
 /*
- * CCompactPair.java
+ * CompactPair.java
  *
  * Created on 9-nov-2007, 15:02:40
  *
@@ -29,14 +29,14 @@ import java.io.Serializable;
  *
  * @author Teake Nutma
  */
-public class CCompactPair implements Serializable
+public class CompactPair implements Serializable
 {
 	/** First node in the compact pair. */
-	public final CDynkinNode node1;
+	public final DynkinNode node1;
 	/** Second node in the compact pair. */
-	public final CDynkinNode node2;
+	public final DynkinNode node2;
 	
-	public CCompactPair(CDynkinNode node1, CDynkinNode node2)
+	public CompactPair(DynkinNode node1, DynkinNode node2)
 	{
 		this.node1 = node1;
 		this.node2 = node2;
@@ -50,7 +50,7 @@ public class CCompactPair implements Serializable
 		
 		if((obj == null) || (obj.getClass() != this.getClass()))
 			return false;
-		CCompactPair comparePair = (CCompactPair) obj;
+		CompactPair comparePair = (CompactPair) obj;
 		if(comparePair.node1.equals(node1) 
 				|| comparePair.node2.equals(node2) 
 				|| comparePair.node2.equals(node1))

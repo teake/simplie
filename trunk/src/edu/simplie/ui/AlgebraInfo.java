@@ -37,16 +37,16 @@ import java.util.Iterator;
  * the root space metric, the root system, and arbitrary highest
  * weight representations.
  * 
- * @see		CAlgebraComposite
+ * @see		AlgebraComposite
  * @author  Teake Nutma
  */
 public class AlgebraInfo extends javax.swing.JPanel implements DiagramListener
 {
 	private DefaultTableModel tableModelRoots;
 	private DefaultTableModel tableModelWeights;
-	private CAlgebra algebra;
-	private CAlgebraComposite algebras;
-	private CHighestWeightRep HWrep;
+	private Algebra algebra;
+	private AlgebraComposite algebras;
+	private HighestWeightRep HWrep;
 	
 	/** Creates new form AlgebraInfo */
 	public AlgebraInfo()
@@ -59,7 +59,7 @@ public class AlgebraInfo extends javax.swing.JPanel implements DiagramListener
 	}
 	
 	/** Sets the composite of algebras we want to view info of. */
-	public void setAlgebraComposite(CAlgebraComposite algebras)
+	public void setAlgebraComposite(AlgebraComposite algebras)
 	{
 		this.algebras	= algebras;
 		algebras.dd.addListener(this);
@@ -644,11 +644,11 @@ private void repFillButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN
 	
 	for (int i = 0; i < HWrep.size(); i++)
 	{
-		Collection<CWeight> weights = HWrep.get(i);
+		Collection<Weight> weights = HWrep.get(i);
 		Iterator iterator	= weights.iterator();
 		while (iterator.hasNext())
 		{
-			CWeight weight = (CWeight) iterator.next();
+			Weight weight = (Weight) iterator.next();
 			if(cbDominant.isSelected() && !weight.isDominant)
 				continue;
 			Object[] rowData = new Object[4];
@@ -666,7 +666,7 @@ private void repFillButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN
 		int[] labels = Helper.stringToIntArray(tfDynkinLabels.getText());
 		if(algebra != null && labels.length == algebra.rank)
 		{
-			HWrep = new CHighestWeightRep(algebra,labels);
+			HWrep = new HighestWeightRep(algebra,labels);
 			lDynkinLabels.setText(Helper.intArrayToString(labels));
 			Long dim = new Long(HWrep.dim);
 			lDimRep.setText(dim.toString());
@@ -697,7 +697,7 @@ private void repFillButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN
 			Iterator iterator	= roots.iterator();
 			while (iterator.hasNext())
 			{
-				CRoot root = (CRoot) iterator.next();
+				Root root = (Root) iterator.next();
 				Object[] rowData = new Object[5];
 				rowData[0] = Helper.intArrayToString(root.vector);
 				rowData[1] = root.norm;

@@ -1,5 +1,5 @@
 /*
- * CRepresentation.java
+ * Representation.java
  *
  * Created on 10 april 2007, 10:49
  *
@@ -23,7 +23,7 @@
 package edu.simplie.leveldecomposer;
 
 import edu.simplie.*;
-import edu.simplie.algebra.CHighestWeightRep;
+import edu.simplie.algebra.HighestWeightRep;
 import edu.simplie.math.fraction;
 
 /**
@@ -33,7 +33,7 @@ import edu.simplie.math.fraction;
  * @see		CAutoLevelScanner
  * @author	Teake Nutma
  */
-public class CRepresentation implements Comparable<CRepresentation>
+public class Representation implements Comparable<Representation>
 {
 	/** The vector of the root associated to the highest weight state of this representation. */
 	public final int[] rootVector;
@@ -57,19 +57,19 @@ public class CRepresentation implements Comparable<CRepresentation>
 	private long outerMult;
 	private long rootMult;
 	
-	private final CHighestWeightRep hwRep;
+	private final HighestWeightRep hwRep;
 	
-	private final CAlgebraComposite algebras;
+	private final AlgebraComposite algebras;
 	
 	/**
-	 * Creates a new instance of CRepresentation
+	 * Creates a new instance of Representation
 	 *
-	 * @param	algebras		The CAlgebraComposite object for which this is a rep at a level.
+	 * @param	algebras		The AlgebraComposite object for which this is a rep at a level.
 	 * @param	dynkinLabels	The full dynkinlabels of the highest weight state.
 	 * @param	levels			The part of the rootvector corresponding to the level nodes.
 	 * @param	length			The length of the associated root (i.e. the innerproduct with itself).
 	 */
-	public CRepresentation(CAlgebraComposite algebras, int[] dynkinLabels, int[] levels, int length)
+	public Representation(AlgebraComposite algebras, int[] dynkinLabels, int[] levels, int length)
 	{
 		this.algebras		= algebras;
 		this.dynkinLabels	= dynkinLabels.clone();
@@ -86,7 +86,7 @@ public class CRepresentation implements Comparable<CRepresentation>
 		intDynkinLabels = algebras.intDynkinLabels(rootVector);
 		
 		// Instantiate the highest weight rep.
-		hwRep = new CHighestWeightRep(algebras.coAlgebra, dynkinLabels);
+		hwRep = new HighestWeightRep(algebras.coAlgebra, dynkinLabels);
 		weightHeight = hwRep.highestHeight;
 		
 		// Calculate the height.
@@ -135,7 +135,7 @@ public class CRepresentation implements Comparable<CRepresentation>
 	}
 	
 	/** Sort representations by means of the height of their associated roots. */
-	public int compareTo(CRepresentation rep)
+	public int compareTo(Representation rep)
 	{
 		final int BEFORE = -1;
 		final int EQUAL = 0;

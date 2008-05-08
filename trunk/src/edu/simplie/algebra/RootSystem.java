@@ -1,5 +1,5 @@
 /*
- * CRootSystem.java
+ * RootSystem.java
  *
  * Created on 19 april 2007, 12:01
  *
@@ -33,15 +33,15 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 /**
- * Given a specific CAlgebra, this class creates the corresponding root system.
+ * Given a specific Algebra, this class creates the corresponding root system.
  *
- * @see		CAlgebra
+ * @see		Algebra
  * @author	Teake Nutma
  */
-public class CRootSystem
+public class RootSystem
 {
 	/** The algebra of which this is the rootsystem. */
-	private final CAlgebra algebra;
+	private final Algebra algebra;
 	/** The rank of the algebra of which this is the rootsystem. */
 	private final int rank;
 	/** The number of positive roots constructed so far. */
@@ -49,11 +49,11 @@ public class CRootSystem
 	/** The number of positive generators constructed so far. */
 	private long numPosGenerators;
 	/** The table containing all the (positive) roots. */
-	private ArrayList<HashSet<CRoot>> rootSystem;
+	private ArrayList<HashSet<Root>> rootSystem;
 	/** The table containing all the multiples of roots that aren't roots themselves (used in the Peterson formula). */
-	private ArrayList<ArrayList<CRoot>> rootMultiples;
+	private ArrayList<ArrayList<Root>> rootMultiples;
 	/** The simple roots. */
-	private HashSet<CRoot> simpleRoots;
+	private HashSet<Root> simpleRoots;
 	/** The height up to and included to which we constructed the root system. */
 	private int constructedHeight;
 	/** Boolean to indicate whether the root system construction should be canceled */
@@ -65,12 +65,12 @@ public class CRootSystem
 	/** The minimum root norm (as constructed so far) */
 	private int minNorm;
 	
-	/** Creates a new instance of CRootSystem and constructs up to height 1. */
-	public CRootSystem(CAlgebra algebra)
+	/** Creates a new instance of RootSystem and constructs up to height 1. */
+	public RootSystem(Algebra algebra)
 	{
 		this.algebra	= algebra;
 		this.rank		= algebra.rank;
-		rootSystem		= new ArrayList<HashSet<CRoot>>();
+		rootSystem		= new ArrayList<HashSet<Root>>();
 	
 		if(rank==0)
 		{
@@ -78,13 +78,13 @@ public class CRootSystem
 		}
 		
 		// Add the CSA to the root table.
-		HashSet<CRoot> csa = new HashSet<CRoot>();
+		HashSet<Root> csa = new HashSet<Root>();
 		int[] csaVector		= new int[rank];
 		for (int i = 0; i < rank; i++)
 		{
 			csaVector[i] = 0;
 		}
-		CRoot csaRoot	= new CRoot(csaVector);
+		Root csaRoot	= new Root(csaVector);
 		csaRoot.mult	= rank;
 		csaRoot.coMult	= new fraction(0);
 		csaRoot.norm	= 0;
@@ -92,7 +92,7 @@ public class CRootSystem
 		rootSystem.add(0,csa);
 		
 		// Add the simple roots and set the max and min norms.
-		simpleRoots = new HashSet<CRoot>();
+		simpleRoots = new HashSet<Root>();
 		maxNorm = 0;
 		minNorm = Integer.MAX_VALUE;
 		for (int i = 0; i < rank; i++)
@@ -102,7 +102,7 @@ public class CRootSystem
 			{
 				rootVector[j] = ( i == j) ? 1 : 0;
 			}
-			CRoot simpleRoot	= new CRoot(rootVector);
+			Root simpleRoot	= new Root(rootVector);
 			simpleRoot.mult		= 1;
 			simpleRoot.coMult	= new fraction(1);
 			simpleRoot.norm		= (short) (2 * algebra.halfNorms[i]);
@@ -119,9 +119,9 @@ public class CRootSystem
 		fullyConstructed	= false;
 		
 		// Set the table of root multiples.
-		rootMultiples = new ArrayList<ArrayList<CRoot>>();
-		rootMultiples.add(0,new ArrayList<CRoot>());
-		rootMultiples.add(1,new ArrayList<CRoot>());
+		rootMultiples = new ArrayList<ArrayList<Root>>();
+		rootMultiples.add(0,new ArrayList<Root>());
+		rootMultiples.add(1,new ArrayList<Root>());
 		
 		// If the algebra is finite, we can construct the root system to all heights.
 		if(algebra.finite)
@@ -143,7 +143,7 @@ public class CRootSystem
 		String output = new String();
 		for (int i = 0; i < rootSystem.size(); i++)
 		{
-			HashSet<CRoot> roots = rootSystem.get(i);
+			HashSet<Root> roots = rootSystem.get(i);
 			for (Iterator it = roots.iterator(); it.hasNext();)
 			{
 				output += "Index: " + i + ", " + it.next() + "\n";
@@ -164,7 +164,7 @@ public class CRootSystem
 			PrintWriter out = new PrintWriter(new FileWriter(filename));
 			for (int i = 0; i < rootSystem.size(); i++)
 			{
-				HashSet<CRoot> roots = rootSystem.get(i);
+				HashSet<Root> roots = rootSystem.get(i);
 				for (Iterator it = roots.iterator(); it.hasNext();)
 				{
 					out.println(it.next());
@@ -226,7 +226,7 @@ public class CRootSystem
 	 * @param	index	The height of the roots to get.
 	 * @return			A collection containing the roots of that height.
 	 */
-	public Collection<CRoot> get(int index)
+	public Collection<Root> get(int index)
 	{
 		return rootSystem.get(index);
 	}
@@ -245,7 +245,7 @@ public class CRootSystem
 		{
 			vector[i] = Math.abs(vector[i]);
 		}
-		return getRootMult(new CRoot(vector));
+		return getRootMult(new Root(vector));
 	}
 	
 	/**
@@ -254,10 +254,10 @@ public class CRootSystem
 	 * @param rootToGet		The root of which the multiplicity should be returned.
 	 * @return				The root multiplicity, 0 if it's not a root.
 	 */
-	public long getRootMult(CRoot rootToGet)
+	public long getRootMult(Root rootToGet)
 	{
 		int rootHeight = rootToGet.height();
-		HashSet<CRoot> roots;
+		HashSet<Root> roots;
 		
 		if(rootHeight < 0)
 		{
@@ -276,7 +276,7 @@ public class CRootSystem
 			{
 				for(Iterator it = roots.iterator(); it.hasNext();)
 				{
-					CRoot root = (CRoot) it.next();
+					Root root = (Root) it.next();
 					if(root.equals(rootToGet))
 						return root.mult;
 				}
@@ -340,8 +340,8 @@ public class CRootSystem
 				constructedHeight	= in.readInt();
 				numPosRoots			= in.readLong();
 				numPosGenerators	= in.readLong();
-				rootSystem			= (ArrayList<HashSet<CRoot>>) in.readObject();
-				rootMultiples		= (ArrayList<ArrayList<CRoot>>) in.readObject();
+				rootSystem			= (ArrayList<HashSet<Root>>) in.readObject();
+				rootMultiples		= (ArrayList<ArrayList<Root>>) in.readObject();
 			}
 			else
 			{
@@ -369,10 +369,10 @@ public class CRootSystem
 		if(fullyConstructed)
 			return;
 		
-		HashSet<CRoot> prevRoots;
-		HashSet<CRoot> newRoots;
-		CRoot	root;
-		CRoot	newRoot;
+		HashSet<Root> prevRoots;
+		HashSet<Root> newRoots;
+		Root	root;
+		Root	newRoot;
 		int[]	newVector;
 		int[]	dynkinLabels;
 		int		nextHeight;
@@ -395,7 +395,7 @@ public class CRootSystem
 			{
 				if(cancelConstruction)
 					return;
-				root = (CRoot) it.next();
+				root = (Root) it.next();
 				// Calculate the Dynkin labels
 				dynkinLabels = algebra.rootToWeight(root.vector);
 				for (int i = 0; i < rank; i++)
@@ -415,11 +415,11 @@ public class CRootSystem
 						{
 							// This will be the first time this height will be reached,
 							// so create a new container for these roots.
-							rootSystem.add(constructedHeight + j,new HashSet<CRoot>());	
+							rootSystem.add(constructedHeight + j,new HashSet<Root>());	
 						}
 						newVector		= root.vector.clone();
 						newVector[i]	= newVector[i] + j;
-						newRoot			= new CRoot(newVector);
+						newRoot			= new Root(newVector);
 						newHeight		= constructedHeight + j;
 						if(j == pMax)
 						{
@@ -453,7 +453,7 @@ public class CRootSystem
 
 			for (Iterator it = newRoots.iterator(); it.hasNext();)
 			{
-				root = (CRoot) it.next();
+				root = (Root) it.next();
 
 				// Determine its coMult minus the root multiplicity.
 				fraction coMult = calculateCoMult(root);
@@ -503,18 +503,18 @@ public class CRootSystem
 			//
 			// Construct all the root multiples of the roots at the new height
 			//
-			ArrayList<CRoot> multiplesList = new ArrayList<CRoot>();
+			ArrayList<Root> multiplesList = new ArrayList<Root>();
 			for (int i = 1; i < Math.floor(nextHeight / 2) + 1; i++)
 			{
 				// We're only interested in i's with zero divisor.
 				if(nextHeight % i != 0)
 					continue;
 				int factor = nextHeight / i;
-				HashSet<CRoot> roots = rootSystem.get(i);
+				HashSet<Root> roots = rootSystem.get(i);
 				for (Iterator it = roots.iterator(); it.hasNext();)
 				{
-					root = (CRoot) it.next();
-					CRoot rootMultiple = root.times(factor);
+					root = (Root) it.next();
+					Root rootMultiple = root.times(factor);
 					// Don't add it if it's already in the 'proper' root list.
 					// Else we would count this one double.
 					if(newRoots.contains(rootMultiple))
@@ -543,7 +543,7 @@ public class CRootSystem
 	 *
 	 * @return			The co-multiplicity.
 	 */
-	private fraction calculateCoMult(CRoot root)
+	private fraction calculateCoMult(Root root)
 	{
 		fraction coMult	= new fraction(0);
 		
@@ -553,7 +553,7 @@ public class CRootSystem
 		
 		for (int i = 2; i < root.highest() + 1; i++)
 		{
-			CRoot divRoot = root.div(i);
+			Root divRoot = root.div(i);
 			if(divRoot != null)
 			{
 				coMult.add(new fraction(getRootMult(divRoot),i));
@@ -571,7 +571,7 @@ public class CRootSystem
 	 * @param	coMult	The co-multiplicity of that root.
 	 * @return			The multiplicity of the root.
 	 */
-	private long calculateMult(CRoot root, fraction coMult)
+	private long calculateMult(Root root, fraction coMult)
 	{
 		fraction multiplicity = new fraction(0);
 
@@ -607,15 +607,15 @@ public class CRootSystem
 	 * @param	height 		The height of one of the decomposition parts.
 	 * @return				A part of the Peterson formula, which is to be summed over.
 	 */
-	private fraction petersonPart(CRoot root, int height)
+	private fraction petersonPart(Root root, int height)
 	{
-		HashSet<CRoot> betas	= rootSystem.get(height);
-		HashSet<CRoot> gammas	= rootSystem.get(root.height() - height);
+		HashSet<Root> betas	= rootSystem.get(height);
+		HashSet<Root> gammas	= rootSystem.get(root.height() - height);
 		
 		fraction multiplicity = petersonSubPart(root, betas, gammas);
 		
-		ArrayList<CRoot> betaMultiples	= rootMultiples.get(height);
-		ArrayList<CRoot> gammaMultiples	= rootMultiples.get(root.height() - height);
+		ArrayList<Root> betaMultiples	= rootMultiples.get(height);
+		ArrayList<Root> gammaMultiples	= rootMultiples.get(root.height() - height);
 		
 		multiplicity.add(petersonSubPart(root,betaMultiples,gammaMultiples));
 		multiplicity.add(petersonSubPart(root,betas,gammaMultiples));
@@ -624,18 +624,18 @@ public class CRootSystem
 		return multiplicity;
 	}
 	
-	private fraction petersonSubPart(CRoot root, Collection<CRoot> list1, Collection<CRoot> list2)
+	private fraction petersonSubPart(Root root, Collection<Root> list1, Collection<Root> list2)
 	{
 		fraction multiplicity = new fraction(0);
-		CRoot beta;
-		CRoot gamma;
+		Root beta;
+		Root gamma;
 		for (Iterator it1 = list1.iterator(); it1.hasNext();)
 		{
-			beta = (CRoot) it1.next();
+			beta = (Root) it1.next();
 			innerRootLoop:
 				for (Iterator it2 = list2.iterator(); it2.hasNext();)
 				{
-					gamma = (CRoot) it2.next();
+					gamma = (Root) it2.next();
 					for (int i = 0; i < rank; i++)
 					{
 						if(beta.vector[i] + gamma.vector[i] != root.vector[i])
