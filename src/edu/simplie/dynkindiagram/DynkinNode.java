@@ -29,7 +29,7 @@ import java.io.Serializable;
 /**
  * A class for storing nodes within a Dynkin diagram.
  *
- * @see		CDynkinDiagram
+ * @see		DynkinDiagram
  * @author	Teake Nutma
  * @version $Revision$, $Date$
  */
