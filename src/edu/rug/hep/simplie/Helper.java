@@ -22,6 +22,7 @@
 
 package edu.rug.hep.simplie;
 
+import Jama.Matrix;
 import edu.rug.hep.simplie.math.*;
 
 import edu.rug.hep.simplie.dynkindiagram.CDynkinConnection;
@@ -68,6 +69,19 @@ public class Helper
 			clone[i] = matrix[i].clone();			
 		}
 		return clone;
+	}
+	
+	public static Matrix intArrayToMatrix(int[][] array)
+	{
+		Matrix matrix = new Matrix(array.length, array.length);
+		for (int i = 0; i < array.length; i++)
+		{
+			for(int j = 0; j < array.length; j++)
+			{
+				matrix.set(i,j,array[i][j]);
+			}
+		}
+		return matrix;
 	}
 	
 	/**

@@ -47,37 +47,29 @@ public class CartanMatrix
 	public final String	type;
 	public final int extended;
 	public final int simpleRank;
-
 	
 	private final int[][] A;
-
+	private final int[][] C;
 	
 	public CartanMatrix(int[][] A)
 	{
 		this.A = Helper.cloneMatrix(A);
+		this.C = characteristicMatrix(A);
 		
-		// Convert the Cartan matrix to a matrix object.
-		Matrix matrix = new Matrix(A.length,A.length);
-		for(int i=0; i<A.length; i++)
-		{
-			for(int j=0; j<A.length; j++)
-			{
-				matrix.set(i,j,A[i][j]);
-			}
-		}
 		// Do some preliminary checks.
 		// Assume that A is a square matrix.
 		if(A.length == 0)
 		{
-			rank	= 0;
-			rankA	= 0;
-			det		= 0;
+			this.rank	= 0;
+			this.rankA	= 0;
+			this.det	= 0;
 		}
 		else
 		{
-			rank	= A.length;
-			rankA	= matrix.rank();
-			det		= (int) Math.round(matrix.det());
+			Matrix matrix = Helper.intArrayToMatrix(A);
+			this.rank	= A.length;
+			this.rankA	= matrix.rank();
+			this.det	= (int) Math.round(matrix.det());
 		}
 		
 		// Determine the type etc.
@@ -95,7 +87,7 @@ public class CartanMatrix
 			{
 				for(String serie : series)
 				{
-					if(sameCartanMatrices(this.A,generateTypeMatrix(rank,j,serie)))
+					if(equivalentTo(generateTypeMatrix(rank,j,serie)))
 					{
 						tType = serie;
 						tExtended = j;
@@ -104,9 +96,9 @@ public class CartanMatrix
 				}
 			}
 		}
-		type		= tType;
-		extended	= tExtended;
-		simpleRank	= rank - extended;
+		this.type		= tType;
+		this.extended	= tExtended;
+		this.simpleRank	= rank - extended;
 	}
 	
 	public int get(int i, int j)
@@ -116,6 +108,9 @@ public class CartanMatrix
 	
 	private String getType(int i)
 	{
+		if(type.equals(empty) || type.equals(unknown))
+			return type;
+		
 		String output = type;
 		if(i == 1) output += "_{";
 		if(i == 2) output += "<sub>";
@@ -257,92 +252,52 @@ public class CartanMatrix
 		
 		return null;
 	}
-	/**
-	 * Determines whether two Cartan matrix are equivalent.
-	 * That is, after arbitrary permutations of rows and columns,
-	 * the matrices should be identical.
-	 * Instead of doing the actual permutations, a couple of permutation-invariant
-	 * characteristics of both matrices are calculated and compared.
-	 *
-	 * @param	matrix1	The first Cartan matrix to compare against the second.
-	 * @param	matrix2	The second Cartan matrix to compare against the first.
-	 * @return			True is the Cartan matrices are equivalent, false otherwise.
-	 */
-	public static boolean sameCartanMatrices(int[][] matrix1, int[][] matrix2)
+	
+	public int[][] characteristicMatrix(int[][] cm)
 	{
-		if(matrix1 == null || matrix2 == null)
-			return false;
-		if(matrix1.length != matrix2.length)
-			return false;
+		int[][] charM = new int[cm.length][cm.length];
+		int[] columnSums = new int[cm.length];
 		
-		Matrix A = new Matrix(matrix1.length,matrix1.length);
-		Matrix B = new Matrix(matrix1.length,matrix1.length);
-		
-		// Calculate the norms (the sum of all matrix entries)
-		int normA = 0;
-		int normB = 0;
-		// Calculate the number of nodes which have a given number of connections
-		int[] nodeConnA = new int[matrix1.length];
-		int[] nodeConnB = new int[matrix1.length];
-		for (int i = 0; i < nodeConnB.length; i++)
-			nodeConnB[i] = nodeConnA[i] = 0;
-		
-		// Calculate the sum of each column and sort these later on
-		int[] columnSums1 = new int[matrix1.length];
-		int[] columnSums2 = new int[matrix1.length];
-
-		for (int i = 0; i < matrix1.length; i++)
+		for(int i = 0; i < cm.length; i++)
 		{
-			int connA = 0;
-			int connB = 0;
-			
-			columnSums1[i] = 0;
-			columnSums2[i] = 0;
-			
-			for (int j = 0; j < matrix1.length; j++)
+			int numNB = 0;
+			for(int j = 0; j < cm.length; j++)
 			{
-				A.set(i,j,matrix1[i][j]);
-				B.set(i,j,matrix2[i][j]);
-				normA += matrix1[i][j];
-				normB += matrix2[i][j];
-				if(i != j)
+				columnSums[i] += cm[i][j];
+				if(i != j && cm[i][j] != 0)
+					numNB++;
+			}
+			for(int j = 0; j < cm.length; j++)
+			{
+				if(i != j && cm[i][j] != 0)
 				{
-					if(matrix1[i][j] != 0)
-						connA++;
-					if(matrix2[i][j] != 0)
-						connB++;
-					columnSums1[i] += matrix1[i][j];
-					columnSums2[i] += matrix2[i][j];
+					int numNBsNB = 0;
+					for(int k = 0; k < cm.length; k++)
+					{
+						if(j != k && cm[j][k] != 0)
+							numNBsNB++;
+					}
+					charM[numNB][numNBsNB]++;
 				}
 			}
-			nodeConnA[connA]++;
-			nodeConnB[connB]++;
-			
 		}
+		Arrays.sort(columnSums);
+		charM[0] = columnSums;	
 		
-		Arrays.sort(columnSums1);
-		Arrays.sort(columnSums2);
-		
-		if(!Arrays.equals(columnSums1, columnSums2))
+		return charM;
+	}
+	
+	
+	public boolean equivalentTo(int[][] cm)
+	{
+		if(cm == null || rank != cm.length)
 			return false;
 		
-		if(normA != normB)
+		Matrix m = Helper.intArrayToMatrix(cm);
+		if(det != Math.round(m.det()) || rankA != m.rank())
 			return false;
 		
-		for (int i = 0; i < nodeConnB.length; i++)
-		{
-			if(nodeConnB[i] != nodeConnA[i])
-				return false;			
-		}
-
-		
-		if(Math.round(A.det()) != Math.round(B.det()))
-			return false;
-		
-		if(A.rank() != B.rank())
-			return false;
-		
-		if(Math.round(100 * A.normF()) != Math.round(100 * B.normF()))
+		if(!Helper.sameMatrices(C,characteristicMatrix(cm)))
 			return false;
 		
 		return true;
