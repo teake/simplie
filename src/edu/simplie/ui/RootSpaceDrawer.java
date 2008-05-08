@@ -43,6 +43,7 @@ import javax.media.opengl.GLJPanel;
 /**
  *
  * @author  Teake Nutma
+ * @version $Revision$, $Date$
  */
 public class RootSpaceDrawer extends javax.swing.JPanel implements 
 		GLEventListener, 

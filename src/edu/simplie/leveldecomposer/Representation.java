@@ -32,6 +32,7 @@ import edu.simplie.math.fraction;
  *
  * @see		CAutoLevelScanner
  * @author	Teake Nutma
+ * @version $Revision$, $Date$
  */
 public class Representation implements Comparable<Representation>
 {

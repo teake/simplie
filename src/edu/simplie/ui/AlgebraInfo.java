@@ -39,6 +39,7 @@ import java.util.Iterator;
  * 
  * @see		AlgebraComposite
  * @author  Teake Nutma
+ * @version $Revision$, $Date$
  */
 public class AlgebraInfo extends javax.swing.JPanel implements DiagramListener
 {

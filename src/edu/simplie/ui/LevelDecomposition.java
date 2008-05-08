@@ -28,7 +28,6 @@ import edu.simplie.leveldecomposer.AutoLevelScanner;
 
 import java.util.*;
 import javax.swing.table.*;
-import javax.swing.event.*;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeEvent;
 import org.jdesktop.swingworker.SwingWorker;
@@ -39,6 +38,7 @@ import edu.simplie.ui.reusable.UIPrintableColorTable;
  * Windows for executing a level decomposition and vieuing its results.
  * 
  * @author  Teake Nutma
+ * @version $Revision$, $Date$
  */
 public class LevelDecomposition extends javax.swing.JPanel
 {

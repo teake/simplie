@@ -23,7 +23,6 @@
 package edu.simplie.ui;
 
 import edu.simplie.*;
-import java.awt.datatransfer.Clipboard;
 
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
@@ -41,6 +40,7 @@ import edu.simplie.ui.reusable.UIPrintableColorTable;
  * output of level decomposition) to LaTeX.
  * 
  * @author  Teake Nutma
+ * @version $Revision$, $Date$
  */
 public class ExportToTex extends javax.swing.JPanel
 {
@@ -303,7 +303,7 @@ public class ExportToTex extends javax.swing.JPanel
 			chooser.setDialogTitle("Export to TeX");
 			int returnVal = chooser.showSaveDialog(this);
 			
-			if ( returnVal == chooser.APPROVE_OPTION )
+			if ( returnVal == JFileChooser.APPROVE_OPTION )
 			{
 				String fileURL = chooser.getSelectedFile().getAbsolutePath();
 				if(!texFilter.accept(chooser.getSelectedFile()))

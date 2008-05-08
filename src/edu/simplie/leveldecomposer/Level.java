@@ -30,6 +30,7 @@ import java.util.Collections;
  * A class for storing subalgebra representations at a given level.
  * 
  * @author Teake Nutma
+ * @version $Revision$, $Date$
  */
 public class Level implements Comparable<Level>
 {

@@ -27,6 +27,7 @@ package edu.simplie.dynkindiagram;
  * Interface for listeners to changes of a Dynkin diagram.
  * 
  * @author Teake Nutma
+ * @version $Revision$, $Date$
  */
 public interface DiagramListener
 {

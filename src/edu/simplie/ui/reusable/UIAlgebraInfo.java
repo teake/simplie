@@ -28,6 +28,7 @@ import edu.simplie.algebra.Algebra;
 /**
  *
  * @author  Teake Nutma
+ * @version $Revision$, $Date$
  */
 public class UIAlgebraInfo extends javax.swing.JPanel
 {

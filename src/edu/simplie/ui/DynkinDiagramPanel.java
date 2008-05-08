@@ -39,6 +39,7 @@ import java.awt.event.KeyListener;
  * Displays a Dynkin diagram and allows its editing via direct user-interaction.
  * 
  * @author  Teake Nutma
+ * @version $Revision$, $Date$
  */
 public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramListener, KeyListener
 {

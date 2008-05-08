@@ -23,7 +23,6 @@
 package edu.simplie.ui.reusable;
 
 import javax.swing.JTable;
-import javax.swing.SwingUtilities;
 import javax.swing.event.TableModelEvent;
 import javax.swing.table.TableCellRenderer;
 import java.awt.Component;
@@ -47,6 +46,7 @@ public class UIPrintableColorTable extends JTable
 	{
 		super.setShowGrid(false);
 	}
+	@Override
 	public void print(Graphics g)
 	{
 		printing = true;
@@ -72,6 +72,7 @@ public class UIPrintableColorTable extends JTable
 		return this.titleTeX;
 	}
 	
+	@Override
 	public Component prepareRenderer(
 			TableCellRenderer renderer,
 			int row, int col)
@@ -102,11 +103,12 @@ public class UIPrintableColorTable extends JTable
 		return c;
 	}
 	
+	@Override
 	public void tableChanged(TableModelEvent e)
 	{
 		super.tableChanged(e);
 		
-		if(e.getType() != e.INSERT)
+		if(e.getType() != TableModelEvent.INSERT)
 			return;
 		
 		/** The following code auto-resizes the column of the table to fit their data. */

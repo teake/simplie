@@ -31,6 +31,7 @@ import java.io.Serializable;
  *
  * @see		CDynkinDiagram
  * @author	Teake Nutma
+ * @version $Revision$, $Date$
  */
 public class DynkinNode implements Serializable, Comparable<DynkinNode>
 {

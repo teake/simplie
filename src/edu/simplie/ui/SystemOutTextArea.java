@@ -31,6 +31,7 @@ import java.io.PrintStream;
  * of to the user.
  * 
  * @author  Teake Nutma
+ * @version $Revision$, $Date$
  */
 public class SystemOutTextArea extends javax.swing.JPanel
 {

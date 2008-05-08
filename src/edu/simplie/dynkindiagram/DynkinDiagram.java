@@ -41,6 +41,7 @@ import java.awt.Font;
  * of the whole algebra, which in turn can be used for a level decomposition.
  *
  * @author Teake Nutma
+ * @version $Revision$, $Date$
  */
 public class DynkinDiagram
 {

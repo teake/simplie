@@ -26,11 +26,11 @@ import edu.simplie.Helper;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import javax.swing.event.*;
 
 /**
  *
  * @author  Teake Nutma
+ * @version $Revision$, $Date$
  */
 public class UINumTextfield extends javax.swing.JPanel
 {
@@ -53,7 +53,7 @@ public class UINumTextfield extends javax.swing.JPanel
 			public void keyTyped(KeyEvent e)
 			{
 				int k=e.getKeyChar();
-				if((k>47 && k<58)|| k==8 || k==e.VK_MINUS)
+				if((k>47 && k<58)|| k==8 || k==KeyEvent.VK_MINUS)
 				{
 				}
 				else
