@@ -19,7 +19,7 @@
             </test-roots>
         </data>
         <swingapp xmlns="http://www.netbeans.org/ns/form-swingapp/1">
-            <application-class name="edu.rug.hep.simplie.SimpLieApp"/>
+            <application-class name="edu.simplie.SimpLieApp"/>
         </swingapp>
     </configuration>
 </project>
