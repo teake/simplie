@@ -41,6 +41,7 @@ import java.awt.geom.QuadCurve2D;
  * come in handy from time to time.
  * 
  * @author Teake Nutma
+ * @version $Revision$, $Date$
  */
 public class Helper
 {
