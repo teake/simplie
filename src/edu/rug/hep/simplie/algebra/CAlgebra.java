@@ -26,7 +26,6 @@ package edu.rug.hep.simplie.algebra;
 import edu.rug.hep.simplie.Helper;
 import edu.rug.hep.simplie.math.fraction;
 
-import java.util.Collections;
 import java.util.Collection;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -89,7 +88,7 @@ public class CAlgebra
 	/** Vector containing the norm of the simple roots divided by two. */
 	public final int[] halfNorms;
 	/** List of matrices into which the Cartan matrix factorizes */
-	private final ArrayList<int[][]> directProductFactors;
+	private final ArrayList<CartanMatrix> directProductFactors;
 		
 	/**********************************
 	 * Public methods
@@ -132,7 +131,7 @@ public class CAlgebra
 		this.symA	= new fraction[rank][rank];
 		this.invA	= new fraction[rank][rank];
 		this.G		= new fraction[rank][rank];
-		this.directProductFactors = new ArrayList<int[][]>();
+		this.directProductFactors = new ArrayList<CartanMatrix>();
 		
 		this.halfNorms = new int[rank];
 		ArrayList<ArrayList<Integer>> indecomposables = new ArrayList<ArrayList<Integer>>();
@@ -194,7 +193,7 @@ public class CAlgebra
 					pieceMatrix[j][k] = this.A[indecomposable.get(j)][indecomposable.get(k)];
 				}
 			}
-			directProductFactors.add(pieceMatrix);
+			directProductFactors.add(new CartanMatrix(pieceMatrix));
 			
 			// Lastly set the simple root norms.
 			// Make sure that all the root norms are multiples of two. This is 
@@ -217,6 +216,35 @@ public class CAlgebra
 			} while(!normsOK);
 		}
 
+		// Set the type of algebra.
+		String tType		= "";
+		String tTypeTeX		= "";
+		String tTypeHTML	= "";
+		for(int i = 0; i < directProductFactors.size(); i++)
+		{
+			CartanMatrix cm = directProductFactors.get(i);
+			tType		+= cm.getType();
+			tTypeTeX	+= cm.getTypeTeX();
+			tTypeHTML	+= cm.getTypeHTML();
+			if(i < directProductFactors.size() - 1)
+			{
+				tType		+= " x ";
+				tTypeTeX	+= " \\otimes ";
+				tTypeHTML	+= " x ";			
+			}
+		}
+		type		= tType;
+		typeTeX		= "$" + tTypeTeX + "$";
+		typeHTML	= "<html>" + tTypeHTML + "</html>";
+		
+		// Dirty hack to check for infinite algebras that might have positive determinant
+		// and infinite direct product algebras that also might have positive determinant.
+		// TODO: implement this better.
+		if((det > 0 || rank == 0) && !type.contains("Unknown") && !type.contains("+"))
+			finite = true;
+		else
+			finite = false;
+		
 		// Construct the Weyl vector
 		int[] weylLabels = new int[rank];
 		for (int i = 0; i < rank; i++)
@@ -225,79 +253,7 @@ public class CAlgebra
 		}
 		rho = new CWeight(weylLabels);
 		
-		// Detect the type of Lie algebra.
-		String tType	= "";
-		String tTypeTeX	= "";
-		String tTypeHTML= "";
-		String[] series	= { "A", "B", "C", "D", "E", "F", "G" };
-		for(int i = 0; i < directProductFactors.size(); i++)
-		{
-			int[][]	matrix	= directProductFactors.get(i);
-			String	ttType		= null;
-			String	ttTypeHTML	= null;
-			String	ttTypeTeX	= null;
-			
-			int size		= matrix.length;
-			int extended	= 0;
-			
-			{
-				loopToBreak:
-					for (int j = 0; j < size; j++)
-					{
-						for(String serie : series)
-						{
-							if(Helper.sameCartanMatrices(matrix,Helper.cartanMatrix(size,j,serie)))
-							{
-								ttType = ttTypeHTML = ttTypeTeX = serie;
-								extended = j;
-								break loopToBreak;
-							}
-						}
-					}
-			}
-			
-			if(ttType == null)
-				ttType = ttTypeHTML = ttTypeTeX = "Unknown";
-			else
-			{
-				if(size != 0)
-				{
-					int simpleRank = size - extended;
-					ttType		+= simpleRank;
-					ttTypeHTML	+= "<sub>" + simpleRank + "</sub>";
-					ttTypeTeX	+= "_{" + simpleRank + "}";
-				}
-				ttTypeHTML	+= "<sup>";
-				ttTypeTeX	+= "^{";
-				for (int j = 0; j < extended; j++)
-				{
-					ttType		+= "+";
-					ttTypeHTML	+= "+";
-					ttTypeTeX	+= "+";
-				}
-				ttTypeHTML	+= "</sup>";
-				ttTypeTeX	+= "}";
-				
-			}
-			tType		+= ttType;
-			tTypeHTML	+= ttTypeHTML;
-			tTypeTeX	+= ttTypeTeX;
-			if(i != directProductFactors.size() - 1)
-			{
-				tType		+= " x ";
-				tTypeHTML	+= " x ";
-				tTypeTeX	+= " \\otimes ";
-			}
-		}
-		if(tType.equals(""))
-			type = typeHTML = typeTeX = "Empty";
-		else
-		{
-			type		= tType;
-			typeTeX		= "$" + tTypeTeX + "$";
-			typeHTML	= "<html>" + tTypeHTML + "</html>";
-		}
-		
+
 		// Now that the simple roots have been created,
 		// we can set the symmetrized Cartan matrix
 		// and the metric on the root space.
@@ -328,14 +284,6 @@ public class CAlgebra
 				}
 			}
 		}
-		
-		// Dirty hack to check for infinite algebras that might have positive determinant
-		// and infinite direct product algebras that also might have positive determinant.
-		// TODO: implement this better.
-		if((det > 0 || rank == 0) && !type.contains("Unknown") && !type.contains("+"))
-			finite = true;
-		else
-			finite = false;
 		
 		// Set up the root system.
 		rs = new CRootSystem(this);

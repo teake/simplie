@@ -24,13 +24,8 @@
 package edu.rug.hep.simplie.algebra;
 
 import edu.rug.hep.simplie.Helper;
-import edu.rug.hep.simplie.math.fraction;
-
-import java.util.Collections;
-import java.util.Collection;
-import java.util.ArrayList;
-import java.util.Iterator;
 import Jama.Matrix;
+import java.util.Arrays;
 
 /**
  * Given a Cartan matrix, this class creates an object which has most properties of a simple Lie algebra:
@@ -41,18 +36,25 @@ import Jama.Matrix;
  */
 public class CartanMatrix
 {
+	public static final String[] series	= { "A", "B", "C", "D", "E", "F", "G" };
+	public static final String unknown	= "Unknown";
+	public static final String empty	= "Empty";
+	
 	public final int det;
 	public final int rank;
 	public final int rankA;
-	public final int[] norms;
-	
-	private float[] D;
+
+	public final String	type;
+	public final int extended;
+	public final int simpleRank;
+
 	
 	private final int[][] A;
+
 	
 	public CartanMatrix(int[][] A)
 	{
-		this.A = A.clone();
+		this.A = Helper.cloneMatrix(A);
 		
 		// Convert the Cartan matrix to a matrix object.
 		Matrix matrix = new Matrix(A.length,A.length);
@@ -76,65 +78,73 @@ public class CartanMatrix
 			rank	= A.length;
 			rankA	= matrix.rank();
 			det		= (int) Math.round(matrix.det());
-		}		
+		}
 		
-		// Set D, the diagonal matrix that symmetrizes A.
-		D = new float[rank];
-		float smallest = Float.MAX_VALUE;
-		for(int i = 0 ; i < rank; i++)
+		// Determine the type etc.
+		int	tExtended = 0;
+		String tType;
+		if(rank == 0)
 		{
-			for(int j = 0; j < rank; j++)
+			tType = empty;
+		}
+		else
+		{
+			tType = unknown;
+			loopToBreak:
+			for (int j = 0; j < rank; j++)
 			{
-				if(A[i][j] != 0 && j != i)
+				for(String serie : series)
 				{
-					if(D[j] == 0)
+					if(sameCartanMatrices(this.A,generateTypeMatrix(rank,j,serie)))
 					{
-						if(D[i] == 0) D[i] = 1;
-						D[j] = D[i] * A[j][i] / A[i][j];
-					}
-					if(D[i] == 0)
-					{
-						if(D[j] == 0) D[j] = 1;
-						D[i] = D[j] * A[i][j] / A[j][i];
+						tType = serie;
+						tExtended = j;
+						break loopToBreak;
 					}
 				}
 			}
-			if(D[i] == 0) D[i] = 1;
-			smallest = (smallest > D[i]) ? D[i] : smallest;
 		}
-
-		// Set the norms correctly normalized.
-		norms = new int[rank];
-		float coefficient = 1 / smallest;
-		boolean normsOK;
-		do
-		{
-			normsOK = true;
-			coefficient *= 2;
-			for(int i = 0; i < rank; i++)
-			{
-				// Make sure that all the root norms are multiples of two. This is 
-				// necessary for making sure that roots are integer multiples of 
-				// their coroots. If this is not the case, innerproducts will not 
-				// always be integers, and all hell will break loose.
-				if(D[i] * coefficient % 2 != 0)
-					normsOK = false;
-				norms[i] = (int) (D[i] * coefficient / 2);
-			}
-		} while(!normsOK);
-
-		for(int i = 0; i < rank; i++)
-		{
-			System.out.println(norms[i]);
-		}
-	
+		type		= tType;
+		extended	= tExtended;
+		simpleRank	= rank - extended;
 	}
 	
 	public int get(int i, int j)
 	{
 		return A[i][j];
 	}
+	
+	private String getType(int i)
+	{
+		String output = type;
+		if(i == 1) output += "_{";
+		if(i == 2) output += "<sub>";
+		output += simpleRank;
+		if(i == 1) output += "}^{";
+		if(i == 2) output += "</sub><sup>";
+		for(int j = 0; j < extended; j++)
+		{
+			output += "+";			
+		}
+		if(i == 1) output += "}";
+		if(i == 2) output += "</sup>";
+		return output;
+	}
+	
+	public String getType()
+	{
+		return getType(0);
+	}
 
+	public String getTypeTeX()
+	{
+		return getType(1);
+	}
+	
+	public String getTypeHTML()
+	{
+		return getType(2);
+	}
 	
 	/**
 	 * Returns a Cartan matrix of the given rank and type.
@@ -145,12 +155,12 @@ public class CartanMatrix
 	 * @param	 type		The type of the Cartan matrix, "A", "B", etc.
 	 * @return				The cartan matrix of the given rank, or null if the type is illegal.
 	 */
-	public static int[][] getType(int rank, int extended, String type)
+	public int[][] generateTypeMatrix(int rank, int extended, String type)
 	{
 		int[][] matrix = new int[rank][rank];
-		int simpleRank = rank - extended;
+		int simpRank = rank - extended;
 		
-		if(simpleRank <= 0)
+		if(simpRank <= 0)
 			return null;
 		
 		// First do the regular A-series matrix.
@@ -173,73 +183,73 @@ public class CartanMatrix
 		{
 			if(extended > 0)
 			{
-				if(simpleRank == 1)
+				if(simpRank == 1)
 					matrix[0][1] = matrix[1][0] = -2;
 				else
-					matrix[0][simpleRank] = matrix[simpleRank][0] = -1;
+					matrix[0][simpRank] = matrix[simpRank][0] = -1;
 			}
 			return matrix;
 		}
 		
-		if(type.equals("B") && simpleRank > 1)
+		if(type.equals("B") && simpRank > 1)
 		{
 			matrix[1][0] = -2;
 			if(extended > 0)
 			{
-				matrix[simpleRank][simpleRank-1] = matrix[simpleRank-1][simpleRank] = 0;
-				matrix[simpleRank][simpleRank-2] = matrix[simpleRank-2][simpleRank] = -1;
+				matrix[simpRank][simpRank-1] = matrix[simpRank-1][simpRank] = 0;
+				matrix[simpRank][simpRank-2] = matrix[simpRank-2][simpRank] = -1;
 			}
 			return matrix;
 		}
 		
-		if(type.equals("C") && simpleRank > 1)
+		if(type.equals("C") && simpRank > 1)
 		{
 			matrix[0][1] = -2;
 			if(extended > 0)
-				matrix[simpleRank][simpleRank-1] = -2;
+				matrix[simpRank][simpRank-1] = -2;
 			return matrix;
 		}
 		
-		if(type.equals("D") && simpleRank > 3)
+		if(type.equals("D") && simpRank > 3)
 		{
 			matrix[0][1] = matrix[1][0] = 0;
 			matrix[0][2] = matrix[2][0] = -1;
 			if(extended > 0)
 			{
-				matrix[simpleRank][simpleRank-1] = matrix[simpleRank-1][simpleRank] = 0;
-				matrix[simpleRank][simpleRank-2] = matrix[simpleRank-2][simpleRank] = -1;
+				matrix[simpRank][simpRank-1] = matrix[simpRank-1][simpRank] = 0;
+				matrix[simpRank][simpRank-2] = matrix[simpRank-2][simpRank] = -1;
 			}
 			return matrix;
 		}
 		
-		if(type.equals("E") && simpleRank > 5 && simpleRank < 9)
+		if(type.equals("E") && simpRank > 5 && simpRank < 9)
 		{
 			matrix[0][3] = matrix[3][0] = -1;
 			matrix[0][1] = matrix[1][0] = 0;
 			if(extended > 0)
 			{
-				if(simpleRank == 6)
+				if(simpRank == 6)
 				{
-					matrix[0][simpleRank] = matrix[simpleRank][0] = -1;
-					matrix[simpleRank][simpleRank-1] = matrix[simpleRank-1][simpleRank] = 0;
+					matrix[0][simpRank] = matrix[simpRank][0] = -1;
+					matrix[simpRank][simpRank-1] = matrix[simpRank-1][simpRank] = 0;
 				}
-				if(simpleRank == 7)
+				if(simpRank == 7)
 				{
-					matrix[1][simpleRank] = matrix[simpleRank][1] = -1;
-					matrix[simpleRank][simpleRank-1] = matrix[simpleRank-1][simpleRank] = 0;
+					matrix[1][simpRank] = matrix[simpRank][1] = -1;
+					matrix[simpRank][simpRank-1] = matrix[simpRank-1][simpRank] = 0;
 				}
 				
 			}
 			return matrix;
 		}
 		
-		if(type.equals("F") && simpleRank == 4)
+		if(type.equals("F") && simpRank == 4)
 		{
 			matrix[1][2] = -2;
 			return matrix;
 		}
 		
-		if(type.equals("G") && simpleRank == 2)
+		if(type.equals("G") && simpRank == 2)
 		{
 			matrix[1][0] = -3;
 			return matrix;
@@ -247,5 +257,94 @@ public class CartanMatrix
 		
 		return null;
 	}
-	
+	/**
+	 * Determines whether two Cartan matrix are equivalent.
+	 * That is, after arbitrary permutations of rows and columns,
+	 * the matrices should be identical.
+	 * Instead of doing the actual permutations, a couple of permutation-invariant
+	 * characteristics of both matrices are calculated and compared.
+	 *
+	 * @param	matrix1	The first Cartan matrix to compare against the second.
+	 * @param	matrix2	The second Cartan matrix to compare against the first.
+	 * @return			True is the Cartan matrices are equivalent, false otherwise.
+	 */
+	public static boolean sameCartanMatrices(int[][] matrix1, int[][] matrix2)
+	{
+		if(matrix1 == null || matrix2 == null)
+			return false;
+		if(matrix1.length != matrix2.length)
+			return false;
+		
+		Matrix A = new Matrix(matrix1.length,matrix1.length);
+		Matrix B = new Matrix(matrix1.length,matrix1.length);
+		
+		// Calculate the norms (the sum of all matrix entries)
+		int normA = 0;
+		int normB = 0;
+		// Calculate the number of nodes which have a given number of connections
+		int[] nodeConnA = new int[matrix1.length];
+		int[] nodeConnB = new int[matrix1.length];
+		for (int i = 0; i < nodeConnB.length; i++)
+			nodeConnB[i] = nodeConnA[i] = 0;
+		
+		// Calculate the sum of each column and sort these later on
+		int[] columnSums1 = new int[matrix1.length];
+		int[] columnSums2 = new int[matrix1.length];
+
+		for (int i = 0; i < matrix1.length; i++)
+		{
+			int connA = 0;
+			int connB = 0;
+			
+			columnSums1[i] = 0;
+			columnSums2[i] = 0;
+			
+			for (int j = 0; j < matrix1.length; j++)
+			{
+				A.set(i,j,matrix1[i][j]);
+				B.set(i,j,matrix2[i][j]);
+				normA += matrix1[i][j];
+				normB += matrix2[i][j];
+				if(i != j)
+				{
+					if(matrix1[i][j] != 0)
+						connA++;
+					if(matrix2[i][j] != 0)
+						connB++;
+					columnSums1[i] += matrix1[i][j];
+					columnSums2[i] += matrix2[i][j];
+				}
+			}
+			nodeConnA[connA]++;
+			nodeConnB[connB]++;
+			
+		}
+		
+		Arrays.sort(columnSums1);
+		Arrays.sort(columnSums2);
+		
+		if(!Arrays.equals(columnSums1, columnSums2))
+			return false;
+		
+		if(normA != normB)
+			return false;
+		
+		for (int i = 0; i < nodeConnB.length; i++)
+		{
+			if(nodeConnB[i] != nodeConnA[i])
+				return false;			
+		}
+
+		
+		if(Math.round(A.det()) != Math.round(B.det()))
+			return false;
+		
+		if(A.rank() != B.rank())
+			return false;
+		
+		if(Math.round(100 * A.normF()) != Math.round(100 * B.normF()))
+			return false;
+		
+		return true;
+	}	
 }
