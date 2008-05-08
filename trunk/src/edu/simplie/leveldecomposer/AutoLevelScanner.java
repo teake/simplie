@@ -36,6 +36,7 @@ import org.jdesktop.swingworker.SwingWorker;
  * A SwingWorker for scanning regular subalgebra representations within a algebra.
  *
  * @author	Teake Nutma
+ * @version $Revision$, $Date$
  */
 public class AutoLevelScanner extends SwingWorker<Void,Object[]>
 {

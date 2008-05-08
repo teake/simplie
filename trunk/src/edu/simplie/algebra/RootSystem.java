@@ -37,6 +37,7 @@ import java.util.Iterator;
  *
  * @see		Algebra
  * @author	Teake Nutma
+ * @version $Revision$, $Date$
  */
 public class RootSystem
 {

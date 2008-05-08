@@ -30,6 +30,7 @@ import edu.simplie.Helper;
  * the dynkin labels, its multiplicity, and its height.
  *
  * @author Teake Nutma
+ * @version $Revision$, $Date$
  */
 public class Weight
 {

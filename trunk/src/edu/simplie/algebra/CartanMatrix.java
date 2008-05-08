@@ -33,6 +33,7 @@ import java.util.Arrays;
  *
  * @see CRootSystem
  * @author Teake Nutma
+ * @version $Revision$, $Date$
  */
 public class CartanMatrix
 {

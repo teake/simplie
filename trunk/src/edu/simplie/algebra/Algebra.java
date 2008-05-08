@@ -38,6 +38,7 @@ import java.util.HashMap;
  *
  * @see RootSystem
  * @author Teake Nutma
+ * @version $Revision$, $Date$
  */
 public class Algebra
 {

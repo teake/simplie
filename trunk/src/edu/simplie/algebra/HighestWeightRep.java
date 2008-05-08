@@ -37,6 +37,7 @@ import java.util.Iterator;
  * @see Algebra
  * @see Weight
  * @author Teake Nutma
+ * @version $Revision$, $Date$
  */
 public class HighestWeightRep
 {

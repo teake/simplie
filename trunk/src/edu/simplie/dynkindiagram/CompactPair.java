@@ -28,6 +28,7 @@ import java.io.Serializable;
 /**
  *
  * @author Teake Nutma
+ * @version $Revision$, $Date$
  */
 public class CompactPair implements Serializable
 {

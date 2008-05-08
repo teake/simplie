@@ -29,6 +29,7 @@ import edu.simplie.dynkindiagram.*;
  * Panel that displays a Dynkin diagram and information on the 4 derived algebras.
  * 
  * @author  Teake Nutma
+ * @version $Revision$, $Date$
  */
 public class AlgebraSetup extends javax.swing.JPanel implements DiagramListener
 {

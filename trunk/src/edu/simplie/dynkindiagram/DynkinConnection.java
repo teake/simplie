@@ -30,6 +30,7 @@ import java.io.Serializable;
  *
  * @see		DynkinNode
  * @author	Teake Nutma
+ * @version $Revision$, $Date$
  */
 public class DynkinConnection implements Serializable
 {

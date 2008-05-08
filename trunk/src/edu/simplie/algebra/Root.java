@@ -32,6 +32,7 @@ import java.io.Serializable;
  * the root vector, its (co-)multiplicity, and its height.
  *
  * @author Teake Nutma
+ * @version $Revision$, $Date$
  */
 public class Root implements Serializable
 {

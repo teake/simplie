@@ -33,6 +33,7 @@ package edu.simplie.math;
  * - Added asLong() & asInt() methods.*
  *
  * @author Teake Nutma
+ * @version $Revision$, $Date$
  */
 
 public class fraction implements Cloneable, Comparable, java.io.Serializable
