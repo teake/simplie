@@ -31,7 +31,7 @@ import java.util.Arrays;
  * Given a Cartan matrix, this class creates an object which has most properties of a simple Lie algebra:
  * rank, dimension, and a root system, to name a few.
  *
- * @see CRootSystem
+ * @see RootSystem
  * @author Teake Nutma
  * @version $Revision$, $Date$
  */

@@ -30,7 +30,7 @@ import edu.simplie.math.fraction;
  * A class for storing valid regular subalgebra representations.
  * This class is used in CAutoLevelScanner before sending the data to the table.
  *
- * @see		CAutoLevelScanner
+ * @see		AutoLevelScanner
  * @author	Teake Nutma
  * @version $Revision$, $Date$
  */
