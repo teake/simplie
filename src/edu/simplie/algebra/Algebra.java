@@ -1,5 +1,5 @@
 /*
- * CAlgebra.java
+ * Algebra.java
  *
  * Created on 26 maart 2007, 17:17
  *
@@ -36,10 +36,10 @@ import java.util.HashMap;
  * Given a Cartan matrix, this class creates an object which has most properties of a simple Lie algebra:
  * rank, dimension, and a root system, to name a few.
  *
- * @see CRootSystem
+ * @see RootSystem
  * @author Teake Nutma
  */
-public class CAlgebra
+public class Algebra
 {
 	/*********************************
 	 * Public properties
@@ -81,9 +81,9 @@ public class CAlgebra
 	/** Boolean indicating whethet the algebra is finite or not. */
 	public final boolean finite;
 	/** The root system */
-	public final CRootSystem rs;
+	public final RootSystem rs;
 	/** The Weyl vector of the algebra */
-	public final CWeight rho;
+	public final Weight rho;
 	
 	/** Vector containing the norm of the simple roots divided by two. */
 	public final int[] halfNorms;
@@ -95,12 +95,12 @@ public class CAlgebra
 	 **********************************/
 	
 	/**
-	 * Creates a new instance of CAlgebra.
+	 * Creates a new instance of Algebra.
 	 * If the algebra is finite, the whole rootsystem is constructed.
 	 *
 	 * @param A    The Cartan matrix from which to construct the algebra.
 	 */
-	public CAlgebra(int[][] A)
+	public Algebra(int[][] A)
 	{
 		// Convert the Cartan matrix to a matrix object.
 		Matrix cartanMatrix = new Matrix(A.length,A.length);
@@ -251,7 +251,7 @@ public class CAlgebra
 		{
 			weylLabels[i] = 1;
 		}
-		rho = new CWeight(weylLabels);
+		rho = new Weight(weylLabels);
 		
 
 		// Now that the simple roots have been created,
@@ -286,7 +286,7 @@ public class CAlgebra
 		}
 		
 		// Set up the root system.
-		rs = new CRootSystem(this);
+		rs = new RootSystem(this);
 		
 		// Determine the dimension.
 		if(finite)
@@ -314,14 +314,14 @@ public class CAlgebra
 	public long dimOfRep(int[] highestWeightLabels)
 	{
 		fraction	dimOfRep;
-		CWeight		highestWeight;
+		Weight		highestWeight;
 		
 		// Preliminary checks.
 		if(!finite || highestWeightLabels.length != rank)
 			return 0;
 		
 		dimOfRep		= new fraction(1);
-		highestWeight	= new CWeight(highestWeightLabels);
+		highestWeight	= new Weight(highestWeightLabels);
 		
 		for (int i = 1; i < rs.size(); i++)
 		{
@@ -329,7 +329,7 @@ public class CAlgebra
 			Iterator iterator	= roots.iterator();
 			while (iterator.hasNext())
 			{
-				CRoot root = (CRoot) iterator.next();
+				Root root = (Root) iterator.next();
 				int rhoRoot = rho(root);
 				dimOfRep.multiply( innerProduct(highestWeight,root) + rhoRoot );
 				dimOfRep.divide( rhoRoot );
@@ -356,7 +356,7 @@ public class CAlgebra
 	 * @param	root2	Root beta.
 	 * @return			The innerproduct (alpha, beta), which is an integer.
 	 */
-	public int innerProduct(CRoot root1, CRoot root2)
+	public int innerProduct(Root root1, Root root2)
 	{
 		int result = 0;
 		for (int i = 0; i < rank; i++)
@@ -376,7 +376,7 @@ public class CAlgebra
 	 * @param	weight2		Weight mu.
 	 * @return				The innerproduct (lambda,mu).
 	 */
-	public fraction innerProduct(CWeight weight1, CWeight weight2)
+	public fraction innerProduct(Weight weight1, Weight weight2)
 	{
 		fraction result = new fraction(0);
 		for (int i = 0; i < rank; i++)
@@ -398,7 +398,7 @@ public class CAlgebra
 	 * @return			The innerproduct (lambda,alpha) = lambda(alpha) = alpha(lambda),
 	 *					which is an integer.
 	 */
-	public int innerProduct(CWeight weight, CRoot root)
+	public int innerProduct(Weight weight, Root root)
 	{
 		int result = 0;
 		for (int i = 0; i < rank; i++)
@@ -414,7 +414,7 @@ public class CAlgebra
 	 * @param	root	Root alpha.
 	 * @return			rho(alhpa), with rho the Weyl vector of this algebra.
 	 */
-	public int rho(CRoot root)
+	public int rho(Root root)
 	{
 		int result = 0;
 		for (int i = 0; i < rank; i++)

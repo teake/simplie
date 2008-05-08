@@ -32,7 +32,7 @@ import edu.simplie.dynkindiagram.*;
  */
 public class AlgebraSetup extends javax.swing.JPanel implements DiagramListener
 {
-	private CAlgebraComposite algebras;
+	private AlgebraComposite algebras;
 	
 	/** Creates new form LevelDecompositionUI */
 	public AlgebraSetup()
@@ -40,7 +40,7 @@ public class AlgebraSetup extends javax.swing.JPanel implements DiagramListener
 		initComponents();
 	}
 	
-	public void setAlgebraComposite(CAlgebraComposite algebras)
+	public void setAlgebraComposite(AlgebraComposite algebras)
 	{
 		this.algebras = algebras;
 		dynkinDiagramPanel.setDynkinDiagram(algebras.dd);

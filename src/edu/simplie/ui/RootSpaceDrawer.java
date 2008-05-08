@@ -23,9 +23,9 @@
 package edu.simplie.ui;
 
 import com.sun.opengl.util.GLUT;
-import edu.simplie.CAlgebraComposite;
+import edu.simplie.AlgebraComposite;
 import edu.simplie.Helper;
-import edu.simplie.algebra.CRoot;
+import edu.simplie.algebra.Root;
 import java.awt.Dimension;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -72,7 +72,7 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements
 	private int simpReflsObj;
 	private int[] listContainer;
 	
-	private CAlgebraComposite algebras;
+	private AlgebraComposite algebras;
 	
 	/** Creates new form RootSpaceDrawer */
 	public RootSpaceDrawer()
@@ -86,7 +86,7 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements
 		canvas.addMouseListener(this);
 	}
 	
-	public void setAlgebrasComposite(CAlgebraComposite algebras)
+	public void setAlgebrasComposite(AlgebraComposite algebras)
 	{
 		this.algebras = algebras;
 	}
@@ -619,10 +619,10 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements
 			// Loop over every root for every GL list.
 			for(int i = 1; i < algebras.algebra.rs.size(); i++)
 			{
-				Collection<CRoot> roots = algebras.algebra.rs.get(i);
+				Collection<Root> roots = algebras.algebra.rs.get(i);
 				for(Iterator it = roots.iterator(); it.hasNext();)
 				{
-					CRoot	root	= (CRoot) it.next();
+					Root	root	= (Root) it.next();
 					float[] pos		= calcPos(root.vector, posX, posZ);
 					boolean real	= (root.norm > 0);
 					

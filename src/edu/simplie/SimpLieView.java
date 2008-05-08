@@ -4,9 +4,6 @@
 
 package edu.simplie;
 
-import edu.simplie.ui.*;
-import java.awt.Image;
-import java.awt.Toolkit;
 import org.jdesktop.application.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -23,7 +20,7 @@ import javax.swing.filechooser.*;
  */
 public class SimpLieView extends FrameView {
 
-	private final CAlgebraComposite algebras;
+	private final AlgebraComposite algebras;
 	private JDialog exportDialog;
 	private JDialog outputDialog;
 	
@@ -110,7 +107,7 @@ public class SimpLieView extends FrameView {
 		
 		this.getFrame().setIconImage(resourceMap.getImageIcon("icon16").getImage());
 				
-		algebras = new CAlgebraComposite();
+		algebras = new AlgebraComposite();
 		algebraSetup.setAlgebraComposite(algebras);
 		algebraInfo.setAlgebraComposite(algebras);
 		levelDecomposition.setAlgebraComposite(algebras);

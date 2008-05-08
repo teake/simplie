@@ -24,7 +24,7 @@ package edu.simplie.ui;
 
 import edu.simplie.*;
 import edu.simplie.algebra.*;
-import edu.simplie.leveldecomposer.CAutoLevelScanner;
+import edu.simplie.leveldecomposer.AutoLevelScanner;
 
 import java.util.*;
 import javax.swing.table.*;
@@ -44,8 +44,8 @@ public class LevelDecomposition extends javax.swing.JPanel
 {
 	private DefaultTableModel	tableModelReps;
 	private DefaultTableModel	tableModelWeights;
-	private CAutoLevelScanner	autoScanner;
-	private CAlgebraComposite	algebras;
+	private AutoLevelScanner	autoScanner;
+	private AlgebraComposite	algebras;
 	
 	private long startTime;
 	
@@ -57,7 +57,7 @@ public class LevelDecomposition extends javax.swing.JPanel
 		tableModelWeights	= (javax.swing.table.DefaultTableModel) weightsTable.getModel();
 	}
 	
-	public void setAlgebraComposite(CAlgebraComposite algebras)
+	public void setAlgebraComposite(AlgebraComposite algebras)
 	{
 		this.algebras = algebras;
 		this.algebras.setSignPos(rbSignPos.isSelected());
@@ -78,7 +78,7 @@ public class LevelDecomposition extends javax.swing.JPanel
 				3));
 		int[] coDynkinLabels = algebras.coDynkinLabels(rootVector);
 		int[] levels = algebras.levels(rootVector);
-		CHighestWeightRep hwRep = new CHighestWeightRep(algebras.coAlgebra,coDynkinLabels);
+		HighestWeightRep hwRep = new HighestWeightRep(algebras.coAlgebra,coDynkinLabels);
 		
 		// Fully construct the weight system.
 		hwRep.construct(0);
@@ -88,11 +88,11 @@ public class LevelDecomposition extends javax.swing.JPanel
 		
 		for (int i = 0; i < hwRep.size(); i++)
 		{
-			Collection<CWeight> weights = hwRep.get(i);
+			Collection<Weight> weights = hwRep.get(i);
 			Iterator iterator	= weights.iterator();
 			while (iterator.hasNext())
 			{
-				CWeight weight = (CWeight) iterator.next();
+				Weight weight = (Weight) iterator.next();
 				if(!weight.isDominant && onlyDominant)
 					continue;
 				int[] root = algebras.rootVector(levels, weight.dynkinLabels);
@@ -461,7 +461,7 @@ private void rbSignPosStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIR
 			representationsTable.setTitleTeX(algebras.getDecompositionType(true));
 			
 			// Set up the scan.
-			autoScanner = new CAutoLevelScanner(
+			autoScanner = new AutoLevelScanner(
 					algebras,
 					cbRootMult.isSelected(),
 					cbRepMult.isSelected(),

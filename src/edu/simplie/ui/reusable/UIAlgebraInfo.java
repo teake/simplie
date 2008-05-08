@@ -23,7 +23,7 @@
 package edu.simplie.ui.reusable;
 
 import edu.simplie.Helper;
-import edu.simplie.algebra.CAlgebra;
+import edu.simplie.algebra.Algebra;
 
 /**
  *
@@ -45,7 +45,7 @@ public class UIAlgebraInfo extends javax.swing.JPanel
 		setBorder(javax.swing.BorderFactory.createTitledBorder(null, title, javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12)));
 	}
 		
-	public void update(CAlgebra algebra)
+	public void update(Algebra algebra)
 	{
 		algebraInfoType.setText(algebra.typeHTML);
 		algebraInfoRank.setText(Helper.intToString(algebra.rank));

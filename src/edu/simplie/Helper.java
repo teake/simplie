@@ -25,7 +25,7 @@ package edu.simplie;
 import Jama.Matrix;
 import edu.simplie.math.*;
 
-import edu.simplie.dynkindiagram.CDynkinConnection;
+import edu.simplie.dynkindiagram.DynkinConnection;
 import edu.simplie.ui.shapes.LinesWithArrow;
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -368,19 +368,19 @@ public class Helper
 		Shape line;
 		switch(type)
 		{
-			case CDynkinConnection.TYPE_SINGLE:
+			case DynkinConnection.TYPE_SINGLE:
 				line = new Line2D.Double(begin,end);
 				break;
-			case CDynkinConnection.TYPE_DOUBLE:
+			case DynkinConnection.TYPE_DOUBLE:
 				line = new LinesWithArrow(begin,end,2,2*radius,true);
 				break;
-			case CDynkinConnection.TYPE_TRIPLE:
+			case DynkinConnection.TYPE_TRIPLE:
 				line = new LinesWithArrow(begin,end,3,2*radius,true);
 				break;
-			case CDynkinConnection.TYPE_QUADRUPLE:
+			case DynkinConnection.TYPE_QUADRUPLE:
 				line = new LinesWithArrow(begin,end,4,2*radius,true);
 				break;
-			case CDynkinConnection.TYPE_SPECIAL_DOUBLE:
+			case DynkinConnection.TYPE_SPECIAL_DOUBLE:
 				line = new LinesWithArrow(begin,end,2,2*radius,false);
 				break;
 			default:

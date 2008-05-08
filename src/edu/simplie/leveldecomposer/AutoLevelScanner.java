@@ -1,5 +1,5 @@
 /*
- * CAutoLevelScanner.java
+ * AutoLevelScanner.java
  *
  * Created on 20 maart 2007, 14:16
  *
@@ -37,9 +37,9 @@ import org.jdesktop.swingworker.SwingWorker;
  *
  * @author	Teake Nutma
  */
-public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
+public class AutoLevelScanner extends SwingWorker<Void,Object[]>
 {
-	private final CAlgebraComposite algebras;
+	private final AlgebraComposite algebras;
 	private final boolean calcRootMult;
 	private final boolean calcRepMult;
 	private final boolean showZeroMultRoot;
@@ -51,9 +51,9 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 	private int levelSign;
 
 	/**
-	 * Creates a new instance of CAutoLevelScanner.
+	 * Creates a new instance of AutoLevelScanner.
 	 *
-	 * @param	algebras			The CAlgebraComposite object for which to do the level decomposition.
+	 * @param	algebras			The AlgebraComposite object for which to do the level decomposition.
 	 * @param	calcRootMult		If true, the multiplicity of the roots will be calculate. This will take longer.
 	 * @param	calcRepMult			If true, the multiplicity of the subalgebra representations will be calculated.
 	 *								This again will take longer.
@@ -64,8 +64,8 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 	 * @param	minLevel			The minimum value of the levels.
 	 * @param	maxLevel			The maximum value of the levels.
 	 */
-	public CAutoLevelScanner(
-			CAlgebraComposite algebras,
+	public AutoLevelScanner(
+			AlgebraComposite algebras,
 			boolean calcRootMult,
 			boolean calcRepMult,
 			boolean showZeroMultRoot,
@@ -89,7 +89,7 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 	@Override
 	public Void doInBackground()
 	{
-		ArrayList<CLevel> levels;
+		ArrayList<Level> levels;
 		
 		int levelRank;
 		int base;
@@ -107,12 +107,12 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 		num			= (int) Math.pow(base, levelRank);
 		try
 		{
-			levels = new ArrayList<CLevel>();
+			levels = new ArrayList<Level>();
 			
 			// Perform the scan.
 			for (int i = 0; i < num; i++)
 			{
-				CLevel level = new CLevel(Helper.numberToVector(i,base,levelRank,minLevel), algebras);
+				Level level = new Level(Helper.numberToVector(i,base,levelRank,minLevel), algebras);
 				System.out.println("Scanning levels " + Helper.intArrayToString(level.levelVector));
 				Scan(level);
 				levels.add(level);
@@ -123,7 +123,7 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 			Collections.sort(levels);
 			
 			// Set outer mults etc.
-			for (CLevel level : levels)
+			for (Level level : levels)
 			{
 				processRepresentations(level);
 			}
@@ -154,7 +154,7 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 	
 	
 	/** Scans all the possible highest weight representations at a given level */
-	private void Scan(CLevel level)
+	private void Scan(Level level)
 	{
 		// Are the levels all positive or all negative?
 		levelSign = 0;
@@ -186,7 +186,7 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 	}
 	
 	/** Loops through every possible dynkin label. */
-	private void LoopDynkinLabels(CLevel level, int[] dynkinLabels, int beginIndex, boolean scanFirst)
+	private void LoopDynkinLabels(Level level, int[] dynkinLabels, int beginIndex, boolean scanFirst)
 	{
 		boolean		allGoodIntegers;
 		fraction[]	coLevels;
@@ -238,11 +238,11 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 	
 	
 	/** Processes all the representations contained in "reps" */
-	private void processRepresentations(CLevel level)
+	private void processRepresentations(Level level)
 	{
 		long outerMult;
-		CRepresentation repI;
-		CRepresentation repJ;
+		Representation repI;
+		Representation repJ;
 		
 		if(calcRootMult)
 		{
@@ -282,7 +282,7 @@ public class CAutoLevelScanner extends SwingWorker<Void,Object[]>
 		// Publish the representations to the output table.
 		for(int i = level.size() - 1; i > -1; i--)
 		{
-			CRepresentation rep = level.get(i);
+			Representation rep = level.get(i);
 			// Don't add this representation if its root has zero multiplicity and we don't show those
 			if(calcRootMult && !showZeroMultRoot && rep.getRootMult() == 0)
 				continue;

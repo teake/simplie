@@ -1,5 +1,5 @@
 /*
- * CLevel.java
+ * Level.java
  * 
  * Created on 8 april 2008, 12:01
  * 
@@ -22,7 +22,7 @@
 
 package edu.simplie.leveldecomposer;
 
-import edu.simplie.CAlgebraComposite;
+import edu.simplie.AlgebraComposite;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -31,15 +31,15 @@ import java.util.Collections;
  * 
  * @author Teake Nutma
  */
-public class CLevel implements Comparable<CLevel>
+public class Level implements Comparable<Level>
 {
 	/** The actual levels */
 	public final int[] levelVector;
 	/** The height of the heightest root at this level */
 	private int heighest;
 	
-	private final CAlgebraComposite algebras;
-	private ArrayList<CRepresentation> repContainer;
+	private final AlgebraComposite algebras;
+	private ArrayList<Representation> repContainer;
 	
 	/**
 	 * Constructs a level container.
@@ -47,12 +47,12 @@ public class CLevel implements Comparable<CLevel>
 	 * @param vector	 The actual level.
 	 * @param algebras	 The algebra composite for which we're doing the level decomposition.
 	 */
-	public CLevel(int[] vector, CAlgebraComposite algebras)
+	public Level(int[] vector, AlgebraComposite algebras)
 	{
 		this.levelVector= vector.clone();
 		this.algebras	= algebras;
 		this.heighest	= 0;
-		repContainer	= new ArrayList<CRepresentation>();
+		repContainer	= new ArrayList<Representation>();
 	}
 	
 	/**
@@ -63,7 +63,7 @@ public class CLevel implements Comparable<CLevel>
 	 */ 
 	public void addRep(int[] dynkinLabels, int rootLength)
 	{
-		CRepresentation rep = new CRepresentation(
+		Representation rep = new Representation(
 									algebras,
 									dynkinLabels,
 									levelVector,
@@ -96,7 +96,7 @@ public class CLevel implements Comparable<CLevel>
 	 * @param index		 The index of the subalgebra representation.
 	 * @return			 A subalgebra representation.
 	 */
-	public CRepresentation get(int index)
+	public Representation get(int index)
 	{
 		return repContainer.get(index);
 	}
@@ -105,7 +105,7 @@ public class CLevel implements Comparable<CLevel>
 	 * Compares levels to each other based on first a partial ordering 
 	 * and next the height of their highest root. 
 	 */
-	public int compareTo(CLevel level)
+	public int compareTo(Level level)
 	{
 		final int BEFORE = -1;
 		final int EQUAL = 0;

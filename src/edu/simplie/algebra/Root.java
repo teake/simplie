@@ -1,5 +1,5 @@
 /*
- * CRoot.java
+ * Root.java
  *
  * Created on 26 maart 2007, 17:35
  *
@@ -33,7 +33,7 @@ import java.io.Serializable;
  *
  * @author Teake Nutma
  */
-public class CRoot implements Serializable
+public class Root implements Serializable
 {
 	//TODO: make variables mult & coMult private and get/settable only via method
 	
@@ -47,12 +47,12 @@ public class CRoot implements Serializable
 	public fraction	coMult;
 	
 	/**
-	 * Creates a new instance of CRoot.
+	 * Creates a new instance of Root.
 	 *
 	 * @param	rootVector	Integer array representing the root vector
 	 *						from which we should construct the root.
 	 */
-	public CRoot(int[] rootVector)
+	public Root(int[] rootVector)
 	{
 		vector	= rootVector.clone();
 		mult	= 0;
@@ -103,7 +103,7 @@ public class CRoot implements Serializable
 	 * @param	factor	The value with which to divide the root vector.
 	 * @return			A new root with divided vector. Returns null if not all the root vector values are integral.
 	 */
-	public CRoot div(int factor)
+	public Root div(int factor)
 	{
 		int[] newVector = new int[vector.length];
 		for (int i = 0; i < vector.length; i++)
@@ -113,7 +113,7 @@ public class CRoot implements Serializable
 			else
 				newVector[i] = vector[i] / factor;
 		}
-		return new CRoot(newVector);
+		return new Root(newVector);
 	}
 	
 	/**
@@ -122,14 +122,14 @@ public class CRoot implements Serializable
 	 * @param	factor	The value with which to multiply the root vector.
 	 * @return			A new root with multiplied vector.
 	 */
-	public CRoot times(int factor)
+	public Root times(int factor)
 	{
 		int[] newVector = new int[vector.length];
 		for (int i = 0; i < vector.length; i++)
 		{
 			newVector[i] = vector[i] * factor;
 		}
-		return new CRoot(newVector);
+		return new Root(newVector);
 	}
 	
 	
@@ -146,7 +146,7 @@ public class CRoot implements Serializable
 		if((obj == null) || (obj.getClass() != this.getClass()))
 			return false;
 		
-		CRoot compareRoot = (CRoot) obj;
+		Root compareRoot = (Root) obj;
 		
 		if(vector.length != compareRoot.vector.length)
 			return false;

@@ -1,5 +1,5 @@
 /*
- * CDynkinConnection.java
+ * DynkinConnection.java
  *
  * Created on 9 maart 2007, 11:19
  *
@@ -28,10 +28,10 @@ import java.io.Serializable;
 /**
  * A class for storing connections between Dynkin nodes.
  *
- * @see		CDynkinNode
+ * @see		DynkinNode
  * @author	Teake Nutma
  */
-public class CDynkinConnection implements Serializable
+public class DynkinConnection implements Serializable
 {
 	/** The constants for the type of connections */
 	
@@ -49,19 +49,19 @@ public class CDynkinConnection implements Serializable
 	public static final int TYPE_SPECIAL_DOUBLE = -2;
 	
 	/** The Dynkin node from which this connection points. */
-	public final CDynkinNode fromNode;
+	public final DynkinNode fromNode;
 	/** The Dynkin node to which this connection points. */
-	public final CDynkinNode toNode;
+	public final DynkinNode toNode;
 	/** The number of lines */
 	public final int type;
 	
 	/** 
-	 * Creates a new instance of CDynkinConnection
+	 * Creates a new instance of DynkinConnection
 	 *
 	 * @param	fromNode	The node from which this connection points.
 	 * @param	toNode		The node to which this connection points.
 	 */
-	public CDynkinConnection(CDynkinNode fromNode, CDynkinNode toNode,int type)
+	public DynkinConnection(DynkinNode fromNode, DynkinNode toNode,int type)
 	{
 		this.fromNode	= fromNode;
 		this.toNode		= toNode;
@@ -82,7 +82,7 @@ public class CDynkinConnection implements Serializable
 		
 		if((obj == null) || (obj.getClass() != this.getClass()))
 			return false;
-		CDynkinConnection compareConnection = (CDynkinConnection) obj;
+		DynkinConnection compareConnection = (DynkinConnection) obj;
 		if((compareConnection.fromNode.equals(fromNode) && compareConnection.toNode.equals(toNode))
 		|| (compareConnection.toNode.equals(fromNode) && compareConnection.fromNode.equals(toNode)) )
 			return true;
