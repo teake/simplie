@@ -104,14 +104,7 @@ public class Algebra
 	public Algebra(int[][] A)
 	{
 		// Convert the Cartan matrix to a matrix object.
-		Matrix cartanMatrix = new Matrix(A.length,A.length);
-		for(int i=0; i<A.length; i++)
-		{
-			for(int j=0; j<A.length; j++)
-			{
-				cartanMatrix.set(i,j,A[i][j]);
-			}
-		}
+		Matrix cartanMatrix = Helper.intArrayToMatrix(A);
 		// Do some preliminary checks.
 		// Assume that A is a square matrix.
 		if(A.length == 0)

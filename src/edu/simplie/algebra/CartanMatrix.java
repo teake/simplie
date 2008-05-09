@@ -29,7 +29,7 @@ import java.util.Arrays;
 
 /**
  * Given a Cartan matrix, this class creates an object which has most properties of a simple Lie algebra:
- * rank, dimension, and a root system, to name a few.
+ * size, dimension, and a root system, to name a few.
  *
  * @see RootSystem
  * @author Teake Nutma
@@ -42,12 +42,12 @@ public class CartanMatrix
 	public static final String empty	= "Empty";
 	
 	public final int det;
+	public final int size;
 	public final int rank;
-	public final int rankA;
 
-	public final String	type;
-	public final int extended;
-	public final int simpleRank;
+	private String	type;
+	private int extended;
+	private int simpleRank;
 	
 	private final int[][] A;
 	private final int[][] C;
@@ -61,45 +61,17 @@ public class CartanMatrix
 		// Assume that A is a square matrix.
 		if(A.length == 0)
 		{
+			this.size	= 0;
 			this.rank	= 0;
-			this.rankA	= 0;
 			this.det	= 0;
 		}
 		else
 		{
 			Matrix matrix = Helper.intArrayToMatrix(A);
-			this.rank	= A.length;
-			this.rankA	= matrix.rank();
+			this.size	= A.length;
+			this.rank	= matrix.rank();
 			this.det	= (int) Math.round(matrix.det());
 		}
-		
-		// Determine the type etc.
-		int	tExtended = 0;
-		String tType;
-		if(rank == 0)
-		{
-			tType = empty;
-		}
-		else
-		{
-			tType = unknown;
-			loopToBreak:
-			for (int j = 0; j < rank; j++)
-			{
-				for(String serie : series)
-				{
-					if(equivalentTo(generateTypeMatrix(rank,j,serie)))
-					{
-						tType = serie;
-						tExtended = j;
-						break loopToBreak;
-					}
-				}
-			}
-		}
-		this.type		= tType;
-		this.extended	= tExtended;
-		this.simpleRank	= rank - extended;
 	}
 	
 	public int get(int i, int j)
@@ -109,6 +81,33 @@ public class CartanMatrix
 	
 	private String getType(int i)
 	{
+		if(type == null)
+		{
+			// Determine the type etc.
+			if(size == 0)
+			{
+				type = empty;
+			}
+			else
+			{
+				type = unknown;
+				loopToBreak:
+				for (int j = 0; j < size; j++)
+				{
+					for(String serie : series)
+					{
+						if(equivalentTo(generateTypeMatrix(size,j,serie)))
+						{
+							type = serie;
+							extended = j;
+							break loopToBreak;
+						}
+					}
+				}
+			}
+			simpleRank = size - extended;
+		}
+		
 		if(type.equals(empty) || type.equals(unknown))
 			return type;
 		
@@ -143,13 +142,13 @@ public class CartanMatrix
 	}
 	
 	/**
-	 * Returns a Cartan matrix of the given rank and type.
+	 * Returns a Cartan matrix of the given size and type.
 	 *
-	 * @param	 rank		The rank of the matrix to be returned.
+	 * @param	 size		The size of the matrix to be returned.
 	 * @param	 extended	The number of times the matrix is extended.
 	 *						(1=affine extension,2=over extended, 3=very extended, etc).
 	 * @param	 type		The type of the Cartan matrix, "A", "B", etc.
-	 * @return				The cartan matrix of the given rank, or null if the type is illegal.
+	 * @return				The cartan matrix of the given size, or null if the type is illegal.
 	 */
 	public int[][] generateTypeMatrix(int rank, int extended, String type)
 	{
@@ -291,11 +290,11 @@ public class CartanMatrix
 	
 	public boolean equivalentTo(int[][] cm)
 	{
-		if(cm == null || rank != cm.length)
+		if(cm == null || size != cm.length)
 			return false;
 		
 		Matrix m = Helper.intArrayToMatrix(cm);
-		if(det != Math.round(m.det()) || rankA != m.rank())
+		if(det != Math.round(m.det()) || rank != m.rank())
 			return false;
 		
 		if(!Helper.sameMatrices(C,characteristicMatrix(cm)))
