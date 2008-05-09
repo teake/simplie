@@ -38,7 +38,7 @@
           <Group type="102" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                  <Component id="jpActions" min="0" pref="87" max="32767" attributes="1"/>
+                  <Component id="jpActions" min="0" pref="103" max="32767" attributes="1"/>
                   <Component id="jpSettings" alignment="0" max="32767" attributes="1"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
@@ -92,12 +92,12 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <EmptySpace min="0" pref="705" max="32767" attributes="0"/>
+                  <EmptySpace min="0" pref="603" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <EmptySpace min="0" pref="244" max="32767" attributes="0"/>
+                  <EmptySpace min="0" pref="280" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
           </Layout>
@@ -118,53 +118,62 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" alignment="1" attributes="0">
-                  <EmptySpace max="-2" attributes="0"/>
+              <Group type="102" attributes="0">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="cbImRoots" min="-2" max="-2" attributes="0"/>
-                      <Component id="cbRealRoots" alignment="0" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" alignment="1" attributes="0">
-                          <Component id="cbLabels" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace pref="78" max="32767" attributes="0"/>
-                          <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="cbRealRoots" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <Group type="102" attributes="0">
-                          <Component id="cbReflections" min="-2" max="-2" attributes="0"/>
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="cbImRoots" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <Group type="102" alignment="0" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="cbNegative" min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="1" attributes="0">
-                      <Group type="102" alignment="1" attributes="0">
-                          <Component id="rbColorNorms" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
-                      </Group>
-                      <Component id="rbColorLevels" alignment="1" min="-2" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Component id="cbReflections" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Component id="cbLabels" alignment="0" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Component id="jLabel1" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Component id="rbColorLevels" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Component id="rbColorNorms" alignment="0" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" alignment="0" attributes="0">
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="rbColorNorms" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="jLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="cbRealRoots" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="cbLabels" alignment="3" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="cbImRoots" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="rbColorLevels" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="cbReflections" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="cbNegative" alignment="3" min="-2" max="-2" attributes="0"/>
+              <Group type="102" attributes="0">
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="102" attributes="0">
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="cbRealRoots" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="jLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="cbImRoots" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="rbColorNorms" alignment="3" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="cbNegative" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="rbColorLevels" alignment="3" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                      </Group>
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace min="-2" pref="23" max="-2" attributes="0"/>
+                          <Component id="cbLabels" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="cbReflections" min="-2" max="-2" attributes="0"/>
+                      </Group>
                   </Group>
                   <EmptySpace max="32767" attributes="0"/>
               </Group>
@@ -261,22 +270,29 @@
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" attributes="0">
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="bUpdate" pref="103" max="32767" attributes="1"/>
-                      <Component id="bReset" alignment="0" min="-2" max="-2" attributes="1"/>
+                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                      <Group type="102" alignment="1" attributes="1">
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="bUpdate" max="32767" attributes="2"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="bReset" min="-2" max="-2" attributes="1"/>
+                      </Group>
+                      <Component id="maxHeightField" alignment="0" min="-2" pref="205" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace max="-2" attributes="0"/>
+                  <EmptySpace pref="22" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" alignment="0" attributes="0">
-                  <Component id="bUpdate" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Component id="bReset" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace pref="8" max="32767" attributes="0"/>
+              <Group type="102" attributes="0">
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="bReset" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="bUpdate" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                  <Component id="maxHeightField" max="32767" attributes="0"/>
+                  <EmptySpace min="-2" pref="8" max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -292,11 +308,16 @@
         </Component>
         <Component class="javax.swing.JButton" name="bUpdate">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Update"/>
+            <Property name="text" type="java.lang.String" value="Draw"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="bUpdateActionPerformed"/>
           </Events>
+        </Component>
+        <Component class="edu.simplie.ui.reusable.UINumTextfield" name="maxHeightField">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Max height:" noResource="true"/>
+          </Properties>
         </Component>
       </SubComponents>
     </Container>

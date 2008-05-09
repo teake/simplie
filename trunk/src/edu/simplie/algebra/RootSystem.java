@@ -364,10 +364,10 @@ public class RootSystem
 	 * @param maxHeight	The height up to and including which we should construct the root system.
 	 *					Construct the whole root system if maxHeight == 0.
 	 */
-	private void construct(int maxHeight)
+	public void construct(int maxHeight)
 	{
 		// If the root system is already fully constructed, just do nothing and return.
-		if(fullyConstructed)
+		if(fullyConstructed || (!algebra.finite && maxHeight == 0))
 			return;
 		
 		HashSet<Root> prevRoots;
