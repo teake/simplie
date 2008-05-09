@@ -38,8 +38,8 @@
           <Group type="102" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                  <Component id="jpSettings" max="32767" attributes="1"/>
-                  <Component id="jpActions" alignment="0" max="32767" attributes="1"/>
+                  <Component id="jpActions" min="0" pref="87" max="32767" attributes="1"/>
+                  <Component id="jpSettings" alignment="0" max="32767" attributes="1"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="container" max="32767" attributes="0"/>
@@ -97,7 +97,7 @@
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <EmptySpace min="0" pref="241" max="32767" attributes="0"/>
+                  <EmptySpace min="0" pref="244" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
           </Layout>
@@ -124,14 +124,18 @@
                       <Component id="cbImRoots" min="-2" max="-2" attributes="0"/>
                       <Component id="cbRealRoots" alignment="0" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="1" attributes="0">
-                          <Component id="cbReflections" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace pref="24" max="32767" attributes="0"/>
+                          <Component id="cbLabels" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace pref="78" max="32767" attributes="0"/>
                           <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <Component id="cbNegative" min="-2" max="-2" attributes="0"/>
+                      <Group type="102" attributes="0">
+                          <Component id="cbReflections" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="cbNegative" min="-2" max="-2" attributes="0"/>
+                      </Group>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="1" attributes="0">
@@ -153,15 +157,16 @@
                       <Component id="rbColorNorms" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="cbRealRoots" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="cbReflections" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="cbLabels" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="cbImRoots" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="rbColorLevels" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="cbReflections" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="cbNegative" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace pref="10" max="32767" attributes="0"/>
+                  <EmptySpace max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -170,7 +175,7 @@
         <Component class="javax.swing.JCheckBox" name="cbRealRoots">
           <Properties>
             <Property name="selected" type="boolean" value="true"/>
-            <Property name="text" type="java.lang.String" value="Draw real roots"/>
+            <Property name="text" type="java.lang.String" value="Real roots"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cbRealRootsActionPerformed"/>
@@ -179,7 +184,7 @@
         <Component class="javax.swing.JCheckBox" name="cbImRoots">
           <Properties>
             <Property name="selected" type="boolean" value="true"/>
-            <Property name="text" type="java.lang.String" value="Draw imaginary roots"/>
+            <Property name="text" type="java.lang.String" value="Imaginary roots"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cbImRootsActionPerformed"/>
@@ -188,7 +193,7 @@
         <Component class="javax.swing.JCheckBox" name="cbReflections">
           <Properties>
             <Property name="selected" type="boolean" value="true"/>
-            <Property name="text" type="java.lang.String" value="Draw Weyl reflections"/>
+            <Property name="text" type="java.lang.String" value="Weyl reflections"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cbReflectionsActionPerformed"/>
@@ -224,10 +229,19 @@
         </Component>
         <Component class="javax.swing.JCheckBox" name="cbNegative">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Draw negative roots"/>
+            <Property name="text" type="java.lang.String" value="Negative roots"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cbNegativeActionPerformed"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JCheckBox" name="cbLabels">
+          <Properties>
+            <Property name="selected" type="boolean" value="true"/>
+            <Property name="text" type="java.lang.String" value="Root labels"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cbLabelsActionPerformed"/>
           </Events>
         </Component>
       </SubComponents>
@@ -262,7 +276,7 @@
                   <Component id="bUpdate" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="bReset" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace max="32767" attributes="0"/>
+                  <EmptySpace pref="8" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
