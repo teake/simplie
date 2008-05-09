@@ -24,7 +24,7 @@
             <MenuItem class="javax.swing.JMenuItem" name="loadDiagramItem">
               <Properties>
                 <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
-                  <action class="edu.rug.hep.simplie.SimpLieView" id="loadDiagram" methodName="loadDiagram"/>
+                  <action class="edu.simplie.SimpLieView" id="loadDiagram" methodName="loadDiagram"/>
                 </Property>
                 <Property name="name" type="java.lang.String" value="loadDiagramItem" noResource="true"/>
               </Properties>
@@ -32,7 +32,7 @@
             <MenuItem class="javax.swing.JMenuItem" name="saveDiagramItem">
               <Properties>
                 <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
-                  <action class="edu.rug.hep.simplie.SimpLieView" id="saveDiagram" methodName="saveDiagram"/>
+                  <action class="edu.simplie.SimpLieView" id="saveDiagram" methodName="saveDiagram"/>
                 </Property>
                 <Property name="name" type="java.lang.String" value="saveDiagramItem" noResource="true"/>
               </Properties>
@@ -45,7 +45,7 @@
             <MenuItem class="javax.swing.JMenuItem" name="loadRootsItem">
               <Properties>
                 <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
-                  <action class="edu.rug.hep.simplie.SimpLieView" id="loadRoots" methodName="loadRoots"/>
+                  <action class="edu.simplie.SimpLieView" id="loadRoots" methodName="loadRoots"/>
                 </Property>
                 <Property name="name" type="java.lang.String" value="loadRootsItem" noResource="true"/>
               </Properties>
@@ -53,7 +53,7 @@
             <MenuItem class="javax.swing.JMenuItem" name="saveRootsItem">
               <Properties>
                 <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
-                  <action class="edu.rug.hep.simplie.SimpLieView" id="saveRoots" methodName="saveRoots"/>
+                  <action class="edu.simplie.SimpLieView" id="saveRoots" methodName="saveRoots"/>
                 </Property>
                 <Property name="name" type="java.lang.String" value="saveRootsItem" noResource="true"/>
               </Properties>
@@ -91,7 +91,7 @@
             <MenuItem class="javax.swing.JMenuItem" name="clearItem">
               <Properties>
                 <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
-                  <action class="edu.rug.hep.simplie.SimpLieView" id="clearDiagram" methodName="clearDiagram"/>
+                  <action class="edu.simplie.SimpLieView" id="clearDiagram" methodName="clearDiagram"/>
                 </Property>
                 <Property name="text" type="java.lang.String" resourceKey="clearItem.text"/>
                 <Property name="name" type="java.lang.String" value="clearItem" noResource="true"/>
@@ -108,7 +108,7 @@
             <MenuItem class="javax.swing.JMenuItem" name="exportToTexItem">
               <Properties>
                 <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
-                  <action class="edu.rug.hep.simplie.SimpLieView" id="showExportTexDialog" methodName="showExportTexDialog"/>
+                  <action class="edu.simplie.SimpLieView" id="showExportTexDialog" methodName="showExportTexDialog"/>
                 </Property>
                 <Property name="text" type="java.lang.String" resourceKey="exportToTexItem.text"/>
                 <Property name="name" type="java.lang.String" value="exportToTexItem" noResource="true"/>
@@ -117,7 +117,7 @@
             <MenuItem class="javax.swing.JMenuItem" name="exporRootsItem">
               <Properties>
                 <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
-                  <action class="edu.rug.hep.simplie.SimpLieView" id="exportRoots" methodName="exportRoots"/>
+                  <action class="edu.simplie.SimpLieView" id="exportRoots" methodName="exportRoots"/>
                 </Property>
                 <Property name="name" type="java.lang.String" value="exporRootsItem" noResource="true"/>
               </Properties>
@@ -125,7 +125,7 @@
             <MenuItem class="javax.swing.JMenuItem" name="outputItem">
               <Properties>
                 <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
-                  <action class="edu.rug.hep.simplie.SimpLieView" id="showOutput" methodName="showOutput"/>
+                  <action class="edu.simplie.SimpLieView" id="showOutput" methodName="showOutput"/>
                 </Property>
                 <Property name="text" type="java.lang.String" resourceKey="outputItem.text"/>
                 <Property name="name" type="java.lang.String" value="outputItem" noResource="true"/>
@@ -146,7 +146,7 @@
             <MenuItem class="javax.swing.JMenuItem" name="aboutMenuItem">
               <Properties>
                 <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
-                  <action class="edu.rug.hep.simplie.SimpLieView" id="showAboutBox" methodName="showAboutBox"/>
+                  <action class="edu.simplie.SimpLieView" id="showAboutBox" methodName="showAboutBox"/>
                 </Property>
                 <Property name="name" type="java.lang.String" value="aboutMenuItem" noResource="true"/>
               </Properties>
@@ -159,12 +159,12 @@
         </Menu>
       </SubComponents>
     </Container>
-    <Component class="edu.rug.hep.simplie.ui.ExportToTex" name="exportToTex">
+    <Component class="edu.simplie.ui.ExportToTex" name="exportToTex">
       <Properties>
         <Property name="name" type="java.lang.String" value="exportToTex" noResource="true"/>
       </Properties>
     </Component>
-    <Component class="edu.rug.hep.simplie.ui.SystemOutTextArea" name="systemOutTextArea">
+    <Component class="edu.simplie.ui.SystemOutTextArea" name="systemOutTextArea">
       <Properties>
         <Property name="name" type="java.lang.String" value="systemOutTextArea" noResource="true"/>
       </Properties>
@@ -239,7 +239,7 @@
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout"/>
       <SubComponents>
-        <Component class="edu.rug.hep.simplie.ui.AlgebraSetup" name="algebraSetup">
+        <Component class="edu.simplie.ui.AlgebraSetup" name="algebraSetup">
           <Properties>
             <Property name="name" type="java.lang.String" value="algebraSetup" noResource="true"/>
           </Properties>
@@ -251,7 +251,7 @@
             </Constraint>
           </Constraints>
         </Component>
-        <Component class="edu.rug.hep.simplie.ui.AlgebraInfo" name="algebraInfo">
+        <Component class="edu.simplie.ui.AlgebraInfo" name="algebraInfo">
           <Properties>
             <Property name="name" type="java.lang.String" value="algebraInfo" noResource="true"/>
           </Properties>
@@ -263,7 +263,7 @@
             </Constraint>
           </Constraints>
         </Component>
-        <Component class="edu.rug.hep.simplie.ui.LevelDecomposition" name="levelDecomposition">
+        <Component class="edu.simplie.ui.LevelDecomposition" name="levelDecomposition">
           <Properties>
             <Property name="name" type="java.lang.String" value="levelDecomposition" noResource="true"/>
           </Properties>
@@ -275,7 +275,7 @@
             </Constraint>
           </Constraints>
         </Component>
-        <Component class="edu.rug.hep.simplie.ui.RootSpaceDrawer" name="rootSpaceDrawer">
+        <Component class="edu.simplie.ui.RootSpaceDrawer" name="rootSpaceDrawer">
           <Properties>
             <Property name="name" type="java.lang.String" value="rootSpaceDrawer" noResource="true"/>
           </Properties>

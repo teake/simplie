@@ -241,7 +241,7 @@
             </Property>
           </Properties>
         </Component>
-        <Component class="edu.rug.hep.simplie.ui.reusable.UINumTextfield" name="tfExtraColumns">
+        <Component class="edu.simplie.ui.reusable.UINumTextfield" name="tfExtraColumns">
           <Properties>
             <Property name="text" type="java.lang.String" value="Extra columns"/>
           </Properties>
