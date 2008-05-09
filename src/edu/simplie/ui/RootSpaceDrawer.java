@@ -131,7 +131,7 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements
         );
         canvasLayout.setVerticalGroup(
             canvasLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 280, Short.MAX_VALUE)
+            .add(0, 277, Short.MAX_VALUE)
         );
 
         org.jdesktop.layout.GroupLayout containerLayout = new org.jdesktop.layout.GroupLayout(container);
@@ -215,16 +215,11 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements
         jpSettingsLayout.setHorizontalGroup(
             jpSettingsLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jpSettingsLayout.createSequentialGroup()
+                .addContainerGap()
                 .add(jpSettingsLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jpSettingsLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .add(cbRealRoots))
-                    .add(jpSettingsLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .add(cbImRoots))
-                    .add(jpSettingsLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .add(cbNegative)))
+                    .add(cbRealRoots)
+                    .add(cbImRoots)
+                    .add(cbNegative))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jpSettingsLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(cbReflections)
@@ -257,7 +252,7 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements
                         .add(cbLabels)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(cbReflections)))
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(10, Short.MAX_VALUE))
         );
 
         jpActions.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Actions", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12))); // NOI18N
@@ -276,6 +271,7 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements
             }
         });
 
+        maxHeightField.setMinValue(0);
         maxHeightField.setText("Max height:"); // NOI18N
 
         org.jdesktop.layout.GroupLayout jpActionsLayout = new org.jdesktop.layout.GroupLayout(jpActions);
@@ -300,7 +296,7 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements
                     .add(bUpdate))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
                 .add(maxHeightField, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .add(8, 8, 8))
+                .add(11, 11, 11))
         );
 
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
@@ -322,7 +318,7 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements
             .add(layout.createSequentialGroup()
                 .addContainerGap()
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
-                    .add(jpActions, 0, 103, Short.MAX_VALUE)
+                    .add(jpActions, 0, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .add(jpSettings, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(container, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -489,7 +485,10 @@ private void cbLabelsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
 			// Draw the root labels.
 			if(cbLabels.isSelected())
 			{
-				gl.glColor3f(0.0f,0.0f,0.0f);
+				if(i == 1 && cbNegative.isSelected())
+					gl.glColor3f(0.5f,0.0f,0.0f);
+				else
+					gl.glColor3f(0.0f,0.5f,0.0f);
 				if(cbRealRoots.isSelected())
 					gl.glCallList(realLabelObj);
 				if(cbImRoots.isSelected())
