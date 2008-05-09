@@ -421,12 +421,8 @@ private void cbLabelsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
 		gl.glEndList();
 		
 		gl.glEnable(GL.GL_CULL_FACE);
-		gl.glEnable(GL.GL_LIGHTING);
-		gl.glEnable(GL.GL_LIGHT0);
 		gl.glEnable(GL.GL_DEPTH_TEST);
 		gl.glEnable(GL.GL_NORMALIZE);
-		gl.glColorMaterial(GL.GL_FRONT, GL.GL_AMBIENT_AND_DIFFUSE);
-		gl.glEnable(GL.GL_COLOR_MATERIAL);
 		
 		gl.glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 	}
@@ -467,7 +463,6 @@ private void cbLabelsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
 			// Draw the weyl reflections.
 			if(cbReflections.isSelected())
 			{
-				gl.glDisable(GL.GL_LIGHTING);
 				gl.glColor3f(0.6f, 0.6f, 0.6f);
 				if(cbRealRoots.isSelected())
 					gl.glCallList(realReflsObj);
@@ -475,19 +470,16 @@ private void cbLabelsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
 					gl.glCallList(imReflsObj);
 				if(i == 0 && cbRealRoots.isSelected())
 					gl.glCallList(simpReflsObj);
-				gl.glEnable(GL.GL_LIGHTING);
 			}
 			
 			// Draw the root labels.
 			if(cbLabels.isSelected())
 			{
-				gl.glDisable(GL.GL_LIGHTING);
 				gl.glColor3f(0.0f,0.0f,0.0f);
 				if(cbRealRoots.isSelected())
 					gl.glCallList(realLabelObj);
 				if(cbImRoots.isSelected())
 					gl.glCallList(imLabelObj);
-				gl.glEnable(GL.GL_LIGHTING);
 			}
 			gl.glRotatef(180.0f, 1.0f, 0.0f, 0.0f);
 		}	
