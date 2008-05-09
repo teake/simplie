@@ -116,12 +116,12 @@
             <Property name="stringPainted" type="boolean" value="true"/>
           </Properties>
         </Component>
-        <Component class="edu.rug.hep.simplie.ui.reusable.UINumTextfield" name="autoScanMaxLevel">
+        <Component class="edu.simplie.ui.reusable.UINumTextfield" name="autoScanMaxLevel">
           <Properties>
             <Property name="text" type="java.lang.String" value="Maximum level:"/>
           </Properties>
         </Component>
-        <Component class="edu.rug.hep.simplie.ui.reusable.UINumTextfield" name="autoScanMinLevel">
+        <Component class="edu.simplie.ui.reusable.UINumTextfield" name="autoScanMinLevel">
           <Properties>
             <Property name="text" type="java.lang.String" value="Minimum level:"/>
           </Properties>
@@ -333,7 +333,7 @@
 
           <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
           <SubComponents>
-            <Component class="edu.rug.hep.simplie.ui.reusable.UIPrintableColorTable" name="representationsTable">
+            <Component class="edu.simplie.ui.reusable.UIPrintableColorTable" name="representationsTable">
               <Properties>
                 <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
                   <Table columnCount="10" rowCount="0">
@@ -406,7 +406,7 @@
 
           <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
           <SubComponents>
-            <Component class="edu.rug.hep.simplie.ui.reusable.UIPrintableColorTable" name="weightsTable">
+            <Component class="edu.simplie.ui.reusable.UIPrintableColorTable" name="weightsTable">
               <Properties>
                 <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
                   <Table columnCount="4" rowCount="0">
