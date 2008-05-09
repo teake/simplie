@@ -34,6 +34,8 @@ import java.awt.event.KeyListener;
  */
 public class UINumTextfield extends javax.swing.JPanel
 {
+	private int minValue = Integer.MIN_VALUE;
+	private int maxValue = Integer.MAX_VALUE;
 	
 	/**
 	 * Creates new form UINumTextfield
@@ -75,9 +77,20 @@ public class UINumTextfield extends javax.swing.JPanel
 	
 	public void setValue(int value)
 	{
+		value = Math.max(value,minValue);
+		value = Math.min(value,maxValue);
 		tfLevel.setText(Helper.intToString(value));
 	}
 	
+	public void setMinValue(int value)
+	{
+		minValue = Math.min(maxValue,value);
+	}
+	
+	public void setMaxValue(int value)
+	{
+		maxValue = Math.max(minValue,value);
+	}
 	
 
 	
