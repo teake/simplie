@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<Form version="1.3" maxVersion="1.3" type="org.netbeans.modules.form.forminfo.JPanelFormInfo">
+<Form version="1.5" maxVersion="1.6" type="org.netbeans.modules.form.forminfo.JPanelFormInfo">
   <Properties>
     <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
       <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
@@ -50,7 +50,7 @@
                           <Component id="algebraInfoCMDet" alignment="1" pref="37" max="32767" attributes="1"/>
                       </Group>
                   </Group>
-                  <Component id="algebraInfoType" pref="104" max="32767" attributes="0"/>
+                  <Component id="algebraInfoType" pref="125" max="32767" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -95,55 +95,65 @@
     <Component class="javax.swing.JLabel" name="jLabel4">
       <Properties>
         <Property name="text" type="java.lang.String" value="Type:"/>
+        <Property name="toolTipText" type="java.lang.String" resourceKey="algebra.typeDef"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="algebraInfoType">
       <Properties>
         <Property name="horizontalAlignment" type="int" value="2"/>
         <Property name="text" type="java.lang.String" value="   "/>
+        <Property name="toolTipText" type="java.lang.String" resourceKey="algebra.typeDef"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="algebraInfoRank">
       <Properties>
         <Property name="horizontalAlignment" type="int" value="2"/>
         <Property name="text" type="java.lang.String" value="    "/>
+        <Property name="toolTipText" type="java.lang.String" resourceKey="algebra.rankDef"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="algebraInfoDim">
       <Properties>
         <Property name="horizontalAlignment" type="int" value="2"/>
         <Property name="text" type="java.lang.String" value="    "/>
+        <Property name="toolTipText" type="java.lang.String" resourceKey="algebra.dimensionDef"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel2">
       <Properties>
         <Property name="text" type="java.lang.String" value="Dimension:"/>
+        <Property name="toolTipText" type="java.lang.String" resourceKey="algebra.dimensionDef"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel1">
       <Properties>
         <Property name="text" type="java.lang.String" value="Rank:"/>
+        <Property name="toolTipText" type="java.lang.String" resourceKey="algebra.rankDef"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel3">
       <Properties>
         <Property name="text" type="java.lang.String" value="CM det:"/>
+        <Property name="toolTipText" type="java.lang.String" resourceKey="algebra.cmDetDef"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="algebraInfoCMDet">
       <Properties>
         <Property name="horizontalAlignment" type="int" value="2"/>
         <Property name="text" type="java.lang.String" value="   "/>
+        <Property name="toolTipText" type="java.lang.String" resourceKey="algebra.cmDetDef"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel5">
       <Properties>
         <Property name="text" type="java.lang.String" value="CM rank:"/>
+        <Property name="toolTipText" type="java.lang.String" resourceKey="algebra.cmRankDef"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="algebraInfoCMrank">
       <Properties>
         <Property name="text" type="java.lang.String" value="   "/>
+        <Property name="toolTipText" type="java.lang.String" resourceKey="algebra.cmRankDef"/>
       </Properties>
     </Component>
   </SubComponents>

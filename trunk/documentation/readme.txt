@@ -47,7 +47,7 @@ commands are:
 
     * Left mouse-click: Add a node. Hold shift to automatically add
       a connection to the previous node.
-    * Middle mouse-click: Toggle a node.
+    * Middle mouse-click or alt-left: Toggle a node.
     * Right mouse-click: Bring up context menu. From the context menu,
       you can:
           o Add/remove a node if the mouse is on an empty location.
@@ -61,44 +61,44 @@ A decomposition is specified by disabling one or more nodes. The
 regular subalgebra nodes remain white.
 
 
+ALGEBRA INFO
+------------
+
+This tab gives some basic information about the previously entered Lie algebra.
+You can select whether to view the information for the full algebra, the regular
+subalgebra, or for the interal algebra.
+
+    * Matrices: Displays some of the relevant matrices for the algebra.
+    * Roots: lists all the roots of the algebra.
+    * Representations: Here it is possible to enter Dynkin labels for a 
+      representation and the computer calculate the dimension and all the weights.
+
 
 LEVEL DECOMPOSITION
 -------------------
 
-In this tab a level decomposition of the Dynkin diagram set up 
-previously can be calculated.
+In this tab a level decomposition of the Dynkin diagram set up previously 
+can be calculated. The columns in the subalgebra representations panel
+are the following:
 
-    * Settings:
-          o Sign convention: whether to scan for lowest weight 
-            representations (p = - A m) or highest weight representation 
-            (p = + A m).
-          o Show zero multiplicity roots: show representations of 
-            which the lowest (highest) weight has zero multiplicity 
-            as a root.
-          o Show zero mu representations: show representations which
-            have zero outer multiplicity (mu).
-          o Calculate root representations: Calculate the root multiplicities
-            while scanning.
-          o Calculate representation multiplicities: Calculate the outer
-            multiplicities while scanning.
-    * Scan levels:
-          o Maximum level: The maximum level to which to scan.
-          o Minimum level: The mininum level to which to scan.
-          o Scan levels: This button start the scanning procedure.
-    * Columns in the subalgebra representations panel:
-          o l : Level(s).
-          o p_r : Dynkin labels of the regular subalgebra part.
-          o p_i : Dynkin labels of the internal part.
-          o vector : Root vector.
-          o a^2 : Root norm.
-          o d_r : Dimension of the regular subalgebra part.
-          o d_i : Dimension of the internal part.
-          o mult : The root multiplicity.
-          o mu : The outer multiplicity of the representation.
-          o h : The height of lowest / highest weight.
-    * Weights of selected representation:
-          o Dominant weights: Show the dominant weights of the representation
-            selected in the representation table.
-          o All weightst: Show all the weights of a representation in the
-            "Weights of selected representation" panel, instead of only
-            the dominant weights.
+    * l : Level(s).
+    * p_r : Dynkin labels of the regular subalgebra part.
+    * p_i : Dynkin labels of the internal part.
+    * vector : Root vector.
+    * a^2 : Root norm.
+    * d_r : Dimension of the regular subalgebra part.
+    * d_i : Dimension of the internal part.
+    * mult : The root multiplicity.
+    * mu : The outer multiplicity of the representation.
+    * h : The height of lowest / highest weight.
+
+
+VISUALIZATION
+-------------
+
+In this tab any Lie algebra can be "visualized": a 3D Hesse diagram can be drawn
+of the root system of the algebra. The diagram interaction is as follows:
+
+    * Left-button mouse drag: Translate.
+    * Mouse scroll: Zoom.
+    * Right-button mouse drag or alt-left-button drag: rotate. 

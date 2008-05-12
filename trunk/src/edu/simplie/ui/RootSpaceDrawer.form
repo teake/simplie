@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<Form version="1.3" maxVersion="1.5" type="org.netbeans.modules.form.forminfo.JPanelFormInfo">
+<Form version="1.5" maxVersion="1.5" type="org.netbeans.modules.form.forminfo.JPanelFormInfo">
   <NonVisualComponents>
     <Component class="javax.swing.ButtonGroup" name="bgColorCoding">
     </Component>
@@ -35,11 +35,11 @@
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" attributes="0">
+          <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                  <Component id="jpActions" min="0" max="32767" attributes="1"/>
-                  <Component id="jpSettings" alignment="0" max="32767" attributes="1"/>
+                  <Component id="jpSettings" min="0" pref="101" max="32767" attributes="1"/>
+                  <Component id="jpActions" alignment="0" pref="101" max="32767" attributes="1"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="container" max="32767" attributes="0"/>
@@ -53,7 +53,7 @@
       <Properties>
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
           <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-            <TitledBorder title="Root space">
+            <TitledBorder title="Hesse diagram of the root space">
               <Font PropertyName="font" name="Tahoma" size="12" style="1"/>
             </TitledBorder>
           </Border>
@@ -92,12 +92,12 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <EmptySpace min="0" pref="603" max="32767" attributes="0"/>
+                  <EmptySpace min="0" pref="763" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <EmptySpace min="0" pref="277" max="32767" attributes="0"/>
+                  <EmptySpace min="0" pref="302" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
           </Layout>
@@ -121,14 +121,18 @@
               <Group type="102" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="cbRealRoots" alignment="0" min="-2" max="-2" attributes="0"/>
-                      <Component id="cbImRoots" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Group type="102" attributes="0">
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="cbRealRoots" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="cbImRoots" alignment="0" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="cbLabels" min="-2" max="-2" attributes="0"/>
+                              <Component id="cbReflections" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                      </Group>
                       <Component id="cbNegative" alignment="0" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="cbReflections" alignment="0" min="-2" max="-2" attributes="0"/>
-                      <Component id="cbLabels" alignment="0" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
@@ -153,21 +157,17 @@
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="cbImRoots" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="rbColorNorms" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="cbReflections" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="cbNegative" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="rbColorLevels" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="rbColorLevels" min="-2" max="-2" attributes="0"/>
+                              <Component id="cbNegative" alignment="0" min="-2" max="-2" attributes="0"/>
                           </Group>
                       </Group>
-                      <Group type="102" alignment="0" attributes="0">
-                          <EmptySpace min="-2" pref="23" max="-2" attributes="0"/>
-                          <Component id="cbLabels" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="cbReflections" min="-2" max="-2" attributes="0"/>
-                      </Group>
+                      <Component id="cbLabels" alignment="0" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace pref="10" max="32767" attributes="0"/>
+                  <EmptySpace pref="5" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -177,27 +177,30 @@
           <Properties>
             <Property name="selected" type="boolean" value="true"/>
             <Property name="text" type="java.lang.String" value="Real roots"/>
+            <Property name="toolTipText" type="java.lang.String" resourceKey="drawer.realTooltip"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cbRealRootsActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="repaint"/>
           </Events>
         </Component>
         <Component class="javax.swing.JCheckBox" name="cbImRoots">
           <Properties>
             <Property name="selected" type="boolean" value="true"/>
             <Property name="text" type="java.lang.String" value="Imaginary roots"/>
+            <Property name="toolTipText" type="java.lang.String" resourceKey="drawer.imaginaryTooltip"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cbImRootsActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="repaint"/>
           </Events>
         </Component>
         <Component class="javax.swing.JCheckBox" name="cbReflections">
           <Properties>
             <Property name="selected" type="boolean" value="true"/>
             <Property name="text" type="java.lang.String" value="Weyl reflections"/>
+            <Property name="toolTipText" type="java.lang.String" resourceKey="drawer.reflectionsTooltip"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cbReflectionsActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="repaint"/>
           </Events>
         </Component>
         <Component class="javax.swing.JRadioButton" name="rbColorLevels">
@@ -206,9 +209,10 @@
               <ComponentRef name="bgColorCoding"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Level decomposition"/>
+            <Property name="toolTipText" type="java.lang.String" resourceKey="drawer.levelTooltip"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="rbColorLevelsActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="updateAndRepaint"/>
           </Events>
         </Component>
         <Component class="javax.swing.JRadioButton" name="rbColorNorms">
@@ -218,9 +222,10 @@
             </Property>
             <Property name="selected" type="boolean" value="true"/>
             <Property name="text" type="java.lang.String" value="Root norms"/>
+            <Property name="toolTipText" type="java.lang.String" resourceKey="drawer.normTooltip"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="rbColorNormsActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="updateAndRepaint"/>
           </Events>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel1">
@@ -231,18 +236,20 @@
         <Component class="javax.swing.JCheckBox" name="cbNegative">
           <Properties>
             <Property name="text" type="java.lang.String" value="Negative roots"/>
+            <Property name="toolTipText" type="java.lang.String" resourceKey="drawer.negativeTooltip"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cbNegativeActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="repaint"/>
           </Events>
         </Component>
         <Component class="javax.swing.JCheckBox" name="cbLabels">
           <Properties>
             <Property name="selected" type="boolean" value="true"/>
             <Property name="text" type="java.lang.String" value="Root labels"/>
+            <Property name="toolTipText" type="java.lang.String" resourceKey="drawer.labelsTooltip"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cbLabelsActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="repaint"/>
           </Events>
         </Component>
       </SubComponents>
@@ -261,17 +268,17 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" attributes="0">
-                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                      <Group type="102" alignment="1" attributes="1">
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="bUpdate" max="32767" attributes="2"/>
-                          <EmptySpace max="-2" attributes="0"/>
+              <Group type="102" alignment="0" attributes="0">
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                      <Component id="maxHeightField" alignment="0" max="32767" attributes="1"/>
+                      <Group type="102" alignment="0" attributes="0">
+                          <Component id="bUpdate" min="-2" max="-2" attributes="2"/>
+                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Component id="bReset" min="-2" max="-2" attributes="1"/>
                       </Group>
-                      <Component id="maxHeightField" alignment="0" min="-2" pref="205" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace pref="22" max="32767" attributes="0"/>
+                  <EmptySpace max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -279,12 +286,12 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" attributes="0">
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="bReset" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="bUpdate" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="bReset" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                  <Component id="maxHeightField" max="32767" attributes="0"/>
-                  <EmptySpace min="-2" pref="11" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="maxHeightField" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -293,6 +300,7 @@
         <Component class="javax.swing.JButton" name="bReset">
           <Properties>
             <Property name="text" type="java.lang.String" value="Reset position"/>
+            <Property name="toolTipText" type="java.lang.String" resourceKey="drawer.resetTooltip"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="bResetActionPerformed"/>
@@ -301,13 +309,15 @@
         <Component class="javax.swing.JButton" name="bUpdate">
           <Properties>
             <Property name="text" type="java.lang.String" value="Draw"/>
+            <Property name="toolTipText" type="java.lang.String" resourceKey="drawer.drawTooltip"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="bUpdateActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="updateAndRepaint"/>
           </Events>
         </Component>
         <Component class="edu.simplie.ui.reusable.UINumTextfield" name="maxHeightField">
           <Properties>
+            <Property name="toolTipText" type="java.lang.String" resourceKey="drawer.maxHeightTooltip"/>
             <Property name="minValue" type="int" value="0"/>
             <Property name="text" type="java.lang.String" value="Max height:" noResource="true"/>
           </Properties>

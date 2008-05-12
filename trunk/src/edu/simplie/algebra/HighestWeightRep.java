@@ -64,8 +64,10 @@ public class HighestWeightRep
 	/**
 	 * Creates a new instance of HighestWeightRep
 	 *
-	 * @param	algebra				The algebra of which this is a representation.
-	 * @param	highestWeightLabels	The dynkin labels of the highest weight state.
+	 * @param	algebra						The algebra of which this is a representation.
+	 * @param	highestWeightLabels			The dynkin labels of the highest weight state.
+	 * @throws	IllegalArgumentException	When the rank of the algebra and the number of 
+	 *										weight labels do not coincide or when the underlying algebra is infinite.
 	 */
 	public HighestWeightRep(Algebra algebra, int[] highestWeightLabels)
 	{
@@ -73,6 +75,11 @@ public class HighestWeightRep
 		
 		this.algebra= algebra;
 		this.rank	= algebra.rank;
+		
+		if(rank != highestWeightLabels.length)
+			throw new IllegalArgumentException("Rank and number of weight labels do no match");
+		if(!algebra.finite)
+			throw new IllegalArgumentException("Highest weight rep of infinite algebra.");
 		
 		// Get the dimension of this rep.
 		dim = algebra.dimOfRep(highestWeightLabels);
@@ -117,6 +124,7 @@ public class HighestWeightRep
 	 *
 	 * @param	weightLabels		The Dynkin labels of the weight for which the multiplicity is calculated.
 	 * @return						The multiplicity of the weight, or 0 if it's not a weight in the representation.
+	 * @throws  IllegalArgumentException	When the rank and number of weight labels do not match.
 	 */
 	public long getWeightMult(int[] weightLabels)
 	{
@@ -124,10 +132,9 @@ public class HighestWeightRep
 		int			wantedDepth;
 		Weight		wantedWeight;
 		
-		// Preliminary checks
-		if(!algebra.finite || weightLabels.length != rank)
-			return 0;
-		
+		if(rank != weightLabels.length)
+			throw new IllegalArgumentException("Rank and number of weight labels do no match");
+	
 		wantedDepthF = highestHeight.minus(algebra.weightHeight(weightLabels));
 		
 		if(!wantedDepthF.isInt())
