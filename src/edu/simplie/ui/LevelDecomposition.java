@@ -132,10 +132,10 @@ public class LevelDecomposition extends javax.swing.JPanel
         jScrollPane1 = new javax.swing.JScrollPane();
         representationsTable = new edu.simplie.ui.reusable.UIPrintableColorTable();
         jPanel2 = new javax.swing.JPanel();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        weightsTable = new edu.simplie.ui.reusable.UIPrintableColorTable();
         bDominantWeights = new javax.swing.JButton();
         bAllWeights = new javax.swing.JButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        weightsTable = new edu.simplie.ui.reusable.UIPrintableColorTable();
 
         AutoScanPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Scan levels", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12))); // NOI18N
 
@@ -168,7 +168,7 @@ public class LevelDecomposition extends javax.swing.JPanel
                     .add(autoScanMinLevel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(AutoScanPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(bAutoScan, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 149, Short.MAX_VALUE)
+                    .add(bAutoScan, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 131, Short.MAX_VALUE)
                     .add(autoScanProgressBar, 0, 0, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -244,7 +244,7 @@ public class LevelDecomposition extends javax.swing.JPanel
                         .add(settingsPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                             .add(cbRepMult)
                             .add(cbRootMult))))
-                .addContainerGap(19, Short.MAX_VALUE))
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         settingsPanelLayout.setVerticalGroup(
             settingsPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -300,17 +300,33 @@ public class LevelDecomposition extends javax.swing.JPanel
             jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 647, Short.MAX_VALUE)
+                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 628, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel1Layout.createSequentialGroup()
-                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 165, Short.MAX_VALUE)
+                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 106, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Weights of selected representation", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12))); // NOI18N
+
+        bDominantWeights.setText("Dominant weights");
+        bDominantWeights.setToolTipText(resourceMap.getString("levelDecomp.dominantTooltip")); // NOI18N
+        bDominantWeights.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bDominantWeightsActionPerformed(evt);
+            }
+        });
+
+        bAllWeights.setText("All weights");
+        bAllWeights.setToolTipText(resourceMap.getString("levelDecomp.allweightsTooltip")); // NOI18N
+        bAllWeights.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bAllWeightsActionPerformed(evt);
+            }
+        });
 
         weightsTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -337,22 +353,6 @@ public class LevelDecomposition extends javax.swing.JPanel
         });
         jScrollPane2.setViewportView(weightsTable);
 
-        bDominantWeights.setText("Dominant weights");
-        bDominantWeights.setToolTipText(resourceMap.getString("levelDecomp.dominantTooltip")); // NOI18N
-        bDominantWeights.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                bDominantWeightsActionPerformed(evt);
-            }
-        });
-
-        bAllWeights.setText("All weights");
-        bAllWeights.setToolTipText(resourceMap.getString("levelDecomp.allweightsTooltip")); // NOI18N
-        bAllWeights.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                bAllWeightsActionPerformed(evt);
-            }
-        });
-
         org.jdesktop.layout.GroupLayout jPanel2Layout = new org.jdesktop.layout.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -360,7 +360,7 @@ public class LevelDecomposition extends javax.swing.JPanel
             .add(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 308, Short.MAX_VALUE)
+                    .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 292, Short.MAX_VALUE)
                     .add(jPanel2Layout.createSequentialGroup()
                         .add(bDominantWeights)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
@@ -389,7 +389,7 @@ public class LevelDecomposition extends javax.swing.JPanel
                     .add(layout.createSequentialGroup()
                         .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
                             .add(AutoScanPanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .add(settingsPanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .add(settingsPanel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(jPanel2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap())
