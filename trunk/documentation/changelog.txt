@@ -1,3 +1,18 @@
+XX-05-2008: Version 1.1
+
+* [math] Faster root system construction, by not calculating multiplicities of roots on the same orbit (with thanks to Axel Kleinschmidt, who pointed this out to me).
+* [math] All simple roots now have even integer norms.
+* [math] Take into account that weight heights can be fractional too.
+* [math] Sort levels according to their height.
+* [ui] Remember window positions and sizes.
+* [ui] Brand-new root system visualization tab.
+* [ui] Extended help.
+* [ui] Adding a node connection has a preview.
+* [ui] Show Dynkin diagram and Cartan matrix on same tab.
+* [code] Moved from Java 6 to Java 5.
+* [code] Renamed packages and some classes.
+* [misc] Numerous bug-fixes and interface improvements.
+
 18-10-2007: Version 1.0
 
 * [math] SimpLie can now handle non-simply laced algebras.

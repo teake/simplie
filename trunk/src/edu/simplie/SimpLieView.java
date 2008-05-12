@@ -352,7 +352,7 @@ public class SimpLieView extends FrameView {
             outputDialog = new JDialog(mainFrame);
 			outputDialog.add(systemOutTextArea);
             outputDialog.setLocationRelativeTo(mainFrame);
-			outputDialog.setTitle("Program output");
+			outputDialog.setTitle("SimpLie Output");
         }
         SimpLieApp.getApplication().show(outputDialog);
 		SimpLieApp.getApplication().show(this);
