@@ -23,6 +23,7 @@ public class SimpLieView extends FrameView {
 	private final AlgebraComposite algebras;
 	private JDialog exportDialog;
 	private JDialog outputDialog;
+	private JDialog helpDialog;
 	
 	private final FileFilter ddFilter;
 	private final FileFilter rsFilter;
@@ -174,6 +175,7 @@ public class SimpLieView extends FrameView {
         exporRootsItem = new javax.swing.JMenuItem();
         outputItem = new javax.swing.JMenuItem();
         javax.swing.JMenu helpMenu = new javax.swing.JMenu();
+        helpMenuItem = new javax.swing.JMenuItem();
         javax.swing.JMenuItem aboutMenuItem = new javax.swing.JMenuItem();
         exportToTex = new edu.simplie.ui.ExportToTex();
         systemOutTextArea = new edu.simplie.ui.SystemOutTextArea();
@@ -230,7 +232,6 @@ public class SimpLieView extends FrameView {
         presetMenu.add(jSeparator1);
 
         clearItem.setAction(actionMap.get("clearDiagram")); // NOI18N
-        clearItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_X, java.awt.event.InputEvent.SHIFT_MASK));
         clearItem.setText(resourceMap.getString("clearItem.text")); // NOI18N
         clearItem.setName("clearItem"); // NOI18N
         presetMenu.add(clearItem);
@@ -241,8 +242,6 @@ public class SimpLieView extends FrameView {
         toolsMenu.setName("toolsMenu"); // NOI18N
 
         exportToTexItem.setAction(actionMap.get("showExportTexDialog")); // NOI18N
-        exportToTexItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, java.awt.event.InputEvent.CTRL_MASK));
-        exportToTexItem.setText(resourceMap.getString("exportToTexItem.text")); // NOI18N
         exportToTexItem.setName("exportToTexItem"); // NOI18N
         toolsMenu.add(exportToTexItem);
 
@@ -251,7 +250,6 @@ public class SimpLieView extends FrameView {
         toolsMenu.add(exporRootsItem);
 
         outputItem.setAction(actionMap.get("showOutput")); // NOI18N
-        outputItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
         outputItem.setText(resourceMap.getString("outputItem.text")); // NOI18N
         outputItem.setName("outputItem"); // NOI18N
         toolsMenu.add(outputItem);
@@ -260,6 +258,10 @@ public class SimpLieView extends FrameView {
 
         helpMenu.setText(resourceMap.getString("helpMenu.text")); // NOI18N
         helpMenu.setName("helpMenu"); // NOI18N
+
+        helpMenuItem.setAction(actionMap.get("showHelp")); // NOI18N
+        helpMenuItem.setName("helpMenuItem"); // NOI18N
+        helpMenu.add(helpMenuItem);
 
         aboutMenuItem.setAction(actionMap.get("showAboutBox")); // NOI18N
         aboutMenuItem.setName("aboutMenuItem"); // NOI18N
@@ -286,11 +288,11 @@ public class SimpLieView extends FrameView {
         statusPanel.setLayout(statusPanelLayout);
         statusPanelLayout.setHorizontalGroup(
             statusPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(statusPanelSeparator, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 679, Short.MAX_VALUE)
+            .add(statusPanelSeparator, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 855, Short.MAX_VALUE)
             .add(statusPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .add(statusMessageLabel)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 505, Short.MAX_VALUE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 659, Short.MAX_VALUE)
                 .add(progressBar, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(statusAnimationLabel)
@@ -489,6 +491,17 @@ public class SimpLieView extends FrameView {
 		}
 	}
 
+	@Action
+	public void showHelp()
+	{
+       if (helpDialog == null) {
+            JFrame mainFrame = SimpLieApp.getApplication().getMainFrame();
+            helpDialog = new SimpLieHelp(mainFrame);
+            helpDialog.setLocationRelativeTo(mainFrame);
+        }
+        SimpLieApp.getApplication().show(helpDialog);
+	}
+
 
 
 
@@ -499,6 +512,7 @@ public class SimpLieView extends FrameView {
     private javax.swing.JMenuItem exporRootsItem;
     private edu.simplie.ui.ExportToTex exportToTex;
     private javax.swing.JMenuItem exportToTexItem;
+    private javax.swing.JMenuItem helpMenuItem;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;

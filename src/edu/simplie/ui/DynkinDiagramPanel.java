@@ -512,7 +512,7 @@ public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramLis
 
 	private void menuAddQuadrupleConnectionActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_menuAddQuadrupleConnectionActionPerformed
 	{//GEN-HEADEREND:event_menuAddQuadrupleConnectionActionPerformed
-		startModify(DynkinConnection.TYPE_QUADRUPLE,	STATUS_ADDCON);
+		startModify(DynkinConnection.TYPE_QUADRUPLE, STATUS_ADDCON);
 }//GEN-LAST:event_menuAddQuadrupleConnectionActionPerformed
 	
 private void diagramMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_diagramMouseExited

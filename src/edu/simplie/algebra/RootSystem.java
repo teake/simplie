@@ -66,7 +66,12 @@ public class RootSystem
 	/** The minimum root norm (as constructed so far) */
 	private int minNorm;
 	
-	/** Creates a new instance of RootSystem and constructs up to height 1. */
+	/** 
+	 * Creates a new instance of RootSystem and constructs up to height 1 
+	 * if the algebra is infinite, and fully if it's finite.
+	 * 
+	 * @param algebra The underlying algebra for which this is a root system.
+	 */
 	public RootSystem(Algebra algebra)
 	{
 		this.algebra	= algebra;
@@ -252,11 +257,15 @@ public class RootSystem
 	/**
 	 * Get a root multiplicity.
 	 *
-	 * @param rootToGet		The root of which the multiplicity should be returned.
-	 * @return				The root multiplicity, 0 if it's not a root.
+	 * @param rootToGet					The root of which the multiplicity should be returned.
+	 * @return							The root multiplicity, 0 if it's not a root.
+	 * @throws IllegalArgumentException	When the number of root components does not match the rank.
 	 */
 	public long getRootMult(Root rootToGet)
 	{
+		if(rootToGet.vector.length != rank)
+			throw new IllegalArgumentException("Number of root components does not match the rank");
+		
 		int rootHeight = rootToGet.height();
 		HashSet<Root> roots;
 		

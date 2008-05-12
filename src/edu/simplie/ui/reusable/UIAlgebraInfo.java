@@ -77,28 +77,39 @@ public class UIAlgebraInfo extends javax.swing.JPanel
         setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Algebra information", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12))); // NOI18N
 
         jLabel4.setText("Type:");
+        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(edu.simplie.SimpLieApp.class).getContext().getResourceMap(UIAlgebraInfo.class);
+        jLabel4.setToolTipText(resourceMap.getString("algebra.typeDef")); // NOI18N
 
         algebraInfoType.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         algebraInfoType.setText("   ");
+        algebraInfoType.setToolTipText(resourceMap.getString("algebra.typeDef")); // NOI18N
 
         algebraInfoRank.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         algebraInfoRank.setText("    ");
+        algebraInfoRank.setToolTipText(resourceMap.getString("algebra.rankDef")); // NOI18N
 
         algebraInfoDim.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         algebraInfoDim.setText("    ");
+        algebraInfoDim.setToolTipText(resourceMap.getString("algebra.dimensionDef")); // NOI18N
 
         jLabel2.setText("Dimension:");
+        jLabel2.setToolTipText(resourceMap.getString("algebra.dimensionDef")); // NOI18N
 
         jLabel1.setText("Rank:");
+        jLabel1.setToolTipText(resourceMap.getString("algebra.rankDef")); // NOI18N
 
         jLabel3.setText("CM det:");
+        jLabel3.setToolTipText(resourceMap.getString("algebra.cmDetDef")); // NOI18N
 
         algebraInfoCMDet.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         algebraInfoCMDet.setText("   ");
+        algebraInfoCMDet.setToolTipText(resourceMap.getString("algebra.cmDetDef")); // NOI18N
 
         jLabel5.setText("CM rank:");
+        jLabel5.setToolTipText(resourceMap.getString("algebra.cmRankDef")); // NOI18N
 
         algebraInfoCMrank.setText("   ");
+        algebraInfoCMrank.setToolTipText(resourceMap.getString("algebra.cmRankDef")); // NOI18N
 
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
         this.setLayout(layout);
@@ -125,7 +136,7 @@ public class UIAlgebraInfo extends javax.swing.JPanel
                         .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING, false)
                             .add(algebraInfoCMrank, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .add(algebraInfoCMDet, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 37, Short.MAX_VALUE)))
-                    .add(algebraInfoType, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 104, Short.MAX_VALUE))
+                    .add(algebraInfoType, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 125, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(

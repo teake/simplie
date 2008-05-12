@@ -302,8 +302,10 @@ public class Algebra
 	 * Dynkin labels associated to the given dynkinLabels.
 	 * This is basically an implementation of Weyl's dimensionality formula.
 	 *
-	 * @param	highestWeightLabels	The Dynkin labels of the representation.
-	 * @return						The dimension of the presentation, 0 if something's wrong.
+	 * @param	highestWeightLabels			The Dynkin labels of the representation.
+	 * @return								The dimension of the presentation.
+	 * @throws	IllegalArgumentException	When the algebra is infinite
+	 *										or if the number of weight labels does not match the rank.
 	 */
 	public long dimOfRep(int[] highestWeightLabels)
 	{
@@ -311,8 +313,11 @@ public class Algebra
 		Weight		highestWeight;
 		
 		// Preliminary checks.
-		if(!finite || highestWeightLabels.length != rank)
-			return 0;
+		if(!finite)
+			throw new IllegalArgumentException("No representations of infinite algebras.");
+
+		if(highestWeightLabels.length != rank)
+			throw new IllegalArgumentException("Number of weight labels does not match rank.");
 		
 		dimOfRep		= new fraction(1);
 		highestWeight	= new Weight(highestWeightLabels);
