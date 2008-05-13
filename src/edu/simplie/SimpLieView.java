@@ -310,7 +310,9 @@ public class SimpLieView extends FrameView {
                 .add(3, 3, 3))
         );
 
+        mainPane.setMinimumSize(new java.awt.Dimension(700, 600));
         mainPane.setName("mainPane"); // NOI18N
+        mainPane.setPreferredSize(new java.awt.Dimension(700, 600));
 
         algebraSetup.setName("algebraSetup"); // NOI18N
         mainPane.addTab(resourceMap.getString("algebraSetup.TabConstraints.tabTitle"), algebraSetup); // NOI18N
