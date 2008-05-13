@@ -204,11 +204,18 @@ public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramLis
 		menuAddConnection.setVisible(onNode);
 		menuRemoveConnection.setVisible(onNode);
 		menuSeparator1.setVisible(onNode);
-		menuSeparator2.setVisible(onNode);
 		menuRemoveNode.setVisible(onNode);
+		/*
 		menuToggleCompact.setVisible(onNode);
 		menuAddCompactPair.setVisible(onNode);
 		menuRemoveCompactPair.setVisible(onNode);
+		menuSeparator2.setVisible(onNode);
+		 */
+		menuToggleCompact.setVisible(false);
+		menuAddCompactPair.setVisible(false);
+		menuRemoveCompactPair.setVisible(false);
+		menuSeparator2.setVisible(false);
+		
 		menuState.setVisible(onNode);
 		if(onNode)
 		{
