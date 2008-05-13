@@ -23,12 +23,12 @@
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="1" attributes="0">
                   <Component id="jPanel1" alignment="0" max="32767" attributes="0"/>
-                  <Group type="102" alignment="1" attributes="0">
+                  <Group type="102" alignment="0" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="AutoScanPanel" linkSize="3" min="0" max="32767" attributes="1"/>
-                          <Component id="settingsPanel" linkSize="3" alignment="0" min="-2" max="-2" attributes="1"/>
+                          <Component id="settingsPanel" min="-2" max="-2" attributes="1"/>
+                          <Component id="AutoScanPanel" min="-2" max="-2" attributes="1"/>
                       </Group>
-                      <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
                       <Component id="jPanel2" max="32767" attributes="0"/>
                   </Group>
               </Group>
@@ -40,13 +40,13 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+              <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
                       <Component id="settingsPanel" min="-2" max="-2" attributes="1"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="AutoScanPanel" min="-2" max="-2" attributes="1"/>
                   </Group>
-                  <Component id="jPanel2" max="32767" attributes="3"/>
+                  <Component id="jPanel2" min="-2" max="-2" attributes="3"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="jPanel1" max="32767" attributes="0"/>
@@ -73,20 +73,15 @@
               <Group type="102" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="bAutoScan" pref="136" max="32767" attributes="1"/>
+                      <Component id="bAutoScan" max="32767" attributes="1"/>
                       <Component id="autoScanProgressBar" alignment="0" min="0" pref="0" max="32767" attributes="3"/>
                   </Group>
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" alignment="1" attributes="0">
-                          <Component id="autoScanMinLevel" min="-2" max="-2" attributes="1"/>
-                          <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
-                      </Group>
-                      <Group type="102" alignment="1" attributes="0">
-                          <Component id="autoScanMaxLevel" min="-2" max="-2" attributes="1"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                      </Group>
+                  <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="1" attributes="0">
+                      <Component id="autoScanMaxLevel" min="-2" max="-2" attributes="1"/>
+                      <Component id="autoScanMinLevel" alignment="1" min="-2" max="-2" attributes="1"/>
                   </Group>
+                  <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -297,7 +292,7 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="1" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="jScrollPane1" pref="708" max="32767" attributes="0"/>
+                  <Component id="jScrollPane1" pref="727" max="32767" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
@@ -359,7 +354,7 @@
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace min="-2" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="jScrollPane2" alignment="0" pref="362" max="32767" attributes="0"/>
+                      <Component id="jScrollPane2" alignment="0" pref="445" max="32767" attributes="0"/>
                       <Group type="102" alignment="0" attributes="0">
                           <Component id="bDominantWeights" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
@@ -378,7 +373,7 @@
                       <Component id="bDominantWeights" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="jScrollPane2" pref="130" max="32767" attributes="0"/>
+                  <Component id="jScrollPane2" pref="139" max="32767" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
