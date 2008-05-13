@@ -1,4 +1,4 @@
-XX-05-2008: Version 1.1
+13-05-2008: Version 1.1
 
 * [math] Faster root system construction, by not calculating multiplicities of roots on the same orbit (with thanks to Axel Kleinschmidt, who pointed this out to me).
 * [math] All simple roots now have even integer norms.
