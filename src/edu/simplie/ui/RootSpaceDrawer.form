@@ -38,7 +38,7 @@
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                  <Component id="jpActions" min="0" pref="113" max="32767" attributes="1"/>
+                  <Component id="jpActions" min="0" max="32767" attributes="1"/>
                   <Component id="jpSettings" alignment="0" max="32767" attributes="1"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
@@ -53,7 +53,7 @@
       <Properties>
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
           <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-            <TitledBorder title="Hesse diagram of the root space">
+            <TitledBorder title="Hasse diagram of the root space">
               <Font PropertyName="font" name="Tahoma" size="12" style="1"/>
             </TitledBorder>
           </Border>
@@ -167,7 +167,7 @@
                       </Group>
                       <Component id="cbLabels" alignment="0" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace max="32767" attributes="0"/>
+                  <EmptySpace pref="17" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -274,7 +274,7 @@
                       <Group type="102" alignment="0" attributes="0">
                           <Component id="bUpdate" min="-2" max="-2" attributes="2"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="bReset" max="32767" attributes="1"/>
+                          <Component id="bReset" pref="137" max="32767" attributes="1"/>
                       </Group>
                       <Component id="maxHeightField" alignment="1" min="-2" max="-2" attributes="1"/>
                   </Group>
@@ -291,7 +291,7 @@
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="maxHeightField" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace max="32767" attributes="0"/>
+                  <EmptySpace pref="32" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>

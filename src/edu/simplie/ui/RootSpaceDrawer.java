@@ -119,7 +119,7 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements
         bUpdate = new javax.swing.JButton();
         maxHeightField = new edu.simplie.ui.reusable.UINumTextfield();
 
-        container.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Hesse diagram of the root space", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12))); // NOI18N
+        container.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Hasse diagram of the root space", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12))); // NOI18N
 
         canvas.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
@@ -259,7 +259,7 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements
                             .add(rbColorLevels)
                             .add(cbNegative)))
                     .add(cbLabels))
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(17, Short.MAX_VALUE))
         );
 
         jpActions.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Actions", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12))); // NOI18N
@@ -294,7 +294,7 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements
                     .add(jpActionsLayout.createSequentialGroup()
                         .add(bUpdate)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(bReset, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .add(bReset, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 137, Short.MAX_VALUE))
                     .add(org.jdesktop.layout.GroupLayout.TRAILING, maxHeightField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
@@ -306,7 +306,7 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements
                     .add(bReset))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(maxHeightField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(32, Short.MAX_VALUE))
         );
 
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
@@ -328,7 +328,7 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements
             .add(layout.createSequentialGroup()
                 .addContainerGap()
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
-                    .add(jpActions, 0, 113, Short.MAX_VALUE)
+                    .add(jpActions, 0, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .add(jpSettings, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(container, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -350,7 +350,7 @@ private void repaint(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_repaint
 private void updateAndRepaint(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateAndRepaint
 		updateRoots();
 		repaint(evt);
-		String text = "Hesse diagram of the root space of " + algebras.algebra.type;
+		String text = "Hasse diagram of the root space of " + algebras.algebra.type;
 		container.setBorder(javax.swing.BorderFactory.createTitledBorder(null, text, javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12)));
 }//GEN-LAST:event_updateAndRepaint
 	
