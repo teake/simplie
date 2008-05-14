@@ -68,17 +68,21 @@
     -->
 	<taskdef name="jarbundler" classname="net.sourceforge.jarbundler.JarBundler" />
 	<target name="-post-jar">
+		<!-- Copy the documentation -->
 		<delete file="${dist.dir}/README.TXT"/>
 		<copy todir="${dist.dir}/doc">
 			<fileset dir="documentation"/>
 		</copy>
-		<jarbundler dir="${dist.dir}"
+		<!-- Build the Mac OS X app -->
+		<property name="dist.mac.dir" value="${dist.dir}/mac" />
+		<mkdir dir="${dist.mac.dir}"/>
+		<jarbundler dir="${dist.mac.dir}"
 				name="${application.title}"
 				mainclass="${main.class}"
 				bundleid="edu.simplie"
 				icon="images/simplie.icns"
 				jvmversion="${javac.target}"
-				signature="slie"
+				signature="sLie"
 				stubfile="JavaApplicationStub"
 				version="1.1"
 				vmoptions="${run.jvmargs}"
@@ -86,8 +90,15 @@
 			<javaproperty name="apple.laf.useScreenMenuBar" value="true"/>
 			<javaproperty name="apple.awt.antialiasing" value="on"/>
 			<jarfileset dir="${dist.dir}">
-				<include name="**/*.jar" />
+				<include name="*.jar" />
+			</jarfileset>
+			<jarfileset dir="${dist.dir}/lib">
+				<include name="*.jar" />
 			</jarfileset>
 		</jarbundler>
+		<!-- Build the redistributable DMG file -->
+		<exec executable="hdiutil" os="Mac OS X">
+			<arg value="create -srcfolder ${dist.mac.dir} ${dist.dir}/${application.title}.dmg" />
+		</exec>
 	</target>
 </project>
