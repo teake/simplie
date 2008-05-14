@@ -96,7 +96,7 @@ are the following:
 VISUALIZATION
 -------------
 
-In this tab any Lie algebra can be "visualized": a 3D Hesse diagram can be drawn
+In this tab any Lie algebra can be "visualized": a 3D Hasse diagram can be drawn
 of the root system of the algebra. The diagram interaction is as follows:
 
     * Left-button mouse drag: Translate.
