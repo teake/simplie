@@ -66,10 +66,28 @@
     nbproject/build-impl.xml file. 
 
     -->
+	<taskdef name="jarbundler" classname="net.sourceforge.jarbundler.JarBundler" />
 	<target name="-post-jar">
 		<delete file="${dist.dir}/README.TXT"/>
 		<copy todir="${dist.dir}/doc">
 			<fileset dir="documentation"/>
 		</copy>
+		<jarbundler dir="${dist.dir}"
+				name="${application.title}"
+				mainclass="${main.class}"
+				bundleid="edu.simplie"
+				icon="images/simplie.icns"
+				jvmversion="${javac.target}"
+				signature="slie"
+				stubfile="JavaApplicationStub"
+				version="1.1"
+				vmoptions="${run.jvmargs}"
+				>
+			<javaproperty name="apple.laf.useScreenMenuBar" value="true"/>
+			<javaproperty name="apple.awt.antialiasing" value="on"/>
+			<jarfileset dir="${dist.dir}">
+				<include name="**/*.jar" />
+			</jarfileset>
+		</jarbundler>
 	</target>
 </project>
