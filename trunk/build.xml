@@ -80,9 +80,6 @@
 			<os family="windows"/>
 		</and>
 	</condition>
-	<taskdef name="jarbundler" classname="net.sourceforge.jarbundler.JarBundler" />
-	<taskdef name="launch4j" classname="net.sf.launch4j.ant.Launch4jTask"
-			classpath="${launch4j.dir}/launch4j.jar:${launch4j.dir}/lib/xstream.jar"/>
 
 	<target name="-post-jar">
 		<antcall target="copy-docs"/>
@@ -99,6 +96,7 @@
 	</target>
 	
 	<target name="build-mac" if="is.mac">
+		<taskdef name="jarbundler" classname="net.sourceforge.jarbundler.JarBundler" />
 		<!-- Build the Mac OS X app -->
 		<property name="dist.mac.dir" value="${dist.dir}/mac" />
 		<mkdir dir="${dist.mac.dir}"/>
@@ -119,12 +117,14 @@
 			</jarfileset>
 		</jarbundler>
 		<!-- Build the redistributable DMG file -->
-		<exec executable="hdiutil">
-			<arg value="create -srcfolder ${dist.mac.dir} ${dist.dir}/${application.title}.dmg" />
+		<exec dir="${dist.dir}" executable="hdiutil">
+			<arg line="create -srcfolder mac -volname ${application.title} ${application.title}.dmg"/>
 		</exec>
 	</target>
 	
 	<target name="build-win" if="is.win">
+		<taskdef name="launch4j" classname="net.sf.launch4j.ant.Launch4jTask"
+			classpath="${launch4j.dir}/launch4j.jar:${launch4j.dir}/lib/xstream.jar"/>
 		<launch4j>
 			<config headerType="gui" 
 					outfile="${dist.dir}/${application.title}.exe"
