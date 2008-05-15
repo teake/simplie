@@ -66,16 +66,30 @@
     nbproject/build-impl.xml file. 
 
     -->
+	<property name="simplie.version" value="1.1"/>
+	<property name="simplie.mem.max" value="768"/>
+	<property name="simplie.mem.ini" value="128"/>
+	<property name="launch4j.dir" location="c:\program files\launch4j" />
+	<condition property="is.mac">
+		<and>
+			<os family="mac"/>
+		</and>
+	</condition>
+	<condition property="is.win">
+		<and>
+			<os family="windows"/>
+		</and>
+	</condition>
 	<taskdef name="jarbundler" classname="net.sourceforge.jarbundler.JarBundler" />
+	<taskdef name="launch4j" classname="net.sf.launch4j.ant.Launch4jTask"
+			classpath="${launch4j.dir}/launch4j.jar:${launch4j.dir}/lib/xstream.jar"/>
+
 	<target name="-post-jar">
-		<condition property="is.mac">
-			<and>
-				<os family="mac"/>
-			</and>
-		</condition>
 		<antcall target="copy-docs"/>
 		<antcall target="build-mac"/>
+		<antcall target="build-win"/>
 	</target>
+	
 	<target name="copy-docs">
 		<!-- Copy the documentation -->
 		<delete file="${dist.dir}/README.TXT"/>
@@ -83,6 +97,7 @@
 			<fileset dir="documentation"/>
 		</copy>
 	</target>
+	
 	<target name="build-mac" if="is.mac">
 		<!-- Build the Mac OS X app -->
 		<property name="dist.mac.dir" value="${dist.dir}/mac" />
@@ -94,7 +109,7 @@
 				icon="images/simplie.icns"
 				jvmversion="${javac.target}"
 				signature="sLie"
-				version="1.1"
+				version="${simplie.version}"
 				vmoptions="${run.jvmargs}"
 				>
 			<javaproperty name="apple.laf.useScreenMenuBar" value="true"/>
@@ -108,4 +123,21 @@
 			<arg value="create -srcfolder ${dist.mac.dir} ${dist.dir}/${application.title}.dmg" />
 		</exec>
 	</target>
+	
+	<target name="build-win" if="is.win">
+		<launch4j>
+			<config headerType="gui" 
+					outfile="${dist.dir}/${application.title}.exe"
+					dontWrapJar="true" jarPath="${application.title}.jar"
+					icon="images/icon32.ico"
+					stayAlive="false"
+					>
+				<jre minVersion="${javac.target}.0"
+					maxheapsize="${simplie.mem.max}"
+					initialheapsize="${simplie.mem.ini}">
+				</jre>
+			</config>
+		</launch4j>
+	</target>
+	
 </project>
