@@ -113,7 +113,7 @@ public class SimpLieView extends FrameView {
 		algebraInfo.setAlgebraComposite(algebras);
 		levelDecomposition.setAlgebraComposite(algebras);
 		rootSpaceDrawer.setAlgebrasComposite(algebras);
-		
+		algebras.dd.clear();		
 		
 		ddFilter = new FileNameExtensionFilter("Dynkin diagram (*.dd)", "dd");
 		rsFilter = new FileNameExtensionFilter("Root system (*.rs)", "rs");

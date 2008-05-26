@@ -227,9 +227,16 @@ public class Algebra
 				tTypeHTML	+= " x ";			
 			}
 		}
-		type		= tType;
-		typeTeX		= "$" + tTypeTeX + "$";
-		typeHTML	= "<html>" + tTypeHTML + "</html>";
+		if(directProductFactors.size() == 0)
+		{
+			type = typeTeX = typeHTML = CartanMatrix.empty;
+		}
+		else
+		{
+			type		= tType;
+			typeTeX		= "$" + tTypeTeX + "$";
+			typeHTML	= "<html>" + tTypeHTML + "</html>";
+		}
 		
 		// Dirty hack to check for infinite algebras that might have positive determinant
 		// and infinite direct product algebras that also might have positive determinant.
