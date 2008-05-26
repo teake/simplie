@@ -376,7 +376,7 @@ public class RootSystem
 	public void construct(int maxHeight)
 	{
 		// If the root system is already fully constructed, just do nothing and return.
-		if(fullyConstructed || (!algebra.finite && maxHeight == 0))
+		if(fullyConstructed || (!algebra.finite && maxHeight == 0) || algebra.rank == 0)
 			return;
 		
 		HashSet<Root> prevRoots;
