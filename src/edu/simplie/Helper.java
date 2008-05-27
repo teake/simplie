@@ -344,6 +344,31 @@ public class Helper
 		return stringMatrix;
 	}
 	
+	public static String matrixToTex(int[][] matrix)
+	{
+		String matrixString = "\\begin{equation}\nA=\\left(\\begin{array}{";
+		for(int i = 0; i < matrix.length; i++)
+		{
+			matrixString += "r";
+		}
+		matrixString += "}\n";
+		
+		for(int i = 0; i < matrix.length; i++)
+		{
+			for(int j = 0; j < matrix.length; j++)
+			{
+				matrixString += matrix[i][j];
+				if(j != matrix.length - 1)
+					matrixString += "\t & ";
+			}
+			if(i != matrix.length - 1)
+				matrixString += " \\\\ \n";
+		}
+	
+		matrixString += "\n\\end{array}\\right)\n\\end{equation}\n";
+		return matrixString;
+	}
+	
 	public static void drawFilledCircle(Graphics2D g, Color c1, Color c2, int x, int y, int radius)
 	{
 		g.setColor(c1);

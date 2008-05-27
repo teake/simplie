@@ -341,6 +341,7 @@ public class SimpLieView extends FrameView {
 			exportToTex.setup(exportDialog,levelDecomposition.getRepTable(),algebras);
             exportDialog.setLocationRelativeTo(mainFrame);
 			exportDialog.setTitle("Export to TeX");
+			exportDialog.setResizable(false);
         }
         SimpLieApp.getApplication().show(exportDialog);
 	}
