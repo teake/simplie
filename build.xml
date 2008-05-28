@@ -66,7 +66,6 @@
     nbproject/build-impl.xml file. 
 
     -->
-	<property name="simplie.version" value="1.1"/>
 	<property name="simplie.mem.max" value="768"/>
 	<property name="simplie.mem.ini" value="128"/>
 	<property name="launch4j.dir" location="c:\program files\launch4j" />
@@ -107,7 +106,7 @@
 				icon="images/simplie.icns"
 				jvmversion="${javac.target}"
 				signature="sLie"
-				version="${simplie.version}"
+				version="${application.version}"
 				vmoptions="${run.jvmargs}"
 				>
 			<javaproperty name="apple.laf.useScreenMenuBar" value="true"/>
@@ -118,7 +117,7 @@
 		</jarbundler>
 		<!-- Build the redistributable DMG file -->
 		<exec dir="${dist.dir}" executable="hdiutil">
-			<arg line="create -srcfolder mac -volname ${application.title} ${application.title}.dmg"/>
+			<arg line="create -srcfolder mac -volname ${application.title} ${application.title}_${application.version}.dmg"/>
 		</exec>
 	</target>
 	
@@ -142,7 +141,7 @@
 			</config>
 		</launch4j>
 		<nsis script="nsis/simplie.nsi">
-			<define name="VERSION" value="${simplie.version}"/>
+			<define name="VERSION" value="${application.version}"/>
 			<define name="NAME" value="${application.title}"/>
 			<define name="DISTDIR" value="${dist.dir}"/>
 		</nsis>
