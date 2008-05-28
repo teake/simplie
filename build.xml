@@ -125,6 +125,9 @@
 	<target name="build-win" if="is.win">
 		<taskdef name="launch4j" classname="net.sf.launch4j.ant.Launch4jTask"
 			classpath="${launch4j.dir}/launch4j.jar:${launch4j.dir}/lib/xstream.jar"/>
+		<taskdef name="nsis" classname="net.sf.nsisant.Task">
+			<classpath location="nsisant-1.2.jar"/>
+		</taskdef>
 		<launch4j>
 			<config headerType="gui" 
 					outfile="${dist.dir}/${application.title}.exe"
@@ -138,6 +141,11 @@
 				</jre>
 			</config>
 		</launch4j>
+		<nsis script="nsis/simplie.nsi">
+			<define name="VERSION" value="${simplie.version}"/>
+			<define name="NAME" value="${application.title}"/>
+			<define name="DISTDIR" value="${dist.dir}"/>
+		</nsis>
 	</target>
 	
 </project>
