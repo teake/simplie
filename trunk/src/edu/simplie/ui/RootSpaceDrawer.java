@@ -346,6 +346,10 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements
 
 private void repaint(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_repaint
 		canvas.repaint();
+		boolean drawExtras = cbRealRoots.isSelected() || cbImRoots.isSelected();
+		cbLabels.setEnabled(drawExtras);
+		cbReflections.setEnabled(drawExtras);
+		cbNegative.setEnabled(drawExtras);
 }//GEN-LAST:event_repaint
 
 private void updateAndRepaint(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateAndRepaint

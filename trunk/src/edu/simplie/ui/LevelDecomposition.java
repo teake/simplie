@@ -164,9 +164,12 @@ public class LevelDecomposition extends javax.swing.JPanel
             .add(AutoScanPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .add(AutoScanPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(bAutoScan, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .add(autoScanProgressBar, 0, 0, Short.MAX_VALUE))
-                .add(12, 12, 12)
+                    .add(AutoScanPanelLayout.createSequentialGroup()
+                        .add(autoScanProgressBar, 0, 0, Short.MAX_VALUE)
+                        .add(6, 6, 6))
+                    .add(AutoScanPanelLayout.createSequentialGroup()
+                        .add(bAutoScan, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 75, Short.MAX_VALUE)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)))
                 .add(AutoScanPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
                     .add(autoScanMaxLevel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                     .add(autoScanMinLevel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
@@ -175,16 +178,13 @@ public class LevelDecomposition extends javax.swing.JPanel
         AutoScanPanelLayout.setVerticalGroup(
             AutoScanPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(AutoScanPanelLayout.createSequentialGroup()
-                .add(AutoScanPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
-                    .add(AutoScanPanelLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .add(autoScanProgressBar, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
-                        .add(bAutoScan))
-                    .add(org.jdesktop.layout.GroupLayout.LEADING, AutoScanPanelLayout.createSequentialGroup()
-                        .add(autoScanMaxLevel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(autoScanMinLevel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
+                .add(AutoScanPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(autoScanProgressBar, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(autoScanMaxLevel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(AutoScanPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(autoScanMinLevel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(bAutoScan))
                 .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -194,6 +194,11 @@ public class LevelDecomposition extends javax.swing.JPanel
         cbRootMult.setText("Calc root mults");
         cbRootMult.setToolTipText(resourceMap.getString("levelDecomp.calMultTooltip")); // NOI18N
         cbRootMult.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        cbRootMult.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbRootMultActionPerformed(evt);
+            }
+        });
 
         cbZeroMultRep.setText("Show zero mu reps");
         cbZeroMultRep.setToolTipText(resourceMap.getString("levelDecomp.zeroMuTooltip")); // NOI18N
@@ -203,6 +208,11 @@ public class LevelDecomposition extends javax.swing.JPanel
         cbRepMult.setText("Calc rep mults");
         cbRepMult.setToolTipText(resourceMap.getString("levelDecomp.calcMuTooltip")); // NOI18N
         cbRepMult.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        cbRepMult.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbRepMultActionPerformed(evt);
+            }
+        });
 
         jLabel1.setText("Sign convention:");
 
@@ -237,16 +247,16 @@ public class LevelDecomposition extends javax.swing.JPanel
                         .add(jLabel1)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(rbSignPos)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(rbSignNeg))
                     .add(settingsPanelLayout.createSequentialGroup()
-                        .add(settingsPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                            .add(cbZeroMultRoot)
-                            .add(cbZeroMultRep))
+                        .add(cbRepMult)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
-                        .add(settingsPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                            .add(cbRepMult)
-                            .add(cbRootMult))))
+                        .add(cbZeroMultRep))
+                    .add(settingsPanelLayout.createSequentialGroup()
+                        .add(cbRootMult)
+                        .add(2, 2, 2)
+                        .add(cbZeroMultRoot)))
                 .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         settingsPanelLayout.setVerticalGroup(
@@ -256,17 +266,15 @@ public class LevelDecomposition extends javax.swing.JPanel
                     .add(jLabel1)
                     .add(rbSignPos)
                     .add(rbSignNeg))
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
-                .add(settingsPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(settingsPanelLayout.createSequentialGroup()
-                        .add(cbZeroMultRoot)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(cbZeroMultRep))
-                    .add(settingsPanelLayout.createSequentialGroup()
-                        .add(cbRootMult)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(cbRepMult)))
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(settingsPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(cbRootMult)
+                    .add(cbZeroMultRoot))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(settingsPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(cbRepMult)
+                    .add(cbZeroMultRep))
+                .addContainerGap(14, Short.MAX_VALUE))
         );
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Subalgebra representations", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12))); // NOI18N
@@ -303,13 +311,13 @@ public class LevelDecomposition extends javax.swing.JPanel
             jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 727, Short.MAX_VALUE)
+                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 536, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel1Layout.createSequentialGroup()
-                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 117, Short.MAX_VALUE)
+                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 171, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -363,7 +371,7 @@ public class LevelDecomposition extends javax.swing.JPanel
             .add(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 445, Short.MAX_VALUE)
+                    .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 248, Short.MAX_VALUE)
                     .add(jPanel2Layout.createSequentialGroup()
                         .add(bDominantWeights)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
@@ -377,7 +385,7 @@ public class LevelDecomposition extends javax.swing.JPanel
                     .add(bAllWeights)
                     .add(bDominantWeights))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 139, Short.MAX_VALUE)
+                .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 134, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -446,6 +454,8 @@ private void rbSignPosStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIR
 			rbSignPos.setEnabled(false);
 			jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null,algebras.getDecompositionType(false), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12)));
 			representationsTable.setTitleTeX(algebras.getDecompositionType(true));
+			autoScanMinLevel.setEnabled(false);
+			autoScanMaxLevel.setEnabled(false);
 			
 			// Set up the scan.
 			autoScanner = new AutoLevelScanner(
@@ -472,6 +482,8 @@ private void rbSignPosStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIR
 						algebras.setLocked(false);
 						rbSignNeg.setEnabled(true);
 						rbSignPos.setEnabled(true);
+						autoScanMinLevel.setEnabled(true);
+						autoScanMaxLevel.setEnabled(true);
 						System.out.print("Finished level decomposition. Milliseconds: ");
 						System.out.println(System.currentTimeMillis() - startTime);
 					}
@@ -494,6 +506,17 @@ private void rbSignPosStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIR
 	{//GEN-HEADEREND:event_bAllWeightsActionPerformed
 		setSelectedRep(false);
 }//GEN-LAST:event_bAllWeightsActionPerformed
+
+private void cbRootMultActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbRootMultActionPerformed
+	boolean enabled = cbRootMult.isSelected();
+	cbRepMult.setEnabled(enabled);
+	cbZeroMultRoot.setEnabled(enabled);
+	cbZeroMultRep.setEnabled(enabled && cbRepMult.isSelected());
+}//GEN-LAST:event_cbRootMultActionPerformed
+
+private void cbRepMultActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbRepMultActionPerformed
+	cbZeroMultRep.setEnabled(cbRepMult.isSelected());
+}//GEN-LAST:event_cbRepMultActionPerformed
 	
 	
     // Variables declaration - do not modify//GEN-BEGIN:variables
