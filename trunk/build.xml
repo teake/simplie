@@ -88,11 +88,11 @@
 		<delete file="${dist.dir}/launch.html"/>
 		<delete file="${dist.dir}/launch.jnlp"/>
 		<antcall target="copy-docs"/>
-		<antcall target="build-mac"/>
-		<antcall target="build-win"/>
 		<zip destfile="${redist.dir}/${redist.name}.zip" basedir="${dist.dir}"/>
 		<tar tarfile="${redist.dir}/${redist.name}.tar" basedir="${dist.dir}"/>
 		<gzip zipfile="${redist.dir}/${redist.name}.tar.gz" src="${redist.dir}/${redist.name}.tar"/>
+		<antcall target="build-mac"/>
+		<antcall target="build-win"/>
 	</target>
 	
 	<target name="copy-docs">
@@ -125,8 +125,8 @@
 			</jarfileset>
 		</jarbundler>
 		<!-- Build the redistributable DMG file -->
-		<exec dir="${redist.dir}" executable="hdiutil">
-			<arg line="create -srcfolder mac -volname ${application.title} ${redist.name}.dmg"/>
+		<exec executable="hdiutil">
+			<arg line="create -srcfolder ${dist.mac.dir} -volname ${application.title} ${redist.dir}/${redist.name}.dmg"/>
 		</exec>
 	</target>
 	
