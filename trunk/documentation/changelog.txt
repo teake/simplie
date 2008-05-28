@@ -1,3 +1,9 @@
+28-05-2008: Version 1.2.0
+
+* [ui] Added TeX export capability of various matrices.
+* [ui] Some interface options get disabled when appropriate.
+* [misc] Added a Windows installer for easier installation.
+
 13-05-2008: Version 1.1
 
 * [math] Faster root system construction, by not calculating multiplicities of roots on the same orbit (with thanks to Axel Kleinschmidt, who pointed this out to me).
