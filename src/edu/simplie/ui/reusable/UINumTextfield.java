@@ -93,6 +93,14 @@ public class UINumTextfield extends javax.swing.JPanel
 		maxValue = Math.max(minValue,value);
 	}
 	
+	@Override
+	public void setEnabled(boolean enabled)
+	{
+		textField.setEnabled(enabled);
+		tfLevel.setEnabled(enabled);
+		buttonPlus.setEnabled(enabled);
+		buttonMinus.setEnabled(enabled);
+	}
 
 	
 	/** This method is called from within the constructor to
@@ -106,7 +114,7 @@ public class UINumTextfield extends javax.swing.JPanel
         textField = new javax.swing.JLabel();
         tfLevel = new javax.swing.JTextField();
         buttonPlus = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
+        buttonMinus = new javax.swing.JButton();
 
         textField.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         textField.setText("<text>:");
@@ -116,7 +124,7 @@ public class UINumTextfield extends javax.swing.JPanel
         javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance(edu.simplie.SimpLieApp.class).getContext().getActionMap(UINumTextfield.class, this);
         buttonPlus.setAction(actionMap.get("doIncrease")); // NOI18N
 
-        jButton1.setAction(actionMap.get("doDecrease")); // NOI18N
+        buttonMinus.setAction(actionMap.get("doDecrease")); // NOI18N
 
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
         this.setLayout(layout);
@@ -129,7 +137,7 @@ public class UINumTextfield extends javax.swing.JPanel
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(buttonPlus)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jButton1))
+                .add(buttonMinus))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -137,7 +145,7 @@ public class UINumTextfield extends javax.swing.JPanel
                 .add(textField)
                 .add(tfLevel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .add(buttonPlus)
-                .add(jButton1))
+                .add(buttonMinus))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -154,8 +162,8 @@ public class UINumTextfield extends javax.swing.JPanel
 	}
 	
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton buttonMinus;
     private javax.swing.JButton buttonPlus;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel textField;
     private javax.swing.JTextField tfLevel;
     // End of variables declaration//GEN-END:variables
