@@ -24,6 +24,7 @@ package edu.simplie.ui;
 
 import edu.simplie.*;
 
+import edu.simplie.algebra.Algebra;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.*;
@@ -98,6 +99,8 @@ public class ExportToTex extends javax.swing.JPanel
         cbDDlabels = new javax.swing.JCheckBox();
         cbDDfigure = new javax.swing.JCheckBox();
         cbCartanMatrix = new javax.swing.JCheckBox();
+        comboAlgebras = new javax.swing.JComboBox();
+        comboMatrix = new javax.swing.JComboBox();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         columnList = new javax.swing.JList();
@@ -115,6 +118,11 @@ public class ExportToTex extends javax.swing.JPanel
         cbDD.setSelected(true);
         cbDD.setText("Export Dynkin diagram");
         cbDD.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        cbDD.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbDDActionPerformed(evt);
+            }
+        });
 
         cbCaption.setSelected(true);
         cbCaption.setText("Include captions");
@@ -123,6 +131,11 @@ public class ExportToTex extends javax.swing.JPanel
         cbReps.setSelected(true);
         cbReps.setText("Export representation table");
         cbReps.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        cbReps.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbRepsActionPerformed(evt);
+            }
+        });
 
         jLabel1.setText("Export to:");
 
@@ -151,6 +164,15 @@ public class ExportToTex extends javax.swing.JPanel
 
         cbCartanMatrix.setSelected(true);
         cbCartanMatrix.setText("Export Cartan matrix");
+        cbCartanMatrix.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbCartanMatrixActionPerformed(evt);
+            }
+        });
+
+        comboAlgebras.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Full algebra", "Regular subalgebra", "Internal subalgebra" }));
+
+        comboMatrix.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Cartan matrix", "Symmetrized Cartan matrix", "Inverse of Cartan matrix", "Root space metric", "Quadratic form matrix" }));
 
         org.jdesktop.layout.GroupLayout jPanel1Layout = new org.jdesktop.layout.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -162,11 +184,6 @@ public class ExportToTex extends javax.swing.JPanel
                     .add(cbReps)
                     .add(jPanel1Layout.createSequentialGroup()
                         .add(17, 17, 17)
-                        .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                            .add(cbDDfigure)
-                            .add(cbDDlabels)))
-                    .add(jPanel1Layout.createSequentialGroup()
-                        .add(17, 17, 17)
                         .add(cbCaption))
                     .add(tfExtraColumns, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                     .add(jPanel1Layout.createSequentialGroup()
@@ -176,9 +193,19 @@ public class ExportToTex extends javax.swing.JPanel
                             .add(rbFile)
                             .add(rbSout)
                             .add(rbClipboard)))
+                    .add(cbCartanMatrix)
+                    .add(jPanel1Layout.createSequentialGroup()
+                        .add(17, 17, 17)
+                        .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                            .add(cbDDfigure)
+                            .add(cbDDlabels)))
                     .add(cbDD)
-                    .add(cbCartanMatrix))
-                .addContainerGap(14, Short.MAX_VALUE))
+                    .add(jPanel1Layout.createSequentialGroup()
+                        .add(21, 21, 21)
+                        .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                            .add(comboMatrix, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                            .add(comboAlgebras, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -186,12 +213,16 @@ public class ExportToTex extends javax.swing.JPanel
                 .addContainerGap()
                 .add(cbCartanMatrix)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(comboAlgebras, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .add(comboMatrix, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
                 .add(cbDD)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(cbDDlabels)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(cbDDfigure)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(cbReps)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(cbCaption)
@@ -218,14 +249,14 @@ public class ExportToTex extends javax.swing.JPanel
             jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 141, Short.MAX_VALUE)
+                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 121, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 212, Short.MAX_VALUE)
+                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 273, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -240,26 +271,26 @@ public class ExportToTex extends javax.swing.JPanel
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(layout.createSequentialGroup()
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
+                    .add(layout.createSequentialGroup()
+                        .add(export)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(cancel))
                     .add(layout.createSequentialGroup()
                         .add(jPanel2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(jPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
-                        .add(export)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(cancel)))
+                        .add(jPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(layout.createSequentialGroup()
                 .addContainerGap()
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
-                    .add(jPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .add(jPanel2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING, false)
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, jPanel2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, jPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(export, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -279,11 +310,47 @@ public class ExportToTex extends javax.swing.JPanel
 		
 		String output = new String();
 		
+		if(cbCartanMatrix.isSelected())
+		{
+			Algebra algebra;
+			switch(comboAlgebras.getSelectedIndex())
+			{
+				case 2:
+					algebra = algebras.intAlgebra;
+					break;
+				case 1:
+					algebra = algebras.subAlgebra;
+					break;
+				case 0:
+				case -1:
+				default:
+					algebra = algebras.algebra;
+					break;
+			}
+			switch(comboMatrix.getSelectedIndex())
+			{
+				case 4:
+					output += Helper.matrixToTex(algebra.G);
+					break;
+				case 3:
+					output += Helper.matrixToTex(algebra.B);
+					break;
+				case 2:
+					output += Helper.matrixToTex(algebra.invA);
+					break;
+				case 1:
+					output += Helper.matrixToTex(algebra.symA);
+					break;
+				case 0:
+				case -1:
+				default:
+					output += Helper.matrixToTex(algebra.A);
+					break;
+			}
+		}
+		output += "\n";
 		if(cbDD.isSelected())
 			output += algebras.dd.toTeX(cbCaption.isSelected(), cbDDlabels.isSelected(), cbDDfigure.isSelected());
-		output += "\n";
-		if(cbCartanMatrix.isSelected())
-			output += Helper.matrixToTex(algebras.algebra.A);
 		output += "\n";
 		if(cbReps.isSelected())
 			output += repTable.toTeX(cbCaption.isSelected(),columnList.getSelectedIndices(),Math.max(0,tfExtraColumns.getValue()));
@@ -327,6 +394,25 @@ public class ExportToTex extends javax.swing.JPanel
 			System.out.println("%%%%%%%%  END LATEX OUTPUT  %%%%%%%%");
 		}
 	}//GEN-LAST:event_exportActionPerformed
+
+private void cbCartanMatrixActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbCartanMatrixActionPerformed
+	boolean enabled = cbCartanMatrix.isSelected();
+	comboAlgebras.setEnabled(enabled);
+	comboMatrix.setEnabled(enabled);
+}//GEN-LAST:event_cbCartanMatrixActionPerformed
+
+private void cbDDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbDDActionPerformed
+	boolean enabled = cbDD.isSelected();
+	cbDDfigure.setEnabled(enabled);
+	cbDDlabels.setEnabled(enabled);
+}//GEN-LAST:event_cbDDActionPerformed
+
+private void cbRepsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbRepsActionPerformed
+	boolean enabled = cbReps.isSelected();
+	cbCaption.setEnabled(enabled);
+	tfExtraColumns.setEnabled(enabled);
+	columnList.setEnabled(enabled);
+}//GEN-LAST:event_cbRepsActionPerformed
 	
 	
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -338,6 +424,8 @@ public class ExportToTex extends javax.swing.JPanel
     private javax.swing.JCheckBox cbDDlabels;
     private javax.swing.JCheckBox cbReps;
     private javax.swing.JList columnList;
+    private javax.swing.JComboBox comboAlgebras;
+    private javax.swing.JComboBox comboMatrix;
     private javax.swing.JButton export;
     private javax.swing.ButtonGroup exportToGroup;
     private javax.swing.JLabel jLabel1;
