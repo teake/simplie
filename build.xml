@@ -66,6 +66,7 @@
     nbproject/build-impl.xml file. 
 
     -->
+	<property name="redist.dir" value="redist"/>
 	<property name="simplie.mem.max" value="768"/>
 	<property name="simplie.mem.ini" value="128"/>
 	<property name="launch4j.dir" location="c:\program files\launch4j" />
@@ -80,10 +81,18 @@
 		</and>
 	</condition>
 
-	<target name="-post-jar">
+	<target name="build-installers" depends="init">
+		<property name="redist.name" value="${application.title}_${application.version}"/>
+		<delete dir="${redist.dir}"/>
+		<mkdir dir="${redist.dir}"/>
+		<delete file="${dist.dir}/launch.html"/>
+		<delete file="${dist.dir}/launch.jnlp"/>
 		<antcall target="copy-docs"/>
 		<antcall target="build-mac"/>
 		<antcall target="build-win"/>
+		<zip destfile="${redist.dir}/${redist.name}.zip" basedir="${dist.dir}"/>
+		<tar tarfile="${redist.dir}/${redist.name}.tar" basedir="${dist.dir}"/>
+		<gzip zipfile="${redist.dir}/${redist.name}.tar.gz" src="${redist.dir}/${redist.name}.tar"/>
 	</target>
 	
 	<target name="copy-docs">
@@ -116,8 +125,8 @@
 			</jarfileset>
 		</jarbundler>
 		<!-- Build the redistributable DMG file -->
-		<exec dir="${dist.dir}" executable="hdiutil">
-			<arg line="create -srcfolder mac -volname ${application.title} ${application.title}_${application.version}.dmg"/>
+		<exec dir="${redist.dir}" executable="hdiutil">
+			<arg line="create -srcfolder mac -volname ${application.title} ${redist.name}.dmg"/>
 		</exec>
 	</target>
 	
@@ -143,6 +152,7 @@
 		<nsis script="nsis/simplie.nsi">
 			<define name="VERSION" value="${application.version}"/>
 			<define name="NAME" value="${application.title}"/>
+			<define name="REDISTDIR" value="${redist.dir}"/>
 			<define name="DISTDIR" value="${dist.dir}"/>
 		</nsis>
 	</target>

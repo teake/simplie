@@ -6,7 +6,7 @@
 Name "${NAME} ${VERSION}"
 
 ; The file to write
-OutFile "${NAME}_${VERSION}.exe"
+OutFile "..\${REDISTDIR}\${NAME}_${VERSION}.exe"
 
 ; The default installation directory
 InstallDir $PROGRAMFILES\${NAME}
