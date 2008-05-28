@@ -104,12 +104,11 @@ public class SimpLieAboutBox extends javax.swing.JDialog {
                                         .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                                             .add(appVersionLabel)
                                             .add(appVendorLabel)
-                                            .add(appHomepageLabel))))))
-                        .addContainerGap())
+                                            .add(appHomepageLabel)))))))
                     .add(layout.createSequentialGroup()
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(closeButton)
-                        .addContainerGap())))
+                        .add(closeButton)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
