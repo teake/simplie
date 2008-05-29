@@ -118,8 +118,10 @@ public class LevelDecomposition extends javax.swing.JPanel
         AutoScanPanel = new javax.swing.JPanel();
         bAutoScan = new javax.swing.JButton();
         autoScanProgressBar = new javax.swing.JProgressBar();
-        autoScanMaxLevel = new edu.simplie.ui.reusable.UINumTextfield();
-        autoScanMinLevel = new edu.simplie.ui.reusable.UINumTextfield();
+        autoScanMaxLevel = new edu.simplie.ui.reusable.UISpinner();
+        autoScanMinLevel = new edu.simplie.ui.reusable.UISpinner();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
         settingsPanel = new javax.swing.JPanel();
         cbRootMult = new javax.swing.JCheckBox();
         cbZeroMultRep = new javax.swing.JCheckBox();
@@ -152,10 +154,14 @@ public class LevelDecomposition extends javax.swing.JPanel
         autoScanProgressBar.setStringPainted(true);
 
         autoScanMaxLevel.setToolTipText(resourceMap.getString("levelDecomp.maxLevelTooltip")); // NOI18N
-        autoScanMaxLevel.setText("Max:"); // NOI18N
 
         autoScanMinLevel.setToolTipText(resourceMap.getString("levelDecomp.minLevelTooltip")); // NOI18N
-        autoScanMinLevel.setText("Min:"); // NOI18N
+
+        jLabel2.setText("Max level:");
+        jLabel2.setToolTipText(resourceMap.getString("levelDecomp.maxLevelTooltip")); // NOI18N
+
+        jLabel3.setText("Min level:");
+        jLabel3.setToolTipText(resourceMap.getString("levelDecomp.minLevelTooltip")); // NOI18N
 
         org.jdesktop.layout.GroupLayout AutoScanPanelLayout = new org.jdesktop.layout.GroupLayout(AutoScanPanel);
         AutoScanPanel.setLayout(AutoScanPanelLayout);
@@ -163,28 +169,31 @@ public class LevelDecomposition extends javax.swing.JPanel
             AutoScanPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(AutoScanPanelLayout.createSequentialGroup()
                 .addContainerGap()
+                .add(AutoScanPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
+                    .add(bAutoScan, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .add(autoScanProgressBar, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 82, Short.MAX_VALUE))
+                .add(18, 18, 18)
                 .add(AutoScanPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(AutoScanPanelLayout.createSequentialGroup()
-                        .add(autoScanProgressBar, 0, 0, Short.MAX_VALUE)
-                        .add(6, 6, 6))
-                    .add(AutoScanPanelLayout.createSequentialGroup()
-                        .add(bAutoScan, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 75, Short.MAX_VALUE)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)))
-                .add(AutoScanPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
-                    .add(autoScanMaxLevel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                    .add(autoScanMinLevel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, jLabel3)
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, jLabel2))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(AutoScanPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
+                    .add(autoScanMaxLevel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .add(autoScanMinLevel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 44, Short.MAX_VALUE))
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         AutoScanPanelLayout.setVerticalGroup(
             AutoScanPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(AutoScanPanelLayout.createSequentialGroup()
-                .add(AutoScanPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                .add(AutoScanPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(autoScanProgressBar, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(jLabel2)
                     .add(autoScanMaxLevel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(AutoScanPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(autoScanMinLevel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                    .add(bAutoScan))
+                .add(AutoScanPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(bAutoScan)
+                    .add(jLabel3)
+                    .add(autoScanMinLevel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -311,13 +320,13 @@ public class LevelDecomposition extends javax.swing.JPanel
             jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 536, Short.MAX_VALUE)
+                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 533, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel1Layout.createSequentialGroup()
-                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 171, Short.MAX_VALUE)
+                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 224, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -371,7 +380,7 @@ public class LevelDecomposition extends javax.swing.JPanel
             .add(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 248, Short.MAX_VALUE)
+                    .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 275, Short.MAX_VALUE)
                     .add(jPanel2Layout.createSequentialGroup()
                         .add(bDominantWeights)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
@@ -385,7 +394,7 @@ public class LevelDecomposition extends javax.swing.JPanel
                     .add(bAllWeights)
                     .add(bDominantWeights))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 134, Short.MAX_VALUE)
+                .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 129, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -521,8 +530,8 @@ private void cbRepMultActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
 	
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel AutoScanPanel;
-    private edu.simplie.ui.reusable.UINumTextfield autoScanMaxLevel;
-    private edu.simplie.ui.reusable.UINumTextfield autoScanMinLevel;
+    private edu.simplie.ui.reusable.UISpinner autoScanMaxLevel;
+    private edu.simplie.ui.reusable.UISpinner autoScanMinLevel;
     private javax.swing.JProgressBar autoScanProgressBar;
     private javax.swing.JButton bAllWeights;
     private javax.swing.JButton bAutoScan;
@@ -532,6 +541,8 @@ private void cbRepMultActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
     private javax.swing.JCheckBox cbZeroMultRep;
     private javax.swing.JCheckBox cbZeroMultRoot;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
