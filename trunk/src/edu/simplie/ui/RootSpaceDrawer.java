@@ -111,13 +111,14 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements
         cbReflections = new javax.swing.JCheckBox();
         rbColorLevels = new javax.swing.JRadioButton();
         rbColorNorms = new javax.swing.JRadioButton();
-        jLabel1 = new javax.swing.JLabel();
+        tfColor = new javax.swing.JLabel();
         cbNegative = new javax.swing.JCheckBox();
         cbLabels = new javax.swing.JCheckBox();
+        maxHeightField = new edu.simplie.ui.reusable.UISpinner();
+        tfMaxHeight = new javax.swing.JLabel();
         jpActions = new javax.swing.JPanel();
         bReset = new javax.swing.JButton();
         bUpdate = new javax.swing.JButton();
-        maxHeightField = new edu.simplie.ui.reusable.UINumTextfield();
 
         container.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Hasse diagram of the root space", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12))); // NOI18N
 
@@ -127,11 +128,11 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements
         canvas.setLayout(canvasLayout);
         canvasLayout.setHorizontalGroup(
             canvasLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 678, Short.MAX_VALUE)
+            .add(0, 533, Short.MAX_VALUE)
         );
         canvasLayout.setVerticalGroup(
             canvasLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 249, Short.MAX_VALUE)
+            .add(0, 300, Short.MAX_VALUE)
         );
 
         org.jdesktop.layout.GroupLayout containerLayout = new org.jdesktop.layout.GroupLayout(container);
@@ -199,7 +200,7 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements
             }
         });
 
-        jLabel1.setText("Color coding:");
+        tfColor.setText("Color coding:");
 
         cbNegative.setText("Negative roots");
         cbNegative.setToolTipText(resourceMap.getString("drawer.negativeTooltip")); // NOI18N
@@ -218,6 +219,12 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements
             }
         });
 
+        maxHeightField.setToolTipText(resourceMap.getString("drawer.maxHeightTooltip")); // NOI18N
+        maxHeightField.setMinValue(0);
+
+        tfMaxHeight.setText("Max height:");
+        tfMaxHeight.setToolTipText(resourceMap.getString("drawer.maxHeightTooltip")); // NOI18N
+
         org.jdesktop.layout.GroupLayout jpSettingsLayout = new org.jdesktop.layout.GroupLayout(jpSettings);
         jpSettings.setLayout(jpSettingsLayout);
         jpSettingsLayout.setHorizontalGroup(
@@ -229,17 +236,20 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements
                         .add(jpSettingsLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                             .add(cbRealRoots)
                             .add(cbImRoots))
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
                         .add(jpSettingsLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                             .add(cbLabels)
-                            .add(cbReflections)))
-                    .add(cbNegative))
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jpSettingsLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jLabel1)
-                    .add(rbColorLevels)
-                    .add(rbColorNorms))
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .add(cbReflections))
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                        .add(jpSettingsLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                            .add(tfColor)
+                            .add(tfMaxHeight))
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(jpSettingsLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                            .add(rbColorLevels)
+                            .add(rbColorNorms)
+                            .add(maxHeightField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 51, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
+                    .add(cbNegative)))
         );
         jpSettingsLayout.setVerticalGroup(
             jpSettingsLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -248,23 +258,28 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements
                     .add(jpSettingsLayout.createSequentialGroup()
                         .add(jpSettingsLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                             .add(cbRealRoots)
-                            .add(jLabel1))
+                            .add(cbLabels)
+                            .add(tfMaxHeight)
+                            .add(maxHeightField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(jpSettingsLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                             .add(cbImRoots)
-                            .add(rbColorNorms)
-                            .add(cbReflections))
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(jpSettingsLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                            .add(rbColorLevels)
-                            .add(cbNegative)))
-                    .add(cbLabels))
+                            .add(cbReflections)))
+                    .add(jpSettingsLayout.createSequentialGroup()
+                        .add(23, 23, 23)
+                        .add(jpSettingsLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                            .add(tfColor)
+                            .add(rbColorNorms))))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jpSettingsLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(cbNegative)
+                    .add(rbColorLevels))
                 .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jpActions.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Actions", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12))); // NOI18N
 
-        bReset.setText("Reset position");
+        bReset.setText("Reset"); // NOI18N
         bReset.setToolTipText(resourceMap.getString("drawer.resetTooltip")); // NOI18N
         bReset.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -280,33 +295,25 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements
             }
         });
 
-        maxHeightField.setToolTipText(resourceMap.getString("drawer.maxHeightTooltip")); // NOI18N
-        maxHeightField.setMinValue(0);
-        maxHeightField.setText("Max height:"); // NOI18N
-
         org.jdesktop.layout.GroupLayout jpActionsLayout = new org.jdesktop.layout.GroupLayout(jpActions);
         jpActions.setLayout(jpActionsLayout);
         jpActionsLayout.setHorizontalGroup(
             jpActionsLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jpActionsLayout.createSequentialGroup()
                 .addContainerGap()
-                .add(jpActionsLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(org.jdesktop.layout.GroupLayout.TRAILING, jpActionsLayout.createSequentialGroup()
-                        .add(bUpdate)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(bReset, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 137, Short.MAX_VALUE))
-                    .add(maxHeightField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
+                .add(jpActionsLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING, false)
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, bUpdate, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, bReset, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jpActionsLayout.setVerticalGroup(
             jpActionsLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jpActionsLayout.createSequentialGroup()
-                .add(jpActionsLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(bUpdate)
-                    .add(bReset))
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 17, Short.MAX_VALUE)
-                .add(maxHeightField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addContainerGap()
+                .add(bUpdate)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(bReset)
+                .addContainerGap(14, Short.MAX_VALUE))
         );
 
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
@@ -315,13 +322,12 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(layout.createSequentialGroup()
                 .addContainerGap()
-                .add(jpActions, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jpSettings, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(135, Short.MAX_VALUE))
-            .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .add(container, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, container, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .add(layout.createSequentialGroup()
+                        .add(jpActions, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(jpSettings, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -350,6 +356,11 @@ private void repaint(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_repaint
 		cbLabels.setEnabled(drawExtras);
 		cbReflections.setEnabled(drawExtras);
 		cbNegative.setEnabled(drawExtras);
+		tfMaxHeight.setEnabled(drawExtras);
+		maxHeightField.setEnabled(drawExtras);
+		tfColor.setEnabled(drawExtras);
+		rbColorLevels.setEnabled(drawExtras);
+		rbColorNorms.setEnabled(drawExtras);		
 }//GEN-LAST:event_repaint
 
 private void updateAndRepaint(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateAndRepaint
@@ -371,12 +382,13 @@ private void updateAndRepaint(java.awt.event.ActionEvent evt) {//GEN-FIRST:event
     private javax.swing.JCheckBox cbRealRoots;
     private javax.swing.JCheckBox cbReflections;
     private javax.swing.JPanel container;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jpActions;
     private javax.swing.JPanel jpSettings;
-    private edu.simplie.ui.reusable.UINumTextfield maxHeightField;
+    private edu.simplie.ui.reusable.UISpinner maxHeightField;
     private javax.swing.JRadioButton rbColorLevels;
     private javax.swing.JRadioButton rbColorNorms;
+    private javax.swing.JLabel tfColor;
+    private javax.swing.JLabel tfMaxHeight;
     // End of variables declaration//GEN-END:variables
 
 	public void init(GLAutoDrawable drawable)

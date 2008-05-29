@@ -19,15 +19,15 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" attributes="0">
+          <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="container" alignment="1" max="32767" attributes="0"/>
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="jpActions" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="jpSettings" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <Component id="container" alignment="1" max="32767" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -36,7 +36,7 @@
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="jpActions" min="-2" max="-2" attributes="1"/>
                   <Component id="jpSettings" min="-2" max="-2" attributes="1"/>
@@ -92,12 +92,12 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <EmptySpace min="0" pref="678" max="32767" attributes="0"/>
+                  <EmptySpace min="0" pref="533" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <EmptySpace min="0" pref="249" max="32767" attributes="0"/>
+                  <EmptySpace min="0" pref="300" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
           </Layout>
@@ -126,21 +126,25 @@
                               <Component id="cbRealRoots" alignment="0" min="-2" max="-2" attributes="0"/>
                               <Component id="cbImRoots" alignment="0" min="-2" max="-2" attributes="0"/>
                           </Group>
+                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="cbLabels" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="cbReflections" alignment="0" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="tfColor" min="-2" max="-2" attributes="0"/>
+                              <Component id="tfMaxHeight" min="-2" max="-2" attributes="1"/>
+                          </Group>
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="cbLabels" min="-2" max="-2" attributes="0"/>
-                              <Component id="cbReflections" min="-2" max="-2" attributes="0"/>
+                              <Component id="rbColorLevels" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="rbColorNorms" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="maxHeightField" alignment="0" min="-2" pref="51" max="-2" attributes="1"/>
                           </Group>
                       </Group>
                       <Component id="cbNegative" alignment="0" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="jLabel1" alignment="0" min="-2" max="-2" attributes="0"/>
-                      <Component id="rbColorLevels" alignment="0" min="-2" max="-2" attributes="0"/>
-                      <Component id="rbColorNorms" alignment="0" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <EmptySpace max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -151,21 +155,28 @@
                       <Group type="102" attributes="0">
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="cbRealRoots" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="jLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="cbLabels" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="tfMaxHeight" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="maxHeightField" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="cbImRoots" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="rbColorNorms" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="cbReflections" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="rbColorLevels" min="-2" max="-2" attributes="0"/>
-                              <Component id="cbNegative" alignment="0" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <Group type="102" attributes="0">
+                          <EmptySpace min="-2" pref="23" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="tfColor" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="rbColorNorms" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                       </Group>
-                      <Component id="cbLabels" alignment="0" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Component id="cbNegative" min="-2" max="-2" attributes="0"/>
+                      <Component id="rbColorLevels" alignment="0" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="32767" attributes="0"/>
               </Group>
@@ -228,7 +239,7 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="updateAndRepaint"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JLabel" name="jLabel1">
+        <Component class="javax.swing.JLabel" name="tfColor">
           <Properties>
             <Property name="text" type="java.lang.String" value="Color coding:"/>
           </Properties>
@@ -252,6 +263,18 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="repaint"/>
           </Events>
         </Component>
+        <Component class="edu.simplie.ui.reusable.UISpinner" name="maxHeightField">
+          <Properties>
+            <Property name="toolTipText" type="java.lang.String" resourceKey="drawer.maxHeightTooltip"/>
+            <Property name="minValue" type="int" value="0"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="tfMaxHeight">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Max height:"/>
+            <Property name="toolTipText" type="java.lang.String" resourceKey="drawer.maxHeightTooltip"/>
+          </Properties>
+        </Component>
       </SubComponents>
     </Container>
     <Container class="javax.swing.JPanel" name="jpActions">
@@ -268,30 +291,24 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" attributes="0">
+              <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" alignment="1" attributes="0">
-                          <Component id="bUpdate" min="-2" max="-2" attributes="2"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="bReset" pref="137" max="32767" attributes="1"/>
-                      </Group>
-                      <Component id="maxHeightField" alignment="0" min="-2" max="-2" attributes="1"/>
+                  <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                      <Component id="bUpdate" alignment="0" max="32767" attributes="3"/>
+                      <Component id="bReset" alignment="0" max="32767" attributes="1"/>
                   </Group>
-                  <EmptySpace max="-2" attributes="0"/>
+                  <EmptySpace max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="bUpdate" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="bReset" alignment="3" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <EmptySpace pref="17" max="32767" attributes="0"/>
-                  <Component id="maxHeightField" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
+                  <Component id="bUpdate" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="bReset" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace pref="14" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -299,7 +316,7 @@
       <SubComponents>
         <Component class="javax.swing.JButton" name="bReset">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Reset position"/>
+            <Property name="text" type="java.lang.String" value="Reset" noResource="true"/>
             <Property name="toolTipText" type="java.lang.String" resourceKey="drawer.resetTooltip"/>
           </Properties>
           <Events>
@@ -314,13 +331,6 @@
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="updateAndRepaint"/>
           </Events>
-        </Component>
-        <Component class="edu.simplie.ui.reusable.UINumTextfield" name="maxHeightField">
-          <Properties>
-            <Property name="toolTipText" type="java.lang.String" resourceKey="drawer.maxHeightTooltip"/>
-            <Property name="minValue" type="int" value="0"/>
-            <Property name="text" type="java.lang.String" value="Max height:" noResource="true"/>
-          </Properties>
         </Component>
       </SubComponents>
     </Container>

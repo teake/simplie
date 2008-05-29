@@ -41,16 +41,16 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace min="-2" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="1" max="-2" attributes="0">
+              <Group type="103" groupAlignment="1" attributes="0">
                   <Component id="jPanel2" alignment="0" max="32767" attributes="3"/>
-                  <Component id="jPanel1" alignment="0" max="32767" attributes="1"/>
+                  <Component id="jPanel1" alignment="0" pref="342" max="32767" attributes="1"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="export" alignment="3" max="32767" attributes="0"/>
                   <Component id="cancel" alignment="3" max="32767" attributes="0"/>
               </Group>
-              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -78,25 +78,15 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" alignment="0" attributes="0">
+              <Group type="102" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="cbReps" alignment="0" min="-2" max="-2" attributes="0"/>
-                      <Group type="102" alignment="0" attributes="0">
-                          <EmptySpace min="17" pref="17" max="17" attributes="0"/>
-                          <Component id="cbCaption" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <Component id="tfExtraColumns" alignment="0" min="-2" max="-2" attributes="1"/>
-                      <Group type="102" alignment="0" attributes="0">
-                          <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="rbFile" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="rbSout" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="rbClipboard" alignment="0" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                      </Group>
                       <Component id="cbCartanMatrix" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace min="21" pref="21" max="21" attributes="0"/>
+                          <Component id="comboAlgebras" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <Component id="cbReps" alignment="0" min="-2" max="-2" attributes="0"/>
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace min="17" pref="17" max="17" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
@@ -107,14 +97,32 @@
                       <Component id="cbDD" alignment="0" min="-2" max="-2" attributes="0"/>
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace min="21" pref="21" max="21" attributes="0"/>
+                          <Component id="comboMatrix" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace min="17" pref="17" max="17" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="comboMatrix" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="comboAlgebras" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Component id="spinnerColumns" min="-2" pref="40" max="-2" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Component id="tfColumns" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <Component id="cbCaption" alignment="0" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                      </Group>
+                      <Group type="102" alignment="0" attributes="0">
+                          <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="rbFile" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="rbSout" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="rbClipboard" alignment="0" min="-2" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                   </Group>
-                  <EmptySpace max="32767" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
               </Group>
+              <Component id="jSeparator1" alignment="1" pref="214" max="32767" attributes="0"/>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">
@@ -124,9 +132,9 @@
                   <Component id="cbCartanMatrix" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="comboAlgebras" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace max="32767" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
                   <Component id="comboMatrix" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
                   <Component id="cbDD" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="cbDDlabels" min="-2" max="-2" attributes="0"/>
@@ -136,18 +144,25 @@
                   <Component id="cbReps" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="cbCaption" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Component id="tfExtraColumns" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="8" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="jLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="rbClipboard" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="spinnerColumns" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="tfColumns" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                  <Component id="jSeparator1" min="-2" pref="10" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
+                      <Group type="102" alignment="0" attributes="0">
+                          <Component id="rbClipboard" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="rbFile" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="rbSout" min="-2" max="-2" attributes="0"/>
+                      </Group>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="rbFile" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Component id="rbSout" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace min="-2" pref="7" max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -225,11 +240,6 @@
             </Property>
           </Properties>
         </Component>
-        <Component class="edu.simplie.ui.reusable.UINumTextfield" name="tfExtraColumns">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="Extra columns"/>
-          </Properties>
-        </Component>
         <Component class="javax.swing.JCheckBox" name="cbDDlabels">
           <Properties>
             <Property name="selected" type="boolean" value="true"/>
@@ -281,6 +291,18 @@
             </Property>
           </Properties>
         </Component>
+        <Component class="javax.swing.JLabel" name="tfColumns">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="extra columns"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JSeparator" name="jSeparator1">
+        </Component>
+        <Component class="edu.simplie.ui.reusable.UISpinner" name="spinnerColumns">
+          <Properties>
+            <Property name="minValue" type="int" value="0"/>
+          </Properties>
+        </Component>
       </SubComponents>
     </Container>
     <Container class="javax.swing.JPanel" name="jPanel2">
@@ -299,7 +321,7 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="jScrollPane1" pref="121" max="32767" attributes="0"/>
+                  <Component id="jScrollPane1" pref="133" max="32767" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
@@ -308,7 +330,7 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="1" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="jScrollPane1" pref="273" max="32767" attributes="0"/>
+                  <Component id="jScrollPane1" pref="293" max="32767" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>

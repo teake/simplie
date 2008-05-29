@@ -95,12 +95,14 @@ public class ExportToTex extends javax.swing.JPanel
         rbFile = new javax.swing.JRadioButton();
         rbSout = new javax.swing.JRadioButton();
         rbClipboard = new javax.swing.JRadioButton();
-        tfExtraColumns = new edu.simplie.ui.reusable.UINumTextfield();
         cbDDlabels = new javax.swing.JCheckBox();
         cbDDfigure = new javax.swing.JCheckBox();
         cbCartanMatrix = new javax.swing.JCheckBox();
         comboAlgebras = new javax.swing.JComboBox();
         comboMatrix = new javax.swing.JComboBox();
+        tfColumns = new javax.swing.JLabel();
+        jSeparator1 = new javax.swing.JSeparator();
+        spinnerColumns = new edu.simplie.ui.reusable.UISpinner();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         columnList = new javax.swing.JList();
@@ -152,8 +154,6 @@ public class ExportToTex extends javax.swing.JPanel
         rbClipboard.setText("Clipboard");
         rbClipboard.setMargin(new java.awt.Insets(0, 0, 0, 0));
 
-        tfExtraColumns.setText("Extra columns");
-
         cbDDlabels.setSelected(true);
         cbDDlabels.setText("Include labels on Dynkin diagram");
         cbDDlabels.setMargin(new java.awt.Insets(0, 0, 0, 0));
@@ -174,6 +174,10 @@ public class ExportToTex extends javax.swing.JPanel
 
         comboMatrix.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Cartan matrix", "Symmetrized Cartan matrix", "Inverse of Cartan matrix", "Root space metric", "Quadratic form matrix" }));
 
+        tfColumns.setText("extra columns");
+
+        spinnerColumns.setMinValue(0);
+
         org.jdesktop.layout.GroupLayout jPanel1Layout = new org.jdesktop.layout.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -181,19 +185,11 @@ public class ExportToTex extends javax.swing.JPanel
             .add(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(cbReps)
-                    .add(jPanel1Layout.createSequentialGroup()
-                        .add(17, 17, 17)
-                        .add(cbCaption))
-                    .add(tfExtraColumns, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                    .add(jPanel1Layout.createSequentialGroup()
-                        .add(jLabel1)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                            .add(rbFile)
-                            .add(rbSout)
-                            .add(rbClipboard)))
                     .add(cbCartanMatrix)
+                    .add(jPanel1Layout.createSequentialGroup()
+                        .add(21, 21, 21)
+                        .add(comboAlgebras, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                    .add(cbReps)
                     .add(jPanel1Layout.createSequentialGroup()
                         .add(17, 17, 17)
                         .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -202,10 +198,24 @@ public class ExportToTex extends javax.swing.JPanel
                     .add(cbDD)
                     .add(jPanel1Layout.createSequentialGroup()
                         .add(21, 21, 21)
+                        .add(comboMatrix, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                    .add(jPanel1Layout.createSequentialGroup()
+                        .add(17, 17, 17)
                         .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                            .add(comboMatrix, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                            .add(comboAlgebras, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .add(jPanel1Layout.createSequentialGroup()
+                                .add(spinnerColumns, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 40, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                                .add(tfColumns))
+                            .add(cbCaption)))
+                    .add(jPanel1Layout.createSequentialGroup()
+                        .add(jLabel1)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                            .add(rbFile)
+                            .add(rbSout)
+                            .add(rbClipboard))))
+                .addContainerGap())
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, jSeparator1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 214, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -214,9 +224,9 @@ public class ExportToTex extends javax.swing.JPanel
                 .add(cbCartanMatrix)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(comboAlgebras, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(comboMatrix, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(cbDD)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(cbDDlabels)
@@ -226,17 +236,22 @@ public class ExportToTex extends javax.swing.JPanel
                 .add(cbReps)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(cbCaption)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(tfExtraColumns, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(8, 8, 8)
                 .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(spinnerColumns, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(tfColumns))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                .add(jSeparator1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 10, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(jLabel1)
-                    .add(rbClipboard))
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(rbFile)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(rbSout)
-                .add(7, 7, 7))
+                    .add(jPanel1Layout.createSequentialGroup()
+                        .add(rbClipboard)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(rbFile)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(rbSout)))
+                .addContainerGap())
         );
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Select table columns", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12))); // NOI18N
@@ -249,14 +264,14 @@ public class ExportToTex extends javax.swing.JPanel
             jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 121, Short.MAX_VALUE)
+                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 133, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 273, Short.MAX_VALUE)
+                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 293, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -288,9 +303,9 @@ public class ExportToTex extends javax.swing.JPanel
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(layout.createSequentialGroup()
                 .addContainerGap()
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING, false)
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
                     .add(org.jdesktop.layout.GroupLayout.LEADING, jPanel2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .add(org.jdesktop.layout.GroupLayout.LEADING, jPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, jPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 342, Short.MAX_VALUE))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(export, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -353,7 +368,7 @@ public class ExportToTex extends javax.swing.JPanel
 			output += algebras.dd.toTeX(cbCaption.isSelected(), cbDDlabels.isSelected(), cbDDfigure.isSelected());
 		output += "\n";
 		if(cbReps.isSelected())
-			output += repTable.toTeX(cbCaption.isSelected(),columnList.getSelectedIndices(),Math.max(0,tfExtraColumns.getValue()));
+			output += repTable.toTeX(cbCaption.isSelected(),columnList.getSelectedIndices(),Math.max(0,spinnerColumns.getValue()));
 		
 		if(rbFile.isSelected())
 		{
@@ -410,7 +425,8 @@ private void cbDDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:ev
 private void cbRepsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbRepsActionPerformed
 	boolean enabled = cbReps.isSelected();
 	cbCaption.setEnabled(enabled);
-	tfExtraColumns.setEnabled(enabled);
+	spinnerColumns.setEnabled(enabled);
+	tfColumns.setEnabled(enabled);
 	columnList.setEnabled(enabled);
 }//GEN-LAST:event_cbRepsActionPerformed
 	
@@ -432,10 +448,12 @@ private void cbRepsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JSeparator jSeparator1;
     private javax.swing.JRadioButton rbClipboard;
     private javax.swing.JRadioButton rbFile;
     private javax.swing.JRadioButton rbSout;
-    private edu.simplie.ui.reusable.UINumTextfield tfExtraColumns;
+    private edu.simplie.ui.reusable.UISpinner spinnerColumns;
+    private javax.swing.JLabel tfColumns;
     // End of variables declaration//GEN-END:variables
 	
 }
