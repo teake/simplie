@@ -22,6 +22,7 @@
 
 package edu.simplie.ui;
 
+import com.sun.opengl.util.Animator;
 import com.sun.opengl.util.GLUT;
 import edu.simplie.AlgebraComposite;
 import edu.simplie.Helper;
@@ -55,9 +56,11 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements
 	private GL gl;
 	private GLUT glut;
 	private GLContext context;
+	private Animator animator;
 	
 	// Variables for rotations, translation and zoom.
 	private float viewRotX = 0.0f, viewRotY = 0.0f;
+	private float diffRotX = 0.0f, diffRotY = 0.0f;
 	private float viewTransX = 0.0f, viewTransY = 0.0f;
 	private float zoom = 1.0f;
 	private int prevMouseX, prevMouseY;
@@ -87,6 +90,8 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements
 		canvas.addMouseMotionListener(this);
 		canvas.addMouseWheelListener(this);
 		canvas.addMouseListener(this);
+		
+		animator = new Animator(canvas);
 	}
 	
 	public void setAlgebrasComposite(AlgebraComposite algebras)
@@ -345,7 +350,8 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements
 
 	private void bResetActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_bResetActionPerformed
 	{//GEN-HEADEREND:event_bResetActionPerformed
-		viewRotX = viewRotY = viewTransX = viewTransY = 0.0f;
+		viewRotX = viewRotY = diffRotX = diffRotY = viewTransX = viewTransY = 0.0f;
+		animator.stop();
 		zoom = 1.0f;
 		repaint(evt);
 	}//GEN-LAST:event_bResetActionPerformed
@@ -441,6 +447,9 @@ private void updateAndRepaint(java.awt.event.ActionEvent evt) {//GEN-FIRST:event
 		}
 		gl.glPushMatrix();
 		
+		viewRotX += diffRotX;
+		viewRotY += diffRotY;
+		
 		// Rotate and zoom the coordinate system.
 		gl.glScalef(zoom, zoom, zoom);
 		gl.glTranslatef(viewTransX, viewTransY, 0.0f);
@@ -519,8 +528,8 @@ private void updateAndRepaint(java.awt.event.ActionEvent evt) {//GEN-FIRST:event
 				
 		if(rotate)
 		{	
-			viewRotX += 240.0f * diffY;
-			viewRotY += 240.0f * diffX;
+			diffRotX = 240.0f * diffY;
+			diffRotY = 240.0f * diffX;
 		}
 		else
 		{
@@ -548,12 +557,21 @@ private void updateAndRepaint(java.awt.event.ActionEvent evt) {//GEN-FIRST:event
 	
 	public void mouseReleased(MouseEvent e)
 	{
+		if(rotate && !animator.isAnimating() && (diffRotX*diffRotX + diffRotY*diffRotY) > 0.1)
+		{
+			animator.start();
+		}
 		rotate = false;
 	}
 
 	public void mousePressed(MouseEvent e)
 	{
 		rotate = (e.getButton() == MouseEvent.BUTTON3) || e.isAltDown();
+		if(rotate)
+		{
+			diffRotX = diffRotY = 0.0f;
+			if(animator.isAnimating()) animator.stop();
+		}
 	}
 	
 	public void mouseClicked(MouseEvent e){}
