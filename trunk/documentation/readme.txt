@@ -18,26 +18,6 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-
-RUNNING SIMPLIE
----------------
-
-For finite-dimensional Lie algebra it is sufficient to run SimpLie 
-with the default Java parameters. You can do so with the following
-command:
-
-	java -jar SimpLie.jar
-
-If, however, you plan to do calculations with infinite-dimensional
-algebras, it is wise to reserve extra memory for SimpLie by running
-
-	java -jar -Xms128M -Xmx768M SimpLie.jar
-
-You can of course adjust the 128 megabyte minimum and 768 megabyte
-maximum memory settings to your liking.
-
-
-
 ALGEBRA SETUP
 -------------
 
