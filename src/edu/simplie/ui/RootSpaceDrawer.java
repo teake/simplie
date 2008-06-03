@@ -22,17 +22,11 @@
 
 package edu.simplie.ui;
 
-import com.sun.opengl.util.Animator;
 import com.sun.opengl.util.GLUT;
 import edu.simplie.AlgebraComposite;
 import edu.simplie.Helper;
 import edu.simplie.algebra.Root;
-import java.awt.Dimension;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
-import java.awt.event.MouseWheelEvent;
-import java.awt.event.MouseWheelListener;
+import edu.simplie.math.TrackBall;
 import java.util.Collection;
 import java.util.Iterator;
 import javax.media.opengl.GL;
@@ -47,24 +41,15 @@ import javax.media.opengl.GLJPanel;
  * @version $Revision$, $Date$
  */
 public class RootSpaceDrawer extends javax.swing.JPanel implements 
-		GLEventListener, 
-		MouseMotionListener, 
-		MouseWheelListener, 
-		MouseListener
+		GLEventListener
 {
 	private GLAutoDrawable glDrawable;
 	private GL gl;
 	private GLUT glut;
 	private GLContext context;
-	private Animator animator;
+	private TrackBall trackball;
 	
 	// Variables for rotations, translation and zoom.
-	private float viewRotX = 0.0f, viewRotY = 0.0f;
-	private float diffRotX = 0.0f, diffRotY = 0.0f;
-	private float viewTransX = 0.0f, viewTransY = 0.0f;
-	private float zoom = 1.0f;
-	private int prevMouseX, prevMouseY;
-	private boolean rotate = false;
 	private float[] offset = {0.0f, 0.0f, 0.0f};
 	
 	// Indices for the GL display lists.
@@ -87,11 +72,8 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements
 		
 		canvas.setVisible(true);
 		canvas.addGLEventListener(this);
-		canvas.addMouseMotionListener(this);
-		canvas.addMouseWheelListener(this);
-		canvas.addMouseListener(this);
 		
-		animator = new Animator(canvas);
+		trackball = new TrackBall(canvas);
 	}
 	
 	public void setAlgebrasComposite(AlgebraComposite algebras)
@@ -350,9 +332,7 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements
 
 	private void bResetActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_bResetActionPerformed
 	{//GEN-HEADEREND:event_bResetActionPerformed
-		viewRotX = viewRotY = diffRotX = diffRotY = viewTransX = viewTransY = 0.0f;
-		animator.stop();
-		zoom = 1.0f;
+		trackball.reset();
 		repaint(evt);
 	}//GEN-LAST:event_bResetActionPerformed
 
@@ -447,14 +427,10 @@ private void updateAndRepaint(java.awt.event.ActionEvent evt) {//GEN-FIRST:event
 		}
 		gl.glPushMatrix();
 		
-		viewRotX += diffRotX;
-		viewRotY += diffRotY;
-		
 		// Rotate and zoom the coordinate system.
-		gl.glScalef(zoom, zoom, zoom);
-		gl.glTranslatef(viewTransX, viewTransY, 0.0f);
-		gl.glRotatef(viewRotX,1.0f,0.0f,0.0f);
-		gl.glRotatef(viewRotY,0.0f,1.0f,0.0f);
+		gl.glScalef(trackball.getZoom(), trackball.getZoom(), trackball.getZoom());
+		gl.glTranslatef(trackball.getTransX(),trackball.getTransY(),0.0f);
+		gl.glMultMatrixf(trackball.getRotMatrix(),0);
 		
 		if(!cbNegative.isSelected())
 			gl.glTranslatef(offset[0],offset[1],offset[2]);	
@@ -517,68 +493,6 @@ private void updateAndRepaint(java.awt.event.ActionEvent evt) {//GEN-FIRST:event
 	{
 	}
 
-	public void mouseDragged(MouseEvent e)
-	{
-		int x = e.getX();
-		int y = e.getY();
-
-		Dimension size = e.getComponent().getSize();
-		float diffX = ( (float)(x-prevMouseX)/(float)size.width );
-		float diffY = ( (float)(prevMouseY-y)/(float)size.height );
-				
-		if(rotate)
-		{	
-			diffRotX = 240.0f * diffY;
-			diffRotY = 240.0f * diffX;
-		}
-		else
-		{
-			viewTransX += 8.0f * diffX / zoom;
-			viewTransY += 8.0f * diffY / zoom;
-		}
-		
-		prevMouseX = x;
-		prevMouseY = y;
-		
-		canvas.repaint();
-	}
-
-	public void mouseMoved(MouseEvent e)
-	{
-		prevMouseX = e.getX();
-		prevMouseY = e.getY();
-	}
-	
-	public void mouseWheelMoved(MouseWheelEvent e) 
-	{
-		zoom *= 1.0f - (float) e.getWheelRotation() / 12;
-		canvas.repaint();
-	}
-	
-	public void mouseReleased(MouseEvent e)
-	{
-		if(rotate && !animator.isAnimating() && (diffRotX*diffRotX + diffRotY*diffRotY) > 0.1)
-		{
-			animator.start();
-		}
-		rotate = false;
-	}
-
-	public void mousePressed(MouseEvent e)
-	{
-		rotate = (e.getButton() == MouseEvent.BUTTON3) || e.isAltDown();
-		if(rotate)
-		{
-			diffRotX = diffRotY = 0.0f;
-			if(animator.isAnimating()) animator.stop();
-		}
-	}
-	
-	public void mouseClicked(MouseEvent e){}
-	public void mouseEntered(MouseEvent e){}
-	public void mouseExited(MouseEvent e){}
-
-	
 	private void updateRoots()
 	{
 		// First construct the root system up to the wanted height.
