@@ -115,11 +115,11 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements
         canvas.setLayout(canvasLayout);
         canvasLayout.setHorizontalGroup(
             canvasLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 533, Short.MAX_VALUE)
+            .add(0, 624, Short.MAX_VALUE)
         );
         canvasLayout.setVerticalGroup(
             canvasLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 300, Short.MAX_VALUE)
+            .add(0, 328, Short.MAX_VALUE)
         );
 
         org.jdesktop.layout.GroupLayout containerLayout = new org.jdesktop.layout.GroupLayout(container);
@@ -220,48 +220,52 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements
                 .addContainerGap()
                 .add(jpSettingsLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(jpSettingsLayout.createSequentialGroup()
-                        .add(jpSettingsLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                            .add(cbRealRoots)
-                            .add(cbImRoots))
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
-                        .add(jpSettingsLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                            .add(cbLabels)
-                            .add(cbReflections))
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                        .add(jpSettingsLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
+                            .add(jpSettingsLayout.createSequentialGroup()
+                                .add(cbRealRoots)
+                                .add(43, 43, 43))
+                            .add(jpSettingsLayout.createSequentialGroup()
+                                .add(cbImRoots)
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)))
+                        .add(jpSettingsLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
+                            .add(jpSettingsLayout.createSequentialGroup()
+                                .add(cbLabels)
+                                .add(41, 41, 41))
+                            .add(jpSettingsLayout.createSequentialGroup()
+                                .add(cbReflections)
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)))
                         .add(jpSettingsLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                             .add(tfColor)
-                            .add(tfMaxHeight))
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(jpSettingsLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                            .add(rbColorLevels)
-                            .add(rbColorNorms)
-                            .add(maxHeightField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 51, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
-                    .add(cbNegative)))
+                            .add(tfMaxHeight)))
+                    .add(cbNegative))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jpSettingsLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(rbColorNorms)
+                    .add(maxHeightField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 51, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(rbColorLevels))
+                .addContainerGap())
         );
         jpSettingsLayout.setVerticalGroup(
             jpSettingsLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jpSettingsLayout.createSequentialGroup()
                 .add(jpSettingsLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jpSettingsLayout.createSequentialGroup()
-                        .add(jpSettingsLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                            .add(cbRealRoots)
-                            .add(cbLabels)
-                            .add(tfMaxHeight)
-                            .add(maxHeightField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(jpSettingsLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                            .add(cbImRoots)
-                            .add(cbReflections)))
+                    .add(jpSettingsLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                        .add(cbRealRoots)
+                        .add(cbLabels)
+                        .add(tfMaxHeight)
+                        .add(maxHeightField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                     .add(jpSettingsLayout.createSequentialGroup()
                         .add(23, 23, 23)
                         .add(jpSettingsLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                             .add(tfColor)
-                            .add(rbColorNorms))))
+                            .add(rbColorNorms)
+                            .add(cbReflections)
+                            .add(cbImRoots))))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jpSettingsLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(cbNegative)
-                    .add(rbColorLevels))
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .add(rbColorLevels)
+                    .add(cbNegative))
+                .addContainerGap(17, Short.MAX_VALUE))
         );
 
         jpActions.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Actions", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12))); // NOI18N
@@ -288,19 +292,18 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements
             jpActionsLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jpActionsLayout.createSequentialGroup()
                 .addContainerGap()
-                .add(jpActionsLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING, false)
-                    .add(org.jdesktop.layout.GroupLayout.LEADING, bUpdate, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .add(org.jdesktop.layout.GroupLayout.LEADING, bReset, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .add(jpActionsLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(bUpdate, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .add(bReset))
+                .addContainerGap())
         );
         jpActionsLayout.setVerticalGroup(
             jpActionsLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jpActionsLayout.createSequentialGroup()
-                .addContainerGap()
                 .add(bUpdate)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 12, Short.MAX_VALUE)
                 .add(bReset)
-                .addContainerGap(14, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
@@ -321,9 +324,9 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(layout.createSequentialGroup()
                 .addContainerGap()
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jpActions, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                    .add(jpSettings, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
+                    .add(jpActions, 0, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .add(jpSettings, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(container, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
@@ -513,8 +516,8 @@ private void updateAndRepaint(java.awt.event.ActionEvent evt) {//GEN-FIRST:event
 			gl.glEndList();
 		}
 		
-		float[] maxCoor = {0.0f,0.0f,0.0f};
-		float[] minCoor = {Float.MAX_VALUE, Float.MAX_VALUE,Float.MAX_VALUE};
+		float[] maxCoor = {-Float.MAX_VALUE,-Float.MAX_VALUE,-Float.MAX_VALUE};
+		float[] minCoor = {+Float.MAX_VALUE,+Float.MAX_VALUE,+Float.MAX_VALUE};
 		
 		// Don't do anything if the algebra is empty.
 		if(algebras.algebra == null || algebras.algebra.rank == 0)

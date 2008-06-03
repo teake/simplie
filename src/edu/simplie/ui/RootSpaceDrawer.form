@@ -37,9 +37,9 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace min="-2" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="jpActions" min="-2" max="-2" attributes="1"/>
-                  <Component id="jpSettings" min="-2" max="-2" attributes="1"/>
+              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                  <Component id="jpActions" min="0" max="32767" attributes="1"/>
+                  <Component id="jpSettings" alignment="0" max="32767" attributes="1"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="container" max="32767" attributes="0"/>
@@ -92,12 +92,12 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <EmptySpace min="0" pref="533" max="32767" attributes="0"/>
+                  <EmptySpace min="0" pref="624" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <EmptySpace min="0" pref="300" max="32767" attributes="0"/>
+                  <EmptySpace min="0" pref="328" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
           </Layout>
@@ -122,29 +122,40 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" attributes="0">
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="cbRealRoots" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="cbImRoots" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="1" attributes="0">
+                              <Group type="102" attributes="0">
+                                  <Component id="cbRealRoots" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace min="-2" pref="43" max="-2" attributes="0"/>
+                              </Group>
+                              <Group type="102" alignment="1" attributes="0">
+                                  <Component id="cbImRoots" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                              </Group>
                           </Group>
-                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="cbLabels" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="cbReflections" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="1" attributes="0">
+                              <Group type="102" attributes="0">
+                                  <Component id="cbLabels" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace min="-2" pref="41" max="-2" attributes="0"/>
+                              </Group>
+                              <Group type="102" alignment="1" attributes="0">
+                                  <Component id="cbReflections" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                              </Group>
                           </Group>
-                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="tfColor" min="-2" max="-2" attributes="0"/>
                               <Component id="tfMaxHeight" min="-2" max="-2" attributes="1"/>
                           </Group>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="rbColorLevels" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="rbColorNorms" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="maxHeightField" alignment="0" min="-2" pref="51" max="-2" attributes="1"/>
-                          </Group>
                       </Group>
                       <Component id="cbNegative" alignment="0" min="-2" max="-2" attributes="0"/>
                   </Group>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Component id="rbColorNorms" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Component id="maxHeightField" alignment="0" min="-2" pref="51" max="-2" attributes="1"/>
+                      <Component id="rbColorLevels" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -152,33 +163,28 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" attributes="0">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" attributes="0">
-                          <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="cbRealRoots" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="cbLabels" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="tfMaxHeight" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="maxHeightField" alignment="3" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="cbImRoots" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="cbReflections" alignment="3" min="-2" max="-2" attributes="0"/>
-                          </Group>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="cbRealRoots" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="cbLabels" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="tfMaxHeight" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="maxHeightField" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" attributes="0">
                           <EmptySpace min="-2" pref="23" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="tfColor" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="rbColorNorms" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="cbReflections" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="cbImRoots" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="cbNegative" min="-2" max="-2" attributes="0"/>
-                      <Component id="rbColorLevels" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Component id="rbColorLevels" min="-2" max="-2" attributes="0"/>
+                      <Component id="cbNegative" alignment="0" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace max="32767" attributes="0"/>
+                  <EmptySpace pref="17" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -291,24 +297,23 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" alignment="0" attributes="0">
+              <Group type="102" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                      <Component id="bUpdate" alignment="0" max="32767" attributes="3"/>
-                      <Component id="bReset" alignment="0" max="32767" attributes="1"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Component id="bUpdate" max="32767" attributes="3"/>
+                      <Component id="bReset" alignment="0" min="-2" max="-2" attributes="1"/>
                   </Group>
-                  <EmptySpace max="32767" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
-                  <EmptySpace max="-2" attributes="0"/>
                   <Component id="bUpdate" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace max="-2" attributes="0"/>
+                  <EmptySpace pref="12" max="32767" attributes="0"/>
                   <Component id="bReset" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace pref="14" max="32767" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
