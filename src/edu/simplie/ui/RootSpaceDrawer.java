@@ -445,8 +445,8 @@ private void maxHeightFieldStateChanged(javax.swing.event.ChangeEvent evt) {//GE
 		gl.glTranslatef(trackball.getTransX(),trackball.getTransY(),0.0f);
 		gl.glMultMatrixf(trackball.getRotMatrix(),0);
 		
-		if(!cbNegative.isSelected())
-			gl.glTranslatef(offset[0],offset[1],offset[2]);	
+		//if(!cbNegative.isSelected())
+			//gl.glTranslatef(offset[0],offset[1],offset[2]);	
 		
 		for(int i = cbNegative.isSelected() ? 0 : 1; i < 2; i++)
 		{		
@@ -609,6 +609,9 @@ private void maxHeightFieldStateChanged(javax.swing.event.ChangeEvent evt) {//GE
 					if(index == realReflsObj || index == imReflsObj)
 					{
 						if( (index == imReflsObj && real) || (index == realReflsObj && !real) )
+							continue;
+						
+						if(i == maxHeight || i == algebras.algebra.rs.size() - 1)
 							continue;
 						
 						int[] dynkinLabels = algebras.algebra.rootToWeight(root.vector);
