@@ -208,6 +208,11 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements
 
         maxHeightField.setToolTipText(resourceMap.getString("drawer.maxHeightTooltip")); // NOI18N
         maxHeightField.setMinValue(0);
+        maxHeightField.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                maxHeightFieldStateChanged(evt);
+            }
+        });
 
         tfMaxHeight.setText("Max height:");
         tfMaxHeight.setToolTipText(resourceMap.getString("drawer.maxHeightTooltip")); // NOI18N
@@ -330,10 +335,29 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements
 	private void bResetActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_bResetActionPerformed
 	{//GEN-HEADEREND:event_bResetActionPerformed
 		trackball.reset();
-		repaint(evt);
+		update(true);
 	}//GEN-LAST:event_bResetActionPerformed
 
 private void repaint(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_repaint
+		update(true);
+}//GEN-LAST:event_repaint
+
+private void updateAndRepaint(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateAndRepaint
+		update(false);
+}//GEN-LAST:event_updateAndRepaint
+
+private void maxHeightFieldStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_maxHeightFieldStateChanged
+	update(false);
+}//GEN-LAST:event_maxHeightFieldStateChanged
+	
+	private void update(boolean repaintOnly)
+	{
+		if(!repaintOnly)
+		{
+			updateRoots();
+			String text = "Hasse diagram of the root space of " + algebras.algebra.type;
+			container.setBorder(javax.swing.BorderFactory.createTitledBorder(null, text, javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12)));
+		}
 		canvas.repaint();
 		boolean drawExtras = cbRealRoots.isSelected() || cbImRoots.isSelected();
 		cbLabels.setEnabled(drawExtras);
@@ -344,15 +368,7 @@ private void repaint(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_repaint
 		tfColor.setEnabled(drawExtras);
 		rbColorLevels.setEnabled(drawExtras);
 		rbColorNorms.setEnabled(drawExtras);		
-}//GEN-LAST:event_repaint
-
-private void updateAndRepaint(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateAndRepaint
-		updateRoots();
-		repaint(evt);
-		String text = "Hasse diagram of the root space of " + algebras.algebra.type;
-		container.setBorder(javax.swing.BorderFactory.createTitledBorder(null, text, javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12)));
-}//GEN-LAST:event_updateAndRepaint
-	
+	}
 	
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton bReset;
