@@ -263,6 +263,9 @@
             <Property name="toolTipText" type="java.lang.String" resourceKey="drawer.maxHeightTooltip"/>
             <Property name="minValue" type="int" value="0"/>
           </Properties>
+          <Events>
+            <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="maxHeightFieldStateChanged"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JLabel" name="tfMaxHeight">
           <Properties>
