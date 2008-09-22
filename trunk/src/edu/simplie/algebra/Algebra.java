@@ -71,6 +71,8 @@ public class Algebra
 	public final int	rank;
 	/** The dimension of the algebra (the number of generators). Only set for finite algebras. */
 	public final int	dim;
+	/** The Coxeter number, i.e. the sum of components of the highest root + 1. */
+	public final int	coxeterNumber;
 	/** String value of dim. "Infinite" if the algebra is infinite. */
 	public final String	dimension;
 	/** The type of the algebra ("A1", "E6", etc) */
@@ -289,19 +291,21 @@ public class Algebra
 		// Set up the root system.
 		rs = new RootSystem(this);
 		
-		// Determine the dimension.
+		// Determine the dimension and the Coxeter number
 		if(finite)
 		{
-			dim			= 2 * (int) rs.numPosGenerators() + rank;
-			dimension	= Helper.intToString(dim);
+			dim				= 2 * (int) rs.numPosGenerators() + rank;
+			dimension		= Helper.intToString(dim);
+			coxeterNumber	= rs.size();
 		}
 		else
 		{
-			dim			= 0;
-			dimension	= "Infinite";
+			dim				= 0;
+			dimension		= "Infinite";
+			coxeterNumber	= 0;
 		}
 		
-		
+
 	}
 	
 	/**
