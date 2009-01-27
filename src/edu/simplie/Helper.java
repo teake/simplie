@@ -22,6 +22,7 @@
 
 package edu.simplie;
 
+import Jama.EigenvalueDecomposition;
 import Jama.Matrix;
 import edu.simplie.math.*;
 
@@ -489,5 +490,57 @@ public class Helper
 			newCol[0] = (float) Math.sqrt(perc);
 		}
 		return newCol;
+	}
+
+	/**
+	 * Determines the complex eigenvector of a given real matrix belonging to
+	 * the given complex eigenvalue. The specified complex eigenvalue has to be
+	 * an actual eigenvalue of the given matrix.
+	 *
+	 * @param matrix		 The matrix for which to compute the complex eigenvalue. Has to be real.
+	 * @param eigenvalRe	 The real part of the complex eigenvalue.
+	 * @param eigenvalIm	 The imaginary part of the complex eigenvalue.
+	 * @return				 The complex eigenvector belong to the given arguments,
+	 *						 with the first entry for the real part and the second for the imaginary.
+	 *						 Both are zero vectors if no eigenvalue can be found.
+	 */
+	public static float[][] complexEigenvector(Matrix matrix, double eigenvalRe, double eigenvalIm)
+	{
+		int size = matrix.getRowDimension();
+		float[][] complexEigenvector = new float[2][size];
+		for(int i = 0; i < 2; i++)
+		{
+			for(int j = 0; j < size; j++)
+			{
+				complexEigenvector[i][j] = 0.0f;
+			}
+		}
+
+		// JAMA doesn't do imaginary eigenvectors ... sigh.
+		Matrix A = matrix.minus(Matrix.identity(size,size).times(eigenvalRe));
+		Matrix B = new Matrix(2*size, 2*size, 0.0);
+		B.setMatrix(0,size-1,size,(2*size)-1,A);
+		B.setMatrix(size, (2*size)-1, 0, size-1, A.times(-1.0));
+
+		EigenvalueDecomposition eig = new EigenvalueDecomposition(B);
+		Matrix eigenvalues	= eig.getD();
+		Matrix eigenvectors	= eig.getV();
+
+		for(int i = 0; i < 2*size; i++)
+		{
+			if((eigenvalues.get(i, i) < eigenvalIm + 0.0001) && (eigenvalues.get(i, i) > eigenvalIm - 0.0001))
+			{
+				// Found the complex part of the right eigenvalue.
+				// Set the eigenvectors.
+				for(int j = 0; j < size; j++)
+				{
+					complexEigenvector[0][j] = (float) eigenvectors.get(j, i);
+					complexEigenvector[1][j] = (float) eigenvectors.get(j+size, i);
+				}
+				break;
+			}
+		}
+
+		return complexEigenvector;
 	}
 }

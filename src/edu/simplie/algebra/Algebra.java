@@ -304,7 +304,7 @@ public class Algebra
 			dimension		= "Infinite";
 			coxeterNumber	= 0;
 		}
-		
+
 
 	}
 	
@@ -473,6 +473,7 @@ public class Algebra
 	
 	/**
 	 * Performs a simple Weyl reflection on vector of a root.
+	 *
 	 * @param	rootVector	 The vector of the root we want to reflect.
 	 * @param	i			 The i'th simple root in which we will reflect.
 	 * @return				 The vector of the reflected root.
@@ -485,6 +486,34 @@ public class Algebra
 		output[i] = output[i] - dynkinLabels[i];
 		
 		return output;
+	}
+
+	/**
+	 * Returns a matrix M_i such that M_i.v = v', where v is a root vector,
+	 * and v' is the vector of the root reflected in the i'th simple root.
+	 *
+	 * @param	i	 The i'th simple root of which to compute the matrix.
+	 * @return		 The matrix M_i as a double[][].
+	 */
+	public double[][] simpWeylRelfMatrix(int i)
+	{
+		double[][] relfMatrix = new double[rank][rank];
+		for(int j = 0; j < rank; j++)
+		{
+			for(int k = 0; k < rank; k++)
+			{
+				relfMatrix[j][k] = 0.0;
+				if(j == k)
+				{
+					relfMatrix[j][k] += 1.0;
+				}
+				if(j == i)
+				{
+					relfMatrix[j][k] -= A[k][i];
+				}
+			}
+		}
+		return relfMatrix;
 	}
 	
 	

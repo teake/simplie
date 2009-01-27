@@ -4,10 +4,13 @@
   <NonVisualComponents>
     <Component class="javax.swing.ButtonGroup" name="bgColorCoding">
     </Component>
+    <Component class="javax.swing.ButtonGroup" name="bgProjectionMode">
+    </Component>
   </NonVisualComponents>
   <AuxValues>
     <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="0"/>
     <AuxValue name="FormSettings_autoSetComponentName" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_generateFQN" type="java.lang.Boolean" value="true"/>
     <AuxValue name="FormSettings_generateMnemonicsCode" type="java.lang.Boolean" value="false"/>
     <AuxValue name="FormSettings_i18nAutoMode" type="java.lang.Boolean" value="false"/>
     <AuxValue name="FormSettings_layoutCodeTarget" type="java.lang.Integer" value="2"/>
@@ -26,7 +29,7 @@
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="jpActions" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jpSettings" min="-2" max="-2" attributes="0"/>
+                      <Component id="jpSettings" min="-2" pref="475" max="-2" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
@@ -39,7 +42,7 @@
               <EmptySpace min="-2" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" max="-2" attributes="0">
                   <Component id="jpActions" max="32767" attributes="1"/>
-                  <Component id="jpSettings" alignment="0" max="32767" attributes="1"/>
+                  <Component id="jpSettings" alignment="0" pref="95" max="32767" attributes="1"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="container" max="32767" attributes="0"/>
@@ -53,7 +56,7 @@
       <Properties>
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
           <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-            <TitledBorder title="Hasse diagram of the root space">
+            <TitledBorder title="Root space visualization">
               <Font PropertyName="font" name="Tahoma" size="12" style="1"/>
             </TitledBorder>
           </Border>
@@ -97,7 +100,7 @@
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <EmptySpace min="0" pref="338" max="32767" attributes="0"/>
+                  <EmptySpace min="0" pref="346" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
           </Layout>
@@ -119,36 +122,44 @@
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" attributes="0">
-                  <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" alignment="0" attributes="0">
+                      <Group type="102" attributes="0">
+                          <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="cbImRoots" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="cbRealRoots" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="cbRealRoots" min="-2" max="-2" attributes="0"/>
+                              <Component id="cbImRoots" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                              <Group type="102" attributes="1">
+                          <EmptySpace min="-2" pref="13" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="1" attributes="0">
+                              <Group type="102" attributes="0">
                                   <Component id="cbLabels" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace max="32767" attributes="0"/>
-                                  <Component id="tfMaxHeight" min="-2" max="-2" attributes="1"/>
+                                  <EmptySpace min="-2" pref="24" max="-2" attributes="0"/>
                               </Group>
-                              <Group type="102" alignment="0" attributes="0">
+                              <Group type="102" alignment="1" attributes="0">
                                   <Component id="cbReflections" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace type="separate" max="-2" attributes="0"/>
-                                  <Component id="tfColor" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
                               </Group>
                           </Group>
                       </Group>
-                      <Component id="cbNegative" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="tfMaxHeight" min="-2" max="-2" attributes="1"/>
+                          <EmptySpace min="-2" max="-2" attributes="0"/>
+                          <Component id="maxHeightField" min="-2" pref="51" max="-2" attributes="1"/>
+                      </Group>
+                  </Group>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Component id="tfColor" min="-2" max="-2" attributes="0"/>
+                      <Component id="rbColorLevels" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Component id="rbColorNorms" alignment="0" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="maxHeightField" min="-2" pref="51" max="-2" attributes="1"/>
-                      <Component id="rbColorNorms" alignment="0" min="-2" max="-2" attributes="0"/>
-                      <Component id="rbColorLevels" min="-2" max="-2" attributes="0"/>
+                      <Component id="tfProjMode" min="-2" max="-2" attributes="0"/>
+                      <Component id="rbProjHasse" min="-2" max="-2" attributes="0"/>
+                      <Component id="rbProjCoxeter" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace max="32767" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -156,24 +167,27 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="cbRealRoots" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="cbLabels" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="tfMaxHeight" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="maxHeightField" alignment="3" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="cbImRoots" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="cbReflections" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="tfColor" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="rbColorNorms" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="tfProjMode" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="maxHeightField" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="tfMaxHeight" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="cbNegative" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="rbColorLevels" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="rbColorNorms" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="rbProjCoxeter" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="cbLabels" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="cbRealRoots" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace max="32767" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="rbColorLevels" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="rbProjHasse" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="cbReflections" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <Component id="cbImRoots" alignment="0" min="-2" max="-2" attributes="0"/>
+                  </Group>
               </Group>
           </Group>
         </DimensionLayout>
@@ -239,18 +253,8 @@
             <Property name="text" type="java.lang.String" value="Color coding:"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JCheckBox" name="cbNegative">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="Negative roots"/>
-            <Property name="toolTipText" type="java.lang.String" resourceKey="drawer.negativeTooltip"/>
-          </Properties>
-          <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="repaint"/>
-          </Events>
-        </Component>
         <Component class="javax.swing.JCheckBox" name="cbLabels">
           <Properties>
-            <Property name="selected" type="boolean" value="true"/>
             <Property name="text" type="java.lang.String" value="Root labels"/>
             <Property name="toolTipText" type="java.lang.String" resourceKey="drawer.labelsTooltip"/>
           </Properties>
@@ -272,6 +276,36 @@
             <Property name="text" type="java.lang.String" value="Max height:"/>
             <Property name="toolTipText" type="java.lang.String" resourceKey="drawer.maxHeightTooltip"/>
           </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="tfProjMode">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Projection mode:"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JRadioButton" name="rbProjHasse">
+          <Properties>
+            <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
+              <ComponentRef name="bgProjectionMode"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="Hasse diagram"/>
+            <Property name="toolTipText" type="java.lang.String" resourceKey="drawer.hasseTooltip"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="updateAndRepaint"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JRadioButton" name="rbProjCoxeter">
+          <Properties>
+            <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
+              <ComponentRef name="bgProjectionMode"/>
+            </Property>
+            <Property name="selected" type="boolean" value="true"/>
+            <Property name="text" type="java.lang.String" value="Coxeter plane"/>
+            <Property name="toolTipText" type="java.lang.String" resourceKey="drawer.coxeterTooltip"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="updateAndRepaint"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>
@@ -303,9 +337,9 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
                   <Component id="bUpdate" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace pref="19" max="32767" attributes="0"/>
+                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Component id="bReset" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace max="-2" attributes="0"/>
+                  <EmptySpace max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>

@@ -207,9 +207,9 @@ public class DynkinDiagram
 	public int[] getDiagramBounds()
 	{
 		int[] bounds = new int[4];
-		bounds[0] = bounds[1] = nodes.get(0).x;
-		bounds[2] = bounds[3] = nodes.get(0).y;
-		for (int i = 1; i < rank(); i++)
+		bounds[0] = bounds[2] = Integer.MAX_VALUE;
+		bounds[2] = bounds[3] = Integer.MIN_VALUE;
+		for (int i = 0; i < rank(); i++)
 		{
 			int x = nodes.get(i).x;
 			int y = nodes.get(i).y;
@@ -218,7 +218,7 @@ public class DynkinDiagram
 			bounds[2] = Math.min(bounds[2], y);
 			bounds[3] = Math.max(bounds[3], y);
 		}
-		
+
 		return bounds;
 	}
 	
