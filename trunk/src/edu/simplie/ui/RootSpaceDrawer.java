@@ -22,10 +22,12 @@
 
 package edu.simplie.ui;
 
+import Jama.Matrix;
 import com.sun.opengl.util.GLUT;
 import edu.simplie.AlgebraComposite;
 import edu.simplie.Helper;
 import edu.simplie.algebra.Root;
+import edu.simplie.dynkindiagram.DiagramListener;
 import edu.simplie.math.TrackBall;
 import java.util.Collection;
 import java.util.Iterator;
@@ -41,7 +43,7 @@ import javax.media.opengl.GLJPanel;
  * @version $Revision$, $Date$
  */
 public class RootSpaceDrawer extends javax.swing.JPanel implements 
-		GLEventListener
+		GLEventListener, DiagramListener
 {
 	private GLAutoDrawable glDrawable;
 	private GL gl;
@@ -49,7 +51,7 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements
 	private GLContext context;
 	private TrackBall trackball;
 	
-	// Variables for rotations, translation and zoom.
+	// Sets the Hasse diagram in the middle of the canvas.
 	private float[] offset = {0.0f, 0.0f, 0.0f};
 	
 	// Indices for the GL display lists.
@@ -58,12 +60,24 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements
 	private int realRootsObj;
 	private int imRootsObj;
 	private int sphereObj;
-	private int simpReflsObj;
 	private int realLabelObj;
 	private int imLabelObj;
 	private int[] listContainer;
+
+	// Basis vectors for the Hasse projection
+	private float[] hasseBasisX;
+	private float[] hasseBasisZ;
+	// Vectors in root space to project onto for the Coxeter projection.
+	private float[] projectionX;
+	private float[] projectionY;
+	private float[] projectionZ;
+	// And their norms.
+	private float normProjectionX;
+	private float normProjectionY;
+	private float normProjectionZ;
 	
 	private AlgebraComposite algebras;
+	private int rank;
 	
 	/** Creates new form RootSpaceDrawer */
 	public RootSpaceDrawer()
@@ -79,6 +93,7 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements
 	public void setAlgebrasComposite(AlgebraComposite algebras)
 	{
 		this.algebras = algebras;
+		algebras.dd.addListener(this);
 	}
 	
 	/** This method is called from within the constructor to
@@ -90,6 +105,7 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements
     private void initComponents() {
 
         bgColorCoding = new javax.swing.ButtonGroup();
+        bgProjectionMode = new javax.swing.ButtonGroup();
         container = new javax.swing.JPanel();
         canvas = new javax.media.opengl.GLJPanel();
         jpSettings = new javax.swing.JPanel();
@@ -99,15 +115,17 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements
         rbColorLevels = new javax.swing.JRadioButton();
         rbColorNorms = new javax.swing.JRadioButton();
         tfColor = new javax.swing.JLabel();
-        cbNegative = new javax.swing.JCheckBox();
         cbLabels = new javax.swing.JCheckBox();
         maxHeightField = new edu.simplie.ui.reusable.UISpinner();
         tfMaxHeight = new javax.swing.JLabel();
+        tfProjMode = new javax.swing.JLabel();
+        rbProjHasse = new javax.swing.JRadioButton();
+        rbProjCoxeter = new javax.swing.JRadioButton();
         jpActions = new javax.swing.JPanel();
         bReset = new javax.swing.JButton();
         bUpdate = new javax.swing.JButton();
 
-        container.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Hasse diagram of the root space", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12))); // NOI18N
+        container.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Root space visualization", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12))); // NOI18N
 
         canvas.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
@@ -119,7 +137,7 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements
         );
         canvasLayout.setVerticalGroup(
             canvasLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 338, Short.MAX_VALUE)
+            .add(0, 346, Short.MAX_VALUE)
         );
 
         org.jdesktop.layout.GroupLayout containerLayout = new org.jdesktop.layout.GroupLayout(container);
@@ -189,15 +207,6 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements
 
         tfColor.setText("Color coding:");
 
-        cbNegative.setText("Negative roots");
-        cbNegative.setToolTipText(resourceMap.getString("drawer.negativeTooltip")); // NOI18N
-        cbNegative.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                repaint(evt);
-            }
-        });
-
-        cbLabels.setSelected(true);
         cbLabels.setText("Root labels");
         cbLabels.setToolTipText(resourceMap.getString("drawer.labelsTooltip")); // NOI18N
         cbLabels.addActionListener(new java.awt.event.ActionListener() {
@@ -217,54 +226,83 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements
         tfMaxHeight.setText("Max height:");
         tfMaxHeight.setToolTipText(resourceMap.getString("drawer.maxHeightTooltip")); // NOI18N
 
+        tfProjMode.setText("Projection mode:");
+
+        bgProjectionMode.add(rbProjHasse);
+        rbProjHasse.setText("Hasse diagram");
+        rbProjHasse.setToolTipText(resourceMap.getString("drawer.hasseTooltip")); // NOI18N
+        rbProjHasse.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                updateAndRepaint(evt);
+            }
+        });
+
+        bgProjectionMode.add(rbProjCoxeter);
+        rbProjCoxeter.setSelected(true);
+        rbProjCoxeter.setText("Coxeter plane");
+        rbProjCoxeter.setToolTipText(resourceMap.getString("drawer.coxeterTooltip")); // NOI18N
+        rbProjCoxeter.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                updateAndRepaint(evt);
+            }
+        });
+
         org.jdesktop.layout.GroupLayout jpSettingsLayout = new org.jdesktop.layout.GroupLayout(jpSettings);
         jpSettings.setLayout(jpSettingsLayout);
         jpSettingsLayout.setHorizontalGroup(
             jpSettingsLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jpSettingsLayout.createSequentialGroup()
-                .addContainerGap()
                 .add(jpSettingsLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(jpSettingsLayout.createSequentialGroup()
+                        .add(10, 10, 10)
                         .add(jpSettingsLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                            .add(cbImRoots)
-                            .add(cbRealRoots))
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(jpSettingsLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
+                            .add(cbRealRoots)
+                            .add(cbImRoots))
+                        .add(13, 13, 13)
+                        .add(jpSettingsLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
                             .add(jpSettingsLayout.createSequentialGroup()
                                 .add(cbLabels)
-                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .add(tfMaxHeight))
+                                .add(24, 24, 24))
                             .add(jpSettingsLayout.createSequentialGroup()
                                 .add(cbReflections)
-                                .add(18, 18, 18)
-                                .add(tfColor))))
-                    .add(cbNegative))
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED))))
+                    .add(jpSettingsLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .add(tfMaxHeight)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(maxHeightField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 51, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
+                .add(jpSettingsLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(tfColor)
+                    .add(rbColorLevels)
+                    .add(rbColorNorms))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jpSettingsLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(maxHeightField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 51, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                    .add(rbColorNorms)
-                    .add(rbColorLevels))
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .add(tfProjMode)
+                    .add(rbProjHasse)
+                    .add(rbProjCoxeter))
+                .addContainerGap())
         );
         jpSettingsLayout.setVerticalGroup(
             jpSettingsLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jpSettingsLayout.createSequentialGroup()
                 .add(jpSettingsLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(cbRealRoots)
-                    .add(cbLabels)
-                    .add(tfMaxHeight)
-                    .add(maxHeightField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jpSettingsLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(cbImRoots)
-                    .add(cbReflections)
                     .add(tfColor)
-                    .add(rbColorNorms))
+                    .add(tfProjMode)
+                    .add(maxHeightField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(tfMaxHeight))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jpSettingsLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(cbNegative)
-                    .add(rbColorLevels))
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .add(rbColorNorms)
+                    .add(rbProjCoxeter)
+                    .add(cbLabels)
+                    .add(cbRealRoots))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jpSettingsLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(jpSettingsLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                        .add(rbColorLevels)
+                        .add(rbProjHasse)
+                        .add(cbReflections))
+                    .add(cbImRoots)))
         );
 
         jpActions.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Actions", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12))); // NOI18N
@@ -300,9 +338,9 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements
             jpActionsLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jpActionsLayout.createSequentialGroup()
                 .add(bUpdate)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 19, Short.MAX_VALUE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
                 .add(bReset)
-                .addContainerGap())
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
@@ -316,7 +354,7 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements
                     .add(layout.createSequentialGroup()
                         .add(jpActions, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(jpSettings, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
+                        .add(jpSettings, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 475, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -325,7 +363,7 @@ public class RootSpaceDrawer extends javax.swing.JPanel implements
                 .addContainerGap()
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
                     .add(jpActions, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .add(jpSettings, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .add(jpSettings, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 95, Short.MAX_VALUE))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(container, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
@@ -355,29 +393,35 @@ private void maxHeightFieldStateChanged(javax.swing.event.ChangeEvent evt) {//GE
 		if(!repaintOnly)
 		{
 			updateRoots();
-			String text = "Hasse diagram of the root space of " + algebras.algebra.type;
+			String text	 = (rbProjCoxeter.isSelected()) ? "Coxeter projection" : "Hasse diagram";
+			text		+= " of the roots of " + algebras.algebra.type;
 			container.setBorder(javax.swing.BorderFactory.createTitledBorder(null, text, javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12)));
 		}
 		canvas.repaint();
 		boolean drawExtras = cbRealRoots.isSelected() || cbImRoots.isSelected();
 		cbLabels.setEnabled(drawExtras);
 		cbReflections.setEnabled(drawExtras);
-		cbNegative.setEnabled(drawExtras);
 		tfMaxHeight.setEnabled(drawExtras);
 		maxHeightField.setEnabled(drawExtras);
 		tfColor.setEnabled(drawExtras);
 		rbColorLevels.setEnabled(drawExtras);
-		rbColorNorms.setEnabled(drawExtras);		
+		rbColorNorms.setEnabled(drawExtras);
+		if(!algebras.subAlgebra.finite && rbProjCoxeter.isSelected())
+		{
+			rbProjHasse.setSelected(true);
+		}
+		rbProjCoxeter.setEnabled(algebras.subAlgebra.finite);
+
 	}
 	
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton bReset;
     private javax.swing.JButton bUpdate;
     private javax.swing.ButtonGroup bgColorCoding;
+    private javax.swing.ButtonGroup bgProjectionMode;
     private javax.media.opengl.GLJPanel canvas;
     private javax.swing.JCheckBox cbImRoots;
     private javax.swing.JCheckBox cbLabels;
-    private javax.swing.JCheckBox cbNegative;
     private javax.swing.JCheckBox cbRealRoots;
     private javax.swing.JCheckBox cbReflections;
     private javax.swing.JPanel container;
@@ -386,8 +430,11 @@ private void maxHeightFieldStateChanged(javax.swing.event.ChangeEvent evt) {//GE
     private edu.simplie.ui.reusable.UISpinner maxHeightField;
     private javax.swing.JRadioButton rbColorLevels;
     private javax.swing.JRadioButton rbColorNorms;
+    private javax.swing.JRadioButton rbProjCoxeter;
+    private javax.swing.JRadioButton rbProjHasse;
     private javax.swing.JLabel tfColor;
     private javax.swing.JLabel tfMaxHeight;
+    private javax.swing.JLabel tfProjMode;
     // End of variables declaration//GEN-END:variables
 
 	public void init(GLAutoDrawable drawable)
@@ -401,7 +448,6 @@ private void maxHeightFieldStateChanged(javax.swing.event.ChangeEvent evt) {//GE
 		imRootsObj		= gl.glGenLists(1);
 		realReflsObj	= gl.glGenLists(1);
 		imReflsObj		= gl.glGenLists(1);
-		simpReflsObj	= gl.glGenLists(1);
 		realLabelObj	= gl.glGenLists(1);
 		imLabelObj		= gl.glGenLists(1);
 		
@@ -445,10 +491,10 @@ private void maxHeightFieldStateChanged(javax.swing.event.ChangeEvent evt) {//GE
 		gl.glTranslatef(trackball.getTransX(),trackball.getTransY(),0.0f);
 		gl.glMultMatrixf(trackball.getRotMatrix(),0);
 		
-		if(!cbNegative.isSelected())
-			gl.glTranslatef(offset[0],offset[1],offset[2]);	
-		
-		for(int i = cbNegative.isSelected() ? 0 : 1; i < 2; i++)
+		if(!rbProjCoxeter.isSelected())
+			gl.glTranslatef(offset[0],offset[1],offset[2]);
+
+		for(int i = rbProjCoxeter.isSelected() ? 0 : 1; i < 2; i++)
 		{		
 			// Draw the real roots.
 			if(cbRealRoots.isSelected())
@@ -466,14 +512,12 @@ private void maxHeightFieldStateChanged(javax.swing.event.ChangeEvent evt) {//GE
 					gl.glCallList(realReflsObj);
 				if(cbImRoots.isSelected())
 					gl.glCallList(imReflsObj);
-				if(i == 0 && cbRealRoots.isSelected())
-					gl.glCallList(simpReflsObj);
 			}
 			
 			// Draw the root labels.
 			if(cbLabels.isSelected())
 			{
-				if(i == 1 && cbNegative.isSelected())
+				if(i == 1 && rbProjCoxeter.isSelected())
 					gl.glColor3f(0.5f,0.0f,0.0f);
 				else
 					gl.glColor3f(0.0f,0.5f,0.0f);
@@ -482,7 +526,7 @@ private void maxHeightFieldStateChanged(javax.swing.event.ChangeEvent evt) {//GE
 				if(cbImRoots.isSelected())
 					gl.glCallList(imLabelObj);
 			}
-			gl.glRotatef(180.0f, 1.0f, 0.0f, 0.0f);
+			gl.glScalef(-1.0f, -1.0f, -1.0f);
 		}	
 		gl.glPopMatrix();
 	}
@@ -508,6 +552,10 @@ private void maxHeightFieldStateChanged(javax.swing.event.ChangeEvent evt) {//GE
 
 	private void updateRoots()
 	{
+		// Don't do anything if the algebra is empty.
+		if(algebras.algebra == null || algebras.algebra.rank == 0)
+			return;
+		
 		// First construct the root system up to the wanted height.
 		int maxHeight = Math.abs(maxHeightField.getValue());
 		algebras.algebra.rs.construct(maxHeight);
@@ -528,23 +576,90 @@ private void maxHeightFieldStateChanged(javax.swing.event.ChangeEvent evt) {//GE
 		
 		float[] maxCoor = {-Float.MAX_VALUE,-Float.MAX_VALUE,-Float.MAX_VALUE};
 		float[] minCoor = {+Float.MAX_VALUE,+Float.MAX_VALUE,+Float.MAX_VALUE};
-		
-		// Don't do anything if the algebra is empty.
-		if(algebras.algebra == null || algebras.algebra.rank == 0)
-			return;
-		
-		// Determine some variables for positional calculation.
-		float[] posX = new float[algebras.algebra.rank];
-		float[] posZ = new float[algebras.algebra.rank];
+
+		//
+		// Determine the basis vectors for the Hasse diagram projection.
+		//
+		hasseBasisX = new float[rank];
+		hasseBasisZ = new float[rank];
 		int[] bounds = algebras.dd.getDiagramBounds();
 		float coeffX = (bounds[1] == bounds[0]) ? 0 : 2 / (float) (bounds[1] - bounds[0]);
 		float coeffZ = (bounds[2] == bounds[3]) ? 0 : 2 / (float) (bounds[3] - bounds[2]);
-		for (int i = 0; i < algebras.algebra.rank; i++)
+		for (int i = 0; i < rank; i++)
 		{
-			posX[i] = (bounds[1] == bounds[0]) ? 0 : (float) (algebras.dd.getNodeByIndex(i).x - bounds[0]) * coeffX - 1;
-			posZ[i] = (bounds[2] == bounds[3]) ? 0 : (float) (algebras.dd.getNodeByIndex(i).y - bounds[2]) * coeffZ - 1;
+			hasseBasisX[i] = (bounds[1] == bounds[0]) ? 0 : (float) (algebras.dd.getNodeByIndex(i).x - bounds[0]) * coeffX - 1;
+			hasseBasisZ[i] = (bounds[2] == bounds[3]) ? 0 : (float) (algebras.dd.getNodeByIndex(i).y - bounds[2]) * coeffZ - 1;
+		}
+
+		//
+		// Determine the basis vectors for the Coxeter plane projection.
+		//
+
+		// First compute the Coxeter element.
+		Matrix coxeterElement = new Matrix(rank,rank);
+		for(int i = 0; i < algebras.subAlgebra.rank; i++)
+		{
+			Matrix reflection = new Matrix(algebras.algebra.simpWeylRelfMatrix(algebras.dd.translateSub(i)));
+			if(i == 0)
+			{
+				coxeterElement = reflection;
+			}
+			else
+			{
+				coxeterElement = coxeterElement.times(reflection);
+			}
+		}
+
+		// The real and imaginary parts of the wanted eigenvalue.
+		double angle		= 2 * Math.PI / algebras.subAlgebra.coxeterNumber;
+		double ReEigenval	= Math.cos(angle);
+		double ImEigenval	= Math.sin(angle);
+		float[][] complex	= Helper.complexEigenvector(coxeterElement, ReEigenval, ImEigenval);
+
+		projectionX = complex[0];
+		projectionY = complex[1];
+		
+		// Try to get a 3rd projection vector.
+		boolean eigenvalueFound	= false;
+		Matrix	eigenvalues		= coxeterElement.eig().getD();
+		int		times			= 1;
+		do
+		{
+			times++;
+			angle		= 2 * times * Math.PI / algebras.subAlgebra.coxeterNumber;
+			ReEigenval	= Math.cos(angle);
+			ImEigenval	= Math.sin(angle);
+			for(int j = 0; j < rank; j++)
+			{
+				if((eigenvalues.get(j, j) < ReEigenval + 0.0001) && (eigenvalues.get(j, j) > ReEigenval - 0.0001))
+				{
+					eigenvalueFound = true;
+					break;
+				}
+			}
+		} while (!eigenvalueFound && ( (2 * times) <= algebras.subAlgebra.coxeterNumber ) );
+
+		if(eigenvalueFound)
+		{
+			complex		= Helper.complexEigenvector(coxeterElement, ReEigenval, ImEigenval);
+			projectionZ = complex[0];
+		}
+		else
+		{
+			projectionZ = new float[rank];
+			for(int i = 0; i < rank; i++)
+			{
+				projectionZ[i] = 0.0f;
+			}
 		}
 		
+		normProjectionX = innerProduct(projectionX, projectionX);
+		normProjectionY = innerProduct(projectionY, projectionY);
+		normProjectionZ = innerProduct(projectionZ, projectionZ);
+		if(normProjectionX == 0.0f) normProjectionX = 1.0f;
+		if(normProjectionY == 0.0f) normProjectionY = 1.0f;
+		if(normProjectionZ == 0.0f) normProjectionZ = 1.0f;
+
 		// Stuff for color coding.
 		float[] color;
 		int colorIndex;
@@ -564,18 +679,7 @@ private void maxHeightFieldStateChanged(javax.swing.event.ChangeEvent evt) {//GE
 			colB	= 0;
 		}
 		colB += 2.0f /3.0f;
-		
-		// Draw the simple weyl reflections down
-		gl.glNewList(simpReflsObj, GL.GL_COMPILE);
-		for (int i = 0; i < posX.length; i++)
-		{
-			gl.glBegin(GL.GL_LINES);
-			gl.glVertex3f(posX[i], 0.5f, posZ[i]);
-			gl.glVertex3f(posX[i],-0.5f,-posZ[i]);
-			gl.glEnd();
-		}
-		gl.glEndList();
-			
+				
 		// Construct the roots list.
 		for(int j = 0; j < listContainer.length; j++)
 		{
@@ -588,7 +692,7 @@ private void maxHeightFieldStateChanged(javax.swing.event.ChangeEvent evt) {//GE
 				for(Iterator it = roots.iterator(); it.hasNext();)
 				{
 					Root	root	= (Root) it.next();
-					float[] pos		= calcPos(root.vector, posX, posZ);
+					float[] pos		= calcPos(root.vector);
 					boolean real	= (root.norm > 0);
 					
 					for (int k = 0; k < 3; k++)
@@ -618,11 +722,13 @@ private void maxHeightFieldStateChanged(javax.swing.event.ChangeEvent evt) {//GE
 						for(int k = 0; k < root.vector.length; k++)
 						{
 							// Only draw reflections upward.
-							if(dynkinLabels[k] >= 0)
+							if( dynkinLabels[k] >= 0 && ( 
+									( i > 1 && rbProjCoxeter.isSelected() ) ||
+									( i == 1 && !rbProjCoxeter.isSelected() ) ) )
 								continue;
 							int[] reflVector = root.vector.clone();
 							reflVector[k] -= dynkinLabels[k];
-							float[] newPos = calcPos(reflVector, posX, posZ);
+							float[] newPos = calcPos(reflVector);
 							// And draw the line.
 							gl.glBegin(GL.GL_LINES);
 							gl.glVertex3f(pos[0],pos[1],pos[2]);
@@ -672,15 +778,55 @@ private void maxHeightFieldStateChanged(javax.swing.event.ChangeEvent evt) {//GE
 
 	}
 	
-	private float[] calcPos(int[] rootVector, float[] posX, float[] posZ)
+	private float[] calcPos(int[] rootVector)
 	{
 		float pos[] = { 0.0f, -0.5f, 0.0f };
-		for (int i = 0; i < rootVector.length; i++)
+		if(rbProjHasse.isSelected())
 		{
-			pos[0] += rootVector[i] * posX[i];
-			pos[2] += rootVector[i] * posZ[i];
-			pos[1] += rootVector[i];
+			for (int i = 0; i < rootVector.length; i++)
+			{
+				pos[0] += rootVector[i] * hasseBasisX[i];
+				pos[2] += rootVector[i] * hasseBasisZ[i];
+				pos[1] += rootVector[i];
+			}
 		}
+		else
+		{
+			pos[0] = 2 * innerProduct(rootVector, projectionX) / normProjectionX;
+			pos[1] = 2 * innerProduct(rootVector, projectionY) / normProjectionY;
+			pos[2] = 2 * innerProduct(rootVector, projectionZ) / normProjectionZ;
+		}
+
 		return pos;
 	}
+
+	private float innerProduct(float[] v1, float[] v2)
+	{
+		float result = 0.0f;
+		for (int i = 0; i < rank; i++)
+		{
+			for (int j = 0; j < rank; j++)
+			{
+				result += ((float) (algebras.algebra.B[i][j])) * v1[i] * v2[j];
+			}
+		}
+		return result;
+	}
+
+	private float innerProduct(int[] v1, float[] v2)
+	{
+		float[] f1 = new float[v1.length];
+		for(int i = 0; i < v1.length; i++)
+		{
+			f1[i] = (float) v1[i];
+		}
+		return innerProduct(f1,v2);
+	}
+
+	public void diagramChanged()
+	{
+		rank = algebras.algebra.rank;
+		update(true);
+	}
+
 }
