@@ -462,13 +462,25 @@ private void maxHeightFieldStateChanged(javax.swing.event.ChangeEvent evt) {//GE
 		glut = new GLUT();
 		
 		gl.glNewList(sphereObj, GL.GL_COMPILE);
-		glut.glutSolidSphere(0.12d, 8, 8);
+		glut.glutSolidSphere(0.06d, 8, 8);
 		gl.glEndList();
 		
 		gl.glEnable(GL.GL_CULL_FACE);
 		gl.glEnable(GL.GL_DEPTH_TEST);
 		gl.glEnable(GL.GL_NORMALIZE);
-		
+
+		gl.glEnable(GL.GL_LINE_SMOOTH);
+		gl.glEnable(GL.GL_POINT_SMOOTH);
+		gl.glEnable(GL.GL_POLYGON_SMOOTH);
+		gl.glEnable(GL.GL_BLEND);
+
+		gl.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA);
+		gl.glLineWidth(1);
+				
+		gl.glHint(GL.GL_POLYGON_SMOOTH_HINT,GL.GL_NICEST);
+		gl.glHint(GL.GL_POINT_SMOOTH, GL.GL_NICEST);
+		gl.glHint(GL.GL_LINE_SMOOTH_HINT, GL.GL_NICEST);
+
 		gl.glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 	}
 
@@ -577,24 +589,6 @@ private void maxHeightFieldStateChanged(javax.swing.event.ChangeEvent evt) {//GE
 		float[] maxCoor = {-Float.MAX_VALUE,-Float.MAX_VALUE,-Float.MAX_VALUE};
 		float[] minCoor = {+Float.MAX_VALUE,+Float.MAX_VALUE,+Float.MAX_VALUE};
 
-		//
-		// Determine the basis vectors for the Hasse diagram projection.
-		//
-		hasseBasisX = new float[rank];
-		hasseBasisZ = new float[rank];
-		int[] bounds = algebras.dd.getDiagramBounds();
-		float coeffX = (bounds[1] == bounds[0]) ? 0 : 2 / (float) (bounds[1] - bounds[0]);
-		float coeffZ = (bounds[2] == bounds[3]) ? 0 : 2 / (float) (bounds[3] - bounds[2]);
-		for (int i = 0; i < rank; i++)
-		{
-			hasseBasisX[i] = (bounds[1] == bounds[0]) ? 0 : (float) (algebras.dd.getNodeByIndex(i).x - bounds[0]) * coeffX - 1;
-			hasseBasisZ[i] = (bounds[2] == bounds[3]) ? 0 : (float) (algebras.dd.getNodeByIndex(i).y - bounds[2]) * coeffZ - 1;
-		}
-
-		//
-		// Determine the basis vectors for the Coxeter plane projection.
-		//
-
 		// First compute the Coxeter element.
 		Matrix coxeterElement = new Matrix(rank,rank);
 		for(int i = 0; i < algebras.subAlgebra.rank; i++)
@@ -610,55 +604,80 @@ private void maxHeightFieldStateChanged(javax.swing.event.ChangeEvent evt) {//GE
 			}
 		}
 
-		// The real and imaginary parts of the wanted eigenvalue.
-		double angle		= 2 * Math.PI / algebras.subAlgebra.coxeterNumber;
-		double ReEigenval	= Math.cos(angle);
-		double ImEigenval	= Math.sin(angle);
-		float[][] complex	= Helper.complexEigenvector(coxeterElement, ReEigenval, ImEigenval);
 
-		projectionX = complex[0];
-		projectionY = complex[1];
-		
-		// Try to get a 3rd projection vector.
-		boolean eigenvalueFound	= false;
-		Matrix	eigenvalues		= coxeterElement.eig().getD();
-		int		times			= 1;
-		do
+		// Get the projection vectors.
+		if(!rbProjCoxeter.isSelected())
 		{
-			times++;
-			angle		= 2 * times * Math.PI / algebras.subAlgebra.coxeterNumber;
-			ReEigenval	= Math.cos(angle);
-			ImEigenval	= Math.sin(angle);
-			for(int j = 0; j < rank; j++)
+			//
+			// Determine the basis vectors for the Hasse diagram projection.
+			//
+			hasseBasisX = new float[rank];
+			hasseBasisZ = new float[rank];
+			int[] bounds = algebras.dd.getDiagramBounds();
+			float coeffX = (bounds[1] == bounds[0]) ? 0 : 2 / (float) (bounds[1] - bounds[0]);
+			float coeffZ = (bounds[2] == bounds[3]) ? 0 : 2 / (float) (bounds[3] - bounds[2]);
+			for (int i = 0; i < rank; i++)
 			{
-				if((eigenvalues.get(j, j) < ReEigenval + 0.0001) && (eigenvalues.get(j, j) > ReEigenval - 0.0001))
-				{
-					eigenvalueFound = true;
-					break;
-				}
+				hasseBasisX[i] = (bounds[1] == bounds[0]) ? 0 : (float) (algebras.dd.getNodeByIndex(i).x - bounds[0]) * coeffX - 1;
+				hasseBasisZ[i] = (bounds[2] == bounds[3]) ? 0 : (float) (algebras.dd.getNodeByIndex(i).y - bounds[2]) * coeffZ - 1;
 			}
-		} while (!eigenvalueFound && ( (2 * times) <= algebras.subAlgebra.coxeterNumber ) );
-
-		if(eigenvalueFound)
-		{
-			complex		= Helper.complexEigenvector(coxeterElement, ReEigenval, ImEigenval);
-			projectionZ = complex[0];
 		}
 		else
 		{
-			projectionZ = new float[rank];
-			for(int i = 0; i < rank; i++)
+			//
+			// Determine the basis vectors for the Coxeter plane projection.
+			//
+
+			// The real and imaginary parts of the wanted eigenvalue.
+			double angle		= 2 * Math.PI / algebras.subAlgebra.coxeterNumber;
+			double ReEigenval	= Math.cos(angle);
+			double ImEigenval	= Math.sin(angle);
+			float[][] complex	= Helper.complexEigenvector(coxeterElement, ReEigenval, ImEigenval);
+
+			projectionX = complex[0];
+			projectionY = complex[1];
+
+			// Try to get a 3rd projection vector.
+			boolean eigenvalueFound	= false;
+			Matrix	eigenvalues		= coxeterElement.eig().getD();
+			int		times			= 1;
+			do
 			{
-				projectionZ[i] = 0.0f;
+				times++;
+				angle		= 2 * times * Math.PI / algebras.subAlgebra.coxeterNumber;
+				ReEigenval	= Math.cos(angle);
+				ImEigenval	= Math.sin(angle);
+				for(int j = 0; j < rank; j++)
+				{
+					if((eigenvalues.get(j, j) < ReEigenval + 0.0001) && (eigenvalues.get(j, j) > ReEigenval - 0.0001))
+					{
+						eigenvalueFound = true;
+						break;
+					}
+				}
+			} while (!eigenvalueFound && ( (2 * times) <= algebras.subAlgebra.coxeterNumber ) );
+
+			if(eigenvalueFound)
+			{
+				complex		= Helper.complexEigenvector(coxeterElement, ReEigenval, ImEigenval);
+				projectionZ = complex[0];
 			}
+			else
+			{
+				projectionZ = new float[rank];
+				for(int i = 0; i < rank; i++)
+				{
+					projectionZ[i] = 0.0f;
+				}
+			}
+
+			normProjectionX = innerProduct(projectionX, projectionX);
+			normProjectionY = innerProduct(projectionY, projectionY);
+			normProjectionZ = innerProduct(projectionZ, projectionZ);
+			if(normProjectionX == 0.0f) normProjectionX = 1.0f;
+			if(normProjectionY == 0.0f) normProjectionY = 1.0f;
+			if(normProjectionZ == 0.0f) normProjectionZ = 1.0f;
 		}
-		
-		normProjectionX = innerProduct(projectionX, projectionX);
-		normProjectionY = innerProduct(projectionY, projectionY);
-		normProjectionZ = innerProduct(projectionZ, projectionZ);
-		if(normProjectionX == 0.0f) normProjectionX = 1.0f;
-		if(normProjectionY == 0.0f) normProjectionY = 1.0f;
-		if(normProjectionZ == 0.0f) normProjectionZ = 1.0f;
 
 		// Stuff for color coding.
 		float[] color;
@@ -715,25 +734,37 @@ private void maxHeightFieldStateChanged(javax.swing.event.ChangeEvent evt) {//GE
 						if( (index == imReflsObj && real) || (index == realReflsObj && !real) )
 							continue;
 						
-						if(i == maxHeight || i == algebras.algebra.rs.size() - 1)
-							continue;
-						
-						int[] dynkinLabels = algebras.algebra.rootToWeight(root.vector);
-						for(int k = 0; k < root.vector.length; k++)
+						if(rbProjCoxeter.isSelected())
 						{
-							// Only draw reflections upward.
-							if( dynkinLabels[k] >= 0 && ( 
-									( i > 1 && rbProjCoxeter.isSelected() ) ||
-									( i == 1 && !rbProjCoxeter.isSelected() ) ) )
+							int[] reflVector = new int[rank];
+							for(int k = 0; k < reflVector.length; k++)
+							{
+								reflVector[k] = 0;
+								for(int l = 0; l < reflVector.length; l++)
+								{
+									reflVector[k] += coxeterElement.get(k, l) * root.vector[l];
+								}
+							}
+							drawLine(pos,calcPos(reflVector));
+						}
+						else
+						{
+							if(i == maxHeight || i == algebras.algebra.rs.size() - 1)
 								continue;
-							int[] reflVector = root.vector.clone();
-							reflVector[k] -= dynkinLabels[k];
-							float[] newPos = calcPos(reflVector);
-							// And draw the line.
-							gl.glBegin(GL.GL_LINES);
-							gl.glVertex3f(pos[0],pos[1],pos[2]);
-							gl.glVertex3f(newPos[0],newPos[1],newPos[2]);
-							gl.glEnd();
+							
+							int[] dynkinLabels = algebras.algebra.rootToWeight(root.vector);
+							for(int k = 0; k < root.vector.length; k++)
+							{
+								// Only draw reflections upward.
+								if( dynkinLabels[k] >= 0 && (
+										( i > 1 && rbProjCoxeter.isSelected() ) ||
+										( i == 1 && !rbProjCoxeter.isSelected() ) ) )
+									continue;
+								int[] reflVector = root.vector.clone();
+								reflVector[k] -= dynkinLabels[k];
+								// And draw the line.
+								drawLine(pos,calcPos(reflVector));
+							}
 						}
 					}
 					
@@ -828,5 +859,14 @@ private void maxHeightFieldStateChanged(javax.swing.event.ChangeEvent evt) {//GE
 		rank = algebras.algebra.rank;
 		update(true);
 	}
+
+	private void drawLine(float[] pos1, float[] pos2)
+	{
+		gl.glBegin(GL.GL_LINES);
+		gl.glVertex3f(pos1[0],pos1[1],pos1[2]);
+		gl.glVertex3f(pos2[0],pos2[1],pos2[2]);
+		gl.glEnd();
+	}
+
 
 }
