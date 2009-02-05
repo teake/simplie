@@ -152,7 +152,7 @@ public class AlgebraInfo extends javax.swing.JPanel implements DiagramListener
 
         symCartanMatrix.setColumns(20);
         symCartanMatrix.setEditable(false);
-        symCartanMatrix.setFont(new java.awt.Font("Monospaced", 0, 11)); // NOI18N
+        symCartanMatrix.setFont(new java.awt.Font("Monospaced", 0, 11));
         symCartanMatrix.setRows(5);
         jScrollPane3.setViewportView(symCartanMatrix);
 
@@ -178,7 +178,7 @@ public class AlgebraInfo extends javax.swing.JPanel implements DiagramListener
 
         qFormMatrix.setColumns(20);
         qFormMatrix.setEditable(false);
-        qFormMatrix.setFont(new java.awt.Font("Monospaced", 0, 11)); // NOI18N
+        qFormMatrix.setFont(new java.awt.Font("Monospaced", 0, 11));
         qFormMatrix.setRows(5);
         jScrollPane4.setViewportView(qFormMatrix);
 
@@ -204,7 +204,7 @@ public class AlgebraInfo extends javax.swing.JPanel implements DiagramListener
 
         rootSpaceMetric.setColumns(20);
         rootSpaceMetric.setEditable(false);
-        rootSpaceMetric.setFont(new java.awt.Font("Monospaced", 0, 11)); // NOI18N
+        rootSpaceMetric.setFont(new java.awt.Font("Monospaced", 0, 11));
         rootSpaceMetric.setRows(5);
         jScrollPane6.setViewportView(rootSpaceMetric);
 
@@ -230,7 +230,7 @@ public class AlgebraInfo extends javax.swing.JPanel implements DiagramListener
 
         cartanMatrixInverse.setColumns(20);
         cartanMatrixInverse.setEditable(false);
-        cartanMatrixInverse.setFont(new java.awt.Font("Monospaced", 0, 11)); // NOI18N
+        cartanMatrixInverse.setFont(new java.awt.Font("Monospaced", 0, 11));
         cartanMatrixInverse.setRows(5);
         jScrollPane5.setViewportView(cartanMatrixInverse);
 
@@ -286,14 +286,14 @@ public class AlgebraInfo extends javax.swing.JPanel implements DiagramListener
 
             },
             new String [] {
-                "Vector", "Norm", "Multiplicity", "CoMultiplicity", "Height"
+                "Vector", "Dynkin labels", "Norm", "Multiplicity", "CoMultiplicity", "Height"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.Integer.class, java.lang.Long.class, java.lang.Long.class, java.lang.Integer.class
+                java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.Long.class, java.lang.Long.class, java.lang.Integer.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false
+                false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -635,12 +635,13 @@ private void repFillButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN
 			while (iterator.hasNext())
 			{
 				Root root = (Root) iterator.next();
-				Object[] rowData = new Object[5];
+				Object[] rowData = new Object[6];
 				rowData[0] = Helper.intArrayToString(root.vector);
-				rowData[1] = root.norm;
-				rowData[2] = root.mult;
-				rowData[3] = root.coMult;
-				rowData[4] = root.height();
+				rowData[1] = Helper.intArrayToString(algebra.rootToWeight(root.vector));
+				rowData[2] = root.norm;
+				rowData[3] = root.mult;
+				rowData[4] = root.coMult;
+				rowData[5] = root.height();
 				tableModelRoots.addRow(rowData);
 			}
 		}
