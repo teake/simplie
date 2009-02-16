@@ -96,7 +96,7 @@ public class fraction implements Cloneable, Comparable, java.io.Serializable
 		long den = 1;
 		while(true)
 		{
-			double remainder =  (den * x) % 1;
+			double remainder =  Math.abs((den * x) % 1);
 			if(remainder < 0.00001 || remainder > 0.99999 )
 				break;
 			den++;
