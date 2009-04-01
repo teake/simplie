@@ -76,6 +76,15 @@ public class RootSystemProjector2D
 		this.algebras = algebras;
 	}
 
+	public void clear()
+	{
+		connections.clear();
+		nodes.clear();
+
+		maxCoorX = maxCoorY = maxCoxDist = -Double.MAX_VALUE;
+		minCoorX = minCoorY = minCoxDist = +Double.MAX_VALUE;
+	}
+
 	public void draw(Graphics2D g2, Rectangle bounds)
 	{
 		offX = bounds.getWidth() / 2;
@@ -125,16 +134,15 @@ public class RootSystemProjector2D
 
 	public void project(int maxHeight)
 	{
-		// Reset stuff
-		connections.clear();
-		nodes.clear();
-
-		maxCoorX = maxCoorY = maxCoxDist = -Double.MAX_VALUE;
-		minCoorX = minCoorY = minCoxDist = +Double.MAX_VALUE;
-
-		// Don't do anything if the algebra is empty.
-		if(algebras.algebra == null || algebras.algebra.rank == 0)
+		// Don't do anything if ...
+		if(algebras.algebra == null 
+				|| algebras.algebra.rank == 0
+				|| algebras.subAlgebra.rank == 0
+				|| !algebras.subAlgebra.finite)
 			return;
+		
+		// Reset stuff
+		clear();
 
 		// First construct the root system up to the wanted height.
 		algebras.algebra.rs.construct(maxHeight);
@@ -206,16 +214,16 @@ public class RootSystemProjector2D
 							if(sum - product == 2)
 							{
 								double[] pos2 = calcPos(otherRoot.vector, mode);
-								connections.add(new Connection2D(pos[0], pos[1], pos2[0], pos2[1], 0, 0, 0));
-								connections.add(new Connection2D(-pos[0], -pos[1], -pos2[0], -pos2[1], 0, 0, 0));
+								addConnection(pos[0], pos[1], pos2[0], pos2[1]);
+								addConnection(-pos[0], -pos[1], -pos2[0], -pos2[1]);
 								continue;
 							}
 							// The distance for thisRoot & - otherRoot
 							if(sum + product == 2)
 							{
 								double[] pos2 = calcPos(otherRoot.vector, mode);
-								connections.add(new Connection2D(pos[0], pos[1], -pos2[0], -pos2[1], 0, 0, 0));
-								connections.add(new Connection2D(-pos[0], -pos[1], pos2[0], pos2[1], 0, 0, 0));
+								addConnection(pos[0], pos[1], -pos2[0], -pos2[1]);
+								addConnection(-pos[0], -pos[1], pos2[0], pos2[1]);
 							}
 						}
 					}
@@ -233,7 +241,7 @@ public class RootSystemProjector2D
 						reflVector[k] -= dynkinLabels[k];
 						// And add the connection.
 						double[] pos2 = calcPos(reflVector, mode);
-						connections.add(new Connection2D(pos[0], pos[1], pos2[0], pos2[1], 0, 0, 0));
+						addConnection(pos[0], pos[1], pos2[0], pos2[1]);
 					}
 				}
 
@@ -257,10 +265,21 @@ public class RootSystemProjector2D
 		maxCoorY = Math.max(maxCoorY,y);
 		minCoorX = Math.min(minCoorX,x);
 		minCoorY = Math.min(minCoorY,y);
+	}
 
-		double square = x*x + y*y;
-		maxCoxDist = Math.max(maxCoxDist,square);
-		minCoxDist = Math.min(minCoxDist,square);
+	private boolean addConnection(double x1, double y1, double x2, double y2)
+	{
+		Connection2D conn = new Connection2D(x1, y1, x2, y2, 0, 0, 0);
+		if(!connections.add(conn))
+		{
+			return false;
+		}
+		else
+		{
+			maxCoxDist = Math.max(maxCoxDist,conn.maxDist);
+			minCoxDist = Math.min(minCoxDist,conn.maxDist);
+			return true;
+		}
 	}
 
 	private double[] calcPos(int[] rootVector, int mode)

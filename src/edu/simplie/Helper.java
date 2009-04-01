@@ -469,23 +469,23 @@ public class Helper
 	 */
 	public static float[] colorSpectrum(float perc)
 	{
-		perc = perc % 1;
+		perc = Math.abs(perc % 1);
 		float[] newCol = {0.0f, 0.0f, 0.0f};
-		if(perc < 1/3.0f)
+		if(3 * perc < 1.0f)
 		{
-			perc = perc * 3;
+			perc = 3 * perc;
 			newCol[0] = (float) Math.sqrt(1 - perc);
 			newCol[1] = (float) Math.sqrt(perc);
 		}
-		else if (perc < 2/3.0f)
+		else if (3 * perc < 2.0f)
 		{
-			perc = (perc - 1/3.0f) * 3;
+			perc = 3 * perc - 1.0f;
 			newCol[1] = (float) Math.sqrt(1 - perc);
 			newCol[2] = (float) Math.sqrt(perc);
 		}
 		else
 		{
-			perc = (perc - 2/3.0f) * 3;
+			perc = 3 * perc - 2.0f;
 			newCol[2] = (float) Math.sqrt(1 - perc);
 			newCol[0] = (float) Math.sqrt(perc);
 		}

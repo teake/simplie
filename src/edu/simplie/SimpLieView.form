@@ -288,18 +288,6 @@
             </Constraint>
           </Constraints>
         </Component>
-        <Component class="edu.simplie.ui.RootSpaceDrawer" name="rootSpaceDrawer">
-          <Properties>
-            <Property name="name" type="java.lang.String" value="rootSpaceDrawer" noResource="true"/>
-          </Properties>
-          <Constraints>
-            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
-              <JTabbedPaneConstraints tabName="Visualization">
-                <Property name="tabTitle" type="java.lang.String" resourceKey="rootSpaceDrawer.TabConstraints.tabTitle"/>
-              </JTabbedPaneConstraints>
-            </Constraint>
-          </Constraints>
-        </Component>
         <Component class="edu.simplie.ui.Projector" name="projector">
           <Properties>
             <Property name="name" type="java.lang.String" value="projector" noResource="true"/>

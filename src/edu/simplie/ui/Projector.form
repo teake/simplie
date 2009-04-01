@@ -27,15 +27,17 @@
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
-                      <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
+                      <Component id="drawButton" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="clearButton" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <Component id="tfMaxHeight" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="spinnerMaxHeight" min="-2" pref="60" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="rbCoxeter" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="rbHasse" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="133" max="32767" attributes="0"/>
-                      <Component id="jButton1" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <Component id="canvas" alignment="1" max="32767" attributes="0"/>
               </Group>
@@ -48,11 +50,12 @@
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="jButton1" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="jLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="spinnerMaxHeight" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="rbCoxeter" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="rbHasse" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="drawButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="clearButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="tfMaxHeight" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="canvas" max="32767" attributes="0"/>
@@ -62,18 +65,18 @@
     </DimensionLayout>
   </Layout>
   <SubComponents>
-    <Component class="javax.swing.JButton" name="jButton1">
+    <Component class="javax.swing.JButton" name="drawButton">
       <Properties>
         <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
           <action class="edu.simplie.ui.Projector" id="project" methodName="project"/>
         </Property>
         <Property name="text" type="java.lang.String" resourceKey="projector.draw"/>
-        <Property name="name" type="java.lang.String" value="jButton1" noResource="true"/>
+        <Property name="name" type="java.lang.String" value="drawButton" noResource="true"/>
       </Properties>
     </Component>
     <Container class="javax.swing.JPanel" name="canvas">
       <Properties>
-        <Property name="background" type="java.awt.Color" noResource="true" editor="org.netbeans.beaninfo.editors.ColorEditor">
+        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
           <Color blue="ff" green="ff" red="ff" type="rgb"/>
         </Property>
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
@@ -105,11 +108,14 @@
         <Property name="minValue" type="int" value="0"/>
         <Property name="name" type="java.lang.String" value="spinnerMaxHeight" noResource="true"/>
       </Properties>
+      <Events>
+        <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="spinnerMaxHeightStateChanged"/>
+      </Events>
     </Component>
-    <Component class="javax.swing.JLabel" name="jLabel1">
+    <Component class="javax.swing.JLabel" name="tfMaxHeight">
       <Properties>
         <Property name="text" type="java.lang.String" resourceKey="projector.maxHeight"/>
-        <Property name="name" type="java.lang.String" value="jLabel1" noResource="true"/>
+        <Property name="name" type="java.lang.String" value="tfMaxHeight" noResource="true"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JRadioButton" name="rbCoxeter">
@@ -129,6 +135,15 @@
         </Property>
         <Property name="text" type="java.lang.String" resourceKey="projector.rbHasse"/>
         <Property name="name" type="java.lang.String" value="rbHasse" noResource="true"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JButton" name="clearButton">
+      <Properties>
+        <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+          <action class="edu.simplie.ui.Projector" id="clear" methodName="clear"/>
+        </Property>
+        <Property name="text" type="java.lang.String" resourceKey="projector.clear"/>
+        <Property name="name" type="java.lang.String" value="clearButton" noResource="true"/>
       </Properties>
     </Component>
   </SubComponents>
