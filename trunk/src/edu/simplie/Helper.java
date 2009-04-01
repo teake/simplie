@@ -504,15 +504,15 @@ public class Helper
 	 *						 with the first entry for the real part and the second for the imaginary.
 	 *						 Both are zero vectors if no eigenvalue can be found.
 	 */
-	public static float[][] complexEigenvector(Matrix matrix, double eigenvalRe, double eigenvalIm)
+	public static double[][] complexEigenvector(Matrix matrix, double eigenvalRe, double eigenvalIm)
 	{
 		int size = matrix.getRowDimension();
-		float[][] complexEigenvector = new float[2][size];
+		double[][] complexEigenvector = new double[2][size];
 		for(int i = 0; i < 2; i++)
 		{
 			for(int j = 0; j < size; j++)
 			{
-				complexEigenvector[i][j] = 0.0f;
+				complexEigenvector[i][j] = 0.0d;
 			}
 		}
 
@@ -534,8 +534,8 @@ public class Helper
 				// Set the eigenvectors.
 				for(int j = 0; j < size; j++)
 				{
-					complexEigenvector[0][j] = (float) eigenvectors.get(j, i);
-					complexEigenvector[1][j] = (float) eigenvectors.get(j+size, i);
+					complexEigenvector[0][j] = eigenvectors.get(j, i);
+					complexEigenvector[1][j] = eigenvectors.get(j+size, i);
 				}
 				break;
 			}

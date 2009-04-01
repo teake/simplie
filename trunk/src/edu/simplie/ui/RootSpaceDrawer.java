@@ -632,10 +632,18 @@ private void maxHeightFieldStateChanged(javax.swing.event.ChangeEvent evt) {//GE
 			double angle		= 2 * Math.PI / algebras.subAlgebra.coxeterNumber;
 			double ReEigenval	= Math.cos(angle);
 			double ImEigenval	= Math.sin(angle);
-			float[][] complex	= Helper.complexEigenvector(coxeterElement, ReEigenval, ImEigenval);
+			double[][] complex	= Helper.complexEigenvector(coxeterElement, ReEigenval, ImEigenval);
 
-			projectionX = complex[0];
-			projectionY = complex[1];
+			projectionX = new float[rank];
+			for(int i = 0; i < rank; i++)
+			{
+				projectionX[i] = (float) complex[0][i];
+			}
+			projectionY = new float[rank];
+			for(int i = 0; i < rank; i++)
+			{
+				projectionY[i] = (float) complex[1][i];
+			}
 
 			// Try to get a 3rd projection vector.
 			boolean eigenvalueFound	= false;
@@ -660,7 +668,11 @@ private void maxHeightFieldStateChanged(javax.swing.event.ChangeEvent evt) {//GE
 			if(eigenvalueFound)
 			{
 				complex		= Helper.complexEigenvector(coxeterElement, ReEigenval, ImEigenval);
-				projectionZ = complex[0];
+				projectionZ = new float[rank];
+				for(int i = 0; i < rank; i++)
+				{
+					projectionZ[i] = (float) complex[0][i];
+				}
 			}
 			else
 			{

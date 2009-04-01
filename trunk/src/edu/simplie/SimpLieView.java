@@ -113,6 +113,7 @@ public class SimpLieView extends FrameView {
 		algebraInfo.setAlgebraComposite(algebras);
 		levelDecomposition.setAlgebraComposite(algebras);
 		rootSpaceDrawer.setAlgebrasComposite(algebras);
+		projector.setAlgebrasComposite(algebras);
 		algebras.dd.clear();		
 		
 		ddFilter = new FileNameExtensionFilter("Dynkin diagram (*.dd)", "dd");
@@ -189,6 +190,7 @@ public class SimpLieView extends FrameView {
         algebraInfo = new edu.simplie.ui.AlgebraInfo();
         levelDecomposition = new edu.simplie.ui.LevelDecomposition();
         rootSpaceDrawer = new edu.simplie.ui.RootSpaceDrawer();
+        projector = new edu.simplie.ui.Projector();
 
         menuBar.setName("menuBar"); // NOI18N
 
@@ -325,6 +327,9 @@ public class SimpLieView extends FrameView {
 
         rootSpaceDrawer.setName("rootSpaceDrawer"); // NOI18N
         mainPane.addTab(resourceMap.getString("rootSpaceDrawer.TabConstraints.tabTitle"), rootSpaceDrawer); // NOI18N
+
+        projector.setName("projector"); // NOI18N
+        mainPane.addTab(resourceMap.getString("projector.TabConstraints.tabTitle"), projector); // NOI18N
 
         setComponent(mainPane);
         setMenuBar(menuBar);
@@ -527,6 +532,7 @@ public class SimpLieView extends FrameView {
     private javax.swing.JMenuItem outputItem;
     private javax.swing.JMenu presetMenu;
     private javax.swing.JProgressBar progressBar;
+    private edu.simplie.ui.Projector projector;
     private edu.simplie.ui.RootSpaceDrawer rootSpaceDrawer;
     private javax.swing.JMenuItem saveDiagramItem;
     private javax.swing.JMenuItem saveRootsItem;
