@@ -112,7 +112,6 @@ public class SimpLieView extends FrameView {
 		algebraSetup.setAlgebraComposite(algebras);
 		algebraInfo.setAlgebraComposite(algebras);
 		levelDecomposition.setAlgebraComposite(algebras);
-		rootSpaceDrawer.setAlgebrasComposite(algebras);
 		projector.setAlgebrasComposite(algebras);
 		algebras.dd.clear();		
 		
@@ -189,7 +188,6 @@ public class SimpLieView extends FrameView {
         algebraSetup = new edu.simplie.ui.AlgebraSetup();
         algebraInfo = new edu.simplie.ui.AlgebraInfo();
         levelDecomposition = new edu.simplie.ui.LevelDecomposition();
-        rootSpaceDrawer = new edu.simplie.ui.RootSpaceDrawer();
         projector = new edu.simplie.ui.Projector();
 
         menuBar.setName("menuBar"); // NOI18N
@@ -324,9 +322,6 @@ public class SimpLieView extends FrameView {
 
         levelDecomposition.setName("levelDecomposition"); // NOI18N
         mainPane.addTab(resourceMap.getString("levelDecomposition.TabConstraints.tabTitle"), levelDecomposition); // NOI18N
-
-        rootSpaceDrawer.setName("rootSpaceDrawer"); // NOI18N
-        mainPane.addTab(resourceMap.getString("rootSpaceDrawer.TabConstraints.tabTitle"), rootSpaceDrawer); // NOI18N
 
         projector.setName("projector"); // NOI18N
         mainPane.addTab(resourceMap.getString("projector.TabConstraints.tabTitle"), projector); // NOI18N
@@ -533,7 +528,6 @@ public class SimpLieView extends FrameView {
     private javax.swing.JMenu presetMenu;
     private javax.swing.JProgressBar progressBar;
     private edu.simplie.ui.Projector projector;
-    private edu.simplie.ui.RootSpaceDrawer rootSpaceDrawer;
     private javax.swing.JMenuItem saveDiagramItem;
     private javax.swing.JMenuItem saveRootsItem;
     private javax.swing.JLabel statusAnimationLabel;

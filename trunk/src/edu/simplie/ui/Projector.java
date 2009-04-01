@@ -26,6 +26,7 @@
 package edu.simplie.ui;
 
 import edu.simplie.AlgebraComposite;
+import edu.simplie.dynkindiagram.DiagramListener;
 import edu.simplie.projections.RootSystemProjector2D;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -41,7 +42,7 @@ import org.jdesktop.application.Action;
  * @author  Teake Nutma
  * @version $Rev$, $Date$
  */
-public class Projector extends javax.swing.JPanel
+public class Projector extends javax.swing.JPanel implements DiagramListener
 {
 
 	private AlgebraComposite		algebras;
@@ -64,7 +65,7 @@ public class Projector extends javax.swing.JPanel
     private void initComponents() {
 
         bgMode = new javax.swing.ButtonGroup();
-        jButton1 = new javax.swing.JButton();
+        drawButton = new javax.swing.JButton();
         canvas = new javax.swing.JPanel() {
             public void paintComponent(Graphics g) {
                 super.paintComponent(g);
@@ -72,17 +73,18 @@ public class Projector extends javax.swing.JPanel
             }
         };
         spinnerMaxHeight = new edu.simplie.ui.reusable.UISpinner();
-        jLabel1 = new javax.swing.JLabel();
+        tfMaxHeight = new javax.swing.JLabel();
         rbCoxeter = new javax.swing.JRadioButton();
         rbHasse = new javax.swing.JRadioButton();
+        clearButton = new javax.swing.JButton();
 
         setName("Form"); // NOI18N
 
         javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance(edu.simplie.SimpLieApp.class).getContext().getActionMap(Projector.class, this);
-        jButton1.setAction(actionMap.get("project")); // NOI18N
+        drawButton.setAction(actionMap.get("project")); // NOI18N
         org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(edu.simplie.SimpLieApp.class).getContext().getResourceMap(Projector.class);
-        jButton1.setText(resourceMap.getString("projector.draw")); // NOI18N
-        jButton1.setName("jButton1"); // NOI18N
+        drawButton.setText(resourceMap.getString("projector.draw")); // NOI18N
+        drawButton.setName("drawButton"); // NOI18N
 
         canvas.setBackground(new java.awt.Color(255, 255, 255));
         canvas.setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -101,9 +103,14 @@ public class Projector extends javax.swing.JPanel
 
         spinnerMaxHeight.setMinValue(0);
         spinnerMaxHeight.setName("spinnerMaxHeight"); // NOI18N
+        spinnerMaxHeight.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                spinnerMaxHeightStateChanged(evt);
+            }
+        });
 
-        jLabel1.setText(resourceMap.getString("projector.maxHeight")); // NOI18N
-        jLabel1.setName("jLabel1"); // NOI18N
+        tfMaxHeight.setText(resourceMap.getString("projector.maxHeight")); // NOI18N
+        tfMaxHeight.setName("tfMaxHeight"); // NOI18N
 
         bgMode.add(rbCoxeter);
         rbCoxeter.setSelected(true);
@@ -114,6 +121,10 @@ public class Projector extends javax.swing.JPanel
         rbHasse.setText(resourceMap.getString("projector.rbHasse")); // NOI18N
         rbHasse.setName("rbHasse"); // NOI18N
 
+        clearButton.setAction(actionMap.get("clear")); // NOI18N
+        clearButton.setText(resourceMap.getString("projector.clear")); // NOI18N
+        clearButton.setName("clearButton"); // NOI18N
+
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -122,15 +133,17 @@ public class Projector extends javax.swing.JPanel
                 .addContainerGap()
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(layout.createSequentialGroup()
-                        .add(jLabel1)
+                        .add(drawButton)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(clearButton)
+                        .add(18, 18, 18)
+                        .add(tfMaxHeight)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(spinnerMaxHeight, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 60, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .add(18, 18, 18)
                         .add(rbCoxeter)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(rbHasse)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 133, Short.MAX_VALUE)
-                        .add(jButton1))
+                        .add(rbHasse))
                     .add(org.jdesktop.layout.GroupLayout.TRAILING, canvas, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -139,16 +152,22 @@ public class Projector extends javax.swing.JPanel
             .add(layout.createSequentialGroup()
                 .addContainerGap()
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(jButton1)
-                    .add(jLabel1)
                     .add(spinnerMaxHeight, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                     .add(rbCoxeter)
-                    .add(rbHasse))
+                    .add(rbHasse)
+                    .add(drawButton)
+                    .add(clearButton)
+                    .add(tfMaxHeight))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(canvas, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
+
+	private void spinnerMaxHeightStateChanged(javax.swing.event.ChangeEvent evt)//GEN-FIRST:event_spinnerMaxHeightStateChanged
+	{//GEN-HEADEREND:event_spinnerMaxHeightStateChanged
+		project();
+	}//GEN-LAST:event_spinnerMaxHeightStateChanged
 
 
 
@@ -156,6 +175,7 @@ public class Projector extends javax.swing.JPanel
 	{
 		this.algebras = algebras;
 		projector2D.setAlgebrasComposite(algebras);
+		algebras.dd.addListener(this);
 	}
 
 	@Action
@@ -179,11 +199,27 @@ public class Projector extends javax.swing.JPanel
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup bgMode;
     private javax.swing.JPanel canvas;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JButton clearButton;
+    private javax.swing.JButton drawButton;
     private javax.swing.JRadioButton rbCoxeter;
     private javax.swing.JRadioButton rbHasse;
     private edu.simplie.ui.reusable.UISpinner spinnerMaxHeight;
+    private javax.swing.JLabel tfMaxHeight;
     // End of variables declaration//GEN-END:variables
 
+	public void diagramChanged()
+	{
+		if(!algebras.subAlgebra.finite && rbCoxeter.isSelected())
+		{
+			rbHasse.setSelected(true);
+		}
+		rbCoxeter.setEnabled(algebras.subAlgebra.finite);
+	}
+
+	@Action
+	public void clear()
+	{
+		projector2D.clear();
+		canvas.repaint();
+	}
 }
