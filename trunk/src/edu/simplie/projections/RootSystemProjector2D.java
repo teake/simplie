@@ -53,7 +53,9 @@ public class RootSystemProjector2D
 	double maxCoorY;
 	double minCoorX;
 	double minCoorY;
-
+	double minCoxDist;
+	double maxCoxDist;
+	
 	private HashSet<Connection2D> connections;
 	private HashSet<Node2D> nodes;
 
@@ -91,17 +93,20 @@ public class RootSystemProjector2D
 			Connection2D conn = (Connection2D) it.next();
 			double[] pos1 = transformCoor(conn.x1, conn.y1);
 			double[] pos2 = transformCoor(conn.x2, conn.y2);
+			float relDist = (float) ((conn.maxDist - maxCoxDist) / ( minCoxDist - maxCoxDist));
+			float[] color = Helper.colorSpectrum(2*relDist/3);
+			g2.setColor(new Color(color[0],color[1],color[2], 0.7f));
 			g2.draw((new Line2D.Double(pos1[0], pos1[1], pos2[0], pos2[1])));
 		}
 
 		// Draw the nodes
 		g2.setStroke(new BasicStroke(1.0f));
-		g2.setColor(Color.BLUE);
+		g2.setColor(Color.BLACK);
 		for(Iterator it = nodes.iterator(); it.hasNext();)
 		{
 			Node2D node		= (Node2D) it.next();
 			double[] pos	= transformCoor(node.x, node.y);
-			g2.fill(new Ellipse2D.Double(pos[0]-radius/2,pos[1]-radius/2,radius,radius));
+			g2.draw(new Ellipse2D.Double(pos[0]-radius/2,pos[1]-radius/2,radius,radius));
 		}
 	}
 
@@ -124,8 +129,8 @@ public class RootSystemProjector2D
 		connections.clear();
 		nodes.clear();
 
-		maxCoorX = maxCoorY = -Double.MAX_VALUE;
-		minCoorX = minCoorY = +Double.MAX_VALUE;
+		maxCoorX = maxCoorY = maxCoxDist = -Double.MAX_VALUE;
+		minCoorX = minCoorY = minCoxDist = +Double.MAX_VALUE;
 
 		// Don't do anything if the algebra is empty.
 		if(algebras.algebra == null || algebras.algebra.rank == 0)
@@ -186,18 +191,34 @@ public class RootSystemProjector2D
 				// Project the Weyl reflections.
 				if(mode == COXETER_MODE)
 				{
-					int[] reflVector = new int[algebras.algebra.rank];
-					for(int k = 0; k < reflVector.length; k++)
+					// Loop over every other root.
+					for(int j = i; j < algebras.algebra.rs.size(); j++)
 					{
-						reflVector[k] = 0;
-						for(int l = 0; l < reflVector.length; l++)
+						Collection<Root> otherRoots = algebras.algebra.rs.get(j);
+						for(Iterator itr = otherRoots.iterator(); itr.hasNext();)
 						{
-							reflVector[k] += coxeterElement.get(k, l) * root.vector[l];
+							Root otherRoot = (Root) itr.next();
+							if(otherRoot.equals(root))
+								continue;
+							int sum		= root.norm + otherRoot.norm;
+							int product = 2 * algebras.algebra.innerProduct(root, otherRoot);
+							// The distance for thisRoot & otherRoot
+							if(sum - product == 2)
+							{
+								double[] pos2 = calcPos(otherRoot.vector, mode);
+								connections.add(new Connection2D(pos[0], pos[1], pos2[0], pos2[1], 0, 0, 0));
+								connections.add(new Connection2D(-pos[0], -pos[1], -pos2[0], -pos2[1], 0, 0, 0));
+								continue;
+							}
+							// The distance for thisRoot & - otherRoot
+							if(sum + product == 2)
+							{
+								double[] pos2 = calcPos(otherRoot.vector, mode);
+								connections.add(new Connection2D(pos[0], pos[1], -pos2[0], -pos2[1], 0, 0, 0));
+								connections.add(new Connection2D(-pos[0], -pos[1], pos2[0], pos2[1], 0, 0, 0));
+							}
 						}
 					}
-					double[] pos2 = calcPos(reflVector, mode);
-					connections.add(new Connection2D(pos[0], pos[1], pos2[0], pos2[1], 0, 0, 0));
-					connections.add(new Connection2D(-pos[0], -pos[1], -pos2[0], -pos2[1], 0, 0, 0));
 				}
 
 				if(mode == HASSE_MODE)
@@ -236,6 +257,10 @@ public class RootSystemProjector2D
 		maxCoorY = Math.max(maxCoorY,y);
 		minCoorX = Math.min(minCoorX,x);
 		minCoorY = Math.min(minCoorY,y);
+
+		double square = x*x + y*y;
+		maxCoxDist = Math.max(maxCoxDist,square);
+		minCoxDist = Math.min(minCoxDist,square);
 	}
 
 	private double[] calcPos(int[] rootVector, int mode)

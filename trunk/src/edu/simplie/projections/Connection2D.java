@@ -30,6 +30,8 @@ public class Connection2D
 	public final double x2;
 	public final double y2;
 
+	public final double maxDist;
+
 	public final int R;
 	public final int G;
 	public final int B;
@@ -52,6 +54,10 @@ public class Connection2D
 		this.y1 = Math.round( pow * y1 ) / pow;
 		this.x2 = Math.round( pow * x2 ) / pow;
 		this.y2 = Math.round( pow * y2 ) / pow;
+
+		double dist1 = x1*x1 + y1*y1;
+		double dist2 = x2*x2 + y2*y2;
+		this.maxDist = Math.max(dist1, dist2);
 
 		this.R = R;
 		this.G = G;
