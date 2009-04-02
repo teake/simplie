@@ -140,25 +140,16 @@ public class EmptyProjector implements Projector2D
 				projectRoot((Root) it.next());
 			}
 		}
+
+		// Do again some other stuff
+		postProject();
 	}
 
-	public void preProject()
-	{
-		// Do stuff
-	}
+	public void preProject(){}
 
-	public void projectRoot(Root root)
-	{
-		// Do stuff
-	}
+	public void postProject(){}
 
-	public void checkMinMax(double x, double y)
-	{
-		maxCoorX = Math.max(maxCoorX,x);
-		maxCoorY = Math.max(maxCoorY,y);
-		minCoorX = Math.min(minCoorX,x);
-		minCoorY = Math.min(minCoorY,y);
-	}
+	public void projectRoot(Root root){}
 
 	public Color connectionColor(Connection2D connection)
 	{
