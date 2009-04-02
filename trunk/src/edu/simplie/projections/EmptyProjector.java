@@ -26,9 +26,15 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import net.sf.epsgraphics.EpsGraphics;
 
 /**
  *
@@ -71,15 +77,16 @@ public class EmptyProjector implements Projector2D
 		minCoorX = minCoorY = +Double.MAX_VALUE;
 	}
 
-	public void draw(Graphics2D g2, Rectangle bounds)
+	public void draw(Graphics2D g2, double width, double height)
 	{
-		offX = bounds.getWidth() / 2;
-		offY = bounds.getHeight() / 2;
+		offX = width / 2;
+		offY = height / 2;
 
-		double scaleX = 0.9 * bounds.getWidth() / ( maxCoorX - minCoorX );
-		double scaleY = 0.9 * bounds.getHeight() / ( maxCoorY - minCoorY );
+		double scaleX = 0.9 * width / ( maxCoorX - minCoorX );
+		double scaleY = 0.9 * height / ( maxCoorY - minCoorY );
 
 		scale = Math.min(scaleX,scaleY);
+		radius = scale / 16;
 
 		// Draw the connections
 		g2.setStroke(new BasicStroke(0.5f));
@@ -143,6 +150,34 @@ public class EmptyProjector implements Projector2D
 
 		// Do again some other stuff
 		postProject();
+	}
+
+	public void toEpsFile(String filename)
+	{
+		FileOutputStream outputStream = null;
+		EpsGraphics eps = null;
+		try
+		{
+			outputStream = new FileOutputStream(filename);
+			eps = new EpsGraphics("Projection", outputStream, 0, 0, 500, 500, net.sf.epsgraphics.ColorMode.COLOR_RGB);
+			draw(eps, 500, 500);
+		}
+		catch(Exception ex)
+		{
+			Logger.getLogger(EmptyProjector.class.getName()).log(Level.SEVERE, null, ex);
+		}
+		finally
+		{
+			try
+			{
+				eps.flush();
+				eps.close();
+			}
+			catch(IOException ex)
+			{
+				Logger.getLogger(EmptyProjector.class.getName()).log(Level.SEVERE, null, ex);
+			}
+		}
 	}
 
 	public void preProject(){}

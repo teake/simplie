@@ -33,6 +33,8 @@ import edu.simplie.projections.Projector2D;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.io.File;
+import javax.swing.JFileChooser;
 import org.jdesktop.application.Action;
 
 
@@ -83,6 +85,7 @@ public class Projector extends javax.swing.JPanel implements DiagramListener
         rbCoxeter = new javax.swing.JRadioButton();
         rbHasse = new javax.swing.JRadioButton();
         clearButton = new javax.swing.JButton();
+        epsButton = new javax.swing.JButton();
 
         setName("Form"); // NOI18N
 
@@ -100,11 +103,11 @@ public class Projector extends javax.swing.JPanel implements DiagramListener
         canvas.setLayout(canvasLayout);
         canvasLayout.setHorizontalGroup(
             canvasLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 539, Short.MAX_VALUE)
+            .add(0, 475, Short.MAX_VALUE)
         );
         canvasLayout.setVerticalGroup(
             canvasLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 384, Short.MAX_VALUE)
+            .add(0, 465, Short.MAX_VALUE)
         );
 
         spinnerMaxHeight.setMinValue(0);
@@ -121,51 +124,74 @@ public class Projector extends javax.swing.JPanel implements DiagramListener
         bgMode.add(rbCoxeter);
         rbCoxeter.setSelected(true);
         rbCoxeter.setText(resourceMap.getString("projector.rbCoxeter")); // NOI18N
+        rbCoxeter.setHorizontalTextPosition(javax.swing.SwingConstants.LEADING);
         rbCoxeter.setName("rbCoxeter"); // NOI18N
 
         bgMode.add(rbHasse);
         rbHasse.setText(resourceMap.getString("projector.rbHasse")); // NOI18N
+        rbHasse.setHorizontalTextPosition(javax.swing.SwingConstants.LEADING);
         rbHasse.setName("rbHasse"); // NOI18N
 
         clearButton.setAction(actionMap.get("clear")); // NOI18N
         clearButton.setText(resourceMap.getString("projector.clear")); // NOI18N
         clearButton.setName("clearButton"); // NOI18N
 
+        epsButton.setAction(actionMap.get("toEPS")); // NOI18N
+        epsButton.setText(resourceMap.getString("projector.toEps")); // NOI18N
+        epsButton.setName("epsButton"); // NOI18N
+
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(layout.createSequentialGroup()
-                .addContainerGap()
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
                     .add(layout.createSequentialGroup()
-                        .add(drawButton)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(clearButton)
-                        .add(18, 18, 18)
-                        .add(tfMaxHeight)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(spinnerMaxHeight, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 60, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                        .add(18, 18, 18)
-                        .add(rbCoxeter)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .addContainerGap()
                         .add(rbHasse))
-                    .add(org.jdesktop.layout.GroupLayout.TRAILING, canvas, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .add(layout.createSequentialGroup()
+                        .add(8, 8, 8)
+                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
+                            .add(rbCoxeter, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 94, Short.MAX_VALUE)
+                            .add(org.jdesktop.layout.GroupLayout.LEADING, layout.createSequentialGroup()
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                                    .add(drawButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 94, Short.MAX_VALUE)
+                                    .add(clearButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 94, Short.MAX_VALUE)
+                                    .add(epsButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 94, Short.MAX_VALUE)))))
+                    .add(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .add(tfMaxHeight))
+                    .add(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .add(spinnerMaxHeight, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 92, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                .add(canvas, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
+
+        layout.linkSize(new java.awt.Component[] {clearButton, drawButton, epsButton, spinnerMaxHeight}, org.jdesktop.layout.GroupLayout.HORIZONTAL);
+
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(layout.createSequentialGroup()
                 .addContainerGap()
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(spinnerMaxHeight, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                    .add(rbCoxeter)
-                    .add(rbHasse)
-                    .add(drawButton)
-                    .add(clearButton)
-                    .add(tfMaxHeight))
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(canvas, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(canvas, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .add(layout.createSequentialGroup()
+                        .add(drawButton)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(clearButton)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(epsButton)
+                        .add(26, 26, 26)
+                        .add(tfMaxHeight)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(spinnerMaxHeight, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .add(26, 26, 26)
+                        .add(rbCoxeter)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(rbHasse)))
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -197,7 +223,7 @@ public class Projector extends javax.swing.JPanel implements DiagramListener
 	{
 		Graphics2D g2 = (Graphics2D) g;
 		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
-		projector2D.draw(g2,canvas.getBounds());
+		projector2D.draw(g2,canvas.getBounds().getWidth(),canvas.getBounds().getHeight());
 	}
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -205,6 +231,7 @@ public class Projector extends javax.swing.JPanel implements DiagramListener
     private javax.swing.JPanel canvas;
     private javax.swing.JButton clearButton;
     private javax.swing.JButton drawButton;
+    private javax.swing.JButton epsButton;
     private javax.swing.JRadioButton rbCoxeter;
     private javax.swing.JRadioButton rbHasse;
     private edu.simplie.ui.reusable.UISpinner spinnerMaxHeight;
@@ -225,5 +252,17 @@ public class Projector extends javax.swing.JPanel implements DiagramListener
 	{
 		projector2D.clear();
 		canvas.repaint();
+	}
+
+	@Action
+	public void toEPS()
+	{
+		JFileChooser chooser = new JFileChooser("");
+		chooser.setSelectedFile(new File("projection.eps"));
+		chooser.setDialogTitle("to EPS");
+		if ( chooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION )
+		{
+			projector2D.toEpsFile(chooser.getSelectedFile().getAbsolutePath());
+		}
 	}
 }

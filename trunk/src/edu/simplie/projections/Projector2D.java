@@ -20,7 +20,6 @@ package edu.simplie.projections;
 
 import edu.simplie.AlgebraComposite;
 import java.awt.Graphics2D;
-import java.awt.Rectangle;
 
 /**
  *
@@ -33,7 +32,9 @@ public interface Projector2D
 
 	void clear();
 
-	void draw(Graphics2D g2, Rectangle bounds);
+	void draw(Graphics2D g2, double width, double height);
+
+	void toEpsFile(String filename);
 
 	void project(int maxHeight);
 
