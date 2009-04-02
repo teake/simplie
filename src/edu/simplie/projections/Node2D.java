@@ -28,6 +28,9 @@ public class Node2D
 	public final double x;
 	public final double y;
 
+	public final double roundX;
+	public final double roundY;
+
 	/**
 	 * Creates a new 2-dimensional node.
 	 *
@@ -36,9 +39,21 @@ public class Node2D
 	 */
 	public Node2D(double x, double y)
 	{
-		double pow = Math.pow(10, 12);
-		this.x = Math.round( pow * x ) / pow;
-		this.y = Math.round( pow * y ) / pow;
+		double pow = Math.pow(10, 10);
+
+		this.x = x;
+		this.y = y;
+		this.roundX = Math.round( pow * x ) / pow;
+		this.roundY = Math.round( pow * y ) / pow;
+	}
+
+	/**
+	 * Convenience constructor.
+	 * @param vector	First entry is the x component, the second the y component.
+	 */
+	public Node2D(double[] vector)
+	{
+		this(vector[0],vector[1]);
 	}
 
 	@Override
@@ -53,11 +68,11 @@ public class Node2D
 			return false;
 		}
 		final Node2D other = (Node2D) obj;
-		if(this.x != other.x)
+		if(this.roundX != other.roundX)
 		{
 			return false;
 		}
-		if(this.y != other.y)
+		if(this.roundY != other.roundY)
 		{
 			return false;
 		}
@@ -68,8 +83,8 @@ public class Node2D
 	public int hashCode()
 	{
 		int hash = 5;
-		hash = 41 * hash + (int) (Double.doubleToLongBits(this.x) ^ (Double.doubleToLongBits(this.x) >>> 32));
-		hash = 41 * hash + (int) (Double.doubleToLongBits(this.y) ^ (Double.doubleToLongBits(this.y) >>> 32));
+		hash = 41 * hash + (int) (Double.doubleToLongBits(this.roundX) ^ (Double.doubleToLongBits(this.roundX) >>> 32));
+		hash = 41 * hash + (int) (Double.doubleToLongBits(this.roundY) ^ (Double.doubleToLongBits(this.roundY) >>> 32));
 		return hash;
 	}
 }

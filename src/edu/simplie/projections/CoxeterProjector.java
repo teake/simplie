@@ -23,6 +23,7 @@ import edu.simplie.Helper;
 import edu.simplie.algebra.Root;
 import java.awt.Color;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 
 /**
@@ -38,6 +39,7 @@ public class CoxeterProjector extends EmptyProjector
 	private double normCoxeterY;
 	private	double minCoxDist;
 	private double maxCoxDist;
+	private double angle;
 
 	@Override
 	public void clear()
@@ -60,7 +62,7 @@ public class CoxeterProjector extends EmptyProjector
 
 		// Determine the basis vectors for the Coxeter plane projection.
 		// The real and imaginary parts of the wanted eigenvalue.
-		double angle		= 2 * Math.PI / algebras.subAlgebra.coxeterNumber;
+		angle = 2 * Math.PI / algebras.subAlgebra.coxeterNumber;
 		double ReEigenval	= Math.cos(angle);
 		double ImEigenval	= Math.sin(angle);
 		double[][] complex	= Helper.complexEigenvector(coxeterElement, ReEigenval, ImEigenval);
@@ -77,11 +79,20 @@ public class CoxeterProjector extends EmptyProjector
 	@Override
 	public void projectRoot(Root root)
 	{
-		// Don't draw imaginary roots for Coxeter projections
+		// Don't draw imaginary roots
 		if(root.norm <= 0)
 			return;
 
 		double[] pos = calcPos(root.vector);
+
+		// Check if we did this orbit before
+		for(int j = 1; j < algebras.subAlgebra.coxeterNumber; j++)
+		{
+			double[] rotatedPos = Helper.rotate(pos, angle * j);
+			Node2D rotatedNode = new Node2D(rotatedPos[0], rotatedPos[1]);
+			if(super.nodes.contains(rotatedNode))
+				return;
+		}
 
 		// Project the Weyl reflections.
 		// Loop over every other root.
@@ -100,7 +111,6 @@ public class CoxeterProjector extends EmptyProjector
 				{
 					double[] pos2 = calcPos(otherRoot.vector);
 					addConnection(pos[0], pos[1], pos2[0], pos2[1]);
-					addConnection(-pos[0], -pos[1], -pos2[0], -pos2[1]);
 					continue;
 				}
 				// The distance for thisRoot & - otherRoot
@@ -108,16 +118,51 @@ public class CoxeterProjector extends EmptyProjector
 				{
 					double[] pos2 = calcPos(otherRoot.vector);
 					addConnection(pos[0], pos[1], -pos2[0], -pos2[1]);
-					addConnection(-pos[0], -pos[1], pos2[0], pos2[1]);
 				}
 			}
 		}
 
 		// Add the root
-		checkMinMax(pos[0],pos[1]);
-		checkMinMax(-pos[0],-pos[1]);
 		nodes.add(new Node2D(pos[0],pos[1]));
-		nodes.add(new Node2D(-pos[0],-pos[1]));
+	}
+
+	@Override
+	public void postProject()
+	{
+		//
+		// Complete every orbit.
+		//
+
+		HashSet<Node2D> newNodes				= new HashSet<Node2D>();
+		HashSet<Connection2D> newConnections	= new HashSet<Connection2D>();
+
+		// Loop over the nodes.
+		for(Iterator it = nodes.iterator(); it.hasNext();)
+		{
+			Node2D node	= (Node2D) it.next();
+			double[] pos = {node.x, node.y};
+			for(int i = 1; i < algebras.subAlgebra.coxeterNumber; i++)
+			{
+				 newNodes.add(new Node2D(Helper.rotate(pos, i * angle)));
+			}
+		}
+		// Loop over the connections.
+		for(Iterator it = connections.iterator(); it.hasNext();)
+		{
+			Connection2D conn = (Connection2D) it.next();
+			double[] pos1 = {conn.x1, conn.y1};
+			double[] pos2 = {conn.x2, conn.y2};
+			for(int i = 0; i < algebras.subAlgebra.coxeterNumber; i++)
+			{
+				double[] newPos1 = Helper.rotate(pos1, i * angle);
+				double[] newPos2 = Helper.rotate(pos2, i * angle);
+				newConnections.add(new Connection2D(newPos1, newPos2));
+			}
+		}
+
+		// And add the new stuff.
+		nodes.addAll(newNodes);
+		connections.addAll(newConnections);
 	}
 
 	@Override
@@ -137,9 +182,16 @@ public class CoxeterProjector extends EmptyProjector
 		}
 		else
 		{	
-			maxCoxDist = Math.max(maxCoxDist,conn.maxDist);
 			minCoxDist = Math.min(minCoxDist,conn.maxDist);
-			checkMinMax(x2, y2);
+			if(conn.maxDist > maxCoxDist)
+			{
+				maxCoxDist = conn.maxDist;
+				double sqrt = Math.sqrt(maxCoxDist);
+				maxCoorX = sqrt;
+				maxCoorY = sqrt;
+				minCoorX = -sqrt;
+				minCoorY = -sqrt;
+			}
 			return true;
 		}
 	}

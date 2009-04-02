@@ -543,4 +543,22 @@ public class Helper
 
 		return complexEigenvector;
 	}
+
+	/**
+	 * Rotate a 2-dimension vector over an angle.
+	 * @param vector	The vector to rotate.
+	 * @param angle		The angle over which to rotate.
+	 * @return			The rotated vector.
+	 */
+	public static double[] rotate(double[] vector, double angle)
+	{
+		double[] result = new double[2];
+
+		double cos = Math.cos(angle);
+		double sin = Math.sin(angle);
+		result[0] = cos * vector[0] - sin * vector[1];
+		result[1] = sin * vector[0] + cos * vector[1];
+
+		return result;
+	}
 }

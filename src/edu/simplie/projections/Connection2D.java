@@ -31,6 +31,10 @@ public class Connection2D
 	public final double y2;
 	public final double maxDist;
 
+	public final double roundX1;
+	public final double roundY1;
+	public final double roundX2;
+	public final double roundY2;
 
 	/**
 	 * Creates a new 2-dimensional node.
@@ -42,15 +46,26 @@ public class Connection2D
 	 */
 	public Connection2D(double x1, double y1, double x2, double y2)
 	{
-		double pow = Math.pow(10, 12);
-		this.x1 = Math.round( pow * x1 ) / pow;
-		this.y1 = Math.round( pow * y1 ) / pow;
-		this.x2 = Math.round( pow * x2 ) / pow;
-		this.y2 = Math.round( pow * y2 ) / pow;
+		this.x1 = x1;
+		this.y1 = y1;
+		this.x2 = x2;
+		this.y2 = y2;
+
+		double pow = Math.pow(10, 10);
+
+		roundX1 = Math.round( pow * x1 ) / pow;
+		roundY1 = Math.round( pow * y1 ) / pow;
+		roundX2 = Math.round( pow * x2 ) / pow;
+		roundY2 = Math.round( pow * y2 ) / pow;
 
 		double dist1 = x1*x1 + y1*y1;
 		double dist2 = x2*x2 + y2*y2;
 		this.maxDist = Math.max(dist1, dist2);
+	}
+
+	public Connection2D(double[] pos1, double[] pos2)
+	{
+		this(pos1[0], pos1[1], pos2[0], pos2[1]);
 	}
 
 	@Override
@@ -65,11 +80,17 @@ public class Connection2D
 			return false;
 		}
 		final Connection2D other = (Connection2D) obj;
-		if(this.x1 == other.x1 && this.y1 == other.y1 && this.x2 == other.x2 && this.y2 == other.y2)
+		if(this.roundX1 == other.roundX1
+				&& this.roundY1 == other.roundY1
+				&& this.roundX2 == other.roundX2
+				&& this.roundY2 == other.roundY2)
 		{
 			return true;
 		}
-		if(this.x1 == other.x2 && this.y1 == other.y2 && this.x2 == other.x1 && this.y2 == other.y1)
+		if(this.roundX1 == other.roundX2
+				&& this.roundY1 == other.roundY2
+				&& this.roundX2 == other.roundX1
+				&& this.roundY2 == other.roundY1)
 		{
 			return true;
 		}
@@ -80,11 +101,8 @@ public class Connection2D
 	public int hashCode()
 	{
 		int hash = 7;
-		hash = 29 * hash + (int) (Double.doubleToLongBits(this.x1 + this.x2) ^ (Double.doubleToLongBits(this.x1 + this.x2) >>> 32));
-		hash = 29 * hash + (int) (Double.doubleToLongBits(this.y1 + this.y2) ^ (Double.doubleToLongBits(this.y1 + this.y2) >>> 32));
+		hash = 29 * hash + (int) (Double.doubleToLongBits(this.roundX1 + this.roundX2) ^ (Double.doubleToLongBits(this.roundX1 + this.roundX2) >>> 32));
+		hash = 29 * hash + (int) (Double.doubleToLongBits(this.roundY1 + this.roundY2) ^ (Double.doubleToLongBits(this.roundY1 + this.roundY2) >>> 32));
 		return hash;
 	}
-
-
-
 }
