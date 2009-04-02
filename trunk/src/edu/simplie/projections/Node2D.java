@@ -28,28 +28,17 @@ public class Node2D
 	public final double x;
 	public final double y;
 
-	public final int R;
-	public final int G;
-	public final int B;
-
 	/**
 	 * Creates a new 2-dimensional node.
 	 *
 	 * @param x	The x-coordinate.
 	 * @param y	The y-coordinate.
-	 * @param R The red color component.
-	 * @param G The green color component.
-	 * @param B The blue color component.
 	 */
-	public Node2D(double x, double y, int R, int G, int B)
+	public Node2D(double x, double y)
 	{
 		double pow = Math.pow(10, 12);
 		this.x = Math.round( pow * x ) / pow;
 		this.y = Math.round( pow * y ) / pow;
-		
-		this.R = R;
-		this.G = G;
-		this.B = B;
 	}
 
 	@Override

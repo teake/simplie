@@ -29,12 +29,8 @@ public class Connection2D
 	public final double y1;
 	public final double x2;
 	public final double y2;
-
 	public final double maxDist;
 
-	public final int R;
-	public final int G;
-	public final int B;
 
 	/**
 	 * Creates a new 2-dimensional node.
@@ -43,11 +39,8 @@ public class Connection2D
 	 * @param y1	The y-coordinate.
 	 * @param x2	The x-coordinate.
 	 * @param y2	The y-coordinate.
-	 * @param R		The red color component.
-	 * @param G		The green color component.
-	 * @param B		The blue color component.
 	 */
-	public Connection2D(double x1, double y1, double x2, double y2, int R, int G, int B)
+	public Connection2D(double x1, double y1, double x2, double y2)
 	{
 		double pow = Math.pow(10, 12);
 		this.x1 = Math.round( pow * x1 ) / pow;
@@ -58,10 +51,6 @@ public class Connection2D
 		double dist1 = x1*x1 + y1*y1;
 		double dist2 = x2*x2 + y2*y2;
 		this.maxDist = Math.max(dist1, dist2);
-
-		this.R = R;
-		this.G = G;
-		this.B = B;
 	}
 
 	@Override

@@ -116,8 +116,8 @@ public class CoxeterProjector extends EmptyProjector
 		// Add the root
 		checkMinMax(pos[0],pos[1]);
 		checkMinMax(-pos[0],-pos[1]);
-		nodes.add(new Node2D(pos[0],pos[1], 0, 0, 0));
-		nodes.add(new Node2D(-pos[0],-pos[1], 0, 0, 0));
+		nodes.add(new Node2D(pos[0],pos[1]));
+		nodes.add(new Node2D(-pos[0],-pos[1]));
 	}
 
 	@Override
@@ -130,7 +130,7 @@ public class CoxeterProjector extends EmptyProjector
 
 	private boolean addConnection(double x1, double y1, double x2, double y2)
 	{
-		Connection2D conn = new Connection2D(x1, y1, x2, y2, 0, 0, 0);
+		Connection2D conn = new Connection2D(x1, y1, x2, y2);
 		if(!connections.add(conn))
 		{
 			return false;

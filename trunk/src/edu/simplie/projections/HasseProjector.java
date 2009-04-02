@@ -60,11 +60,11 @@ public class HasseProjector extends EmptyProjector
 			reflVector[k] -= dynkinLabels[k];
 			// And add the connection.
 			double[] pos2 = calcPos(reflVector);
-			connections.add(new Connection2D(pos[0], pos[1], pos2[0], pos2[1],0,0,0));
+			connections.add(new Connection2D(pos[0], pos[1], pos2[0], pos2[1]));
 		}
 
 		// Add the root
-		nodes.add(new Node2D(pos[0],pos[1], 0, 0, 0));
+		nodes.add(new Node2D(pos[0],pos[1]));
 
 	}
 
