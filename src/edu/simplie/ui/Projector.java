@@ -27,7 +27,9 @@ package edu.simplie.ui;
 
 import edu.simplie.AlgebraComposite;
 import edu.simplie.dynkindiagram.DiagramListener;
-import edu.simplie.projections.RootSystemProjector2D;
+import edu.simplie.projections.CoxeterProjector;
+import edu.simplie.projections.HasseProjector;
+import edu.simplie.projections.Projector2D;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
@@ -45,14 +47,18 @@ import org.jdesktop.application.Action;
 public class Projector extends javax.swing.JPanel implements DiagramListener
 {
 
-	private AlgebraComposite		algebras;
-	private RootSystemProjector2D	projector2D;
+	private AlgebraComposite	algebras;
+	private Projector2D			projector2D;
+	private Projector2D			coxeterProjector;
+	private Projector2D			hasseProjector;
 
     /** Creates new form Projector */
     public Projector()
 	{
         initComponents();
-		projector2D = new RootSystemProjector2D();
+		coxeterProjector	= new CoxeterProjector();
+		hasseProjector		= new HasseProjector();
+		projector2D			= coxeterProjector;
     }
 
     /** This method is called from within the constructor to
@@ -169,21 +175,19 @@ public class Projector extends javax.swing.JPanel implements DiagramListener
 		project();
 	}//GEN-LAST:event_spinnerMaxHeightStateChanged
 
-
-
 	public void setAlgebrasComposite(AlgebraComposite algebras)
 	{
-		this.algebras = algebras;
-		projector2D.setAlgebrasComposite(algebras);
 		algebras.dd.addListener(this);
+		this.algebras = algebras;
+		coxeterProjector.setAlgebrasComposite(algebras);
+		hasseProjector.setAlgebrasComposite(algebras);
 	}
 
 	@Action
 	public void project()
 	{
 		// Project
-		int mode = ( rbCoxeter.isSelected() ) ? RootSystemProjector2D.COXETER_MODE : RootSystemProjector2D.HASSE_MODE;
-		projector2D.setMode(mode);
+		projector2D = ( rbCoxeter.isSelected() ) ? coxeterProjector : hasseProjector;
 		projector2D.project(spinnerMaxHeight.getValue());
 		// And draw
 		canvas.repaint();
