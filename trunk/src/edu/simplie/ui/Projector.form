@@ -24,35 +24,9 @@
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" attributes="0">
-              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                  <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="rbHasse" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="-2" pref="8" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="1" attributes="0">
-                          <Component id="rbCoxeter" alignment="1" pref="94" max="32767" attributes="1"/>
-                          <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="drawButton" linkSize="1" alignment="0" pref="94" max="32767" attributes="1"/>
-                                  <Component id="clearButton" linkSize="1" alignment="0" pref="94" max="32767" attributes="1"/>
-                                  <Component id="epsButton" linkSize="1" alignment="0" pref="94" max="32767" attributes="1"/>
-                              </Group>
-                          </Group>
-                      </Group>
-                  </Group>
-                  <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="tfMaxHeight" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="spinnerMaxHeight" linkSize="1" min="-2" pref="92" max="-2" attributes="0"/>
-                  </Group>
-              </Group>
-              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="optionPanel" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
               <Component id="canvas" max="32767" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -63,22 +37,8 @@
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="canvas" alignment="0" max="32767" attributes="0"/>
-                  <Group type="102" alignment="0" attributes="0">
-                      <Component id="drawButton" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="clearButton" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="epsButton" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
-                      <Component id="tfMaxHeight" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="spinnerMaxHeight" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
-                      <Component id="rbCoxeter" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="rbHasse" min="-2" max="-2" attributes="0"/>
-                  </Group>
+                  <Component id="canvas" alignment="1" max="32767" attributes="0"/>
+                  <Component id="optionPanel" alignment="1" max="32767" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -86,15 +46,6 @@
     </DimensionLayout>
   </Layout>
   <SubComponents>
-    <Component class="javax.swing.JButton" name="drawButton">
-      <Properties>
-        <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
-          <action class="edu.simplie.ui.Projector" id="project" methodName="project"/>
-        </Property>
-        <Property name="text" type="java.lang.String" resourceKey="projector.draw"/>
-        <Property name="name" type="java.lang.String" value="drawButton" noResource="true"/>
-      </Properties>
-    </Component>
     <Container class="javax.swing.JPanel" name="canvas">
       <Properties>
         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
@@ -114,7 +65,7 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <EmptySpace min="0" pref="475" max="32767" attributes="0"/>
+              <EmptySpace min="0" pref="485" max="32767" attributes="0"/>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">
@@ -124,59 +75,147 @@
         </DimensionLayout>
       </Layout>
     </Container>
-    <Component class="edu.simplie.ui.reusable.UISpinner" name="spinnerMaxHeight">
+    <Container class="javax.swing.JPanel" name="optionPanel">
       <Properties>
-        <Property name="minValue" type="int" value="0"/>
-        <Property name="name" type="java.lang.String" value="spinnerMaxHeight" noResource="true"/>
+        <Property name="name" type="java.lang.String" value="optionPanel" noResource="true"/>
       </Properties>
-      <Events>
-        <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="spinnerMaxHeightStateChanged"/>
-      </Events>
-    </Component>
-    <Component class="javax.swing.JLabel" name="tfMaxHeight">
-      <Properties>
-        <Property name="text" type="java.lang.String" resourceKey="projector.maxHeight"/>
-        <Property name="name" type="java.lang.String" value="tfMaxHeight" noResource="true"/>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JRadioButton" name="rbCoxeter">
-      <Properties>
-        <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
-          <ComponentRef name="bgMode"/>
-        </Property>
-        <Property name="selected" type="boolean" value="true"/>
-        <Property name="text" type="java.lang.String" resourceKey="projector.rbCoxeter"/>
-        <Property name="horizontalTextPosition" type="int" value="10"/>
-        <Property name="name" type="java.lang.String" value="rbCoxeter" noResource="true"/>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JRadioButton" name="rbHasse">
-      <Properties>
-        <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
-          <ComponentRef name="bgMode"/>
-        </Property>
-        <Property name="text" type="java.lang.String" resourceKey="projector.rbHasse"/>
-        <Property name="horizontalTextPosition" type="int" value="10"/>
-        <Property name="name" type="java.lang.String" value="rbHasse" noResource="true"/>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JButton" name="clearButton">
-      <Properties>
-        <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
-          <action class="edu.simplie.ui.Projector" id="clear" methodName="clear"/>
-        </Property>
-        <Property name="text" type="java.lang.String" resourceKey="projector.clear"/>
-        <Property name="name" type="java.lang.String" value="clearButton" noResource="true"/>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JButton" name="epsButton">
-      <Properties>
-        <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
-          <action class="edu.simplie.ui.Projector" id="toEPS" methodName="toEPS"/>
-        </Property>
-        <Property name="text" type="java.lang.String" resourceKey="projector.toEps"/>
-        <Property name="name" type="java.lang.String" value="epsButton" noResource="true"/>
-      </Properties>
-    </Component>
+
+      <Layout>
+        <DimensionLayout dim="0">
+          <Group type="103" groupAlignment="0" attributes="0">
+              <Component id="tfMaxHeight" alignment="0" min="-2" max="-2" attributes="0"/>
+              <Component id="tfProjectionMode" alignment="0" min="-2" max="-2" attributes="0"/>
+              <Component id="cbNodes" alignment="0" min="-2" max="-2" attributes="0"/>
+              <Component id="cbConnections" alignment="0" min="-2" max="-2" attributes="0"/>
+              <Component id="rbHasse" alignment="0" min="-2" max="-2" attributes="0"/>
+              <Component id="tfDraw" alignment="0" min="-2" max="-2" attributes="0"/>
+              <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
+                  <Component id="spinnerMaxHeight" alignment="0" max="32767" attributes="1"/>
+                  <Component id="drawButton" alignment="0" max="32767" attributes="1"/>
+                  <Component id="clearButton" alignment="0" max="32767" attributes="1"/>
+                  <Component id="epsButton" alignment="0" max="32767" attributes="1"/>
+                  <Component id="rbCoxeter" alignment="0" max="32767" attributes="1"/>
+              </Group>
+          </Group>
+        </DimensionLayout>
+        <DimensionLayout dim="1">
+          <Group type="103" groupAlignment="0" attributes="0">
+              <Group type="102" alignment="0" attributes="0">
+                  <Component id="drawButton" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="clearButton" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="epsButton" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                  <Component id="tfMaxHeight" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="spinnerMaxHeight" min="-2" pref="18" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
+                  <Component id="tfProjectionMode" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                  <Component id="rbCoxeter" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="rbHasse" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                  <Component id="tfDraw" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="cbNodes" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="cbConnections" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace pref="167" max="32767" attributes="0"/>
+              </Group>
+          </Group>
+        </DimensionLayout>
+      </Layout>
+      <SubComponents>
+        <Component class="javax.swing.JButton" name="drawButton">
+          <Properties>
+            <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+              <action class="edu.simplie.ui.Projector" id="project" methodName="project"/>
+            </Property>
+            <Property name="text" type="java.lang.String" resourceKey="projector.draw"/>
+            <Property name="name" type="java.lang.String" value="drawButton" noResource="true"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JButton" name="clearButton">
+          <Properties>
+            <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+              <action class="edu.simplie.ui.Projector" id="clear" methodName="clear"/>
+            </Property>
+            <Property name="text" type="java.lang.String" resourceKey="projector.clear"/>
+            <Property name="name" type="java.lang.String" value="clearButton" noResource="true"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JButton" name="epsButton">
+          <Properties>
+            <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+              <action class="edu.simplie.ui.Projector" id="toEPS" methodName="toEPS"/>
+            </Property>
+            <Property name="text" type="java.lang.String" resourceKey="projector.toEps"/>
+            <Property name="name" type="java.lang.String" value="epsButton" noResource="true"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="tfMaxHeight">
+          <Properties>
+            <Property name="text" type="java.lang.String" resourceKey="projector.maxHeight"/>
+            <Property name="name" type="java.lang.String" value="tfMaxHeight" noResource="true"/>
+          </Properties>
+        </Component>
+        <Component class="edu.simplie.ui.reusable.UISpinner" name="spinnerMaxHeight">
+          <Properties>
+            <Property name="minValue" type="int" value="0"/>
+            <Property name="name" type="java.lang.String" value="spinnerMaxHeight" noResource="true"/>
+          </Properties>
+          <Events>
+            <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="spinnerMaxHeightStateChanged"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JLabel" name="tfProjectionMode">
+          <Properties>
+            <Property name="text" type="java.lang.String" resourceKey="projector.tfProjectionMode"/>
+            <Property name="name" type="java.lang.String" value="tfProjectionMode" noResource="true"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JRadioButton" name="rbCoxeter">
+          <Properties>
+            <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
+              <ComponentRef name="bgMode"/>
+            </Property>
+            <Property name="selected" type="boolean" value="true"/>
+            <Property name="text" type="java.lang.String" resourceKey="projector.rbCoxeter"/>
+            <Property name="name" type="java.lang.String" value="rbCoxeter" noResource="true"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JRadioButton" name="rbHasse">
+          <Properties>
+            <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
+              <ComponentRef name="bgMode"/>
+            </Property>
+            <Property name="text" type="java.lang.String" resourceKey="projector.rbHasse"/>
+            <Property name="name" type="java.lang.String" value="rbHasse" noResource="true"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="tfDraw">
+          <Properties>
+            <Property name="text" type="java.lang.String" resourceKey="projector.tfDraw"/>
+            <Property name="name" type="java.lang.String" value="tfDraw" noResource="true"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JCheckBox" name="cbNodes">
+          <Properties>
+            <Property name="selected" type="boolean" value="true"/>
+            <Property name="text" type="java.lang.String" resourceKey="projector.cbNodes"/>
+            <Property name="name" type="java.lang.String" value="cbNodes" noResource="true"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JCheckBox" name="cbConnections">
+          <Properties>
+            <Property name="selected" type="boolean" value="true"/>
+            <Property name="text" type="java.lang.String" resourceKey="projector.cbConnections"/>
+            <Property name="name" type="java.lang.String" value="cbConnections" noResource="true"/>
+          </Properties>
+        </Component>
+      </SubComponents>
+    </Container>
   </SubComponents>
 </Form>

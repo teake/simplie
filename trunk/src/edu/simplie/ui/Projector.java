@@ -73,27 +73,26 @@ public class Projector extends javax.swing.JPanel implements DiagramListener
     private void initComponents() {
 
         bgMode = new javax.swing.ButtonGroup();
-        drawButton = new javax.swing.JButton();
         canvas = new javax.swing.JPanel() {
             public void paintComponent(Graphics g) {
                 super.paintComponent(g);
                 draw(g);
             }
         };
-        spinnerMaxHeight = new edu.simplie.ui.reusable.UISpinner();
-        tfMaxHeight = new javax.swing.JLabel();
-        rbCoxeter = new javax.swing.JRadioButton();
-        rbHasse = new javax.swing.JRadioButton();
+        optionPanel = new javax.swing.JPanel();
+        drawButton = new javax.swing.JButton();
         clearButton = new javax.swing.JButton();
         epsButton = new javax.swing.JButton();
+        tfMaxHeight = new javax.swing.JLabel();
+        spinnerMaxHeight = new edu.simplie.ui.reusable.UISpinner();
+        tfProjectionMode = new javax.swing.JLabel();
+        rbCoxeter = new javax.swing.JRadioButton();
+        rbHasse = new javax.swing.JRadioButton();
+        tfDraw = new javax.swing.JLabel();
+        cbNodes = new javax.swing.JCheckBox();
+        cbConnections = new javax.swing.JCheckBox();
 
         setName("Form"); // NOI18N
-
-        javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance(edu.simplie.SimpLieApp.class).getContext().getActionMap(Projector.class, this);
-        drawButton.setAction(actionMap.get("project")); // NOI18N
-        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(edu.simplie.SimpLieApp.class).getContext().getResourceMap(Projector.class);
-        drawButton.setText(resourceMap.getString("projector.draw")); // NOI18N
-        drawButton.setName("drawButton"); // NOI18N
 
         canvas.setBackground(new java.awt.Color(255, 255, 255));
         canvas.setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -103,34 +102,20 @@ public class Projector extends javax.swing.JPanel implements DiagramListener
         canvas.setLayout(canvasLayout);
         canvasLayout.setHorizontalGroup(
             canvasLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 475, Short.MAX_VALUE)
+            .add(0, 485, Short.MAX_VALUE)
         );
         canvasLayout.setVerticalGroup(
             canvasLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(0, 465, Short.MAX_VALUE)
         );
 
-        spinnerMaxHeight.setMinValue(0);
-        spinnerMaxHeight.setName("spinnerMaxHeight"); // NOI18N
-        spinnerMaxHeight.addChangeListener(new javax.swing.event.ChangeListener() {
-            public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                spinnerMaxHeightStateChanged(evt);
-            }
-        });
+        optionPanel.setName("optionPanel"); // NOI18N
 
-        tfMaxHeight.setText(resourceMap.getString("projector.maxHeight")); // NOI18N
-        tfMaxHeight.setName("tfMaxHeight"); // NOI18N
-
-        bgMode.add(rbCoxeter);
-        rbCoxeter.setSelected(true);
-        rbCoxeter.setText(resourceMap.getString("projector.rbCoxeter")); // NOI18N
-        rbCoxeter.setHorizontalTextPosition(javax.swing.SwingConstants.LEADING);
-        rbCoxeter.setName("rbCoxeter"); // NOI18N
-
-        bgMode.add(rbHasse);
-        rbHasse.setText(resourceMap.getString("projector.rbHasse")); // NOI18N
-        rbHasse.setHorizontalTextPosition(javax.swing.SwingConstants.LEADING);
-        rbHasse.setName("rbHasse"); // NOI18N
+        javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance(edu.simplie.SimpLieApp.class).getContext().getActionMap(Projector.class, this);
+        drawButton.setAction(actionMap.get("project")); // NOI18N
+        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(edu.simplie.SimpLieApp.class).getContext().getResourceMap(Projector.class);
+        drawButton.setText(resourceMap.getString("projector.draw")); // NOI18N
+        drawButton.setName("drawButton"); // NOI18N
 
         clearButton.setAction(actionMap.get("clear")); // NOI18N
         clearButton.setText(resourceMap.getString("projector.clear")); // NOI18N
@@ -140,58 +125,102 @@ public class Projector extends javax.swing.JPanel implements DiagramListener
         epsButton.setText(resourceMap.getString("projector.toEps")); // NOI18N
         epsButton.setName("epsButton"); // NOI18N
 
+        tfMaxHeight.setText(resourceMap.getString("projector.maxHeight")); // NOI18N
+        tfMaxHeight.setName("tfMaxHeight"); // NOI18N
+
+        spinnerMaxHeight.setMinValue(0);
+        spinnerMaxHeight.setName("spinnerMaxHeight"); // NOI18N
+        spinnerMaxHeight.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                spinnerMaxHeightStateChanged(evt);
+            }
+        });
+
+        tfProjectionMode.setText(resourceMap.getString("projector.tfProjectionMode")); // NOI18N
+        tfProjectionMode.setName("tfProjectionMode"); // NOI18N
+
+        bgMode.add(rbCoxeter);
+        rbCoxeter.setSelected(true);
+        rbCoxeter.setText(resourceMap.getString("projector.rbCoxeter")); // NOI18N
+        rbCoxeter.setName("rbCoxeter"); // NOI18N
+
+        bgMode.add(rbHasse);
+        rbHasse.setText(resourceMap.getString("projector.rbHasse")); // NOI18N
+        rbHasse.setName("rbHasse"); // NOI18N
+
+        tfDraw.setText(resourceMap.getString("projector.tfDraw")); // NOI18N
+        tfDraw.setName("tfDraw"); // NOI18N
+
+        cbNodes.setSelected(true);
+        cbNodes.setText(resourceMap.getString("projector.cbNodes")); // NOI18N
+        cbNodes.setName("cbNodes"); // NOI18N
+
+        cbConnections.setSelected(true);
+        cbConnections.setText(resourceMap.getString("projector.cbConnections")); // NOI18N
+        cbConnections.setName("cbConnections"); // NOI18N
+
+        org.jdesktop.layout.GroupLayout optionPanelLayout = new org.jdesktop.layout.GroupLayout(optionPanel);
+        optionPanel.setLayout(optionPanelLayout);
+        optionPanelLayout.setHorizontalGroup(
+            optionPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(tfMaxHeight)
+            .add(tfProjectionMode)
+            .add(cbNodes)
+            .add(cbConnections)
+            .add(rbHasse)
+            .add(tfDraw)
+            .add(optionPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING, false)
+                .add(org.jdesktop.layout.GroupLayout.LEADING, spinnerMaxHeight, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .add(org.jdesktop.layout.GroupLayout.LEADING, drawButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .add(org.jdesktop.layout.GroupLayout.LEADING, clearButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .add(org.jdesktop.layout.GroupLayout.LEADING, epsButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .add(org.jdesktop.layout.GroupLayout.LEADING, rbCoxeter, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        optionPanelLayout.setVerticalGroup(
+            optionPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(optionPanelLayout.createSequentialGroup()
+                .add(drawButton)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(clearButton)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(epsButton)
+                .add(18, 18, 18)
+                .add(tfMaxHeight)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(spinnerMaxHeight, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 18, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .add(18, 18, 18)
+                .add(tfProjectionMode)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                .add(rbCoxeter)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(rbHasse)
+                .add(18, 18, 18)
+                .add(tfDraw)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(cbNodes)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(cbConnections)
+                .addContainerGap(167, Short.MAX_VALUE))
+        );
+
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(layout.createSequentialGroup()
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
-                    .add(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .add(rbHasse))
-                    .add(layout.createSequentialGroup()
-                        .add(8, 8, 8)
-                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
-                            .add(rbCoxeter, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 94, Short.MAX_VALUE)
-                            .add(org.jdesktop.layout.GroupLayout.LEADING, layout.createSequentialGroup()
-                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                                    .add(drawButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 94, Short.MAX_VALUE)
-                                    .add(clearButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 94, Short.MAX_VALUE)
-                                    .add(epsButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 94, Short.MAX_VALUE)))))
-                    .add(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .add(tfMaxHeight))
-                    .add(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .add(spinnerMaxHeight, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 92, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                .addContainerGap()
+                .add(optionPanel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(canvas, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
-
-        layout.linkSize(new java.awt.Component[] {clearButton, drawButton, epsButton, spinnerMaxHeight}, org.jdesktop.layout.GroupLayout.HORIZONTAL);
-
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(layout.createSequentialGroup()
                 .addContainerGap()
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(canvas, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .add(layout.createSequentialGroup()
-                        .add(drawButton)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(clearButton)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(epsButton)
-                        .add(26, 26, 26)
-                        .add(tfMaxHeight)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(spinnerMaxHeight, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                        .add(26, 26, 26)
-                        .add(rbCoxeter)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(rbHasse)))
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, canvas, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, optionPanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -223,19 +252,26 @@ public class Projector extends javax.swing.JPanel implements DiagramListener
 	{
 		Graphics2D g2 = (Graphics2D) g;
 		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
+		projector2D.setDrawNodes(cbNodes.isSelected());
+		projector2D.setDrawConnections(cbConnections.isSelected());
 		projector2D.draw(g2,canvas.getBounds().getWidth(),canvas.getBounds().getHeight());
 	}
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup bgMode;
     private javax.swing.JPanel canvas;
+    private javax.swing.JCheckBox cbConnections;
+    private javax.swing.JCheckBox cbNodes;
     private javax.swing.JButton clearButton;
     private javax.swing.JButton drawButton;
     private javax.swing.JButton epsButton;
+    private javax.swing.JPanel optionPanel;
     private javax.swing.JRadioButton rbCoxeter;
     private javax.swing.JRadioButton rbHasse;
     private edu.simplie.ui.reusable.UISpinner spinnerMaxHeight;
+    private javax.swing.JLabel tfDraw;
     private javax.swing.JLabel tfMaxHeight;
+    private javax.swing.JLabel tfProjectionMode;
     // End of variables declaration//GEN-END:variables
 
 	public void diagramChanged()
