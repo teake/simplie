@@ -32,7 +32,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -60,6 +59,9 @@ public class EmptyProjector implements Projector2D
 	private double offY;
 	private double scale;
 	private double radius = 6.0d;
+
+	private boolean drawNodes;
+	private boolean drawConnections;
 
 	public EmptyProjector()
 	{
@@ -94,38 +96,44 @@ public class EmptyProjector implements Projector2D
 		scale = Math.min(scaleX,scaleY);
 		radius = scale / 16;
 
-		// Draw the connections.
-		g2.setStroke(new BasicStroke(0.5f));
-		double maxKey = conns.lastKey().doubleValue();
-		double minKey = conns.firstKey().doubleValue();
-		// Do it in reverse order. Would be easier in Java 6 .... sigh
-		ArrayList<Number> keys = new ArrayList<Number>(conns.keySet());
-		for(int i = 0; i < keys.size(); i++)
+		if(drawConnections)
 		{
-			Number key = keys.get(keys.size() - 1 - i);
-			// Determine the color
-			float frac = (float) ((key.doubleValue() - maxKey) / ( minKey - maxKey));
-			float[] color = Helper.colorSpectrum(2*frac/3);
-			g2.setColor(new Color(color[0],color[1],color[2], 0.7f));
-			// Iterate over the connections
-			for(Iterator it = conns.get(key).iterator(); it.hasNext();)
+			// Draw the connections.
+			g2.setStroke(new BasicStroke(0.5f));
+			double maxKey = conns.lastKey().doubleValue();
+			double minKey = conns.firstKey().doubleValue();
+			// Do it in reverse order. Would be easier in Java 6 .... sigh
+			ArrayList<Number> keys = new ArrayList<Number>(conns.keySet());
+			for(int i = 0; i < keys.size(); i++)
 			{
-				Connection2D conn = (Connection2D) it.next();
-				double[] pos1 = transformCoor(conn.x1, conn.y1);
-				double[] pos2 = transformCoor(conn.x2, conn.y2);
+				Number key = keys.get(keys.size() - 1 - i);
+				// Determine the color
+				float frac = (float) ((key.doubleValue() - maxKey) / ( minKey - maxKey));
+				float[] color = Helper.colorSpectrum(2*frac/3);
+				g2.setColor(new Color(color[0],color[1],color[2]));
+				// Iterate over the connections
+				for(Iterator it = conns.get(key).iterator(); it.hasNext();)
+				{
+					Connection2D conn = (Connection2D) it.next();
+					double[] pos1 = transformCoor(conn.x1, conn.y1);
+					double[] pos2 = transformCoor(conn.x2, conn.y2);
 
-				g2.draw((new Line2D.Double(pos1[0], pos1[1], pos2[0], pos2[1])));
+					g2.draw((new Line2D.Double(pos1[0], pos1[1], pos2[0], pos2[1])));
+				}
 			}
 		}
-		
-		// Draw the nodes
-		g2.setStroke(new BasicStroke(1.0f));
-		g2.setColor(Color.BLACK);
-		for(Iterator it = nodes.iterator(); it.hasNext();)
+
+		if(drawNodes)
 		{
-			Node2D node		= (Node2D) it.next();
-			double[] pos	= transformCoor(node.x, node.y);
-			g2.draw(new Ellipse2D.Double(pos[0]-radius/2,pos[1]-radius/2,radius,radius));
+			// Draw the nodes
+			g2.setStroke(new BasicStroke(1.0f));
+			g2.setColor(Color.BLACK);
+			for(Iterator it = nodes.iterator(); it.hasNext();)
+			{
+				Node2D node		= (Node2D) it.next();
+				double[] pos	= transformCoor(node.x, node.y);
+				g2.draw(new Ellipse2D.Double(pos[0]-radius/2,pos[1]-radius/2,radius,radius));
+			}
 		}
 	}
 
@@ -215,4 +223,14 @@ public class EmptyProjector implements Projector2D
 	public void postProject(){}
 
 	public void projectRoot(Root root){}
+
+	public void setDrawNodes(boolean drawNodes)
+	{
+		this.drawNodes = drawNodes;
+	}
+
+	public void setDrawConnections(boolean drawConnections)
+	{
+		this.drawConnections = drawConnections;
+	}
 }

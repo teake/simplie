@@ -38,4 +38,7 @@ public interface Projector2D
 
 	void project(int maxHeight);
 
+	void setDrawNodes(boolean drawNodes);
+
+	void setDrawConnections(boolean drawConnections);
 }
