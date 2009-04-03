@@ -60,7 +60,7 @@ public class Connection2D
 
 		double dist1 = x1*x1 + y1*y1;
 		double dist2 = x2*x2 + y2*y2;
-		this.maxDist = Math.max(dist1, dist2);
+		this.maxDist = Math.round( pow * Math.max(dist1, dist2) ) / pow;
 	}
 
 	public Connection2D(double[] pos1, double[] pos2)

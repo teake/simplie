@@ -19,19 +19,22 @@
 package edu.simplie.projections;
 
 import edu.simplie.AlgebraComposite;
+import edu.simplie.Helper;
 import edu.simplie.algebra.Root;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.Rectangle;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
+import java.util.SortedMap;
+import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import net.sf.epsgraphics.EpsGraphics;
@@ -43,8 +46,8 @@ import net.sf.epsgraphics.EpsGraphics;
  */
 public class EmptyProjector implements Projector2D
 {
-	public HashSet<Connection2D> connections;
-	public HashSet<Node2D> nodes;
+	public SortedMap<Number,Set<Connection2D>> conns;
+	public Set<Node2D> nodes;
 	public AlgebraComposite algebras;
 
 	public double maxCoorX;
@@ -59,7 +62,7 @@ public class EmptyProjector implements Projector2D
 
 	public EmptyProjector()
 	{
-		connections = new HashSet<Connection2D>();
+		conns = new TreeMap<Number,Set<Connection2D>>();
 		nodes = new HashSet<Node2D>();
 	}
 
@@ -70,15 +73,17 @@ public class EmptyProjector implements Projector2D
 
 	public void clear()
 	{
-		connections.clear();
+		conns.clear();
 		nodes.clear();
-
 		maxCoorX = maxCoorY = -Double.MAX_VALUE;
 		minCoorX = minCoorY = +Double.MAX_VALUE;
 	}
 
 	public void draw(Graphics2D g2, double width, double height)
 	{
+		if(nodes.isEmpty() || conns.isEmpty())
+			return;
+		
 		offX = width / 2;
 		offY = height / 2;
 
@@ -88,17 +93,26 @@ public class EmptyProjector implements Projector2D
 		scale = Math.min(scaleX,scaleY);
 		radius = scale / 16;
 
-		// Draw the connections
+		// Draw the connections.
 		g2.setStroke(new BasicStroke(0.5f));
-		for(Iterator it = connections.iterator(); it.hasNext();)
+		double maxKey = conns.lastKey().doubleValue();
+		double minKey = conns.firstKey().doubleValue();
+		for(Map.Entry<Number,Set<Connection2D>> entry : conns.entrySet())
 		{
-			Connection2D conn = (Connection2D) it.next();
-			double[] pos1 = transformCoor(conn.x1, conn.y1);
-			double[] pos2 = transformCoor(conn.x2, conn.y2);
-			g2.setColor(connectionColor(conn));
-			g2.draw((new Line2D.Double(pos1[0], pos1[1], pos2[0], pos2[1])));
+			// Determine the color
+			float frac = (float) ((entry.getKey().doubleValue() - maxKey) / ( minKey - maxKey));
+			float[] color = Helper.colorSpectrum(2*frac/3);
+			g2.setColor(new Color(color[0],color[1],color[2], 0.7f));
+			// Iterate over the connections
+			for(Iterator it = entry.getValue().iterator(); it.hasNext();)
+			{
+				Connection2D conn = (Connection2D) it.next();
+				double[] pos1 = transformCoor(conn.x1, conn.y1);
+				double[] pos2 = transformCoor(conn.x2, conn.y2);
+				
+				g2.draw((new Line2D.Double(pos1[0], pos1[1], pos2[0], pos2[1])));
+			}
 		}
-
 		// Draw the nodes
 		g2.setStroke(new BasicStroke(1.0f));
 		g2.setColor(Color.BLACK);
@@ -152,6 +166,17 @@ public class EmptyProjector implements Projector2D
 		postProject();
 	}
 
+	public boolean addConnection(Number key, Connection2D conn)
+	{
+		Set<Connection2D> connections = conns.get(key);
+		if(connections == null)
+		{
+			connections = new HashSet<Connection2D>();
+			conns.put(key, connections);
+		}
+		return connections.add(conn);
+	}
+
 	public void toEpsFile(String filename)
 	{
 		FileOutputStream outputStream = null;
@@ -185,9 +210,4 @@ public class EmptyProjector implements Projector2D
 	public void postProject(){}
 
 	public void projectRoot(Root root){}
-
-	public Color connectionColor(Connection2D connection)
-	{
-		return Color.BLACK;
-	}
 }

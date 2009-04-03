@@ -49,6 +49,9 @@ public class HasseProjector extends EmptyProjector
 
 		double[] pos = calcPos(root.vector);
 
+		// Add the root
+		nodes.add(new Node2D(pos));
+
 		maxCoorX = Math.max(maxCoorX,pos[0]);
 		maxCoorY = Math.max(maxCoorY,pos[1]);
 		minCoorX = Math.min(minCoorX,pos[0]);
@@ -63,12 +66,8 @@ public class HasseProjector extends EmptyProjector
 			int[] reflVector = root.vector.clone();
 			reflVector[k] -= dynkinLabels[k];
 			// And add the connection.
-			double[] pos2 = calcPos(reflVector);
-			connections.add(new Connection2D(pos, pos2));
+			addConnection(k,new Connection2D(pos, calcPos(reflVector)));
 		}
-
-		// Add the root
-		nodes.add(new Node2D(pos));
 	}
 
 	private double[] calcPos(int[] rootVector)

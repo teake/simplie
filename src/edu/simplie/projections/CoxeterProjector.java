@@ -21,10 +21,11 @@ package edu.simplie.projections;
 import Jama.Matrix;
 import edu.simplie.Helper;
 import edu.simplie.algebra.Root;
-import java.awt.Color;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 
 /**
  *
@@ -37,17 +38,7 @@ public class CoxeterProjector extends EmptyProjector
 	private double[] coxeterY;
 	private double normCoxeterX;
 	private double normCoxeterY;
-	private	double minCoxDist;
-	private double maxCoxDist;
 	private double angle;
-
-	@Override
-	public void clear()
-	{
-		super.clear();
-		maxCoxDist = -Double.MAX_VALUE;
-		minCoxDist = +Double.MAX_VALUE;
-	}
 
 	@Override
 	public void preProject()
@@ -84,15 +75,16 @@ public class CoxeterProjector extends EmptyProjector
 			return;
 
 		double[] pos = calcPos(root.vector);
-
+		
 		// Check if we did this orbit before
 		for(int j = 1; j < algebras.subAlgebra.coxeterNumber; j++)
 		{
-			double[] rotatedPos = Helper.rotate(pos, angle * j);
-			Node2D rotatedNode = new Node2D(rotatedPos[0], rotatedPos[1]);
-			if(super.nodes.contains(rotatedNode))
+			if(nodes.contains(new Node2D(Helper.rotate(pos, angle * j))))
 				return;
 		}
+
+		// Add the root
+		nodes.add(new Node2D(pos));
 
 		// Project the Weyl reflections.
 		// Loop over every other root.
@@ -110,33 +102,37 @@ public class CoxeterProjector extends EmptyProjector
 				if(sum - product == 2)
 				{
 					double[] pos2 = calcPos(otherRoot.vector);
-					addConnection(pos[0], pos[1], pos2[0], pos2[1]);
+					Connection2D conn = new Connection2D(pos,pos2);
+					addConnection(conn.maxDist,conn);
 					continue;
 				}
 				// The distance for thisRoot & - otherRoot
 				if(sum + product == 2)
 				{
 					double[] pos2 = calcPos(otherRoot.vector);
-					addConnection(pos[0], pos[1], -pos2[0], -pos2[1]);
+					Connection2D conn = new Connection2D(pos[0], pos[1], -pos2[0], -pos2[1]);
+					addConnection(conn.maxDist,conn);
 				}
 			}
 		}
-
-		// Add the root
-		nodes.add(new Node2D(pos[0],pos[1]));
 	}
 
 	@Override
 	public void postProject()
 	{
+		// Determine the min&maxCoor
+		double sqrt = Math.sqrt(conns.lastKey().doubleValue());
+		maxCoorX = sqrt;
+		maxCoorY = sqrt;
+		minCoorX = -sqrt;
+		minCoorY = -sqrt;
+
 		//
 		// Complete every orbit.
 		//
 
-		HashSet<Node2D> newNodes				= new HashSet<Node2D>();
-		HashSet<Connection2D> newConnections	= new HashSet<Connection2D>();
-
 		// Loop over the nodes.
+		Collection<Node2D> newNodes = new HashSet<Node2D>();
 		for(Iterator it = nodes.iterator(); it.hasNext();)
 		{
 			Node2D node	= (Node2D) it.next();
@@ -146,53 +142,25 @@ public class CoxeterProjector extends EmptyProjector
 				 newNodes.add(new Node2D(Helper.rotate(pos, i * angle)));
 			}
 		}
-		// Loop over the connections.
-		for(Iterator it = connections.iterator(); it.hasNext();)
-		{
-			Connection2D conn = (Connection2D) it.next();
-			double[] pos1 = {conn.x1, conn.y1};
-			double[] pos2 = {conn.x2, conn.y2};
-			for(int i = 0; i < algebras.subAlgebra.coxeterNumber; i++)
-			{
-				double[] newPos1 = Helper.rotate(pos1, i * angle);
-				double[] newPos2 = Helper.rotate(pos2, i * angle);
-				newConnections.add(new Connection2D(newPos1, newPos2));
-			}
-		}
-
-		// And add the new stuff.
 		nodes.addAll(newNodes);
-		connections.addAll(newConnections);
-	}
-
-	@Override
-	public Color connectionColor(Connection2D connection)
-	{
-		float relDist = (float) ((connection.maxDist - maxCoxDist) / ( minCoxDist - maxCoxDist));
-		float[] color = Helper.colorSpectrum(2*relDist/3);
-		return (new Color(color[0],color[1],color[2], 0.7f));
-	}
-
-	private boolean addConnection(double x1, double y1, double x2, double y2)
-	{
-		Connection2D conn = new Connection2D(x1, y1, x2, y2);
-		if(!connections.add(conn))
+		// Loop over the connections.
+		for(Map.Entry<Number,Set<Connection2D>> entry : conns.entrySet())
 		{
-			return false;
-		}
-		else
-		{	
-			minCoxDist = Math.min(minCoxDist,conn.maxDist);
-			if(conn.maxDist > maxCoxDist)
+			Set<Connection2D> connections		= entry.getValue();
+			Set<Connection2D> newConnections	= new HashSet<Connection2D>();
+			for(Iterator it = connections.iterator(); it.hasNext();)
 			{
-				maxCoxDist = conn.maxDist;
-				double sqrt = Math.sqrt(maxCoxDist);
-				maxCoorX = sqrt;
-				maxCoorY = sqrt;
-				minCoorX = -sqrt;
-				minCoorY = -sqrt;
+				Connection2D conn = (Connection2D) it.next();
+				double[] pos1 = {conn.x1, conn.y1};
+				double[] pos2 = {conn.x2, conn.y2};
+				for(int i = 0; i < algebras.subAlgebra.coxeterNumber; i++)
+				{
+					double[] newPos1 = Helper.rotate(pos1, i * angle);
+					double[] newPos2 = Helper.rotate(pos2, i * angle);
+					newConnections.add(new Connection2D(newPos1, newPos2));
+				}
 			}
-			return true;
+			connections.addAll(newConnections);
 		}
 	}
 
