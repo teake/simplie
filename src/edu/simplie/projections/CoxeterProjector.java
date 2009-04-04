@@ -74,19 +74,24 @@ public class CoxeterProjector extends EmptyProjector
 		if(root.norm <= 0)
 			return;
 
-		double[] pos = calcPos(root.vector);
-		
+		double[] pos	= calcPos(root.vector);
+		int key			= algebras.levelChar(root.vector);
+
 		// Check if we did this orbit before
-		for(int j = 1; j < algebras.subAlgebra.coxeterNumber; j++)
+		Set<Node2D> nodeset = nodes.get(key);
+		if(nodeset != null)
 		{
-			if(nodes.contains(new Node2D(Helper.rotate(pos, angle * j))))
-				return;
+			for(int j = 1; j < algebras.subAlgebra.coxeterNumber; j++)
+			{
+				if(nodeset.contains(new Node2D(Helper.rotate(pos, angle * j))))
+					return;
+			}
 		}
 
 		if(drawNodes)
 		{
 			// Add the root
-			nodes.add(new Node2D(pos));
+			addNode(key,new Node2D(pos));
 			maxCoorX = Math.max(maxCoorX, pos[0]*pos[0] + pos[1]*pos[1]);
 		}
 
@@ -101,6 +106,9 @@ public class CoxeterProjector extends EmptyProjector
 				{
 					Root otherRoot = (Root) itr.next();
 					if(otherRoot.norm <= 0 || otherRoot.equals(root))
+						continue;
+					// Only draw connections between other roots at this level
+					if(algebras.levelChar(otherRoot.vector) != key)
 						continue;
 					int sum		= root.norm + otherRoot.norm;
 					int product = 2 * algebras.algebra.innerProduct(root, otherRoot);
@@ -141,17 +149,22 @@ public class CoxeterProjector extends EmptyProjector
 		//
 
 		// Loop over the nodes.
-		Collection<Node2D> newNodes = new HashSet<Node2D>();
-		for(Iterator it = nodes.iterator(); it.hasNext();)
+		for(Map.Entry<Number,Set<Node2D>> entry : nodes.entrySet())
 		{
-			Node2D node	= (Node2D) it.next();
-			double[] pos = {node.x, node.y};
-			for(int i = 1; i < algebras.subAlgebra.coxeterNumber; i++)
+			Set<Node2D> oldNodes = entry.getValue();
+			Set<Node2D> newNodes = new HashSet<Node2D>();
+			for(Iterator it = oldNodes.iterator(); it.hasNext();)
 			{
-				 newNodes.add(new Node2D(Helper.rotate(pos, i * angle)));
+				Node2D node	= (Node2D) it.next();
+				double[] pos = {node.x, node.y};
+				for(int i = 1; i < algebras.subAlgebra.coxeterNumber; i++)
+				{
+					 newNodes.add(new Node2D(Helper.rotate(pos, i * angle)));
+				}
 			}
+			oldNodes.addAll(newNodes);
 		}
-		nodes.addAll(newNodes);
+
 		// Loop over the connections.
 		for(Map.Entry<Number,Set<Connection2D>> entry : conns.entrySet())
 		{
@@ -162,7 +175,7 @@ public class CoxeterProjector extends EmptyProjector
 				Connection2D conn = (Connection2D) it.next();
 				double[] pos1 = {conn.x1, conn.y1};
 				double[] pos2 = {conn.x2, conn.y2};
-				for(int i = 0; i < algebras.subAlgebra.coxeterNumber; i++)
+				for(int i = 1; i < algebras.subAlgebra.coxeterNumber; i++)
 				{
 					double[] newPos1 = Helper.rotate(pos1, i * angle);
 					double[] newPos2 = Helper.rotate(pos2, i * angle);

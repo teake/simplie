@@ -32,6 +32,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -47,7 +48,7 @@ import net.sf.epsgraphics.EpsGraphics;
 public class EmptyProjector implements Projector2D
 {
 	public SortedMap<Number,Set<Connection2D>> conns;
-	public Set<Node2D> nodes;
+	public SortedMap<Number,Set<Node2D>> nodes;
 	public AlgebraComposite algebras;
 
 	public double maxCoorX;
@@ -67,7 +68,7 @@ public class EmptyProjector implements Projector2D
 	public EmptyProjector()
 	{
 		conns = new TreeMap<Number,Set<Connection2D>>();
-		nodes = new HashSet<Node2D>();
+		nodes = new TreeMap<Number,Set<Node2D>>();
 	}
 
 	public void setAlgebrasComposite(AlgebraComposite algebras)
@@ -122,14 +123,20 @@ public class EmptyProjector implements Projector2D
 
 		if(drawNodes && !nodes.isEmpty())
 		{
-			// Draw the nodes
-			g2.setStroke(new BasicStroke(1.0f));
-			g2.setColor(Color.BLACK);
-			for(Iterator it = nodes.iterator(); it.hasNext();)
+			double maxKey = nodes.lastKey().doubleValue();
+			double minKey = nodes.firstKey().doubleValue();
+			for(Map.Entry<Number,Set<Node2D>> entry : nodes.entrySet())
 			{
-				Node2D node		= (Node2D) it.next();
-				double[] pos	= transformCoor(node.x, node.y);
-				g2.fill(new Ellipse2D.Double(pos[0]-radius/2,pos[1]-radius/2,radius,radius));
+				// Determine the color
+				float frac = (float) ((entry.getKey().doubleValue() - maxKey) / ( minKey - maxKey));
+				float[] color = Helper.colorSpectrum(2*frac/3);
+				g2.setColor(new Color(color[0],color[1],color[2]));
+				for(Iterator it = entry.getValue().iterator(); it.hasNext();)
+				{
+					Node2D node		= (Node2D) it.next();
+					double[] pos	= transformCoor(node.x, node.y);
+					g2.fill(new Ellipse2D.Double(pos[0]-radius/2,pos[1]-radius/2,radius,radius));
+				}
 			}
 		}
 	}
@@ -173,6 +180,17 @@ public class EmptyProjector implements Projector2D
 
 		// Do again some other stuff
 		postProject();
+	}
+
+	public boolean addNode(Number key, Node2D node)
+	{
+		Set<Node2D> nodeset = nodes.get(key);
+		if(nodeset == null)
+		{
+			nodeset = new HashSet<Node2D>();
+			nodes.put(key, nodeset);
+		}
+		return nodeset.add(node);
 	}
 
 	public boolean addConnection(Number key, Connection2D conn)
