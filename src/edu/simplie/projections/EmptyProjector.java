@@ -60,8 +60,9 @@ public class EmptyProjector implements Projector2D
 	private double scale;
 	private double radius = 6.0d;
 
-	private boolean drawNodes;
-	private boolean drawConnections;
+	public boolean drawNodes = true;
+	public boolean drawConnections = true;
+	private int maxHeight = 0;
 
 	public EmptyProjector()
 	{
@@ -84,19 +85,16 @@ public class EmptyProjector implements Projector2D
 
 	public void draw(Graphics2D g2, double width, double height)
 	{
-		if(nodes.isEmpty() || conns.isEmpty())
-			return;
-		
 		offX = width / 2;
 		offY = height / 2;
 
-		double scaleX = 0.9 * width / ( maxCoorX - minCoorX );
-		double scaleY = 0.9 * height / ( maxCoorY - minCoorY );
+		double scaleX = (maxCoorX == minCoorX) ? 0.9 * width  : 0.9 * width / ( maxCoorX - minCoorX );
+		double scaleY = (maxCoorY == minCoorY) ? 0.9 * height : 0.9 * height / ( maxCoorY - minCoorY );
 
 		scale = Math.min(scaleX,scaleY);
 		radius = scale / 16;
 
-		if(drawConnections)
+		if(drawConnections && !conns.isEmpty())
 		{
 			// Draw the connections.
 			g2.setStroke(new BasicStroke(0.5f));
@@ -117,13 +115,12 @@ public class EmptyProjector implements Projector2D
 					Connection2D conn = (Connection2D) it.next();
 					double[] pos1 = transformCoor(conn.x1, conn.y1);
 					double[] pos2 = transformCoor(conn.x2, conn.y2);
-
 					g2.draw((new Line2D.Double(pos1[0], pos1[1], pos2[0], pos2[1])));
 				}
 			}
 		}
 
-		if(drawNodes)
+		if(drawNodes && !nodes.isEmpty())
 		{
 			// Draw the nodes
 			g2.setStroke(new BasicStroke(1.0f));
@@ -132,7 +129,7 @@ public class EmptyProjector implements Projector2D
 			{
 				Node2D node		= (Node2D) it.next();
 				double[] pos	= transformCoor(node.x, node.y);
-				g2.draw(new Ellipse2D.Double(pos[0]-radius/2,pos[1]-radius/2,radius,radius));
+				g2.fill(new Ellipse2D.Double(pos[0]-radius/2,pos[1]-radius/2,radius,radius));
 			}
 		}
 	}
@@ -145,7 +142,7 @@ public class EmptyProjector implements Projector2D
 		return newCoor;
 	}
 
-	public void project(int maxHeight)
+	public void project()
 	{
 		// Don't do anything if ...
 		if(algebras.algebra == null 
@@ -159,14 +156,13 @@ public class EmptyProjector implements Projector2D
 
 		// First construct the root system up to the wanted height.
 		algebras.algebra.rs.construct(maxHeight);
-		if(maxHeight == 0)
-			maxHeight = algebras.algebra.rs.size();
+		int max = ( maxHeight > 0 ) ? maxHeight : algebras.algebra.rs.size();
 
 		// Do perhaps some other stuff
 		preProject();
 
 		// Loop over every root.
-		for(int i = 1; i < maxHeight + 1 && i < algebras.algebra.rs.size(); i++)
+		for(int i = 1; i < max + 1 && i < algebras.algebra.rs.size(); i++)
 		{
 			Collection<Root> roots = algebras.algebra.rs.get(i);
 			for(Iterator it = roots.iterator(); it.hasNext();)
@@ -232,5 +228,10 @@ public class EmptyProjector implements Projector2D
 	public void setDrawConnections(boolean drawConnections)
 	{
 		this.drawConnections = drawConnections;
+	}
+
+	public void setMaxHeight(int maxHeight)
+	{
+		this.maxHeight = maxHeight;
 	}
 }

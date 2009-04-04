@@ -242,8 +242,8 @@ public class Projector extends javax.swing.JPanel implements DiagramListener
 	public void project()
 	{
 		// Project
-		projector2D = ( rbCoxeter.isSelected() ) ? coxeterProjector : hasseProjector;
-		projector2D.project(spinnerMaxHeight.getValue());
+		setProjectorOptions();
+		projector2D.project();
 		// And draw
 		canvas.repaint();
 	}
@@ -252,8 +252,6 @@ public class Projector extends javax.swing.JPanel implements DiagramListener
 	{
 		Graphics2D g2 = (Graphics2D) g;
 		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
-		projector2D.setDrawNodes(cbNodes.isSelected());
-		projector2D.setDrawConnections(cbConnections.isSelected());
 		projector2D.draw(g2,canvas.getBounds().getWidth(),canvas.getBounds().getHeight());
 	}
 
@@ -298,7 +296,17 @@ public class Projector extends javax.swing.JPanel implements DiagramListener
 		chooser.setDialogTitle("to EPS");
 		if ( chooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION )
 		{
+			setProjectorOptions();
+			projector2D.project();
 			projector2D.toEpsFile(chooser.getSelectedFile().getAbsolutePath());
 		}
+	}
+
+	private void setProjectorOptions()
+	{
+		projector2D = ( rbCoxeter.isSelected() ) ? coxeterProjector : hasseProjector;
+		projector2D.setMaxHeight(spinnerMaxHeight.getValue());
+		projector2D.setDrawNodes(cbNodes.isSelected());
+		projector2D.setDrawConnections(cbConnections.isSelected());
 	}
 }

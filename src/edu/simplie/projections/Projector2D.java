@@ -36,9 +36,9 @@ public interface Projector2D
 
 	void toEpsFile(String filename);
 
-	void project(int maxHeight);
+	void project();
 
 	void setDrawNodes(boolean drawNodes);
-
 	void setDrawConnections(boolean drawConnections);
+	void setMaxHeight(int maxHeight);
 }
