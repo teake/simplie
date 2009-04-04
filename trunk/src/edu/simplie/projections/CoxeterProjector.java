@@ -83,35 +83,42 @@ public class CoxeterProjector extends EmptyProjector
 				return;
 		}
 
-		// Add the root
-		nodes.add(new Node2D(pos));
-
-		// Project the Weyl reflections.
-		// Loop over every other root.
-		for(int j = root.height(); j < algebras.algebra.rs.size(); j++)
+		if(drawNodes)
 		{
-			Collection<Root> otherRoots = algebras.algebra.rs.get(j);
-			for(Iterator itr = otherRoots.iterator(); itr.hasNext();)
+			// Add the root
+			nodes.add(new Node2D(pos));
+			maxCoorX = Math.max(maxCoorX, pos[0]*pos[0] + pos[1]*pos[1]);
+		}
+
+		if(drawConnections)
+		{
+			// Project the Weyl reflections.
+			// Loop over every other root.
+			for(int j = root.height(); j < algebras.algebra.rs.size(); j++)
 			{
-				Root otherRoot = (Root) itr.next();
-				if(otherRoot.norm <= 0 || otherRoot.equals(root))
-					continue;
-				int sum		= root.norm + otherRoot.norm;
-				int product = 2 * algebras.algebra.innerProduct(root, otherRoot);
-				// The distance for thisRoot & otherRoot
-				if(sum - product == 2)
+				Collection<Root> otherRoots = algebras.algebra.rs.get(j);
+				for(Iterator itr = otherRoots.iterator(); itr.hasNext();)
 				{
-					double[] pos2 = calcPos(otherRoot.vector);
-					Connection2D conn = new Connection2D(pos,pos2);
-					addConnection(conn.maxDist,conn);
-					continue;
-				}
-				// The distance for thisRoot & - otherRoot
-				if(sum + product == 2)
-				{
-					double[] pos2 = calcPos(otherRoot.vector);
-					Connection2D conn = new Connection2D(pos[0], pos[1], -pos2[0], -pos2[1]);
-					addConnection(conn.maxDist,conn);
+					Root otherRoot = (Root) itr.next();
+					if(otherRoot.norm <= 0 || otherRoot.equals(root))
+						continue;
+					int sum		= root.norm + otherRoot.norm;
+					int product = 2 * algebras.algebra.innerProduct(root, otherRoot);
+					// The distance for thisRoot & otherRoot
+					if(sum - product == 2)
+					{
+						double[] pos2 = calcPos(otherRoot.vector);
+						Connection2D conn = new Connection2D(pos,pos2);
+						addConnection(conn.maxDist,conn);
+						continue;
+					}
+					// The distance for thisRoot & - otherRoot
+					if(sum + product == 2)
+					{
+						double[] pos2 = calcPos(otherRoot.vector);
+						Connection2D conn = new Connection2D(pos[0], pos[1], -pos2[0], -pos2[1]);
+						addConnection(conn.maxDist,conn);
+					}
 				}
 			}
 		}
@@ -121,7 +128,9 @@ public class CoxeterProjector extends EmptyProjector
 	public void postProject()
 	{
 		// Determine the min&maxCoor
-		double sqrt = Math.sqrt(conns.lastKey().doubleValue());
+		double sqrt = conns.isEmpty() ? 
+			Math.sqrt(maxCoorX) :
+			Math.sqrt(Math.max(maxCoorX, conns.lastKey().doubleValue()));
 		maxCoorX = sqrt;
 		maxCoorY = sqrt;
 		minCoorX = -sqrt;
