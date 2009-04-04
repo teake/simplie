@@ -293,6 +293,28 @@ public class AlgebraComposite implements DiagramListener
 		}
 		return rootVector;
 	}
+
+	public int levelModChar(int[] rootVector)
+	{
+		int[] levels = levels(rootVector);
+		int characteristic = 0;
+		for (int i = 0; i < levels.length; i++)
+		{
+			characteristic += (levels[i] % 2) * Math.pow(2,i);
+		}
+		return characteristic;
+	}
+
+	public int levelChar(int[] rootVector)
+	{
+		int[] levels = levels(rootVector);
+		int characteristic = 0;
+		for (int i = 0; i < levels.length; i++)
+		{
+			characteristic += levels[i] * Math.pow(2,i);
+		}
+		return characteristic;
+	}
 	
 	/********************************
 	 * Methods for representation

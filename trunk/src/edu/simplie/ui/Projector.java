@@ -106,7 +106,7 @@ public class Projector extends javax.swing.JPanel implements DiagramListener
         );
         canvasLayout.setVerticalGroup(
             canvasLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 465, Short.MAX_VALUE)
+            .add(0, 492, Short.MAX_VALUE)
         );
 
         optionPanel.setName("optionPanel"); // NOI18N
@@ -130,11 +130,6 @@ public class Projector extends javax.swing.JPanel implements DiagramListener
 
         spinnerMaxHeight.setMinValue(0);
         spinnerMaxHeight.setName("spinnerMaxHeight"); // NOI18N
-        spinnerMaxHeight.addChangeListener(new javax.swing.event.ChangeListener() {
-            public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                spinnerMaxHeightStateChanged(evt);
-            }
-        });
 
         tfProjectionMode.setText(resourceMap.getString("projector.tfProjectionMode")); // NOI18N
         tfProjectionMode.setName("tfProjectionMode"); // NOI18N
@@ -224,11 +219,6 @@ public class Projector extends javax.swing.JPanel implements DiagramListener
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
-
-	private void spinnerMaxHeightStateChanged(javax.swing.event.ChangeEvent evt)//GEN-FIRST:event_spinnerMaxHeightStateChanged
-	{//GEN-HEADEREND:event_spinnerMaxHeightStateChanged
-		project();
-	}//GEN-LAST:event_spinnerMaxHeightStateChanged
 
 	public void setAlgebrasComposite(AlgebraComposite algebras)
 	{

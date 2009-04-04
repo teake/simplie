@@ -48,10 +48,6 @@ public class HasseProjector extends EmptyProjector
 	@Override
 	public void projectRoot(Root root)
 	{
-		// Don't draw imaginary roots for Coxeter projections
-		if(root.norm <= 0)
-			return;
-
 		double[] pos = calcPos(root.vector);
 		maxCoorX = Math.max(maxCoorX,pos[0]);
 		maxCoorY = Math.max(maxCoorY,pos[1]);
@@ -60,7 +56,7 @@ public class HasseProjector extends EmptyProjector
 
 		// Add the root
 		if(drawNodes)
-			nodes.add(new Node2D(pos));
+			addNode(algebras.levelModChar(root.vector),new Node2D(pos));
 
 		if(drawConnections)
 		{
