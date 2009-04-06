@@ -125,13 +125,15 @@ public class EmptyProjector implements Projector2D
 		{
 			double maxKey = nodes.lastKey().doubleValue();
 			double minKey = nodes.firstKey().doubleValue();
-			for(Map.Entry<Number,Set<Node2D>> entry : nodes.entrySet())
+			ArrayList<Number> keys = new ArrayList<Number>(nodes.keySet());
+			for(int i = 0; i < keys.size(); i++)
 			{
+				Number key = keys.get(keys.size() - 1 - i);
 				// Determine the color
-				float frac = (float) ((entry.getKey().doubleValue() - maxKey) / ( minKey - maxKey));
+				float frac = (float) ((key.doubleValue() - maxKey) / ( minKey - maxKey));
 				float[] color = Helper.colorSpectrum(2*frac/3);
 				g2.setColor(new Color(color[0],color[1],color[2]));
-				for(Iterator it = entry.getValue().iterator(); it.hasNext();)
+				for(Iterator it = nodes.get(key).iterator(); it.hasNext();)
 				{
 					Node2D node		= (Node2D) it.next();
 					double[] pos	= transformCoor(node.x, node.y);
