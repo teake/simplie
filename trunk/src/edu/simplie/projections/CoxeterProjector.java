@@ -148,6 +148,10 @@ public class CoxeterProjector extends EmptyProjector
 		// Complete every orbit.
 		//
 
+		// If the Coxeter number is not even, the negative roots and connections
+		// must also be added.
+		boolean oddCoxNumber = ( (algebras.subAlgebra.coxeterNumber % 2) == 1 );
+
 		// Loop over the nodes.
 		for(Map.Entry<Number,Set<Node2D>> entry : nodes.entrySet())
 		{
@@ -157,9 +161,12 @@ public class CoxeterProjector extends EmptyProjector
 			{
 				Node2D node	= (Node2D) it.next();
 				double[] pos = {node.x, node.y};
-				for(int i = 1; i < algebras.subAlgebra.coxeterNumber; i++)
+				for(int i = 0; i < algebras.subAlgebra.coxeterNumber; i++)
 				{
-					 newNodes.add(new Node2D(Helper.rotate(pos, i * angle)));
+					double[] newPos = Helper.rotate(pos, i * angle);
+					newNodes.add(new Node2D(newPos));
+					if(oddCoxNumber)
+						newNodes.add(new Node2D(-newPos[0],-newPos[1]));
 				}
 			}
 			oldNodes.addAll(newNodes);
@@ -175,11 +182,13 @@ public class CoxeterProjector extends EmptyProjector
 				Connection2D conn = (Connection2D) it.next();
 				double[] pos1 = {conn.x1, conn.y1};
 				double[] pos2 = {conn.x2, conn.y2};
-				for(int i = 1; i < algebras.subAlgebra.coxeterNumber; i++)
+				for(int i = 0; i < algebras.subAlgebra.coxeterNumber; i++)
 				{
 					double[] newPos1 = Helper.rotate(pos1, i * angle);
 					double[] newPos2 = Helper.rotate(pos2, i * angle);
 					newConnections.add(new Connection2D(newPos1, newPos2));
+					if(oddCoxNumber)
+						newConnections.add(new Connection2D(-newPos1[0],-newPos1[1],-newPos2[0],-newPos2[1]));
 				}
 			}
 			connections.addAll(newConnections);
