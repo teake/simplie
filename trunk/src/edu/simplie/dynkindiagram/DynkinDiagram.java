@@ -23,16 +23,10 @@
 
 package edu.simplie.dynkindiagram;
 
-import edu.simplie.Helper;
-
 import java.util.Vector;
 import java.util.Iterator;
 import java.util.Collections;
 import java.io.*;
-import java.awt.Graphics2D;
-import java.awt.Point;
-import java.awt.Color;
-import java.awt.Font;
 
 
 /**
@@ -46,13 +40,11 @@ import java.awt.Font;
 public class DynkinDiagram
 {
 	/** Vector containing all nodes of this diagram. */
-	private Vector<DynkinNode> nodes;
+	public Vector<DynkinNode> nodes;
 	/** Vector containing all connections of this diagram */
-	private Vector<DynkinConnection> connections;
+	public Vector<DynkinConnection> connections;
 	/** Vector containing all the compact pairs of this diagram */
-	private Vector<CompactPair> compactPairs;
-	/** Font for drawing the diagram. */
-	private Font font;
+	public Vector<CompactPair> compactPairs;
 	/** The node that was added last. */
 	private DynkinNode lastAddedNode;
 	/** The internal list of listeners */
@@ -73,7 +65,6 @@ public class DynkinDiagram
 		nodes		= new Vector<DynkinNode>();
 		connections	= new Vector<DynkinConnection>();
 		compactPairs= new Vector<CompactPair>();
-		font		= new Font("Monospaced", Font.PLAIN, 12);
 		lastAddedNode	= null;
 		listeners	= new Vector<DiagramListener>();
 	}
@@ -196,13 +187,7 @@ public class DynkinDiagram
 		}
 		return null;
 	}
-	
-	public DynkinNode getNodeByIndex(int index)
-	{
-		// TODO: check for out of bounds, return clone.
-		return nodes.get(index);
-	}
-	
+		
 	/** returns [minX, maxX, minY, maxY] */
 	public int[] getDiagramBounds()
 	{
@@ -743,71 +728,6 @@ public class DynkinDiagram
 		}
 		
 		return output;
-	}
-	
-	/**
-	 * Draw the diagram onto a graphics component.
-	 *
-	 * @param	g2		The graphics component onto which the diagram should be drawn.
-	 * @param	offset	The amount of spacing between the edges of the component and the diagram.
-	 * @param	spacing	The amount of spacing between each node.
-	 * @param	radius	The radius of each node.
-	 */
-	public void drawDiagram(Graphics2D g2, int offset, int spacing, int radius)
-	{
-		// Draw the connections first.
-		g2.setColor(Color.BLACK);
-		for (DynkinConnection connection : connections)
-		{
-			DynkinNode node1 = connection.fromNode;
-			DynkinNode node2 = connection.toNode;
-			Point begin	= new Point(spacing * node1.x + offset, spacing * node1.y + offset);
-			Point end	= new Point(spacing * node2.x + offset, spacing * node2.y + offset);
-			Helper.drawConnection(g2, Color.BLACK, connection.type, begin, end, radius);
-		}
-		// Secondly the compact pair indicators.
-		for(CompactPair pair : compactPairs)
-		{
-			DynkinNode node1 = pair.node1;
-			DynkinNode node2 = pair.node2;
-			int x1 = spacing * node1.x + offset;
-			int y1 = spacing * node1.y + offset;
-			int x2 = spacing * node2.x + offset;
-			int y2 = spacing * node2.y + offset;
-			Helper.drawCompactCon(g2, Color.BLACK, x1, y1, x2, y2);
-		}
-		// Now draw the nodes.
-		for (DynkinNode node : nodes)
-		{
-			int x = spacing * node.x + offset;
-			int y = spacing * node.y + offset;
-			Color color;
-			
-			if(node.isEnabled() || node.isCompact())
-				color = Color.WHITE;
-			else if(node.isDisconnected())
-				color = Color.ORANGE;
-			else
-				color = Color.GRAY;
-			
-			Helper.drawFilledCircle(g2,color,Color.BLACK,x,y,radius);
-			
-			if(node.isCompact())
-			{
-				if(node.isEnabled())
-					color = Color.WHITE;
-				else if(node.isDisconnected())
-					color = Color.ORANGE;
-				else
-					color = Color.GRAY;
-
-				Helper.drawFilledCircle(g2,color,Color.BLACK,x,y,radius/2);
-			}
-			g2.setFont(font);
-			g2.drawString(Helper.intToString(node.getLabel()),
-					x + radius,
-					y + radius + 10);
-		}
 	}
 	
 	private void update()

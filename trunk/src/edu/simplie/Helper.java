@@ -561,4 +561,45 @@ public class Helper
 
 		return result;
 	}
+
+	/**
+	 * Calculates the first null eigenvectors of a matrix with determinant 0.
+	 * @param matrix	The matrix of which to calculate a null eigenvector.
+	 * @return			A rounded integer vector normalized s.t. the lowest entry
+	 *					is equal to 1.
+	 */
+	public static int[] nullEigenVector(Matrix matrix)
+	{
+		int rank			= matrix.getRowDimension();
+		int[] nullVector	= new int[rank];
+
+		EigenvalueDecomposition eig = matrix.eig();
+		Matrix eigVals = eig.getD();
+		Matrix eigVecs = eig.getV();
+		double[] eigVec = new double[rank];
+		for(int i = 0; i < rank; i++)
+		{
+			if(Math.abs(eigVals.get(i, i)) < 0.0000001)
+			{
+				for(int j = 0; j < rank; j++)
+				{
+					eigVec[j] = eigVecs.getArray()[j][i];
+				}
+				break;
+			}
+		}
+		// Normalize the null eigenvector
+		double min = Double.MAX_VALUE;
+		for(int i = 0; i < rank; i++)
+		{
+			if(Math.abs(eigVec[i]) > 0.0000001 && Math.abs(eigVec[i]) < Math.abs(min))
+				min = eigVec[i];
+		}
+		for(int i = 0; i < rank; i++)
+		{
+			nullVector[i] = (int) Math.round(( eigVec[i] / min ));
+		}
+
+		return nullVector;
+	}
 }

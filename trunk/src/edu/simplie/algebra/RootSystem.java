@@ -77,11 +77,6 @@ public class RootSystem
 		this.algebra	= algebra;
 		this.rank		= algebra.rank;
 		rootSystem		= new ArrayList<HashSet<Root>>();
-	
-		if(rank==0)
-		{
-			return;
-		}
 		
 		// Add the CSA to the root table.
 		HashSet<Root> csa = new HashSet<Root>();
@@ -96,7 +91,12 @@ public class RootSystem
 		csaRoot.norm	= 0;
 		csa.add(csaRoot);
 		rootSystem.add(0,csa);
-		
+
+		if(rank==0)
+		{
+			return;
+		}
+
 		// Add the simple roots and set the max and min norms.
 		simpleRoots = new HashSet<Root>();
 		maxNorm = 0;

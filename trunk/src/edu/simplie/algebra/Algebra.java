@@ -71,6 +71,10 @@ public class Algebra
 	public final int	rank;
 	/** The dimension of the algebra (the number of generators). Only set for finite algebras. */
 	public final int	dim;
+	/** The Coxeter labels */
+	public final int[] coxeterLabels;
+	/** The dual Coxeter labels */
+	public final int[] dualCoxeterLabels;
 	/** The Coxeter number, i.e. the sum of components of the highest root + 1. */
 	public final int	coxeterNumber;
 	/** String value of dim. "Infinite" if the algebra is infinite. */
@@ -290,21 +294,40 @@ public class Algebra
 		
 		// Set up the root system.
 		rs = new RootSystem(this);
-		
+
 		// Determine the dimension and the Coxeter number
+		int[] tempCoxeterLabels		= new int[rank];
+		int[] tempDualCoxeterLabels	= new int[rank];
 		if(finite)
 		{
 			dim				= 2 * (int) rs.numPosGenerators() + rank;
 			dimension		= Helper.intToString(dim);
 			coxeterNumber	= rs.size();
+			Root highestRoot = rs.get(rs.size()-1).iterator().next();
+			for(int i = 0; i < rank; i++)
+			{
+				tempCoxeterLabels[i] = highestRoot.vector[i];
+				tempDualCoxeterLabels[i] = 2 * halfNorms[i] * highestRoot.vector[i] / highestRoot.norm;
+			}
 		}
 		else
 		{
-			dim				= 0;
-			dimension		= "Infinite";
-			coxeterNumber	= 0;
+			dim			= 0;
+			dimension	= "Infinite";
+			int tempCox	= 0;
+			if(det == 0)
+			{
+				tempCoxeterLabels		= Helper.nullEigenVector(cartanMatrix.transpose());
+				tempDualCoxeterLabels	= Helper.nullEigenVector(cartanMatrix);
+				for(int i = 0; i < rank; i++)
+				{
+					tempCox += tempCoxeterLabels[i];
+				}
+			}
+			coxeterNumber = tempCox;
 		}
-
+		coxeterLabels = tempCoxeterLabels;
+		dualCoxeterLabels = tempDualCoxeterLabels;
 
 	}
 	

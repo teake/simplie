@@ -44,7 +44,7 @@ public class AlgebraSetup extends javax.swing.JPanel implements DiagramListener
 	public void setAlgebraComposite(AlgebraComposite algebras)
 	{
 		this.algebras = algebras;
-		dynkinDiagramPanel.setDynkinDiagram(algebras.dd);
+		dynkinDiagramPanel.setAlgebraComposite(algebras);
 		algebras.dd.addListener(this);
 	}
 	
