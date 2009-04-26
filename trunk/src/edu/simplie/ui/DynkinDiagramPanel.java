@@ -73,12 +73,9 @@ public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramLis
 	private DynkinNode modificationFrom;
 	
 	// Keeps track of the location the context menu.
-	private int contextX;
-	private int contextY;
-	
+	private Point contextXY;
 	// Keeps track of the location of the mouse pointer.
-	private int x;
-	private int y;
+	private Point xy;
 	
 	private boolean shiftDown;
 	private boolean contextVisible;
@@ -96,8 +93,8 @@ public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramLis
 		
 		modificationFrom = null;
 		
-		contextX = contextY = 0;
-		x = y = -1;
+		contextXY = new Point(0,0);
+		xy = new Point(-1,-1);
 		
 		shiftDown = false;
 		contextVisible = false;
@@ -129,13 +126,14 @@ public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramLis
 		{
 			FileOutputStream outputStream = null;
 			EpsGraphics eps = null;
-			int[] bounds = dd.getDiagramBounds();
+			Point[] bounds = dd.getDiagramBounds();
+			Point min = trans(bounds[0]);
+			Point max = trans(bounds[1]);
 			try
 			{
 				outputStream = new FileOutputStream(chooser.getSelectedFile().getAbsolutePath());
 				eps = new EpsGraphics("Projection", outputStream, 
-						transform(bounds[0])-offset, transform(bounds[2])-offset,
-						transform(bounds[1])+offset, transform(bounds[3])+offset,
+						min.x-offset,min.y-offset, max.x+offset,max.y+offset,
 						net.sf.epsgraphics.ColorMode.COLOR_RGB);
 				drawDiagram(eps);
 			}
@@ -170,21 +168,23 @@ public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramLis
 		}
 	}
 		
-	public void keyTyped(KeyEvent e)
-	{
-	}
+	public void keyTyped(KeyEvent e){}
 
-	private int transform(int coordinate)
+	private Point invTrans(Point p)
 	{
-		return spacing * coordinate + offset;
+		int x = Math.round(((float) p.x - offset) / spacing);
+		int y = Math.round(((float) p.y - offset) / spacing);
+		return new Point(x,y);
 	}
-	private int invTrans(int coordinate)
+	private Point trans(Point p)
 	{
-		return Math.round(((float) coordinate - offset) / spacing);
+		int x = spacing * p.x + offset;
+		int y = spacing * p.y + offset;
+		return new Point(x,y);
 	}
-	private Point trans(int x, int y)
+	private Point trans(DynkinNode node)
 	{
-		return new Point(transform(x),transform(y));
+		return trans(new Point(node.x,node.y));
 	}
 
 	public void drawDiagram(Graphics g)
@@ -192,10 +192,9 @@ public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramLis
 		Graphics2D g2 = (Graphics2D) g;
 		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
 
-		int x_mouse = transform(x);
-		int y_mouse = transform(y);
+		Point mouseP = trans(xy);
 
-		// Don't draw a preview is the context menu is visible.
+		// Don't draw a preview if the context menu is visible.
 		if(!contextMenu.isVisible())
 		{
 			switch(status)
@@ -204,25 +203,17 @@ public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramLis
 					DynkinNode node = dd.getLastAddedNode();
 					if(shiftDown && node != null)
 					{
-						Helper.drawConnection(g2, 
-								Color.LIGHT_GRAY, 
-								DynkinConnection.TYPE_SINGLE, 
-								new Point(transform(node.x),transform(node.y)),
-								new Point(x_mouse,y_mouse),
-								radius);
+						Helper.drawConnection(g2,Color.LIGHT_GRAY,DynkinConnection.TYPE_SINGLE,trans(node),mouseP,radius);
 					}
-					Helper.drawFilledCircle(g2, Color.WHITE, Color.GRAY, x_mouse, y_mouse, radius);
+					Helper.drawFilledCircle(g2, Color.WHITE, Color.GRAY, mouseP, radius);
 					break;
 				case STATUS_ADDCOMP:
 				case STATUS_ADDCON:
-					int x_start = transform(modificationFrom.x);
-					int y_start = transform(modificationFrom.y);
-					Point begin = new Point(x_start,y_start);
-					Point end = new Point(x_mouse,y_mouse);
+					Point modP = trans(modificationFrom);
 					if(status == STATUS_ADDCOMP)
-						Helper.drawCompactCon(g2, Color.GRAY, x_start, y_start, x_mouse, y_mouse);
+						Helper.drawCompactCon(g2, Color.GRAY,modP,mouseP);
 					else
-						Helper.drawConnection(g2, Color.LIGHT_GRAY, connectionType, begin, end, radius);
+						Helper.drawConnection(g2, Color.LIGHT_GRAY, connectionType, modP, mouseP, radius);
 					break;
 				default:
 					break;			
@@ -235,29 +226,20 @@ public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramLis
 
 		// Draw the connections first.
 		g2.setColor(Color.BLACK);
-		for (DynkinConnection connection : dd.connections)
+		for (DynkinConnection conn : dd.connections)
 		{
-			DynkinNode node1 = connection.fromNode;
-			DynkinNode node2 = connection.toNode;
-			Point begin	= new Point(transform(node1.x), transform(node1.y));
-			Point end	= new Point(transform(node2.x), transform(node2.y));
-			Helper.drawConnection(g2, Color.BLACK, connection.type, begin, end, radius);
+			Helper.drawConnection(g2, Color.BLACK, conn.type, trans(conn.fromNode), trans(conn.toNode), radius);
 		}
 		// Secondly the compact pair indicators.
 		for(CompactPair pair : dd.compactPairs)
 		{
-			DynkinNode node1 = pair.node1;
-			DynkinNode node2 = pair.node2;
-			Helper.drawCompactCon(g2, Color.BLACK, 
-					transform(node1.x), transform(node1.y),
-					transform(node2.x), transform(node2.y));
+			Helper.drawCompactCon(g2, Color.BLACK, trans(pair.node1), trans(pair.node2));
 		}
 		// Now draw the nodes.
 		for (int i = 0; i < dd.rank(); i++)
 		{
 			DynkinNode node = dd.nodes.get(i);
-			int xNode = transform(node.x);
-			int yNode = transform(node.y);
+			Point nodeP = trans(node);
 			Color color;
 
 			if(node.isEnabled() || node.isCompact())
@@ -267,7 +249,7 @@ public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramLis
 			else
 				color = Color.GRAY;
 
-			Helper.drawFilledCircle(g2,color,Color.BLACK,xNode,yNode,radius);
+			Helper.drawFilledCircle(g2,color,Color.BLACK,nodeP,radius);
 
 			if(node.isCompact())
 			{
@@ -278,23 +260,23 @@ public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramLis
 				else
 					color = Color.GRAY;
 
-				Helper.drawFilledCircle(g2,color,Color.BLACK,xNode,yNode,radius/2);
+				Helper.drawFilledCircle(g2,color,Color.BLACK,nodeP,radius/2);
 			}
 			if(rbNodeOrder.isSelected())
 			{
 				g2.setFont(new Font("Monospaced", Font.PLAIN, 12));
-				g2.drawString(Helper.intToString(i+1), xNode + radius, yNode + radius + 10);
+				g2.drawString(Helper.intToString(i+1), nodeP.x + radius, nodeP.y + radius + 10);
 			}
 			else
 			{
 				int cox		= algebras.algebra.coxeterLabels[i];
 				int dualCox = algebras.algebra.dualCoxeterLabels[i];
 				g2.setFont(new Font("Monospaced", Font.ITALIC, 12));
-				g2.drawString(Helper.intToString(cox), xNode + radius, yNode + radius + 10);
+				g2.drawString(Helper.intToString(cox), nodeP.x + radius, nodeP.y + radius + 10);
 				if(cox != dualCox)
 				{
 					g2.setFont(new Font("Monospaced",Font.ITALIC|Font.BOLD, 12));
-					g2.drawString(Helper.intToString(dualCox), xNode + radius, yNode + radius + 22);
+					g2.drawString(Helper.intToString(dualCox), nodeP.x + radius, nodeP.y + radius + 22);
 				}
 			}
 
@@ -359,7 +341,7 @@ public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramLis
 	
 	private void startModify(int type, int action)
 	{
-		DynkinNode node = dd.getNodeByCoor(contextX, contextY);
+		DynkinNode node = dd.getNodeByCoor(contextXY);
 		if(node == null)
 		{
 			tf_status.setText("Invalid start point specified.");
@@ -653,12 +635,10 @@ private void diagramMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:even
 }//GEN-LAST:event_diagramMouseExited
 
 private void diagramMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_diagramMouseMoved
-	int x_new = invTrans(evt.getX());
-	int y_new = invTrans(evt.getY());
-	if(x!=x_new || y!=y_new)
+	Point xy_new = invTrans(new Point(evt.getX(), evt.getY()));
+	if(xy!=xy_new && xy_new.x >= 0 && xy_new.y >= 0)
 	{
-		x = x_new;
-		y = y_new;
+		xy = xy_new;
 		diagram.repaint();
 	}
 }//GEN-LAST:event_diagramMouseMoved
@@ -668,13 +648,12 @@ private void diagramMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:ev
 	if(dd.isLocked())
 		return;
 	
-	DynkinNode node = dd.getNodeByCoor(x,y);
+	DynkinNode node = dd.getNodeByCoor(xy);
 	
 	if(evt.getButton() == MouseEvent.BUTTON3 || evt.isControlDown())
 	{
 		setupMenu(node);
-		contextX = x;
-		contextY = y;
+		contextXY = xy;
 		contextMenu.show(diagram,evt.getX(),evt.getY());
 		contextVisible = true;
 		return;
@@ -691,7 +670,7 @@ private void diagramMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:ev
 	if(evt.getButton() == MouseEvent.BUTTON1 && status == STATUS_PREVIEW && !evt.isAltDown())
 	{
 		int connectionToLast = (evt.isShiftDown()) ? 1 : 0;
-		tf_status.setText(dd.addNode(x, y, connectionToLast));
+		tf_status.setText(dd.addNode(xy, connectionToLast));
 		return;
 	}
 	
@@ -739,19 +718,19 @@ private void diagramMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:ev
 	
 	private void menuRemoveNodeActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_menuRemoveNodeActionPerformed
 	{//GEN-HEADEREND:event_menuRemoveNodeActionPerformed
-		tf_status.setText(dd.removeNode(dd.getNodeByCoor(contextX, contextY)));
+		tf_status.setText(dd.removeNode(dd.getNodeByCoor(contextXY)));
 		contextVisible = false;
 	}//GEN-LAST:event_menuRemoveNodeActionPerformed
 	
 	private void menuAddNodeActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_menuAddNodeActionPerformed
 	{//GEN-HEADEREND:event_menuAddNodeActionPerformed
-		tf_status.setText(dd.addNode(contextX, contextY, 0));
+		tf_status.setText(dd.addNode(contextXY, 0));
 		contextVisible = false;
 	}//GEN-LAST:event_menuAddNodeActionPerformed
 
 	private void menuToggleCompactActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_menuToggleCompactActionPerformed
 	{//GEN-HEADEREND:event_menuToggleCompactActionPerformed
-		tf_status.setText(dd.toggleCompactNode(dd.getNodeByCoor(contextX, contextY)));
+		tf_status.setText(dd.toggleCompactNode(dd.getNodeByCoor(contextXY)));
 		contextVisible = false;
 }//GEN-LAST:event_menuToggleCompactActionPerformed
 
@@ -780,19 +759,19 @@ private void diagramMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:ev
 
 	private void menuStateEnabledActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_menuStateEnabledActionPerformed
 	{//GEN-HEADEREND:event_menuStateEnabledActionPerformed
-		tf_status.setText(dd.setNodeState(dd.getNodeByCoor(contextX, contextY),DynkinNode.STATE_ENABLED));
+		tf_status.setText(dd.setNodeState(dd.getNodeByCoor(contextXY),DynkinNode.STATE_ENABLED));
 		contextVisible = false;
 	}//GEN-LAST:event_menuStateEnabledActionPerformed
 
 	private void menuStateDisabledActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_menuStateDisabledActionPerformed
 	{//GEN-HEADEREND:event_menuStateDisabledActionPerformed
-		tf_status.setText(dd.setNodeState(dd.getNodeByCoor(contextX, contextY),DynkinNode.STATE_DISABLED));
+		tf_status.setText(dd.setNodeState(dd.getNodeByCoor(contextXY),DynkinNode.STATE_DISABLED));
 		contextVisible = false;
 	}//GEN-LAST:event_menuStateDisabledActionPerformed
 
 	private void menuStateLevelActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_menuStateLevelActionPerformed
 	{//GEN-HEADEREND:event_menuStateLevelActionPerformed
-		tf_status.setText(dd.setNodeState(dd.getNodeByCoor(contextX, contextY),DynkinNode.STATE_ALWAYS_LEVEL));
+		tf_status.setText(dd.setNodeState(dd.getNodeByCoor(contextXY),DynkinNode.STATE_ALWAYS_LEVEL));
 		contextVisible = false;
 	}//GEN-LAST:event_menuStateLevelActionPerformed
 

@@ -23,6 +23,7 @@
 
 package edu.simplie.dynkindiagram;
 
+import java.awt.Point;
 import java.util.Vector;
 import java.util.Iterator;
 import java.util.Collections;
@@ -125,15 +126,15 @@ public class DynkinDiagram
 	 * Fetches a nodes by its coordinates.
 	 * Returns null if the nodes is not found.
 	 *
-	 * @param	x	The x-coordinate of the node in the diagram.
-	 * @param	y	The y-coordinate of the node in the diagram.
+	 * @param	p	The point of which the x and y members are the coordinates
+	 *				of the node to fetch
 	 * @return		The node itself.
 	 */
-	public DynkinNode getNodeByCoor(int x, int y)
+	public DynkinNode getNodeByCoor(Point p)
 	{
 		for (DynkinNode node : nodes)
 		{
-			if(node.x == x && node.y == y)
+			if(node.x == p.x && node.y == p.y)
 			{
 				return node;
 			}
@@ -141,22 +142,24 @@ public class DynkinDiagram
 		return null;
 	}
 		
-	/** returns [minX, maxX, minY, maxY] */
-	public int[] getDiagramBounds()
+	/** returns [(minX, minY), (maxX, maxY)] */
+	public Point[] getDiagramBounds()
 	{
-		int[] bounds = new int[4];
-		bounds[0] = bounds[2] = Integer.MAX_VALUE;
-		bounds[1] = bounds[3] = Integer.MIN_VALUE;
+		int maxX, maxY, minX, minY;
+		minX = minY = Integer.MAX_VALUE;
+		maxX = maxY = Integer.MIN_VALUE;
 		for (int i = 0; i < rank(); i++)
 		{
 			int x = nodes.get(i).x;
 			int y = nodes.get(i).y;
-			bounds[0] = Math.min(bounds[0], x);
-			bounds[1] = Math.max(bounds[1], x);
-			bounds[2] = Math.min(bounds[2], y);
-			bounds[3] = Math.max(bounds[3], y);
+			minX = Math.min(minX, x);
+			maxX = Math.max(maxX, x);
+			minY = Math.min(minY, y);
+			maxY = Math.max(maxY, y);
 		}
-
+		Point[] bounds = new Point[2];
+		bounds[0] = new Point(minX,minY);
+		bounds[1] = new Point(maxX,maxY);
 		return bounds;
 	}
 	
@@ -323,24 +326,27 @@ public class DynkinDiagram
 	/**
 	 * Adds a node to the diagram on the specified coordinates.
 	 *
-	 * @param	x					The x-coordinate of the node in the diagram.
-	 * @param	y					The y-coordinate of the node in the diagram.
+	 * @param	p					A point whose x and y members are the coordinates of the node.
 	 * @param	connectionToLast	Integer indicating whether or not a connection should be made
 	 *								from this node to the last one added. If it equals zero, then
 	 *								a connection won't be made. If it is bigger than zero it represents
 	 *								the lacing of the connection.
 	 * @return						A string representing the action taken.
 	 */
-	public String addNode(int x, int y, int connectionToLast)
+	public String addNode(Point p, int connectionToLast)
 	{
 		if(locked)
 			return "Diagram is locked.";
 		
-		DynkinNode newNode = new DynkinNode(x, y);
+		DynkinNode newNode = new DynkinNode(p.x, p.y);
 		
 		if(nodes.contains(newNode))
 		{
 			return "Cannot add node that is already present.";
+		}
+		else if(p.x < 0 || p.y < 0)
+		{
+			return "Node coordinates out of bounds.";
 		}
 		else
 		{

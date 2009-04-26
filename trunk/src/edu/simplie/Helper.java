@@ -396,21 +396,21 @@ public class Helper
 		return matrixString;
 	}
 
-	public static void drawFilledCircle(Graphics2D g, Color c1, Color c2, int x, int y, int radius)
+	public static void drawFilledCircle(Graphics2D g, Color c1, Color c2, Point p, int radius)
 	{
 		g.setColor(c1);
-		g.fillOval(x - radius, y - radius, 2*radius, 2*radius);
+		g.fillOval(p.x - radius, p.y - radius, 2*radius, 2*radius);
 		g.setColor(c2);
-		g.drawOval(x - radius, y - radius, 2*radius, 2*radius);	
+		g.drawOval(p.x - radius, p.y - radius, 2*radius, 2*radius);
 	}
 	
-	public static void drawCompactCon(Graphics2D g, Color c, int x1, int y1, int x2, int y2)
+	public static void drawCompactCon(Graphics2D g, Color c, Point begin, Point end)
 	{
 		g.setColor(c);
 		g.setStroke(dashedStroke);
-		int controlx = (x1 + x2 + y1 - y2) / 2;
-		int controly = (y1 + y2 + x2 - x1) / 2;
-		g.draw(new QuadCurve2D.Float(x1, y1, controlx, controly, x2, y2));
+		int controlx = (begin.x + end.x + begin.y - end.y) / 2;
+		int controly = (begin.y + end.y + end.x - begin.x) / 2;
+		g.draw(new QuadCurve2D.Float(begin.x, begin.y, controlx, controly, end.x, end.y));
 		g.setStroke(normalStroke);
 	}
 	
