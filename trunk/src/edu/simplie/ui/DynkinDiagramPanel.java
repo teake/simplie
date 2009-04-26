@@ -35,6 +35,12 @@ import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.File;
+import java.io.FileOutputStream;
+import javax.swing.JFileChooser;
+import net.sf.epsgraphics.EpsGraphics;
+import org.jdesktop.application.Action;
+
 
 /**
  * Displays a Dynkin diagram and allows its editing via direct user-interaction.
@@ -112,7 +118,40 @@ public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramLis
 		diagram.repaint();
 		setTitle(dd.getTitle());
 	}
-	
+
+	@Action
+	public void toEPS()
+	{
+		JFileChooser chooser = new JFileChooser("");
+		chooser.setSelectedFile(new File("DynkinDiagram.eps"));
+		chooser.setDialogTitle("to EPS");
+		if ( chooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION )
+		{
+			FileOutputStream outputStream = null;
+			EpsGraphics eps = null;
+			int[] bounds = dd.getDiagramBounds();
+			try
+			{
+				outputStream = new FileOutputStream(chooser.getSelectedFile().getAbsolutePath());
+				eps = new EpsGraphics("Projection", outputStream, 
+						transform(bounds[0])-offset, transform(bounds[2])-offset,
+						transform(bounds[1])+offset, transform(bounds[3])+offset,
+						net.sf.epsgraphics.ColorMode.COLOR_RGB);
+				drawDiagram(eps);
+			}
+			catch(Exception ex){}
+			finally
+			{
+				try
+				{
+					eps.flush();
+					eps.close();
+				}
+				catch(Exception ex){}
+			}
+		}
+	}
+
 	public void keyPressed(KeyEvent e)
 	{
 		if(e.isShiftDown())
@@ -134,14 +173,27 @@ public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramLis
 	public void keyTyped(KeyEvent e)
 	{
 	}
-	
+
+	private int transform(int coordinate)
+	{
+		return spacing * coordinate + offset;
+	}
+	private int invTrans(int coordinate)
+	{
+		return Math.round(((float) coordinate - offset) / spacing);
+	}
+	private Point trans(int x, int y)
+	{
+		return new Point(transform(x),transform(y));
+	}
+
 	public void drawDiagram(Graphics g)
 	{
 		Graphics2D g2 = (Graphics2D) g;
 		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
 
-		int x_mouse = spacing * x + offset;
-		int y_mouse = spacing * y + offset;
+		int x_mouse = transform(x);
+		int y_mouse = transform(y);
 
 		// Don't draw a preview is the context menu is visible.
 		if(!contextMenu.isVisible())
@@ -155,7 +207,7 @@ public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramLis
 						Helper.drawConnection(g2, 
 								Color.LIGHT_GRAY, 
 								DynkinConnection.TYPE_SINGLE, 
-								new Point(node.x * spacing + offset, node.y * spacing + offset),
+								new Point(transform(node.x),transform(node.y)),
 								new Point(x_mouse,y_mouse),
 								radius);
 					}
@@ -163,8 +215,8 @@ public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramLis
 					break;
 				case STATUS_ADDCOMP:
 				case STATUS_ADDCON:
-					int x_start = spacing * modificationFrom.x + offset;
-					int y_start = spacing * modificationFrom.y + offset;
+					int x_start = transform(modificationFrom.x);
+					int y_start = transform(modificationFrom.y);
 					Point begin = new Point(x_start,y_start);
 					Point end = new Point(x_mouse,y_mouse);
 					if(status == STATUS_ADDCOMP)
@@ -187,8 +239,8 @@ public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramLis
 		{
 			DynkinNode node1 = connection.fromNode;
 			DynkinNode node2 = connection.toNode;
-			Point begin	= new Point(spacing * node1.x + offset, spacing * node1.y + offset);
-			Point end	= new Point(spacing * node2.x + offset, spacing * node2.y + offset);
+			Point begin	= new Point(transform(node1.x), transform(node1.y));
+			Point end	= new Point(transform(node2.x), transform(node2.y));
 			Helper.drawConnection(g2, Color.BLACK, connection.type, begin, end, radius);
 		}
 		// Secondly the compact pair indicators.
@@ -196,18 +248,16 @@ public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramLis
 		{
 			DynkinNode node1 = pair.node1;
 			DynkinNode node2 = pair.node2;
-			int x1 = spacing * node1.x + offset;
-			int y1 = spacing * node1.y + offset;
-			int x2 = spacing * node2.x + offset;
-			int y2 = spacing * node2.y + offset;
-			Helper.drawCompactCon(g2, Color.BLACK, x1, y1, x2, y2);
+			Helper.drawCompactCon(g2, Color.BLACK, 
+					transform(node1.x), transform(node1.y),
+					transform(node2.x), transform(node2.y));
 		}
 		// Now draw the nodes.
 		for (int i = 0; i < dd.rank(); i++)
 		{
 			DynkinNode node = dd.nodes.get(i);
-			int xNode = spacing * node.x + offset;
-			int yNode = spacing * node.y + offset;
+			int xNode = transform(node.x);
+			int yNode = transform(node.y);
 			Color color;
 
 			if(node.isEnabled() || node.isCompact())
@@ -370,6 +420,7 @@ public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramLis
         rbNodeOrder = new javax.swing.JRadioButton();
         rbCoxeterLabels = new javax.swing.JRadioButton();
         jLabel1 = new javax.swing.JLabel();
+        bToEPS = new javax.swing.JButton();
 
         menuAddConnection.setText("Add connection");
 
@@ -526,12 +577,12 @@ public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramLis
         diagram.setLayout(diagramLayout);
         diagramLayout.setHorizontalGroup(
             diagramLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(org.jdesktop.layout.GroupLayout.TRAILING, tf_status, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 413, Short.MAX_VALUE)
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, tf_status, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 502, Short.MAX_VALUE)
         );
         diagramLayout.setVerticalGroup(
             diagramLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(diagramLayout.createSequentialGroup()
-                .addContainerGap(286, Short.MAX_VALUE)
+                .addContainerGap(278, Short.MAX_VALUE)
                 .add(tf_status))
         );
 
@@ -549,6 +600,10 @@ public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramLis
 
         jLabel1.setText("Node labels:");
 
+        javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance(edu.simplie.SimpLieApp.class).getContext().getActionMap(DynkinDiagramPanel.class, this);
+        bToEPS.setAction(actionMap.get("toEPS")); // NOI18N
+        bToEPS.setText("to EPS");
+
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -558,6 +613,8 @@ public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramLis
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
                     .add(org.jdesktop.layout.GroupLayout.LEADING, diagram, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .add(layout.createSequentialGroup()
+                        .add(bToEPS)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 105, Short.MAX_VALUE)
                         .add(jLabel1)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
                         .add(rbNodeOrder)
@@ -573,7 +630,8 @@ public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramLis
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(jLabel1)
                     .add(rbNodeOrder)
-                    .add(rbCoxeterLabels))
+                    .add(rbCoxeterLabels)
+                    .add(bToEPS))
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -595,8 +653,8 @@ private void diagramMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:even
 }//GEN-LAST:event_diagramMouseExited
 
 private void diagramMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_diagramMouseMoved
-	int x_new = Math.round(((float) evt.getX() - offset) / spacing);
-	int y_new = Math.round(((float) evt.getY() - offset) / spacing);
+	int x_new = invTrans(evt.getX());
+	int y_new = invTrans(evt.getY());
 	if(x!=x_new || y!=y_new)
 	{
 		x = x_new;
@@ -745,6 +803,7 @@ private void diagramMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:ev
 	
 	
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton bToEPS;
     private javax.swing.JPopupMenu contextMenu;
     private javax.swing.JPanel diagram;
     private javax.swing.JLabel jLabel1;
