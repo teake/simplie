@@ -53,7 +53,6 @@ public class AlgebraSetup extends javax.swing.JPanel implements DiagramListener
 		algebraInfo.update(algebras.algebra);
 		subAlgebraInfo.update(algebras.subAlgebra);
 		disAlgebraInfo.update(algebras.intAlgebra);
-		cartanMatrixTextArea.setText(Helper.matrixToString(algebras.algebra.A));
 	}
 	
 	/** This method is called from within the constructor to
@@ -68,9 +67,6 @@ public class AlgebraSetup extends javax.swing.JPanel implements DiagramListener
         subAlgebraInfo = new edu.simplie.ui.reusable.UIAlgebraInfo();
         disAlgebraInfo = new edu.simplie.ui.reusable.UIAlgebraInfo();
         dynkinDiagramPanel = new edu.simplie.ui.DynkinDiagramPanel();
-        cartanMatrixPanel = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        cartanMatrixTextArea = new javax.swing.JTextArea();
 
         org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(edu.simplie.SimpLieApp.class).getContext().getResourceMap(AlgebraSetup.class);
         algebraInfo.setToolTipText(resourceMap.getString("algebraSetup.fullTooltip")); // NOI18N
@@ -84,69 +80,32 @@ public class AlgebraSetup extends javax.swing.JPanel implements DiagramListener
 
         dynkinDiagramPanel.setMinimumSize(new java.awt.Dimension(0, 0));
 
-        cartanMatrixPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Cartan Matrix", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12))); // NOI18N
-        cartanMatrixPanel.setToolTipText(resourceMap.getString("algebraSetup.cartanMatrixTooltip")); // NOI18N
-        cartanMatrixPanel.setMinimumSize(new java.awt.Dimension(0, 0));
-
-        jScrollPane1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-
-        cartanMatrixTextArea.setColumns(20);
-        cartanMatrixTextArea.setEditable(false);
-        cartanMatrixTextArea.setFont(new java.awt.Font("Monospaced", 0, 11)); // NOI18N
-        cartanMatrixTextArea.setRows(5);
-        jScrollPane1.setViewportView(cartanMatrixTextArea);
-
-        org.jdesktop.layout.GroupLayout cartanMatrixPanelLayout = new org.jdesktop.layout.GroupLayout(cartanMatrixPanel);
-        cartanMatrixPanel.setLayout(cartanMatrixPanelLayout);
-        cartanMatrixPanelLayout.setHorizontalGroup(
-            cartanMatrixPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(cartanMatrixPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 236, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-        cartanMatrixPanelLayout.setVerticalGroup(
-            cartanMatrixPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(cartanMatrixPanelLayout.createSequentialGroup()
-                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 295, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
+            .add(layout.createSequentialGroup()
                 .addContainerGap()
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
-                    .add(org.jdesktop.layout.GroupLayout.LEADING, dynkinDiagramPanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 561, Short.MAX_VALUE)
-                    .add(layout.createSequentialGroup()
-                        .add(cartanMatrixPanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                            .add(subAlgebraInfo, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 287, Short.MAX_VALUE)
-                            .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING, false)
-                                .add(disAlgebraInfo, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .add(algebraInfo, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 287, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))))
-                .addContainerGap())
-        );
-
-        layout.linkSize(new java.awt.Component[] {algebraInfo, disAlgebraInfo, subAlgebraInfo}, org.jdesktop.layout.GroupLayout.HORIZONTAL);
-
-        layout.setVerticalGroup(
-            layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .add(dynkinDiagramPanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 220, Short.MAX_VALUE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING, false)
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(dynkinDiagramPanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 696, Short.MAX_VALUE)
                     .add(layout.createSequentialGroup()
                         .add(algebraInfo, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(subAlgebraInfo, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(disAlgebraInfo, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                    .add(cartanMatrixPanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .add(disAlgebraInfo, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
+                .add(dynkinDiagramPanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 302, Short.MAX_VALUE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(algebraInfo, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(subAlgebraInfo, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(disAlgebraInfo, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -154,11 +113,8 @@ public class AlgebraSetup extends javax.swing.JPanel implements DiagramListener
 	
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private edu.simplie.ui.reusable.UIAlgebraInfo algebraInfo;
-    private javax.swing.JPanel cartanMatrixPanel;
-    private javax.swing.JTextArea cartanMatrixTextArea;
     private edu.simplie.ui.reusable.UIAlgebraInfo disAlgebraInfo;
     private edu.simplie.ui.DynkinDiagramPanel dynkinDiagramPanel;
-    private javax.swing.JScrollPane jScrollPane1;
     private edu.simplie.ui.reusable.UIAlgebraInfo subAlgebraInfo;
     // End of variables declaration//GEN-END:variables
 }
