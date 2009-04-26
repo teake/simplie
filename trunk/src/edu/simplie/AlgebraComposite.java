@@ -98,9 +98,6 @@ public class AlgebraComposite implements DiagramListener
 				intAlgebra = new Algebra(dd.cartanSubMatrix("int"));
 		}
 		
-		dd.setTitle("Dynkin diagram of " + getDynkinDiagramType(false));
-		dd.setTitleTeX("Dynkin diagram of " + getDynkinDiagramType(true));
-		
 	}
 	
 	/**
@@ -176,22 +173,13 @@ public class AlgebraComposite implements DiagramListener
 	 * @return	String of the type "fullalgebra as regular subalgebra x disconnected subalgebra".
 	 * @see		#getDecompositionType
 	 */
-	public String getDynkinDiagramType(boolean TeX)
+	public String getDynkinDiagramType()
 	{
 		String output = "";
-		
-		if(TeX)
-		{
-			output += algebra.typeTeX;
-			if(algebra.rank > coAlgebra.rank)
-				output += " decomposed as " + coAlgebra.typeTeX;
-		}
-		else
-		{
-			output += algebra.type;
-			if(algebra.rank > coAlgebra.rank)
-				output += " decomposed as " + coAlgebra.type;
-		}
+		output += algebra.type;
+		if(algebra.rank > coAlgebra.rank)
+			output += " decomposed as " + coAlgebra.type;
+
 		return output;
 	}
 	
