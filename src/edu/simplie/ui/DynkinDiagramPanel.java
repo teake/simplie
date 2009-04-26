@@ -117,6 +117,12 @@ public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramLis
 	}
 
 	@Action
+	public void clear()
+	{
+		dd.clear();
+	}
+
+	@Action
 	public void toEPS()
 	{
 		JFileChooser chooser = new JFileChooser("");
@@ -399,10 +405,12 @@ public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramLis
             }
         };
         tf_status = new javax.swing.JLabel();
-        rbNodeOrder = new javax.swing.JRadioButton();
+        jPanel1 = new javax.swing.JPanel();
         rbCoxeterLabels = new javax.swing.JRadioButton();
+        rbNodeOrder = new javax.swing.JRadioButton();
         jLabel1 = new javax.swing.JLabel();
         bToEPS = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
 
         menuAddConnection.setText("Add connection");
 
@@ -559,14 +567,17 @@ public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramLis
         diagram.setLayout(diagramLayout);
         diagramLayout.setHorizontalGroup(
             diagramLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(org.jdesktop.layout.GroupLayout.TRAILING, tf_status, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 502, Short.MAX_VALUE)
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, tf_status, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 441, Short.MAX_VALUE)
         );
         diagramLayout.setVerticalGroup(
             diagramLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(diagramLayout.createSequentialGroup()
-                .addContainerGap(278, Short.MAX_VALUE)
+                .addContainerGap(298, Short.MAX_VALUE)
                 .add(tf_status))
         );
+
+        nodeLabelGroup.add(rbCoxeterLabels);
+        rbCoxeterLabels.setText("Coxeter labels");
 
         nodeLabelGroup.add(rbNodeOrder);
         rbNodeOrder.setSelected(true);
@@ -577,14 +588,47 @@ public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramLis
             }
         });
 
-        nodeLabelGroup.add(rbCoxeterLabels);
-        rbCoxeterLabels.setText("Coxeter labels");
-
         jLabel1.setText("Node labels:");
 
         javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance(edu.simplie.SimpLieApp.class).getContext().getActionMap(DynkinDiagramPanel.class, this);
         bToEPS.setAction(actionMap.get("toEPS")); // NOI18N
-        bToEPS.setText("to EPS");
+        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(edu.simplie.SimpLieApp.class).getContext().getResourceMap(DynkinDiagramPanel.class);
+        bToEPS.setText(resourceMap.getString("projector.toEps")); // NOI18N
+
+        jButton1.setAction(actionMap.get("clear")); // NOI18N
+        jButton1.setText(resourceMap.getString("projector.clear")); // NOI18N
+
+        org.jdesktop.layout.GroupLayout jPanel1Layout = new org.jdesktop.layout.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel1Layout.createSequentialGroup()
+                .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(bToEPS, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE)
+                    .add(jPanel1Layout.createSequentialGroup()
+                        .add(jLabel1)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 44, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                    .add(jPanel1Layout.createSequentialGroup()
+                        .add(rbNodeOrder)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 20, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                    .add(rbCoxeterLabels)
+                    .add(jButton1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel1Layout.createSequentialGroup()
+                .add(jButton1)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(bToEPS)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jLabel1)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                .add(rbNodeOrder)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(rbCoxeterLabels)
+                .addContainerGap(175, Short.MAX_VALUE))
+        );
 
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
         this.setLayout(layout);
@@ -592,28 +636,18 @@ public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramLis
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
-                    .add(org.jdesktop.layout.GroupLayout.LEADING, diagram, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .add(layout.createSequentialGroup()
-                        .add(bToEPS)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 105, Short.MAX_VALUE)
-                        .add(jLabel1)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
-                        .add(rbNodeOrder)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
-                        .add(rbCoxeterLabels)))
+                .add(diagram, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                .add(jPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
-                .add(diagram, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(jLabel1)
-                    .add(rbNodeOrder)
-                    .add(rbCoxeterLabels)
-                    .add(bToEPS))
+            .add(layout.createSequentialGroup()
+                .addContainerGap()
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, diagram, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -785,7 +819,9 @@ private void diagramMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:ev
     private javax.swing.JButton bToEPS;
     private javax.swing.JPopupMenu contextMenu;
     private javax.swing.JPanel diagram;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JMenuItem menuAddCompactPair;
     private javax.swing.JMenu menuAddConnection;
