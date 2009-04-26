@@ -116,7 +116,7 @@ public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramLis
 	public void diagramChanged()
 	{
 		diagram.repaint();
-		setTitle(dd.getTitle());
+		setTitle("Dynkin diagram of " + algebras.getDynkinDiagramType());
 	}
 
 	@Action

@@ -51,10 +51,6 @@ public class DynkinDiagram
 	private Vector<DiagramListener> listeners;
 	/** Internal boolean to keep if the diagram is locked or not */
 	private boolean locked;
-	/** The title of the dynkin diagram */
-	private String title;
-	/** The same as "title", only now in TeX */
-	private String titleTeX;
 	
 	/**
 	 * Creates a new instance of DynkinDiagram
@@ -101,50 +97,7 @@ public class DynkinDiagram
 	{
 		return this.locked;
 	}
-	
-	/**
-	 * Sets the plain-text title of the diagram.
-	 * 
-	 * @param   title   The title of the diagram.
-	 */
-	public void setTitle(String title)
-	{
-		this.title = title;
-	}
-	
-	/**
-	 * Gets the plain-text title of the diagram.
-	 * 
-	 * @return  The title of the diagram.
-	 */
-	public String getTitle()
-	{
-		return this.title;
-	}
-	
-	/**
-	 * Sets the TeX-formatted title of the diagram.
-	 * Used when export to TeX.
-	 * 
-	 * @param   title   The TeX-formatted title of the diagram.
-	 * @see		    #toTeX
-	 */
-	public void setTitleTeX(String title)
-	{
-		this.titleTeX = title;
-	}
-	
-	
-	/**
-	 * Gets the TeX-formatted title of the diagram.
-	 * 
-	 * @return  The TeX-formatted title of the diagram.
-	 */
-	public String getTitleTeX()
-	{
-		return this.titleTeX;
-	}
-	
+				
 	public DynkinNode getLastAddedNode()
 	{
 		return lastAddedNode;
@@ -641,95 +594,7 @@ public class DynkinDiagram
 		}
 		return true;
 	}
-	
-	/** 
-	 * Returns a string of LaTeX representing the diagram visually.
-	 * 
-	 * @param   includeCaption  Includes a caption with the LaTeX figure, 
-	 *			    which contains LaTeX title.
-	 * @param   includeLabels   Includes numbering on the nodes within the figure.
-	 * @param   includeFigure   Includes the "figure" environment when exporting to TeX.
-	 * @return		    A string containing TeX code that can be compiled.
-	 * @see	    #setTitleTeX
-	 */
-	public String toTeX(boolean includeCaption, boolean includeLabels, boolean includeFigure)
-	{
-		if(rank() == 0)
-		{
-			return "";
-		}
 		
-		// Append a hashcode of this specific diagram to all the labels in the psfigure.
-		// This prevents multiple garbled psfigures on one page.
-		int hashCode = Math.abs(cartanMatrix().hashCode() + cartanSubMatrix("co").hashCode());
-		
-		// Get the bounds of the diagram
-		int[] bounds = getDiagramBounds();
-		
-		String output = new String();
-		
-		// The header
-		if(includeFigure)
-		{
-			output += "\\begin{figure}[H]\n";
-			output += "\\begin{center}\n";
-		}
-		output += "\\begin{pspicture}(" + bounds[0] + "," + bounds[2] + ")(" + bounds[1] + "," + bounds[3] + ")\n";
-		
-		// The nodes.
-		for(DynkinNode node : nodes)
-		{
-			if(node.isEnabled())
-				output += "\\normalNode";
-			if(node.isDisconnected())
-				output += "\\dualityNode";
-			if(node.isLevel())
-				output += "\\disabledNode";
-			output += "{" + node.x + "," + (bounds[3] - node.y) + "}{N" + node.getLabel() + hashCode + "} \n";
-			if(includeLabels)
-				output += "\\nodeLabel{N" + node.getLabel() + hashCode + "}{" + node.getLabel() + "}\n";
-		}
-		
-		// The connections.
-		for(DynkinConnection connection : connections)
-		{
-			String toFrom= "{N" + connection.fromNode.getLabel() + hashCode + "}"
-					+ "{N" + connection.toNode.getLabel() + hashCode + "}\n";
-			switch(connection.type)
-			{
-			case DynkinConnection.TYPE_SINGLE:
-				output += "\\singleConnection" + toFrom;
-				break;
-			case DynkinConnection.TYPE_DOUBLE:
-				output += "\\doubleConnection" + toFrom;
-				break;
-			case DynkinConnection.TYPE_TRIPLE:
-				output += "\\tripleConnection" + toFrom;
-				break;
-			case DynkinConnection.TYPE_QUADRUPLE:
-				output += "\\quadrupleConnection" + toFrom;
-				break;
-			case DynkinConnection.TYPE_SPECIAL_DOUBLE:
-				output += "\\specialDoubleConnection" + toFrom;
-				break;
-			default:
-				break;
-			}
-		}
-		
-		// The footer
-		output += "\\end{pspicture}\n";
-		if(includeFigure)
-		{
-			output += "\\end{center}\n";
-			if(includeCaption)
-				output += "\\caption{" + titleTeX + "}\n";
-			output += "\\end{figure}\n";
-		}
-		
-		return output;
-	}
-	
 	private void update()
 	{
 		Collections.sort(nodes);

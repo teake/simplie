@@ -417,7 +417,7 @@ public class SimpLieView extends FrameView {
 	{
 		JFileChooser chooser = new JFileChooser(ddDir);
 		chooser.addChoosableFileFilter(ddFilter);
-		chooser.setSelectedFile(new File(algebras.getDynkinDiagramType(false) + ".dd"));
+		chooser.setSelectedFile(new File(algebras.getDynkinDiagramType() + ".dd"));
 		chooser.setDialogTitle("Save Dynkin diagram");
 		
 		if ( chooser.showSaveDialog(this.getComponent()) == JFileChooser.APPROVE_OPTION )
