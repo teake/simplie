@@ -152,8 +152,7 @@ public class EmptyProjector implements Projector2D
 		// Don't do anything if ...
 		if(algebras.algebra == null 
 				|| algebras.algebra.rank == 0
-				|| algebras.subAlgebra.rank == 0
-				|| !algebras.subAlgebra.finite)
+				|| algebras.subAlgebra.rank == 0)
 			return;
 		
 		// Reset stuff
