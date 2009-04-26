@@ -27,7 +27,6 @@ import java.awt.Graphics2D;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -35,8 +34,6 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import net.sf.epsgraphics.EpsGraphics;
 
 /**
@@ -215,10 +212,7 @@ public class EmptyProjector implements Projector2D
 			eps = new EpsGraphics("Projection", outputStream, 0, 0, 500, 500, net.sf.epsgraphics.ColorMode.COLOR_RGB);
 			draw(eps, 500, 500);
 		}
-		catch(Exception ex)
-		{
-			Logger.getLogger(EmptyProjector.class.getName()).log(Level.SEVERE, null, ex);
-		}
+		catch(Exception ex){}
 		finally
 		{
 			try
@@ -226,10 +220,7 @@ public class EmptyProjector implements Projector2D
 				eps.flush();
 				eps.close();
 			}
-			catch(IOException ex)
-			{
-				Logger.getLogger(EmptyProjector.class.getName()).log(Level.SEVERE, null, ex);
-			}
+			catch(Exception ex){}
 		}
 	}
 
