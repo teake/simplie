@@ -28,6 +28,7 @@ import java.util.Vector;
 import java.util.Iterator;
 import java.util.Collections;
 import java.io.*;
+import java.util.Comparator;
 
 
 /**
@@ -38,8 +39,11 @@ import java.io.*;
  * @author Teake Nutma
  * @version $Revision$, $Date$
  */
-public class DynkinDiagram
+public class DynkinDiagram implements Comparator<DynkinNode>
 {
+	public static final int SORT_TOPBOTTOM = 1;
+	public static final int SORT_BOTTOMTOP = -1;
+
 	/** Vector containing all nodes of this diagram. */
 	public Vector<DynkinNode> nodes;
 	/** Vector containing all connections of this diagram */
@@ -52,6 +56,8 @@ public class DynkinDiagram
 	private Vector<DiagramListener> listeners;
 	/** Internal boolean to keep if the diagram is locked or not */
 	private boolean locked;
+	/** Determines what order the dynkin nodes are sorted */
+	private int sortOrder;
 	
 	/**
 	 * Creates a new instance of DynkinDiagram
@@ -64,6 +70,7 @@ public class DynkinDiagram
 		compactPairs= new Vector<CompactPair>();
 		lastAddedNode	= null;
 		listeners	= new Vector<DiagramListener>();
+		sortOrder	= SORT_BOTTOMTOP;
 	}
 	
 	/**
@@ -98,7 +105,20 @@ public class DynkinDiagram
 	{
 		return this.locked;
 	}
-				
+
+	/**
+	 * Sets the sort order.
+	 * @param sortOrder		Should either be SORT_BOTTOMTOP or SORT_TOPBOTTOM
+	 */
+	public void setSortOrder(int sortOrder)
+	{
+		if(sortOrder != this.sortOrder && (sortOrder == SORT_BOTTOMTOP || sortOrder == SORT_TOPBOTTOM) )
+		{
+			this.sortOrder = sortOrder;
+			update();
+		}
+	}
+
 	public DynkinNode getLastAddedNode()
 	{
 		return lastAddedNode;
@@ -603,7 +623,7 @@ public class DynkinDiagram
 		
 	private void update()
 	{
-		Collections.sort(nodes);
+		Collections.sort(nodes,this);
 		for(int i = 0; i < rank(); i++)
 		{
 			nodes.get(i).setLabel(i+1);
@@ -612,5 +632,20 @@ public class DynkinDiagram
 		{
 			listener.diagramChanged();
 		}
+	}
+
+	public int compare(DynkinNode n1, DynkinNode n2)
+	{
+		final int BEFORE = -1;
+		final int EQUAL = 0;
+		final int AFTER = 1;
+
+		if(sortOrder * n1.y > sortOrder * n2.y) return AFTER;
+		if(sortOrder * n1.y < sortOrder * n2.y) return BEFORE;
+
+		if(n1.x > n2.x) return AFTER;
+		if(n1.x < n2.x) return BEFORE;
+
+		return EQUAL;
 	}
 }

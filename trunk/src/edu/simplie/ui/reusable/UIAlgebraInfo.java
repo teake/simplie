@@ -53,7 +53,8 @@ public class UIAlgebraInfo extends javax.swing.JPanel
 		algebraInfoDim.setText(algebra.dimension);
 		algebraInfoCMDet.setText(Helper.intToString(algebra.det));
 		algebraInfoCMrank.setText(Helper.intToString(algebra.rankA));
-		algebraInfoCoxeter.setText(Helper.intToString(algebra.coxeterNumber));
+		algebraInfoCoxNum.setText(Helper.intToString(algebra.coxeterNumber));
+		algebraInfoDualCoxNum.setText(Helper.intToString(algebra.dualCoxeterNumber));
 	}
 	
 	/** This method is called from within the constructor to
@@ -66,16 +67,20 @@ public class UIAlgebraInfo extends javax.swing.JPanel
 
         jLabel4 = new javax.swing.JLabel();
         algebraInfoType = new javax.swing.JLabel();
-        algebraInfoRank = new javax.swing.JLabel();
-        algebraInfoDim = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         algebraInfoCMDet = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         algebraInfoCMrank = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
-        algebraInfoCoxeter = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+        algebraInfoRank = new javax.swing.JLabel();
+        jPanel2 = new javax.swing.JPanel();
+        tfCoxNum = new javax.swing.JLabel();
+        algebraInfoCoxNum = new javax.swing.JLabel();
+        tfDualCoxNum = new javax.swing.JLabel();
+        algebraInfoDualCoxNum = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        algebraInfoDim = new javax.swing.JLabel();
 
         setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Algebra information", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12))); // NOI18N
 
@@ -86,20 +91,6 @@ public class UIAlgebraInfo extends javax.swing.JPanel
         algebraInfoType.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         algebraInfoType.setText("   ");
         algebraInfoType.setToolTipText(resourceMap.getString("algebra.typeDef")); // NOI18N
-
-        algebraInfoRank.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        algebraInfoRank.setText("    ");
-        algebraInfoRank.setToolTipText(resourceMap.getString("algebra.rankDef")); // NOI18N
-
-        algebraInfoDim.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        algebraInfoDim.setText("    ");
-        algebraInfoDim.setToolTipText(resourceMap.getString("algebra.dimensionDef")); // NOI18N
-
-        jLabel2.setText("Dimension:");
-        jLabel2.setToolTipText(resourceMap.getString("algebra.dimensionDef")); // NOI18N
-
-        jLabel1.setText("Rank:");
-        jLabel1.setToolTipText(resourceMap.getString("algebra.rankDef")); // NOI18N
 
         jLabel3.setText("CM det:");
         jLabel3.setToolTipText(resourceMap.getString("algebra.cmDetDef")); // NOI18N
@@ -114,11 +105,89 @@ public class UIAlgebraInfo extends javax.swing.JPanel
         algebraInfoCMrank.setText("   ");
         algebraInfoCMrank.setToolTipText(resourceMap.getString("algebra.cmRankDef")); // NOI18N
 
-        jLabel6.setText("Coxeter number:");
-        jLabel6.setToolTipText(resourceMap.getString("algebra.coxeterDef")); // NOI18N
+        jLabel1.setText("Rank:");
+        jLabel1.setToolTipText(resourceMap.getString("algebra.rankDef")); // NOI18N
 
-        algebraInfoCoxeter.setText(" ");
-        algebraInfoCoxeter.setToolTipText(resourceMap.getString("algebra.coxeterDef")); // NOI18N
+        algebraInfoRank.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        algebraInfoRank.setText("    ");
+        algebraInfoRank.setToolTipText(resourceMap.getString("algebra.rankDef")); // NOI18N
+
+        org.jdesktop.layout.GroupLayout jPanel1Layout = new org.jdesktop.layout.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel1Layout.createSequentialGroup()
+                .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(jLabel3)
+                    .add(jLabel5)
+                    .add(jLabel1))
+                .add(15, 15, 15)
+                .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
+                    .add(algebraInfoRank, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 37, Short.MAX_VALUE)
+                    .add(algebraInfoCMDet, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 37, Short.MAX_VALUE)
+                    .add(algebraInfoCMrank, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 37, Short.MAX_VALUE)))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel1Layout.createSequentialGroup()
+                .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(jLabel1)
+                    .add(algebraInfoRank))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(jLabel3)
+                    .add(algebraInfoCMDet))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(jLabel5)
+                    .add(algebraInfoCMrank)))
+        );
+
+        tfCoxNum.setText("Coxeter number:");
+        tfCoxNum.setToolTipText(resourceMap.getString("algebra.coxeterDef")); // NOI18N
+
+        algebraInfoCoxNum.setText(" ");
+        algebraInfoCoxNum.setToolTipText(resourceMap.getString("algebra.coxeterDef")); // NOI18N
+
+        tfDualCoxNum.setText("Dual number:");
+
+        jLabel2.setText("Dimension:");
+        jLabel2.setToolTipText(resourceMap.getString("algebra.dimensionDef")); // NOI18N
+
+        algebraInfoDim.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        algebraInfoDim.setText("    ");
+        algebraInfoDim.setToolTipText(resourceMap.getString("algebra.dimensionDef")); // NOI18N
+
+        org.jdesktop.layout.GroupLayout jPanel2Layout = new org.jdesktop.layout.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel2Layout.createSequentialGroup()
+                .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(tfCoxNum)
+                    .add(tfDualCoxNum)
+                    .add(jLabel2))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(algebraInfoDim, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 38, Short.MAX_VALUE)
+                    .add(algebraInfoCoxNum, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 38, Short.MAX_VALUE)
+                    .add(algebraInfoDualCoxNum, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 38, Short.MAX_VALUE)))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel2Layout.createSequentialGroup()
+                .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(jLabel2)
+                    .add(algebraInfoDim, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 14, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(tfCoxNum)
+                    .add(algebraInfoCoxNum))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
+                    .add(tfDualCoxNum)
+                    .add(algebraInfoDualCoxNum, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 14, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
+        );
 
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
         this.setLayout(layout);
@@ -130,53 +199,23 @@ public class UIAlgebraInfo extends javax.swing.JPanel
                     .add(layout.createSequentialGroup()
                         .add(jLabel4)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(algebraInfoType, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 138, Short.MAX_VALUE))
+                        .add(algebraInfoType, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 193, Short.MAX_VALUE))
                     .add(layout.createSequentialGroup()
-                        .add(jLabel6)
+                        .add(jPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(algebraInfoCoxeter, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 67, Short.MAX_VALUE))
-                    .add(layout.createSequentialGroup()
-                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                            .add(jLabel1)
-                            .add(jLabel2)
-                            .add(jLabel3)
-                            .add(jLabel5))
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                            .add(algebraInfoDim, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)
-                            .add(algebraInfoRank, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)
-                            .add(algebraInfoCMrank, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)
-                            .add(algebraInfoCMDet, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE))))
+                        .add(jPanel2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(layout.createSequentialGroup()
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(jLabel4)
                     .add(algebraInfoType, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 29, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(layout.createSequentialGroup()
-                        .add(jLabel1)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(jLabel2))
-                    .add(layout.createSequentialGroup()
-                        .add(algebraInfoRank)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(algebraInfoDim)))
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jLabel3)
-                    .add(algebraInfoCMDet))
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(jLabel5)
-                    .add(algebraInfoCMrank))
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(jLabel6)
-                    .add(algebraInfoCoxeter))
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
+                    .add(jPanel2, 0, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .add(jPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -185,8 +224,9 @@ public class UIAlgebraInfo extends javax.swing.JPanel
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel algebraInfoCMDet;
     private javax.swing.JLabel algebraInfoCMrank;
-    private javax.swing.JLabel algebraInfoCoxeter;
+    private javax.swing.JLabel algebraInfoCoxNum;
     private javax.swing.JLabel algebraInfoDim;
+    private javax.swing.JLabel algebraInfoDualCoxNum;
     private javax.swing.JLabel algebraInfoRank;
     private javax.swing.JLabel algebraInfoType;
     private javax.swing.JLabel jLabel1;
@@ -194,7 +234,10 @@ public class UIAlgebraInfo extends javax.swing.JPanel
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JLabel tfCoxNum;
+    private javax.swing.JLabel tfDualCoxNum;
     // End of variables declaration//GEN-END:variables
 	
 }

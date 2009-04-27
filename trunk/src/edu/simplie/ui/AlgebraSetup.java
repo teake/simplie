@@ -63,10 +63,12 @@ public class AlgebraSetup extends javax.swing.JPanel implements DiagramListener
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        dynkinDiagramPanel = new edu.simplie.ui.DynkinDiagramPanel();
         algebraInfo = new edu.simplie.ui.reusable.UIAlgebraInfo();
         subAlgebraInfo = new edu.simplie.ui.reusable.UIAlgebraInfo();
         disAlgebraInfo = new edu.simplie.ui.reusable.UIAlgebraInfo();
-        dynkinDiagramPanel = new edu.simplie.ui.DynkinDiagramPanel();
+
+        dynkinDiagramPanel.setMinimumSize(new java.awt.Dimension(0, 0));
 
         org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(edu.simplie.SimpLieApp.class).getContext().getResourceMap(AlgebraSetup.class);
         algebraInfo.setToolTipText(resourceMap.getString("algebraSetup.fullTooltip")); // NOI18N
@@ -78,8 +80,6 @@ public class AlgebraSetup extends javax.swing.JPanel implements DiagramListener
         disAlgebraInfo.setToolTipText(resourceMap.getString("algebraSetup.internalTooltip")); // NOI18N
         disAlgebraInfo.setTitle("Internal algebra");
 
-        dynkinDiagramPanel.setMinimumSize(new java.awt.Dimension(0, 0));
-
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -87,20 +87,20 @@ public class AlgebraSetup extends javax.swing.JPanel implements DiagramListener
             .add(layout.createSequentialGroup()
                 .addContainerGap()
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(dynkinDiagramPanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 696, Short.MAX_VALUE)
                     .add(layout.createSequentialGroup()
                         .add(algebraInfo, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(subAlgebraInfo, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(disAlgebraInfo, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
+                        .add(disAlgebraInfo, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                    .add(dynkinDiagramPanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 624, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .add(dynkinDiagramPanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 302, Short.MAX_VALUE)
+                .add(dynkinDiagramPanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 337, Short.MAX_VALUE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(algebraInfo, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)

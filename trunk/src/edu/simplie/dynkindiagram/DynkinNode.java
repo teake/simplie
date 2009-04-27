@@ -33,7 +33,7 @@ import java.io.Serializable;
  * @author	Teake Nutma
  * @version $Revision$, $Date$
  */
-public class DynkinNode implements Serializable, Comparable<DynkinNode>
+public class DynkinNode implements Serializable
 {
 	public static final int STATE_ENABLED = 0;
 	public static final int STATE_DISABLED = 1;
@@ -236,30 +236,6 @@ public class DynkinNode implements Serializable, Comparable<DynkinNode>
 	public boolean hasConnectionTo(DynkinNode toNode)
 	{
 		return connectionsTo.contains(toNode);
-	}
-	
-	/**
-	 * Compares nodes according to their position in the Dynkin diagram.
-	 * The nodes are sorted according to their position in the Dynkin diagram.
-	 *
-	 * @param	compareNode		The node to compare this one to.
-	 * @return					1 if this node comes after the other,
-	 *							0 if we cannot sort it,
-	 *							-1 if this nodes comes before the other.
-	 */
-	public int compareTo(DynkinNode compareNode)
-	{
-		final int BEFORE = -1;
-		final int EQUAL = 0;
-		final int AFTER = 1;
-		
-		if(this.y < compareNode.y) return AFTER;
-		if(this.y > compareNode.y) return BEFORE;
-		
-		if(this.x > compareNode.x) return AFTER;
-		if(this.x < compareNode.x) return BEFORE;
-		
-		return EQUAL;
 	}
 	
 	/**
