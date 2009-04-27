@@ -102,11 +102,11 @@ public class Projector extends javax.swing.JPanel implements DiagramListener
         canvas.setLayout(canvasLayout);
         canvasLayout.setHorizontalGroup(
             canvasLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 471, Short.MAX_VALUE)
+            .add(0, 320, Short.MAX_VALUE)
         );
         canvasLayout.setVerticalGroup(
             canvasLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 492, Short.MAX_VALUE)
+            .add(0, 361, Short.MAX_VALUE)
         );
 
         optionPanel.setName("optionPanel"); // NOI18N
@@ -195,7 +195,7 @@ public class Projector extends javax.swing.JPanel implements DiagramListener
                 .add(cbNodes)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(cbConnections)
-                .addContainerGap(167, Short.MAX_VALUE))
+                .addContainerGap(63, Short.MAX_VALUE))
         );
 
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
@@ -282,7 +282,7 @@ public class Projector extends javax.swing.JPanel implements DiagramListener
 	public void toEPS()
 	{
 		JFileChooser chooser = new JFileChooser("");
-		chooser.setSelectedFile(new File("projection.eps"));
+		chooser.setSelectedFile(new File("Projection of " + algebras.getDynkinDiagramType() + ".eps"));
 		chooser.setDialogTitle("to EPS");
 		if ( chooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION )
 		{
