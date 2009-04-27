@@ -37,7 +37,9 @@ import java.util.TreeMap;
 import net.sf.epsgraphics.EpsGraphics;
 
 /**
- *
+ * Generic skeleton projector for root systems.
+ * Extending classes should do all the work.
+ * 
  * @author Teake Nutma
  * @version $Rev$, $Date$
  */

@@ -24,7 +24,9 @@ package edu.simplie.ui;
 
 import edu.simplie.*;
 import edu.simplie.dynkindiagram.*;
+import edu.simplie.ui.shapes.LinesWithArrow;
 
+import java.awt.BasicStroke;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
@@ -32,9 +34,12 @@ import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Font;
 import java.awt.Point;
+import java.awt.Shape;
 import java.awt.event.MouseEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.geom.Line2D;
+import java.awt.geom.QuadCurve2D;
 import java.io.File;
 import java.io.FileOutputStream;
 import javax.swing.JFileChooser;
@@ -57,7 +62,15 @@ public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramLis
 	public static final int STATUS_REMCON = 3;
 	public static final int STATUS_ADDCOMP = 4;
 	public static final int STATUS_REMCOMP = 5;
-	
+
+
+	private float dash[] = {5.0f,2.0f};
+	private BasicStroke dashedStroke = new BasicStroke(0.75f,
+				BasicStroke.CAP_BUTT,
+				BasicStroke.JOIN_MITER,
+				10.0f, dash, 0.0f);
+	private BasicStroke normalStroke = new BasicStroke(1.0f);
+
 	// Variables storing the actual status.
 	private int status;
 	private int prev_status;
@@ -216,17 +229,17 @@ public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramLis
 					DynkinNode node = dd.getLastAddedNode();
 					if(shiftDown && node != null)
 					{
-						Helper.drawConnection(g2,Color.LIGHT_GRAY,DynkinConnection.TYPE_SINGLE,trans(node),mouseP,radius);
+						drawConnection(g2,Color.LIGHT_GRAY,DynkinConnection.TYPE_SINGLE,trans(node),mouseP,radius);
 					}
-					Helper.drawFilledCircle(g2, Color.WHITE, Color.GRAY, mouseP, radius);
+					drawFilledCircle(g2, Color.WHITE, Color.GRAY, mouseP, radius);
 					break;
 				case STATUS_ADDCOMP:
 				case STATUS_ADDCON:
 					Point modP = trans(modificationFrom);
 					if(status == STATUS_ADDCOMP)
-						Helper.drawCompactCon(g2, Color.GRAY,modP,mouseP);
+						drawCompactCon(g2, Color.GRAY,modP,mouseP);
 					else
-						Helper.drawConnection(g2, Color.LIGHT_GRAY, connectionType, modP, mouseP, radius);
+						drawConnection(g2, Color.LIGHT_GRAY, connectionType, modP, mouseP, radius);
 					break;
 				default:
 					break;			
@@ -241,12 +254,12 @@ public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramLis
 		g2.setColor(Color.BLACK);
 		for (DynkinConnection conn : dd.connections)
 		{
-			Helper.drawConnection(g2, Color.BLACK, conn.type, trans(conn.fromNode), trans(conn.toNode), radius);
+			drawConnection(g2, Color.BLACK, conn.type, trans(conn.fromNode), trans(conn.toNode), radius);
 		}
 		// Secondly the compact pair indicators.
 		for(CompactPair pair : dd.compactPairs)
 		{
-			Helper.drawCompactCon(g2, Color.BLACK, trans(pair.node1), trans(pair.node2));
+			drawCompactCon(g2, Color.BLACK, trans(pair.node1), trans(pair.node2));
 		}
 		// Now draw the nodes.
 		for (int i = 0; i < dd.rank(); i++)
@@ -262,7 +275,7 @@ public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramLis
 			else
 				color = Color.GRAY;
 
-			Helper.drawFilledCircle(g2,color,Color.BLACK,nodeP,radius);
+			drawFilledCircle(g2,color,Color.BLACK,nodeP,radius);
 
 			if(node.isCompact())
 			{
@@ -273,7 +286,7 @@ public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramLis
 				else
 					color = Color.GRAY;
 
-				Helper.drawFilledCircle(g2,color,Color.BLACK,nodeP,radius/2);
+				drawFilledCircle(g2,color,Color.BLACK,nodeP,radius/2);
 			}
 			if(rbNodeOrder.isSelected())
 			{
@@ -373,6 +386,61 @@ public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramLis
 		setStatus(STATUS_PREVIEW);
 		modificationFrom = null;
 		this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+	}
+
+	/**
+	 * Draw a filled circle onto a Graphics2D object.
+	 * @param g			The object on which to draw.
+	 * @param c1		The inner color of the circle.
+	 * @param c2		The outer color (stoke) of the circle.
+	 * @param p			The point where the circle is to be drawn.
+	 * @param radius	The radius of the circle.
+	 */
+	private void drawFilledCircle(Graphics2D g, Color c1, Color c2, Point p, int radius)
+	{
+		g.setColor(c1);
+		g.fillOval(p.x - radius, p.y - radius, 2*radius, 2*radius);
+		g.setColor(c2);
+		g.drawOval(p.x - radius, p.y - radius, 2*radius, 2*radius);
+	}
+
+	private void drawCompactCon(Graphics2D g, Color c, Point begin, Point end)
+	{
+		g.setColor(c);
+		g.setStroke(dashedStroke);
+		int controlx = (begin.x + end.x + begin.y - end.y) / 2;
+		int controly = (begin.y + end.y + end.x - begin.x) / 2;
+		g.draw(new QuadCurve2D.Float(begin.x, begin.y, controlx, controly, end.x, end.y));
+		g.setStroke(normalStroke);
+	}
+
+	private void drawConnection(Graphics2D g, Color c, int type, Point begin, Point end, int radius)
+	{
+		g.setColor(c);
+		Shape line;
+		switch(type)
+		{
+			case DynkinConnection.TYPE_SINGLE:
+				line = new Line2D.Double(begin,end);
+				break;
+			case DynkinConnection.TYPE_DOUBLE:
+				line = new LinesWithArrow(begin,end,2,2*radius,true);
+				break;
+			case DynkinConnection.TYPE_TRIPLE:
+				line = new LinesWithArrow(begin,end,3,2*radius,true);
+				break;
+			case DynkinConnection.TYPE_QUADRUPLE:
+				line = new LinesWithArrow(begin,end,4,2*radius,true);
+				break;
+			case DynkinConnection.TYPE_SPECIAL_DOUBLE:
+				line = new LinesWithArrow(begin,end,2,2*radius,false);
+				break;
+			default:
+				line = null;
+				break;
+		}
+		if(line != null)
+			g.draw(line);
 	}
 	
 	/** This method is called from within the constructor to

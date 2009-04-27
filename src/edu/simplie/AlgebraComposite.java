@@ -156,8 +156,9 @@ public class AlgebraComposite implements DiagramListener
 	 * Returns a string representing the type of decomposition of the full algebra into
 	 * the regular subalgebra and the disconnected subalgebra.
 	 *
-	 * @return	String of the type "regular subalgebra x disconnected subalgebra representations in fullalgebra".
-	 * @see		#getDynkinDiagramType
+	 * @return			String of the type "regular subalgebra x disconnected subalgebra representations in fullalgebra".
+	 * @param	TeX		If true, a LaTeX formatted string is returned.
+	 * @see				#getDynkinDiagramType
 	 */
 	public String getDecompositionType(boolean TeX)
 	{
@@ -282,6 +283,14 @@ public class AlgebraComposite implements DiagramListener
 		return rootVector;
 	}
 
+	/**
+	 * Calculates a non-unique character (an integer) for a specific level in this
+	 * decomposition. Adjacent levels have different characters.
+	 *
+	 * @param rootVector	The root vector on the level whose character is to be
+	 *						calculated.
+	 * @return				A non-unique integer for that level.
+	 */
 	public int levelModChar(int[] rootVector)
 	{
 		int[] levels = levels(rootVector);
@@ -293,6 +302,14 @@ public class AlgebraComposite implements DiagramListener
 		return characteristic;
 	}
 
+	/**
+	 * Calculates a unique character (an integer) for a specific level in this
+	 * decomposition.
+	 *
+	 * @param rootVector	The root vector on the level whose character is to be
+	 *						calculated.
+	 * @return				A unique integer for that level.
+	 */
 	public int levelChar(int[] rootVector)
 	{
 		int[] levels = levels(rootVector);

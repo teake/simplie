@@ -55,7 +55,6 @@ public class ExportToTex extends javax.swing.JPanel
 	public ExportToTex()
 	{
 		initComponents();
-		texFilter = new FileNameExtensionFilter("LaTeX file (*.tex)", "tex");
 		clipboard = java.awt.Toolkit.getDefaultToolkit().getSystemClipboard();
 	}
 	

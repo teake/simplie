@@ -547,7 +547,12 @@ public class Algebra
 	}
 	
 	
-	/** Returns the Dynkin labels of the weight associated to a vector of the root. */
+	/**
+	 * Returns the Dynkin labels of the weight associated to a vector of the root.
+	 * 
+	 * @param rootVector	The root vector to be converted into Dynkin labels.
+	 * @return				The Dynkin labels of the input root vector.
+	 */
 	public int[] rootToWeight(int[] rootVector)
 	{
 		int[] dynkinLabels = new int[rank];
