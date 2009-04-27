@@ -1,0 +1,25 @@
+#summary Screenshot and generated images.
+
+= Coxeter plane projections =
+
+
+== E10 ==
+
+http://simplie.googlecode.com/files/E10.jpg
+[http://simplie.googlecode.com/files/E10.pdf High resolution PDF]
+
+
+== E8 ==
+
+http://simplie.googlecode.com/files/E8%20coxeter.jpg
+[http://simplie.googlecode.com/files/E8%20coxeter.pdf High resolution PDF]
+
+
+
+= Hasse diagrams =
+
+
+== E8 ==
+
+http://simplie.googlecode.com/files/E8%20hasse.jpg
+[http://simplie.googlecode.com/files/E8%20hasse.pdf High resolution PDF]
