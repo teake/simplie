@@ -142,14 +142,6 @@
             <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
           </AuxValues>
           <SubComponents>
-            <MenuItem class="javax.swing.JMenuItem" name="helpMenuItem">
-              <Properties>
-                <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
-                  <action class="edu.simplie.SimpLieView" id="showHelp" methodName="showHelp"/>
-                </Property>
-                <Property name="name" type="java.lang.String" value="helpMenuItem" noResource="true"/>
-              </Properties>
-            </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="aboutMenuItem">
               <Properties>
                 <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">

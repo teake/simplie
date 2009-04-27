@@ -168,9 +168,8 @@ public class SimpLieView extends FrameView {
         exportToTexItem = new javax.swing.JMenuItem();
         exporRootsItem = new javax.swing.JMenuItem();
         outputItem = new javax.swing.JMenuItem();
-        javax.swing.JMenu helpMenu = new javax.swing.JMenu();
-        helpMenuItem = new javax.swing.JMenuItem();
-        javax.swing.JMenuItem aboutMenuItem = new javax.swing.JMenuItem();
+        helpMenu = new javax.swing.JMenu();
+        aboutMenuItem = new javax.swing.JMenuItem();
         exportToTex = new edu.simplie.ui.ExportToTex();
         systemOutTextArea = new edu.simplie.ui.SystemOutTextArea();
         statusPanel = new javax.swing.JPanel();
@@ -252,10 +251,6 @@ public class SimpLieView extends FrameView {
 
         helpMenu.setText(resourceMap.getString("helpMenu.text")); // NOI18N
         helpMenu.setName("helpMenu"); // NOI18N
-
-        helpMenuItem.setAction(actionMap.get("showHelp")); // NOI18N
-        helpMenuItem.setName("helpMenuItem"); // NOI18N
-        helpMenu.add(helpMenuItem);
 
         aboutMenuItem.setAction(actionMap.get("showAboutBox")); // NOI18N
         aboutMenuItem.setName("aboutMenuItem"); // NOI18N
@@ -477,28 +472,17 @@ public class SimpLieView extends FrameView {
 		}
 	}
 
-	@Action
-	public void showHelp()
-	{
-       if (helpDialog == null) {
-            JFrame mainFrame = SimpLieApp.getApplication().getMainFrame();
-            helpDialog = new SimpLieHelp(mainFrame);
-            helpDialog.setLocationRelativeTo(mainFrame);
-        }
-        SimpLieApp.getApplication().show(helpDialog);
-	}
-
-
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem aboutMenuItem;
     private edu.simplie.ui.AlgebraInfo algebraInfo;
     private edu.simplie.ui.AlgebraSetup algebraSetup;
     private javax.swing.JMenuItem clearItem;
     private javax.swing.JMenuItem exporRootsItem;
     private edu.simplie.ui.ExportToTex exportToTex;
     private javax.swing.JMenuItem exportToTexItem;
-    private javax.swing.JMenuItem helpMenuItem;
+    private javax.swing.JMenu helpMenu;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
