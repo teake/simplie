@@ -123,6 +123,13 @@ public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramLis
 	}
 
 	@Action
+	public void changeOrder()
+	{
+		int order = ( rbBottomTop.isSelected() ) ? DynkinDiagram.SORT_BOTTOMTOP : DynkinDiagram.SORT_TOPBOTTOM;
+		dd.setSortOrder(order);
+	}
+
+	@Action
 	public void toEPS()
 	{
 		JFileChooser chooser = new JFileChooser("");
@@ -278,11 +285,11 @@ public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramLis
 				int cox		= algebras.algebra.coxeterLabels[i];
 				int dualCox = algebras.algebra.dualCoxeterLabels[i];
 				g2.setFont(new Font("Monospaced", Font.ITALIC, 12));
-				g2.drawString(Helper.intToString(cox), nodeP.x + radius, nodeP.y + radius + 10);
+				g2.drawString(Helper.intToString(dualCox), nodeP.x + radius, nodeP.y + radius + 10);
 				if(cox != dualCox)
 				{
 					g2.setFont(new Font("Monospaced",Font.ITALIC|Font.BOLD, 12));
-					g2.drawString(Helper.intToString(dualCox), nodeP.x + radius, nodeP.y + radius + 22);
+					g2.drawString(Helper.intToString(cox), nodeP.x + radius, nodeP.y + radius + 22);
 				}
 			}
 
@@ -398,6 +405,7 @@ public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramLis
         menuRemoveNode = new javax.swing.JMenuItem();
         stateButtonGroup = new javax.swing.ButtonGroup();
         nodeLabelGroup = new javax.swing.ButtonGroup();
+        orderGroup = new javax.swing.ButtonGroup();
         diagram = new javax.swing.JPanel() {
             public void paintComponent(Graphics g) {
                 super.paintComponent(g);
@@ -411,6 +419,9 @@ public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramLis
         jLabel1 = new javax.swing.JLabel();
         bToEPS = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
+        rbBottomTop = new javax.swing.JRadioButton();
+        rbTopBottom = new javax.swing.JRadioButton();
 
         menuAddConnection.setText("Add connection");
 
@@ -567,7 +578,7 @@ public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramLis
         diagram.setLayout(diagramLayout);
         diagramLayout.setHorizontalGroup(
             diagramLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(org.jdesktop.layout.GroupLayout.TRAILING, tf_status, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 441, Short.MAX_VALUE)
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, tf_status, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 307, Short.MAX_VALUE)
         );
         diagramLayout.setVerticalGroup(
             diagramLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -598,21 +609,35 @@ public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramLis
         jButton1.setAction(actionMap.get("clear")); // NOI18N
         jButton1.setText(resourceMap.getString("projector.clear")); // NOI18N
 
+        jLabel2.setText("Node order:");
+
+        rbBottomTop.setAction(actionMap.get("changeOrder")); // NOI18N
+        orderGroup.add(rbBottomTop);
+        rbBottomTop.setSelected(true);
+        rbBottomTop.setText("Bottom to top");
+
+        rbTopBottom.setAction(actionMap.get("changeOrder")); // NOI18N
+        orderGroup.add(rbTopBottom);
+        rbTopBottom.setText("Top to bottom");
+
         org.jdesktop.layout.GroupLayout jPanel1Layout = new org.jdesktop.layout.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel1Layout.createSequentialGroup()
                 .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(bToEPS, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE)
+                    .add(bToEPS, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 95, Short.MAX_VALUE)
+                    .add(jButton1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 95, Short.MAX_VALUE)
                     .add(jPanel1Layout.createSequentialGroup()
                         .add(jLabel1)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 44, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 36, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                     .add(jPanel1Layout.createSequentialGroup()
                         .add(rbNodeOrder)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 20, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 16, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                     .add(rbCoxeterLabels)
-                    .add(jButton1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE))
+                    .add(jLabel2)
+                    .add(rbBottomTop)
+                    .add(rbTopBottom))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -621,13 +646,19 @@ public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramLis
                 .add(jButton1)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(bToEPS)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(18, 18, 18)
                 .add(jLabel1)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
                 .add(rbNodeOrder)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(rbCoxeterLabels)
-                .addContainerGap(175, Short.MAX_VALUE))
+                .add(18, 18, 18)
+                .add(jLabel2)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                .add(rbBottomTop)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(rbTopBottom)
+                .addContainerGap(94, Short.MAX_VALUE))
         );
 
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
@@ -643,11 +674,11 @@ public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramLis
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(layout.createSequentialGroup()
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(org.jdesktop.layout.GroupLayout.TRAILING, diagram, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, diagram, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, jPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -821,6 +852,7 @@ private void diagramMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:ev
     private javax.swing.JPanel diagram;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JMenuItem menuAddCompactPair;
@@ -842,8 +874,11 @@ private void diagramMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:ev
     private javax.swing.JRadioButtonMenuItem menuStateLevel;
     private javax.swing.JMenuItem menuToggleCompact;
     private javax.swing.ButtonGroup nodeLabelGroup;
+    private javax.swing.ButtonGroup orderGroup;
+    private javax.swing.JRadioButton rbBottomTop;
     private javax.swing.JRadioButton rbCoxeterLabels;
     private javax.swing.JRadioButton rbNodeOrder;
+    private javax.swing.JRadioButton rbTopBottom;
     private javax.swing.ButtonGroup stateButtonGroup;
     private javax.swing.JLabel tf_status;
     // End of variables declaration//GEN-END:variables
