@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- You may freely edit this file. See commented blocks below for -->
+<!-- some examples of how to customize the build. -->
+<!-- (If you delete it and reopen the project it will be recreated.) -->
+<project name="SimpLie" default="default" basedir=".">
+    <description>Builds, tests, and runs the project SimpLie.</description>
+    <import file="nbproject/build-impl.xml"/>
+    <!--
+
+    There exist several targets which are by default empty and which can be 
+    used for execution of your tasks. These targets are usually executed 
+    before and after some main targets. They are: 
+
+      -pre-init:                 called before initialization of project properties
+      -post-init:                called after initialization of project properties
+      -pre-compile:              called before javac compilation
+      -post-compile:             called after javac compilation
+      -pre-compile-single:       called before javac compilation of single file
+      -post-compile-single:      called after javac compilation of single file
+      -pre-compile-test:         called before javac compilation of JUnit tests
+      -post-compile-test:        called after javac compilation of JUnit tests
+      -pre-compile-test-single:  called before javac compilation of single JUnit test
+      -post-compile-test-single: called after javac compilation of single JUunit test
+      -pre-jar:                  called before JAR building
+      -post-jar:                 called after JAR building
+      -post-clean:               called after cleaning build products
+
+    (Targets beginning with '-' are not intended to be called on their own.)
+
+    Example of inserting an obfuscator after compilation could look like this:
+
+        <target name="-post-compile">
+            <obfuscate>
+                <fileset dir="${build.classes.dir}"/>
+            </obfuscate>
+        </target>
+
+    For list of available properties check the imported 
+    nbproject/build-impl.xml file. 
+
+
+    Another way to customize the build is by overriding existing main targets.
+    The targets of interest are: 
+
+      -init-macrodef-javac:     defines macro for javac compilation
+      -init-macrodef-junit:     defines macro for junit execution
+      -init-macrodef-debug:     defines macro for class debugging
+      -init-macrodef-java:      defines macro for class execution
+      -do-jar-with-manifest:    JAR building (if you are using a manifest)
+      -do-jar-without-manifest: JAR building (if you are not using a manifest)
+      run:                      execution of project 
+      -javadoc-build:           Javadoc generation
+      test-report:              JUnit report generation
+
+    An example of overriding the target for project execution could look like this:
+
+        <target name="run" depends="SimpLie-impl.jar">
+            <exec dir="bin" executable="launcher.exe">
+                <arg file="${dist.jar}"/>
+            </exec>
+        </target>
+
+    Notice that the overridden target depends on the jar target and not only on 
+    the compile target as the regular run target does. Again, for a list of available 
+    properties which you can use, check the target you are overriding in the
+    nbproject/build-impl.xml file. 
+
+    -->
+	<property name="redist.dir" value="redist"/>
+	<property name="simplie.mem.max" value="768"/>
+	<property name="simplie.mem.ini" value="128"/>
+	<property name="launch4j.dir" location="c:\program files\launch4j" />
+	<condition property="is.mac">
+		<and>
+			<os family="mac"/>
+		</and>
+	</condition>
+	<condition property="is.win">
+		<and>
+			<os family="windows"/>
+		</and>
+	</condition>
+
+	<target name="build-installers" depends="init">
+		<property name="redist.name" value="${application.title}_${application.version}"/>
+		<delete dir="${redist.dir}"/>
+		<mkdir dir="${redist.dir}"/>
+		<delete file="${dist.dir}/launch.html"/>
+		<delete file="${dist.dir}/launch.jnlp"/>
+		<antcall target="copy-docs"/>
+		<zip destfile="${redist.dir}/${redist.name}.zip" basedir="${dist.dir}"/>
+		<tar tarfile="${redist.dir}/${redist.name}.tar" basedir="${dist.dir}"/>
+		<gzip zipfile="${redist.dir}/${redist.name}.tar.gz" src="${redist.dir}/${redist.name}.tar"/>
+		<antcall target="build-mac"/>
+		<antcall target="build-win"/>
+	</target>
+	
+	<target name="copy-docs">
+		<!-- Copy the documentation -->
+		<delete file="${dist.dir}/README.TXT"/>
+		<copy todir="${dist.dir}/doc">
+			<fileset dir="../wiki"/>
+		</copy>
+	</target>
+	
+	<target name="build-mac" if="is.mac">
+		<taskdef name="jarbundler" classname="net.sourceforge.jarbundler.JarBundler" />
+		<!-- Build the Mac OS X app -->
+		<property name="dist.mac.dir" value="${dist.dir}/mac" />
+		<mkdir dir="${dist.mac.dir}"/>
+		<jarbundler dir="${dist.mac.dir}"
+				name="${application.title}"
+				mainclass="${main.class}"
+				bundleid="edu.simplie"
+				icon="images/simplie.icns"
+				jvmversion="${javac.target}"
+				signature="sLie"
+				version="${application.version}"
+				vmoptions="${run.jvmargs}"
+				>
+			<javaproperty name="apple.laf.useScreenMenuBar" value="true"/>
+			<javaproperty name="apple.awt.antialiasing" value="on"/>
+			<jarfileset dir="${dist.dir}">
+				<include name="**/*.jar" />
+			</jarfileset>
+		</jarbundler>
+		<!-- Build the redistributable DMG file -->
+		<exec executable="hdiutil">
+			<arg line="create -srcfolder ${dist.mac.dir} -volname ${application.title} ${redist.dir}/${redist.name}.dmg"/>
+		</exec>
+	</target>
+	
+	<target name="build-win" if="is.win">
+		<taskdef name="launch4j" classname="net.sf.launch4j.ant.Launch4jTask"
+			classpath="${launch4j.dir}/launch4j.jar:${launch4j.dir}/lib/xstream.jar"/>
+		<taskdef name="nsis" classname="net.sf.nsisant.Task">
+			<classpath location="nsisant-1.2.jar"/>
+		</taskdef>
+		<launch4j>
+			<config headerType="gui" 
+					outfile="${dist.dir}/${application.title}.exe"
+					dontWrapJar="true" jarPath="${application.title}.jar"
+					icon="images/icon32.ico"
+					stayAlive="false"
+					>
+				<jre minVersion="${javac.target}.0"
+					maxheapsize="${simplie.mem.max}"
+					initialheapsize="${simplie.mem.ini}">
+				</jre>
+			</config>
+		</launch4j>
+		<nsis script="nsis/simplie.nsi">
+			<define name="VERSION" value="${application.version}"/>
+			<define name="NAME" value="${application.title}"/>
+			<define name="REDISTDIR" value="${redist.dir}"/>
+			<define name="DISTDIR" value="${dist.dir}"/>
+		</nsis>
+	</target>
+	
+</project>

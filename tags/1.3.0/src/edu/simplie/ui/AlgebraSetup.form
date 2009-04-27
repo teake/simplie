@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<Form version="1.5" maxVersion="1.6" type="org.netbeans.modules.form.forminfo.JPanelFormInfo">
+  <AuxValues>
+    <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="0"/>
+    <AuxValue name="FormSettings_autoSetComponentName" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_generateFQN" type="java.lang.Boolean" value="true"/>
+    <AuxValue name="FormSettings_generateMnemonicsCode" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_i18nAutoMode" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_layoutCodeTarget" type="java.lang.Integer" value="2"/>
+    <AuxValue name="FormSettings_listenerGenerationStyle" type="java.lang.Integer" value="0"/>
+    <AuxValue name="FormSettings_variablesLocal" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_variablesModifier" type="java.lang.Integer" value="2"/>
+  </AuxValues>
+
+  <Layout>
+    <DimensionLayout dim="0">
+      <Group type="103" groupAlignment="0" attributes="0">
+          <Group type="102" alignment="0" attributes="0">
+              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" alignment="0" attributes="0">
+                      <Component id="algebraInfo" min="-2" max="-2" attributes="2"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="subAlgebraInfo" min="-2" max="-2" attributes="2"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="disAlgebraInfo" min="-2" max="-2" attributes="2"/>
+                  </Group>
+                  <Component id="dynkinDiagramPanel" alignment="0" pref="624" max="32767" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+          </Group>
+      </Group>
+    </DimensionLayout>
+    <DimensionLayout dim="1">
+      <Group type="103" groupAlignment="0" attributes="0">
+          <Group type="102" alignment="1" attributes="0">
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="dynkinDiagramPanel" pref="337" max="32767" attributes="2"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="algebraInfo" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="subAlgebraInfo" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="disAlgebraInfo" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+          </Group>
+      </Group>
+    </DimensionLayout>
+  </Layout>
+  <SubComponents>
+    <Component class="edu.simplie.ui.DynkinDiagramPanel" name="dynkinDiagramPanel">
+      <Properties>
+        <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+          <Dimension value="[0, 0]"/>
+        </Property>
+      </Properties>
+    </Component>
+    <Component class="edu.simplie.ui.reusable.UIAlgebraInfo" name="algebraInfo">
+      <Properties>
+        <Property name="toolTipText" type="java.lang.String" resourceKey="algebraSetup.fullTooltip"/>
+        <Property name="title" type="java.lang.String" value="Full algebra"/>
+      </Properties>
+    </Component>
+    <Component class="edu.simplie.ui.reusable.UIAlgebraInfo" name="subAlgebraInfo">
+      <Properties>
+        <Property name="toolTipText" type="java.lang.String" resourceKey="algebraSetup.subTooltip"/>
+        <Property name="title" type="java.lang.String" value="Regular subalgebra"/>
+      </Properties>
+    </Component>
+    <Component class="edu.simplie.ui.reusable.UIAlgebraInfo" name="disAlgebraInfo">
+      <Properties>
+        <Property name="toolTipText" type="java.lang.String" resourceKey="algebraSetup.internalTooltip"/>
+        <Property name="title" type="java.lang.String" value="Internal algebra"/>
+      </Properties>
+    </Component>
+  </SubComponents>
+</Form>
