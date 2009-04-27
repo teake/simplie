@@ -16,6 +16,10 @@ Within the white Dynkin diagram panel of the Algebra Setup tab one can interacti
 
 A decomposition is specified by disabling one or more nodes. The 'level-nodes' are black, the 'internal nodes' are orange, and the regular subalgebra nodes remain white.
 
+By default, the subscripts of the nodes indicate the node ordering. Using the radio buttons on the right it is possible to display to (dual) Coxeter labels. If the Coxeter labels differ from their duals, the Coxeter label get displayed in bold below the dual.
+
+The default ordering on of the nodes is from bottom to top. Using the radio buttons on the right it is possible to change it to from top to bottom.
+
  
 
 ==Algebra Info==
@@ -47,8 +51,5 @@ In this tab a level decomposition of the Dynkin diagram set up previously can be
 
 ==Visualization==
 
-In this tab any Lie algebra can be "visualized": a 3D Hesse diagram can be drawn of the root system of the algebra. The diagram interaction is as follows:
-
-    * Left-button mouse drag: Translate.
-    * Mouse scroll: Zoom.
-    * Right-button mouse drag or alt-left-button drag: rotate.
+In this tab any Lie algebra can be "visualized": either a Coxeter plane projection can be made, or a Hasse diagram can be drawn of the root system of the algebra.
+When choosing the Coxeter plane projection, the full algebra gets projected w.r.t its regular subalgebra as specified in the Dynkin diagram.
