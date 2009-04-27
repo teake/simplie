@@ -99,7 +99,7 @@
 		<!-- Copy the documentation -->
 		<delete file="${dist.dir}/README.TXT"/>
 		<copy todir="${dist.dir}/doc">
-			<fileset dir="documentation"/>
+			<fileset dir="../wiki"/>
 		</copy>
 	</target>
 	
