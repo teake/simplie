@@ -1,4 +1,5 @@
 #summary Screenshot and generated images.
+<wiki:toc/>
 
 = Coxeter plane projections =
 
@@ -23,3 +24,8 @@ http://simplie.googlecode.com/files/E8%20coxeter.jpg
 
 http://simplie.googlecode.com/files/E8%20hasse.jpg
 [http://simplie.googlecode.com/files/E8%20hasse.pdf High resolution PDF]
+
+
+= Screenshots =
+
+http://simplie.googlecode.com/files/SetupScreen.png
