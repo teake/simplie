@@ -28,6 +28,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
+ * A projector that projects root systems onto their Coxeter plane.
  *
  * @author Teake Nutma
  * @version $Rev$, $Date$

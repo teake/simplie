@@ -174,7 +174,8 @@ public class CartanMatrix
 	
 	/**
 	 * The same as getType(), only now with HTML markup, e.g. "A<sub>10</sub><sup>++</sup>"
-	 * @return
+	 *
+	 * @return	A string with HTML markup.
 	 */
 	public String getTypeHTML()
 	{
@@ -350,7 +351,7 @@ public class CartanMatrix
 	 * the matrix).<p>
 	 * 
 	 * <p>Here instead certain derived objects of the Cartan matrix will be compared,
-	 * that are independant of the row and column permutations. They are the size
+	 * that are independent of the row and column permutations. They are the size
 	 * of the matrix, its determinant, its rank, and its characteristic matrix.<p>
 	 * 
 	 * @param cm	 The second Cartan matrix to compare this object to.

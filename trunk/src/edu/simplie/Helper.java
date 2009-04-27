@@ -25,17 +25,7 @@ package edu.simplie;
 import Jama.EigenvalueDecomposition;
 import Jama.Matrix;
 import edu.simplie.math.*;
-
-import edu.simplie.dynkindiagram.DynkinConnection;
-import edu.simplie.ui.shapes.LinesWithArrow;
-import java.awt.Color;
-import java.awt.Graphics2D;
 import java.util.ArrayList;
-import java.awt.BasicStroke;
-import java.awt.Point;
-import java.awt.Shape;
-import java.awt.geom.Line2D;
-import java.awt.geom.QuadCurve2D;
 
 /**
  * This class contains miscellaneous helper functions that
@@ -45,14 +35,7 @@ import java.awt.geom.QuadCurve2D;
  * @version $Revision$, $Date$
  */
 public class Helper
-{
-	private static final float dash[] = {5.0f,2.0f};
-	private static final BasicStroke dashedStroke = new BasicStroke(0.75f,
-				BasicStroke.CAP_BUTT,
-				BasicStroke.JOIN_MITER, 
-				10.0f, dash, 0.0f);
-	private static final BasicStroke normalStroke = new BasicStroke(1.0f);;
-	
+{	
 	public Helper()
 	{
 	}
@@ -72,7 +55,12 @@ public class Helper
 		}
 		return clone;
 	}
-	
+
+	/**
+	 * Takes an matrix of integers and spits out a Jama Matrix object.
+	 * @param array		The 2-dimensional array of integers to convert.
+	 * @return			A Jama Matrix based on the input.
+	 */
 	public static Matrix intArrayToMatrix(int[][] array)
 	{
 		Matrix matrix = new Matrix(array.length, array.length);
@@ -344,33 +332,32 @@ public class Helper
 		
 		return stringMatrix;
 	}
-	
+
+	/**
+	 * Takes a rectangular matrix of integers and spits out a LaTeX formatted String.
+	 *
+	 * @param matrix	The 2-dimensional array of integers to convert.
+	 * @return			A LaTeX formatted string based on the input.
+	 */
 	public static String matrixToTex(int[][] matrix)
 	{
-		String matrixString = "\\begin{equation}\n\\left(\\begin{array}{";
-		for(int i = 0; i < matrix.length; i++)
+		String[][] m = new String[matrix.length][matrix.length];
+		for(int i = 0; i < m.length; i++)
 		{
-			matrixString += "r";
-		}
-		matrixString += "}\n";
-		
-		for(int i = 0; i < matrix.length; i++)
-		{
-			for(int j = 0; j < matrix.length; j++)
+			for(int j = 0; j < m.length; j++)
 			{
-				matrixString += matrix[i][j];
-				if(j != matrix.length - 1)
-					matrixString += "\t & ";
+				m[i][j] = intToString(matrix[i][j]);
 			}
-			if(i != matrix.length - 1)
-				matrixString += " \\\\ \n";
 		}
-	
-		matrixString += "\n\\end{array}\\right)\n\\end{equation}\n";
-		return matrixString;
+		return matrixToTex(m);
 	}
 	
-	// TODO: remove duplicate code
+	/**
+	 * Takes a rectangular matrix of objects and spits out a LaTeX formatted String.
+	 *
+	 * @param matrix	The 2-dimensional array of object to convert.
+	 * @return			A LaTeX formatted string based on the input.
+	 */
 	public static String matrixToTex(Object[][] matrix)
 	{
 		String matrixString = "\\begin{equation}\n\\left(\\begin{array}{";
@@ -394,53 +381,6 @@ public class Helper
 	
 		matrixString += "\n\\end{array}\\right)\n\\end{equation}\n";
 		return matrixString;
-	}
-
-	public static void drawFilledCircle(Graphics2D g, Color c1, Color c2, Point p, int radius)
-	{
-		g.setColor(c1);
-		g.fillOval(p.x - radius, p.y - radius, 2*radius, 2*radius);
-		g.setColor(c2);
-		g.drawOval(p.x - radius, p.y - radius, 2*radius, 2*radius);
-	}
-	
-	public static void drawCompactCon(Graphics2D g, Color c, Point begin, Point end)
-	{
-		g.setColor(c);
-		g.setStroke(dashedStroke);
-		int controlx = (begin.x + end.x + begin.y - end.y) / 2;
-		int controly = (begin.y + end.y + end.x - begin.x) / 2;
-		g.draw(new QuadCurve2D.Float(begin.x, begin.y, controlx, controly, end.x, end.y));
-		g.setStroke(normalStroke);
-	}
-	
-	public static void drawConnection(Graphics2D g, Color c, int type, Point begin, Point end, int radius)
-	{
-		g.setColor(c);
-		Shape line;
-		switch(type)
-		{
-			case DynkinConnection.TYPE_SINGLE:
-				line = new Line2D.Double(begin,end);
-				break;
-			case DynkinConnection.TYPE_DOUBLE:
-				line = new LinesWithArrow(begin,end,2,2*radius,true);
-				break;
-			case DynkinConnection.TYPE_TRIPLE:
-				line = new LinesWithArrow(begin,end,3,2*radius,true);
-				break;
-			case DynkinConnection.TYPE_QUADRUPLE:
-				line = new LinesWithArrow(begin,end,4,2*radius,true);
-				break;
-			case DynkinConnection.TYPE_SPECIAL_DOUBLE:
-				line = new LinesWithArrow(begin,end,2,2*radius,false);
-				break;
-			default:
-				line = null;
-				break;
-		}
-		if(line != null)
-			g.draw(line);	
 	}
 	
 	/**

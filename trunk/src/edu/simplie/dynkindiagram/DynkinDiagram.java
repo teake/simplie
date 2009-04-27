@@ -41,7 +41,9 @@ import java.util.Comparator;
  */
 public class DynkinDiagram implements Comparator<DynkinNode>
 {
+	/** Constant integer for top to bottom sorting */
 	public static final int SORT_TOPBOTTOM = 1;
+	/** Constant integer for bottom to top sorting */
 	public static final int SORT_BOTTOMTOP = -1;
 
 	/** Vector containing all nodes of this diagram. */
@@ -119,6 +121,11 @@ public class DynkinDiagram implements Comparator<DynkinNode>
 		}
 	}
 
+	/**
+	 * Returns the node that was add last to the diagram.
+	 * @return	The node that was added last, or null if such a node does
+	 *			not exists.
+	 */
 	public DynkinNode getLastAddedNode()
 	{
 		return lastAddedNode;

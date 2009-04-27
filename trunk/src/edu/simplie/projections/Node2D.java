@@ -19,6 +19,7 @@
 package edu.simplie.projections;
 
 /**
+ * A class for storing projected roots.
  *
  * @author Teake Nutma
  * @version $Rev$, $Date$

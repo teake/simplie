@@ -21,7 +21,8 @@ package edu.simplie.projections;
 import edu.simplie.algebra.Root;
 
 /**
- *
+ * A projector that creates a Hasse diagram from root system.
+ * 
  * @author Teake Nutma
  * @version $Rev$, $Date$
  */

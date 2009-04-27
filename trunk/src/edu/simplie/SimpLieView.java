@@ -13,7 +13,6 @@ import javax.swing.Icon;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
-import javax.swing.filechooser.*;
 
 /**
  * The application's main frame.
@@ -24,9 +23,6 @@ public class SimpLieView extends FrameView {
 	private JDialog exportDialog;
 	private JDialog outputDialog;
 	private JDialog helpDialog;
-	
-	private final FileFilter ddFilter;
-	private final FileFilter rsFilter;
 	
 	private final File workDir;
 	private final File ddDir;
@@ -115,9 +111,7 @@ public class SimpLieView extends FrameView {
 		projector.setAlgebrasComposite(algebras);
 		algebras.dd.clear();		
 		
-		ddFilter = new FileNameExtensionFilter("Dynkin diagram (*.dd)", "dd");
-		rsFilter = new FileNameExtensionFilter("Root system (*.rs)", "rs");
-		
+	
 		// Check what the working dir is.
 		String userDir	= java.lang.System.getProperty("user.home");
 		File appData	= new File(userDir,"Application Data");
@@ -380,9 +374,6 @@ public class SimpLieView extends FrameView {
 		int pos = 0;
 		for(File file : ddDir.listFiles())
 		{
-			if(!ddFilter.accept(file))
-				continue;
-			
 			// Add the menu item.
 			javax.swing.JMenuItem ddPreset = new javax.swing.JMenuItem();
 			String text = file.getName();
@@ -403,7 +394,6 @@ public class SimpLieView extends FrameView {
 		JFileChooser chooser;
 	
 		chooser = new JFileChooser(ddDir);
-		chooser.addChoosableFileFilter(ddFilter);
 		chooser.setDialogTitle("Load Dynkin diagram");
 		
 		if ( chooser.showOpenDialog(this.getComponent()) == JFileChooser.APPROVE_OPTION )
@@ -416,7 +406,6 @@ public class SimpLieView extends FrameView {
 	public void saveDiagram()
 	{
 		JFileChooser chooser = new JFileChooser(ddDir);
-		chooser.addChoosableFileFilter(ddFilter);
 		chooser.setSelectedFile(new File(algebras.getDynkinDiagramType() + ".dd"));
 		chooser.setDialogTitle("Save Dynkin diagram");
 		
@@ -426,8 +415,6 @@ public class SimpLieView extends FrameView {
 		 * pre-pend the "file" protocol to the absolute path of the file.
 		 */
 			String fileURL = chooser.getSelectedFile().getAbsolutePath();
-			if(!ddFilter.accept(chooser.getSelectedFile()))
-				fileURL += ".dd";
 			algebras.dd.saveTo(fileURL);
 		}
 		// Reload the presets.
@@ -438,8 +425,7 @@ public class SimpLieView extends FrameView {
 	public void saveRoots()
 	{
 		JFileChooser chooser = new JFileChooser(rsDir);
-		chooser.addChoosableFileFilter(rsFilter);
-		chooser.setSelectedFile(new File(algebras.algebra.type + "_height_" + algebras.algebra.rs.constructedHeight()));
+		chooser.setSelectedFile(new File(algebras.algebra.type + "_height_" + algebras.algebra.rs.constructedHeight() + ".rs"));
 		chooser.setDialogTitle("Save root system");
 		
 		if ( chooser.showSaveDialog(this.getComponent()) == JFileChooser.APPROVE_OPTION )
@@ -448,8 +434,6 @@ public class SimpLieView extends FrameView {
 		 * pre-pend the "file" protocol to the absolute path of the file.
 		 */
 			String fileURL = chooser.getSelectedFile().getAbsolutePath();
-			if(!rsFilter.accept(chooser.getSelectedFile()))
-				fileURL += ".rs";
 			algebras.algebra.rs.saveTo(fileURL);
 		}
 	}
@@ -462,7 +446,6 @@ public class SimpLieView extends FrameView {
 		JFileChooser chooser;
 		
 		chooser = new JFileChooser(rsDir);
-		chooser.addChoosableFileFilter(rsFilter);
 		chooser.setDialogTitle("Load root system");
 		
 		if ( chooser.showOpenDialog(this.getComponent()) == JFileChooser.APPROVE_OPTION )

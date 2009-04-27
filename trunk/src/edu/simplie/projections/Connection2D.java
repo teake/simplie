@@ -19,6 +19,7 @@
 package edu.simplie.projections;
 
 /**
+ * A class for storing projected root connections.
  *
  * @author Teake Nutma
  * @version $Rev$, $Date$
