@@ -133,7 +133,7 @@ public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramLis
 	public void toEPS()
 	{
 		JFileChooser chooser = new JFileChooser("");
-		chooser.setSelectedFile(new File("DynkinDiagram.eps"));
+		chooser.setSelectedFile(new File("Dynkin diagram of " + algebras.getDynkinDiagramType() + ".eps"));
 		chooser.setDialogTitle("to EPS");
 		if ( chooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION )
 		{

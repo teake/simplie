@@ -295,7 +295,7 @@
                   <Component id="rbBottomTop" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="rbTopBottom" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace pref="94" max="32767" attributes="0"/>
+                  <EmptySpace pref="98" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -356,7 +356,6 @@
               <ComponentRef name="orderGroup"/>
             </Property>
             <Property name="selected" type="boolean" value="true"/>
-            <Property name="text" type="java.lang.String" value="Bottom to top"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JRadioButton" name="rbTopBottom">
@@ -367,7 +366,6 @@
             <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
               <ComponentRef name="orderGroup"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="Top to bottom"/>
           </Properties>
         </Component>
       </SubComponents>
