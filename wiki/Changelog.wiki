@@ -6,6 +6,7 @@
 
   * *math* Added Coxeter plane projections (still crashes on some algebras though).
   * *math* Added (dual) Coxeter labels and numbers for affine and finite algebras.
+  * *ui* Added option to sort Dynkin diagram nodes from bottom to top, or the other way around.
   * *ui* Switched from 3D Hasse diagram to 2D Hasse diagrams.
   * *ui* Added EPS export capability of root system projections and Dynkin diagrams (the LaTeX export has been removed).
   * *misc* Various bug-fixes and improvements.
