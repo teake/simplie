@@ -1,4 +1,7 @@
 #summary Screenshot and generated images.
+
+See also http://picasaweb.google.com/teake.nutma/SimpLie?feat=directlink
+
 <wiki:toc/>
 
 = Coxeter plane projections =
@@ -6,14 +9,23 @@
 
 == E10 ==
 
-http://simplie.googlecode.com/files/E10.jpg
-[http://simplie.googlecode.com/files/E10.pdf High resolution PDF]
+=== E10 up to height 100 projected on its E8 Coxeter plane ===
+[http://picasaweb.google.com/lh/photo/H4X7FSBikggU1pVBN3bFQA?feat=embedwebsite http://lh3.ggpht.com/_E-ytpBQG0R8/SfbAat6yTwI/AAAAAAAAAaI/kiL4u-u7uOA/s400/E10-coxeter.png]
 
+=== E10 up to height 120 projected onto an A8 Coxeter plane ===
+
+[http://picasaweb.google.com/lh/photo/fa6Kk_Mm7l9dHfcsSsXUAw?feat=embedwebsite http://lh3.ggpht.com/_E-ytpBQG0R8/SfbnSlbqRXI/AAAAAAAAAbg/p_SXSIyKdYY/s400/E10aA8-coxeter.png]
+
+== A4++ up to height 21 projected onto an A4 Coxeter plane ==
+
+[http://picasaweb.google.com/lh/photo/MoCZdaW-4IdADryIdkJyMw?feat=embedwebsite http://lh5.ggpht.com/_E-ytpBQG0R8/SfbMmgcYojI/AAAAAAAAAaw/IwOiPwxmZUI/s400/A4%2B%2BasA4-coxeter.png]
 
 == E8 ==
 
-http://simplie.googlecode.com/files/E8%20coxeter.jpg
-[http://simplie.googlecode.com/files/E8%20coxeter.pdf High resolution PDF]
+[http://picasaweb.google.com/lh/photo/uSn2cOFqNIy-u3WyJx81hQ?feat=embedwebsite http://lh3.ggpht.com/_E-ytpBQG0R8/SfbHpmdq7uI/AAAAAAAAAaY/kzXfeT8WVWM/s400/E8-coxeter.png]
+
+== D8 ==
+[http://picasaweb.google.com/lh/photo/7cMsnNXUGxVWphizIppSDw?feat=embedwebsite http://lh5.ggpht.com/_E-ytpBQG0R8/Sfbi6cApNLI/AAAAAAAAAbQ/ke6UCJtzqc8/s400/D8-coxeter.png]
 
 
 
@@ -22,10 +34,14 @@ http://simplie.googlecode.com/files/E8%20coxeter.jpg
 
 == E8 ==
 
-http://simplie.googlecode.com/files/E8%20hasse.jpg
-[http://simplie.googlecode.com/files/E8%20hasse.pdf High resolution PDF]
-
+[http://picasaweb.google.com/lh/photo/EtHMg4S6JKqntZTvCHbssA?feat=embedwebsite http://lh4.ggpht.com/_E-ytpBQG0R8/SfbIc11-PyI/AAAAAAAAAak/ViNxirXyn0Q/s400/E8-hasse.png]
 
 = Screenshots =
 
-http://lh4.ggpht.com/_E-ytpBQG0R8/Sfa9hFfxv1I/AAAAAAAAAZw/sicKkXSlne0/s800/SetupScreenOSX.png
+== Windows ==
+
+[http://picasaweb.google.com/lh/photo/xJMcU12BAPDami0Ui5Qo1g?feat=embedwebsite http://lh3.ggpht.com/_E-ytpBQG0R8/Sfa9hIhYnMI/AAAAAAAAAZo/xDu7YD44PKY/s800/SetupScreenWin.png]
+
+== OS X ==
+
+[http://picasaweb.google.com/lh/photo/gyzb3mcso9Kv2tN6cLZr9Q?feat=embedwebsite http://lh4.ggpht.com/_E-ytpBQG0R8/Sfa9hFfxv1I/AAAAAAAAAZw/sicKkXSlne0/s800/SetupScreenOSX.png]
