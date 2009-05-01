@@ -444,45 +444,38 @@ public class Helper
 	 *						 with the first entry for the real part and the second for the imaginary.
 	 *						 Both are zero vectors if no eigenvalue can be found.
 	 */
-	public static double[][] complexEigenvector(Matrix matrix, double eigenvalRe, double eigenvalIm)
+	public static double[][] complexEigenvector(double[][] matrix, double eigenvalRe, double eigenvalIm)
 	{
-		int size = matrix.getRowDimension();
+		int size = matrix.length;
 		double[][] complexEigenvector = new double[2][size];
-		for(int i = 0; i < 2; i++)
+
+		Jampack.Zmat m = new Jampack.Zmat(matrix);
+		try
 		{
-			for(int j = 0; j < size; j++)
+			Jampack.Eig eig		= new Jampack.Eig(m);
+			for(int i = 0; i < size; i++)
 			{
-				complexEigenvector[i][j] = 0.0d;
-			}
-		}
-
-		// JAMA doesn't do imaginary eigenvectors ... sigh.
-		Matrix A = matrix.minus(Matrix.identity(size,size).times(eigenvalRe));
-		Matrix B = new Matrix(2*size, 2*size, 0.0);
-		B.setMatrix(0,size-1,size,(2*size)-1,A);
-		B.setMatrix(size, (2*size)-1, 0, size-1, A.times(-1.0));
-
-		EigenvalueDecomposition eig = new EigenvalueDecomposition(B);
-		Matrix eigenvalues	= eig.getD();
-		Matrix eigenvectors	= eig.getV();
-
-		for(int i = 0; i < 2*size; i++)
-		{
-			if((eigenvalues.get(i, i) < eigenvalIm + 0.0001) && (eigenvalues.get(i, i) > eigenvalIm - 0.0001))
-			{
-				// Found the complex part of the right eigenvalue.
-				// Set the eigenvectors.
-				for(int j = 0; j < size; j++)
+				double re = eig.D.get0(i).re;
+				double im = eig.D.get0(i).im;
+				if((im < eigenvalIm + 0.0001)
+						&& (im > eigenvalIm - 0.0001)
+						&& (re < eigenvalRe + 0.0001)
+						&& (re > eigenvalRe - 0.0001))
 				{
-					complexEigenvector[0][j] = eigenvectors.get(j, i);
-					complexEigenvector[1][j] = eigenvectors.get(j+size, i);
+					for(int j = 0; j < size; j++)
+					{
+						complexEigenvector[0][j] = eig.X.get0(j,i).re;
+						complexEigenvector[1][j] = eig.X.get0(j,i).im;
+					}
+					break;
 				}
-				break;
 			}
 		}
+		catch(Exception ex){}
 
 		return complexEigenvector;
 	}
+
 
 	/**
 	 * Rotate a 2-dimension vector over an angle.

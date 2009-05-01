@@ -51,19 +51,19 @@ public class CoxeterProjector extends EmptyProjector
 			Matrix reflection	= new Matrix(algebras.algebra.simpWeylRelfMatrix(algebras.dd.translateSub(i)));
 			coxeterElement		= ( i == 0 ) ? reflection : coxeterElement.times(reflection);
 		}
-
+		
 		// Determine the basis vectors for the Coxeter plane projection.
 		// The real and imaginary parts of the wanted eigenvalue.
 		angle = 2 * Math.PI / algebras.subAlgebra.coxeterNumber;
-		double ReEigenval	= Math.cos(angle);
-		double ImEigenval	= Math.sin(angle);
-		double[][] complex	= Helper.complexEigenvector(coxeterElement, ReEigenval, ImEigenval);
+		double[][] complex	= Helper.complexEigenvector(coxeterElement.getArrayCopy(), 
+				Math.cos(angle),
+				Math.sin(angle));
 
 		coxeterX = complex[0];
 		coxeterY = complex[1];
 
-		normCoxeterX = innerProduct(coxeterX, coxeterX);
-		normCoxeterY = innerProduct(coxeterY, coxeterY);
+		normCoxeterX = 3 * innerProduct(coxeterX, coxeterX);
+		normCoxeterY = 3 * innerProduct(coxeterY, coxeterY);
 		if(normCoxeterX == 0.0f) normCoxeterX = 1.0f;
 		if(normCoxeterY == 0.0f) normCoxeterY = 1.0f;
 	}
