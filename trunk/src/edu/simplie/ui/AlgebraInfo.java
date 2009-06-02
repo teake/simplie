@@ -57,6 +57,7 @@ public class AlgebraInfo extends javax.swing.JPanel implements DiagramListener
 		tableModelWeights = (DefaultTableModel) repTable.getModel();
 		algebra = null;
 		HWrep = null;
+		repSpinner.setMinValue(0);
 	}
 	
 	/** Sets the composite of algebras we want to view info of. */
@@ -88,6 +89,7 @@ public class AlgebraInfo extends javax.swing.JPanel implements DiagramListener
 		
 		constructedHeight.setText(Helper.intToString(algebra.rs.constructedHeight()));
 		numPosRoots.setText(Helper.intToString((int) algebra.rs.numPosRoots()));
+		repSpinner.setNumSpinners(algebra.rank);
 
 		String matrix;
 		switch(matrixBox.getSelectedIndex())
@@ -147,10 +149,10 @@ public class AlgebraInfo extends javax.swing.JPanel implements DiagramListener
         jScrollPane7 = new javax.swing.JScrollPane();
         repTable = new edu.simplie.ui.reusable.UIPrintableColorTable();
         jPanel12 = new javax.swing.JPanel();
-        tfDynkinLabels = new javax.swing.JTextField();
         repOKbutton = new javax.swing.JButton();
         cbDominant = new javax.swing.JCheckBox();
         repFillButton = new javax.swing.JButton();
+        repSpinner = new edu.simplie.ui.reusable.UIMultiSpinner();
         algebrasBox = new javax.swing.JComboBox();
         jLabel3 = new javax.swing.JLabel();
 
@@ -176,7 +178,7 @@ public class AlgebraInfo extends javax.swing.JPanel implements DiagramListener
             .add(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 544, Short.MAX_VALUE)
+                    .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 679, Short.MAX_VALUE)
                     .add(jPanel1Layout.createSequentialGroup()
                         .add(jLabel4)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
@@ -191,7 +193,7 @@ public class AlgebraInfo extends javax.swing.JPanel implements DiagramListener
                     .add(jLabel4)
                     .add(matrixBox, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 375, Short.MAX_VALUE)
+                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 404, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -275,7 +277,7 @@ public class AlgebraInfo extends javax.swing.JPanel implements DiagramListener
             .add(jPanel9Layout.createSequentialGroup()
                 .addContainerGap()
                 .add(jPanel9Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 544, Short.MAX_VALUE)
+                    .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 679, Short.MAX_VALUE)
                     .add(jPanel9Layout.createSequentialGroup()
                         .add(jPanel2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
@@ -290,7 +292,7 @@ public class AlgebraInfo extends javax.swing.JPanel implements DiagramListener
                     .add(jPanel2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                     .add(fillRootTable))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 325, Short.MAX_VALUE)
+                .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 354, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -341,7 +343,7 @@ public class AlgebraInfo extends javax.swing.JPanel implements DiagramListener
                 .add(jPanel11Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(jLabel7)
                     .add(lHeight))
-                .addContainerGap(17, Short.MAX_VALUE))
+                .addContainerGap(9, Short.MAX_VALUE))
         );
 
         repTable.setModel(new javax.swing.table.DefaultTableModel(
@@ -371,9 +373,6 @@ public class AlgebraInfo extends javax.swing.JPanel implements DiagramListener
 
         jPanel12.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Enter Dynkin labels", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12))); // NOI18N
 
-        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(edu.simplie.SimpLieApp.class).getContext().getResourceMap(AlgebraInfo.class);
-        tfDynkinLabels.setToolTipText(resourceMap.getString("algebraInfo.enterLabelsTooltip")); // NOI18N
-
         repOKbutton.setText("OK"); // NOI18N
         repOKbutton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -397,38 +396,38 @@ public class AlgebraInfo extends javax.swing.JPanel implements DiagramListener
             jPanel12Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel12Layout.createSequentialGroup()
                 .addContainerGap()
-                .add(jPanel12Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
-                    .add(tfDynkinLabels, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 168, Short.MAX_VALUE)
-                    .add(cbDominant, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 168, Short.MAX_VALUE))
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jPanel12Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
-                    .add(repOKbutton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .add(jPanel12Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(repOKbutton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 109, Short.MAX_VALUE)
                     .add(repFillButton))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jPanel12Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(repSpinner, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE)
+                    .add(cbDominant))
                 .addContainerGap())
         );
         jPanel12Layout.setVerticalGroup(
             jPanel12Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel12Layout.createSequentialGroup()
-                .add(jPanel12Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(tfDynkinLabels, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                    .add(repOKbutton))
+                .add(jPanel12Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, repSpinner, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, repOKbutton))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jPanel12Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(cbDominant)
-                    .add(repFillButton))
-                .addContainerGap(19, Short.MAX_VALUE))
+                    .add(repFillButton)
+                    .add(cbDominant))
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         org.jdesktop.layout.GroupLayout jPanel10Layout = new org.jdesktop.layout.GroupLayout(jPanel10);
         jPanel10.setLayout(jPanel10Layout);
         jPanel10Layout.setHorizontalGroup(
             jPanel10Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jPanel10Layout.createSequentialGroup()
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel10Layout.createSequentialGroup()
                 .addContainerGap()
-                .add(jPanel10Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jScrollPane7, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 565, Short.MAX_VALUE)
+                .add(jPanel10Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, jScrollPane7, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 679, Short.MAX_VALUE)
                     .add(jPanel10Layout.createSequentialGroup()
-                        .add(jPanel12, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .add(jPanel12, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(jPanel11, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
@@ -438,16 +437,17 @@ public class AlgebraInfo extends javax.swing.JPanel implements DiagramListener
             .add(jPanel10Layout.createSequentialGroup()
                 .addContainerGap()
                 .add(jPanel10Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
-                    .add(jPanel11, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .add(jPanel11, 0, 90, Short.MAX_VALUE)
                     .add(jPanel12, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jScrollPane7, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 299, Short.MAX_VALUE)
+                .add(jScrollPane7, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 336, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
         tabbedPane.addTab("Representations", jPanel10);
 
         algebrasBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Full algebra", "Regular subalgebra", "Internal algebra" }));
+        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(edu.simplie.SimpLieApp.class).getContext().getResourceMap(AlgebraInfo.class);
         algebrasBox.setToolTipText(resourceMap.getString("algebraInfo.selectTooltip")); // NOI18N
         algebrasBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -465,7 +465,7 @@ public class AlgebraInfo extends javax.swing.JPanel implements DiagramListener
             .add(layout.createSequentialGroup()
                 .addContainerGap()
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(tabbedPane, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 569, Short.MAX_VALUE)
+                    .add(tabbedPane, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 704, Short.MAX_VALUE)
                     .add(layout.createSequentialGroup()
                         .add(jLabel3)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
@@ -480,7 +480,7 @@ public class AlgebraInfo extends javax.swing.JPanel implements DiagramListener
                     .add(jLabel3)
                     .add(algebrasBox, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(tabbedPane, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 450, Short.MAX_VALUE)
+                .add(tabbedPane, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 479, Short.MAX_VALUE)
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -516,7 +516,7 @@ private void repFillButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN
 		
 	private void repOKbuttonActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_repOKbuttonActionPerformed
 	{//GEN-HEADEREND:event_repOKbuttonActionPerformed
-		int[] labels = Helper.stringToIntArray(tfDynkinLabels.getText());
+		int[] labels = repSpinner.getValues();
 		if(algebra != null && labels.length == algebra.rank)
 		{
 			HWrep = new HighestWeightRep(algebra,labels);
@@ -597,10 +597,10 @@ private void repFillButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     private javax.swing.JLabel numPosRoots;
     private javax.swing.JButton repFillButton;
     private javax.swing.JButton repOKbutton;
+    private edu.simplie.ui.reusable.UIMultiSpinner repSpinner;
     private edu.simplie.ui.reusable.UIPrintableColorTable repTable;
     private edu.simplie.ui.reusable.UIPrintableColorTable rootTable;
     private javax.swing.JTabbedPane tabbedPane;
-    private javax.swing.JTextField tfDynkinLabels;
     private javax.swing.JTextArea tfMatrix;
     // End of variables declaration//GEN-END:variables
 	
