@@ -44,26 +44,21 @@ import java.util.Iterator;
 public class AlgebraInfo extends javax.swing.JPanel implements DiagramListener
 {
 	private DefaultTableModel tableModelRoots;
-	private DefaultTableModel tableModelWeights;
 	private Algebra algebra;
 	private AlgebraComposite algebras;
-	private HighestWeightRep HWrep;
 	
 	/** Creates new form AlgebraInfo */
 	public AlgebraInfo()
 	{
 		initComponents();
 		tableModelRoots = (DefaultTableModel) rootTable.getModel();
-		tableModelWeights = (DefaultTableModel) repTable.getModel();
 		algebra = null;
-		HWrep = null;
-		repSpinner.setMinValue(0);
 	}
 	
 	/** Sets the composite of algebras we want to view info of. */
 	public void setAlgebraComposite(AlgebraComposite algebras)
 	{
-		this.algebras	= algebras;
+		this.algebras = algebras;
 		algebras.dd.addListener(this);
 	}
 	
@@ -89,7 +84,6 @@ public class AlgebraInfo extends javax.swing.JPanel implements DiagramListener
 		
 		constructedHeight.setText(Helper.intToString(algebra.rs.constructedHeight()));
 		numPosRoots.setText(Helper.intToString((int) algebra.rs.numPosRoots()));
-		repSpinner.setNumSpinners(algebra.rank);
 
 		String matrix;
 		switch(matrixBox.getSelectedIndex())
@@ -138,21 +132,6 @@ public class AlgebraInfo extends javax.swing.JPanel implements DiagramListener
         numPosRoots = new javax.swing.JLabel();
         constructedHeight = new javax.swing.JLabel();
         fillRootTable = new javax.swing.JButton();
-        jPanel10 = new javax.swing.JPanel();
-        jPanel11 = new javax.swing.JPanel();
-        jLabel6 = new javax.swing.JLabel();
-        lDynkinLabels = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        lDimRep = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
-        lHeight = new javax.swing.JLabel();
-        jScrollPane7 = new javax.swing.JScrollPane();
-        repTable = new edu.simplie.ui.reusable.UIPrintableColorTable();
-        jPanel12 = new javax.swing.JPanel();
-        repOKbutton = new javax.swing.JButton();
-        cbDominant = new javax.swing.JCheckBox();
-        repFillButton = new javax.swing.JButton();
-        repSpinner = new edu.simplie.ui.reusable.UIMultiSpinner();
         algebrasBox = new javax.swing.JComboBox();
         jLabel3 = new javax.swing.JLabel();
 
@@ -298,154 +277,6 @@ public class AlgebraInfo extends javax.swing.JPanel implements DiagramListener
 
         tabbedPane.addTab("Roots", jPanel9);
 
-        jPanel11.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Representation info", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12))); // NOI18N
-
-        jLabel6.setText("Dynkin labels:"); // NOI18N
-
-        lDynkinLabels.setText("     "); // NOI18N
-
-        jLabel5.setText("Dimension of rep:"); // NOI18N
-
-        lDimRep.setText("    "); // NOI18N
-
-        jLabel7.setText("Highest weight height:"); // NOI18N
-
-        lHeight.setText("     "); // NOI18N
-
-        org.jdesktop.layout.GroupLayout jPanel11Layout = new org.jdesktop.layout.GroupLayout(jPanel11);
-        jPanel11.setLayout(jPanel11Layout);
-        jPanel11Layout.setHorizontalGroup(
-            jPanel11Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jPanel11Layout.createSequentialGroup()
-                .addContainerGap()
-                .add(jPanel11Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jLabel7)
-                    .add(jLabel5)
-                    .add(jLabel6))
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jPanel11Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(lDynkinLabels, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 98, Short.MAX_VALUE)
-                    .add(lDimRep, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 98, Short.MAX_VALUE)
-                    .add(lHeight, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 98, Short.MAX_VALUE))
-                .addContainerGap())
-        );
-        jPanel11Layout.setVerticalGroup(
-            jPanel11Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jPanel11Layout.createSequentialGroup()
-                .add(jPanel11Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(lDynkinLabels)
-                    .add(jLabel6))
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jPanel11Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(jLabel5)
-                    .add(lDimRep))
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jPanel11Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(jLabel7)
-                    .add(lHeight))
-                .addContainerGap(9, Short.MAX_VALUE))
-        );
-
-        repTable.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                "Labels", "Multiplicity", "Dimension", "Depth"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.String.class, java.lang.Long.class, java.lang.Long.class, java.lang.Integer.class
-            };
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
-        jScrollPane7.setViewportView(repTable);
-
-        jPanel12.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Enter Dynkin labels", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12))); // NOI18N
-
-        repOKbutton.setText("OK"); // NOI18N
-        repOKbutton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                repOKbuttonActionPerformed(evt);
-            }
-        });
-
-        cbDominant.setText("Only dominant weights"); // NOI18N
-        cbDominant.setMargin(new java.awt.Insets(0, 0, 0, 0));
-
-        repFillButton.setText("Fill weight table"); // NOI18N
-        repFillButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                repFillButtonActionPerformed(evt);
-            }
-        });
-
-        org.jdesktop.layout.GroupLayout jPanel12Layout = new org.jdesktop.layout.GroupLayout(jPanel12);
-        jPanel12.setLayout(jPanel12Layout);
-        jPanel12Layout.setHorizontalGroup(
-            jPanel12Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jPanel12Layout.createSequentialGroup()
-                .addContainerGap()
-                .add(jPanel12Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(repOKbutton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 109, Short.MAX_VALUE)
-                    .add(repFillButton))
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jPanel12Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(repSpinner, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE)
-                    .add(cbDominant))
-                .addContainerGap())
-        );
-        jPanel12Layout.setVerticalGroup(
-            jPanel12Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jPanel12Layout.createSequentialGroup()
-                .add(jPanel12Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(org.jdesktop.layout.GroupLayout.TRAILING, repSpinner, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                    .add(org.jdesktop.layout.GroupLayout.TRAILING, repOKbutton))
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jPanel12Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(repFillButton)
-                    .add(cbDominant))
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
-        org.jdesktop.layout.GroupLayout jPanel10Layout = new org.jdesktop.layout.GroupLayout(jPanel10);
-        jPanel10.setLayout(jPanel10Layout);
-        jPanel10Layout.setHorizontalGroup(
-            jPanel10Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel10Layout.createSequentialGroup()
-                .addContainerGap()
-                .add(jPanel10Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
-                    .add(org.jdesktop.layout.GroupLayout.LEADING, jScrollPane7, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 679, Short.MAX_VALUE)
-                    .add(jPanel10Layout.createSequentialGroup()
-                        .add(jPanel12, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(jPanel11, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
-        );
-        jPanel10Layout.setVerticalGroup(
-            jPanel10Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jPanel10Layout.createSequentialGroup()
-                .addContainerGap()
-                .add(jPanel10Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
-                    .add(jPanel11, 0, 90, Short.MAX_VALUE)
-                    .add(jPanel12, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jScrollPane7, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 336, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-
-        tabbedPane.addTab("Representations", jPanel10);
-
         algebrasBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Full algebra", "Regular subalgebra", "Internal algebra" }));
         org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(edu.simplie.SimpLieApp.class).getContext().getResourceMap(AlgebraInfo.class);
         algebrasBox.setToolTipText(resourceMap.getString("algebraInfo.selectTooltip")); // NOI18N
@@ -465,11 +296,11 @@ public class AlgebraInfo extends javax.swing.JPanel implements DiagramListener
             .add(layout.createSequentialGroup()
                 .addContainerGap()
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(tabbedPane, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 704, Short.MAX_VALUE)
                     .add(layout.createSequentialGroup()
                         .add(jLabel3)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(algebrasBox, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
+                        .add(algebrasBox, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                    .add(tabbedPane, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 704, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -484,50 +315,7 @@ public class AlgebraInfo extends javax.swing.JPanel implements DiagramListener
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
-	
-private void repFillButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_repFillButtonActionPerformed
-	if(HWrep == null || algebra == null)
-		return;
-	
-	// Fully construct the weight system.
-	HWrep.construct(0);
-	
-	// Clear and fill the table.
-	tableModelWeights.setRowCount(0);
-	
-	for (int i = 0; i < HWrep.size(); i++)
-	{
-		Collection<Weight> weights = HWrep.get(i);
-		Iterator iterator	= weights.iterator();
-		while (iterator.hasNext())
-		{
-			Weight weight = (Weight) iterator.next();
-			if(cbDominant.isSelected() && !weight.isDominant)
-				continue;
-			Object[] rowData = new Object[4];
-			rowData[0] = Helper.intArrayToString(weight.dynkinLabels);
-			rowData[1] = weight.getMult();
-			rowData[2] = (weight.isDominant) ? algebra.dimOfRep(weight.dynkinLabels) : 0;
-			rowData[3] = weight.getDepth();
-			tableModelWeights.addRow(rowData);
-		}
-	}
-}//GEN-LAST:event_repFillButtonActionPerformed
-		
-	private void repOKbuttonActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_repOKbuttonActionPerformed
-	{//GEN-HEADEREND:event_repOKbuttonActionPerformed
-		int[] labels = repSpinner.getValues();
-		if(algebra != null && labels.length == algebra.rank)
-		{
-			HWrep = new HighestWeightRep(algebra,labels);
-			lDynkinLabels.setText(Helper.intArrayToString(labels));
-			Long dim = new Long(HWrep.dim);
-			lDimRep.setText(dim.toString());
-			lHeight.setText(HWrep.highestHeight.toString());
-		}
-		
-}//GEN-LAST:event_repOKbuttonActionPerformed
-	
+				
 	private void algebrasBoxActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_algebrasBoxActionPerformed
 	{//GEN-HEADEREND:event_algebrasBoxActionPerformed
 		diagramChanged();
@@ -571,34 +359,19 @@ private void repFillButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN
 	
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox algebrasBox;
-    private javax.swing.JCheckBox cbDominant;
     private javax.swing.JLabel constructedHeight;
     private javax.swing.JButton fillRootTable;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel10;
-    private javax.swing.JPanel jPanel11;
-    private javax.swing.JPanel jPanel12;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JScrollPane jScrollPane7;
-    private javax.swing.JLabel lDimRep;
-    private javax.swing.JLabel lDynkinLabels;
-    private javax.swing.JLabel lHeight;
     private javax.swing.JComboBox matrixBox;
     private javax.swing.JLabel numPosRoots;
-    private javax.swing.JButton repFillButton;
-    private javax.swing.JButton repOKbutton;
-    private edu.simplie.ui.reusable.UIMultiSpinner repSpinner;
-    private edu.simplie.ui.reusable.UIPrintableColorTable repTable;
     private edu.simplie.ui.reusable.UIPrintableColorTable rootTable;
     private javax.swing.JTabbedPane tabbedPane;
     private javax.swing.JTextArea tfMatrix;

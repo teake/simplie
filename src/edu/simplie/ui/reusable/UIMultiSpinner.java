@@ -22,6 +22,9 @@
 package edu.simplie.ui.reusable;
 
 import java.awt.Dimension;
+import java.util.ArrayList;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 /**
  * A convenience class for an array of spinners.
@@ -29,7 +32,7 @@ import java.awt.Dimension;
  * @author Teake Nutma
  * @version $Revision$, $Date$
  */
-public class UIMultiSpinner extends javax.swing.JPanel
+public class UIMultiSpinner extends javax.swing.JPanel implements ChangeListener
 {
 
 	/* Number of spinners */
@@ -41,13 +44,35 @@ public class UIMultiSpinner extends javax.swing.JPanel
 	/* The preferred size of the spinners */
 	private Dimension size;
 
+	private ArrayList<ChangeListener> listeners;
+
     /** Creates new form UIMultiSpinner */
     public UIMultiSpinner()
 	{
         initComponents();
 		size = dummy.getPreferredSize();
 		size.width = (int) (1.5 * size.width);
+		listeners = new ArrayList<ChangeListener>();
     }
+
+	public void addChangeListener(ChangeListener listener)
+	{
+		listeners.add(listener);
+	}
+
+	public void removeChangeListener(ChangeListener listener)
+	{
+		listeners.remove(listener);
+	}
+
+	protected void fireStateChanged()
+	{
+		ChangeEvent e = new ChangeEvent(this);
+		for(ChangeListener listener : listeners)
+		{
+			listener.stateChanged(e);
+		}
+	}
 
 	/**
 	 * Sets the number of spinners.
@@ -64,6 +89,7 @@ public class UIMultiSpinner extends javax.swing.JPanel
 		{
 			UISpinner spinner = new UISpinner();
 			spinner.setPreferredSize(size);
+			spinner.addChangeListener(this);
 			container.add(spinner, i);
 		}
 		if(minValue != null) setMinValue(minValue);
@@ -132,6 +158,24 @@ public class UIMultiSpinner extends javax.swing.JPanel
 		}
 		
 		return true;
+	}
+
+	/**
+	 * Sets one value for all the spinners.
+	 *
+	 * @param value The value to set.
+	 */
+	public void setValue(int value)
+	{
+		for(int i = 0; i < num; i++)
+		{
+			get(i).setValue(value);
+		}
+	}
+
+	public void stateChanged(ChangeEvent e)
+	{
+		fireStateChanged();
 	}
 
 	private UISpinner get(int index)
