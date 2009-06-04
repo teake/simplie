@@ -22,7 +22,6 @@ public class SimpLieView extends FrameView {
 	private final AlgebraComposite algebras;
 	private JDialog exportDialog;
 	private JDialog outputDialog;
-	private JDialog helpDialog;
 	
 	private final File workDir;
 	private final File ddDir;
@@ -107,6 +106,7 @@ public class SimpLieView extends FrameView {
 		algebras = new AlgebraComposite();
 		algebraSetup.setAlgebraComposite(algebras);
 		algebraInfo.setAlgebraComposite(algebras);
+		repContainer.setAlgebraComposite(algebras);
 		levelDecomposition.setAlgebraComposite(algebras);
 		projector.setAlgebrasComposite(algebras);
 		algebras.dd.clear();		
@@ -168,8 +168,8 @@ public class SimpLieView extends FrameView {
         exportToTexItem = new javax.swing.JMenuItem();
         exporRootsItem = new javax.swing.JMenuItem();
         outputItem = new javax.swing.JMenuItem();
-        helpMenu = new javax.swing.JMenu();
-        aboutMenuItem = new javax.swing.JMenuItem();
+        javax.swing.JMenu helpMenu = new javax.swing.JMenu();
+        javax.swing.JMenuItem aboutMenuItem = new javax.swing.JMenuItem();
         exportToTex = new edu.simplie.ui.ExportToTex();
         systemOutTextArea = new edu.simplie.ui.SystemOutTextArea();
         statusPanel = new javax.swing.JPanel();
@@ -180,6 +180,7 @@ public class SimpLieView extends FrameView {
         mainPane = new javax.swing.JTabbedPane();
         algebraSetup = new edu.simplie.ui.AlgebraSetup();
         algebraInfo = new edu.simplie.ui.AlgebraInfo();
+        repContainer = new edu.simplie.ui.reps.RepContainer();
         levelDecomposition = new edu.simplie.ui.LevelDecomposition();
         projector = new edu.simplie.ui.Projector();
 
@@ -308,6 +309,9 @@ public class SimpLieView extends FrameView {
 
         algebraInfo.setName("algebraInfo"); // NOI18N
         mainPane.addTab(resourceMap.getString("algebraInfo.TabConstraints.tabTitle"), algebraInfo); // NOI18N
+
+        repContainer.setName("repContainer"); // NOI18N
+        mainPane.addTab(resourceMap.getString("repContainer.TabConstraints.tabTitle"), repContainer); // NOI18N
 
         levelDecomposition.setName("levelDecomposition"); // NOI18N
         mainPane.addTab(resourceMap.getString("levelDecomposition.TabConstraints.tabTitle"), levelDecomposition); // NOI18N
@@ -475,14 +479,12 @@ public class SimpLieView extends FrameView {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JMenuItem aboutMenuItem;
     private edu.simplie.ui.AlgebraInfo algebraInfo;
     private edu.simplie.ui.AlgebraSetup algebraSetup;
     private javax.swing.JMenuItem clearItem;
     private javax.swing.JMenuItem exporRootsItem;
     private edu.simplie.ui.ExportToTex exportToTex;
     private javax.swing.JMenuItem exportToTexItem;
-    private javax.swing.JMenu helpMenu;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
@@ -495,6 +497,7 @@ public class SimpLieView extends FrameView {
     private javax.swing.JMenu presetMenu;
     private javax.swing.JProgressBar progressBar;
     private edu.simplie.ui.Projector projector;
+    private edu.simplie.ui.reps.RepContainer repContainer;
     private javax.swing.JMenuItem saveDiagramItem;
     private javax.swing.JMenuItem saveRootsItem;
     private javax.swing.JLabel statusAnimationLabel;
