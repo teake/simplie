@@ -26,6 +26,7 @@ package edu.simplie.algebra;
 import edu.simplie.Helper;
 import edu.simplie.math.fraction;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -566,4 +567,27 @@ public class Algebra
 		}
 		return dynkinLabels;
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		final Algebra other = (Algebra) obj;
+		if (this.A != other.A && (this.A == null || !Arrays.equals(this.A,other.A))) {
+			return false;
+		}
+		return true;
+	}
+
+	@Override
+	public int hashCode() {
+		int hash = 7;
+		hash = 61 * hash + (this.A != null ? this.A.hashCode() : 0);
+		return hash;
+	}
+
 }
