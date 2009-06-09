@@ -40,10 +40,10 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="1" attributes="0">
               <EmptySpace min="-2" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                  <Group type="102" alignment="1" attributes="1">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" alignment="1" attributes="0">
                       <Component id="bCalculate" min="-2" max="-2" attributes="1"/>
-                      <EmptySpace max="32767" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
                       <Component id="bReset" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <Component id="jPanel1" alignment="0" min="-2" max="-2" attributes="0"/>
@@ -82,12 +82,18 @@
     </Container>
     <Component class="javax.swing.JButton" name="bCalculate">
       <Properties>
+        <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+          <action class="edu.simplie.ui.reps.TensorProducts" id="calculate" methodName="calculate"/>
+        </Property>
         <Property name="text" type="java.lang.String" resourceKey="generic.calculate"/>
         <Property name="name" type="java.lang.String" value="bCalculate" noResource="true"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JButton" name="bReset">
       <Properties>
+        <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+          <action class="edu.simplie.ui.reps.TensorProducts" id="reset" methodName="reset"/>
+        </Property>
         <Property name="text" type="java.lang.String" resourceKey="generic.reset"/>
         <Property name="name" type="java.lang.String" value="bReset" noResource="true"/>
       </Properties>
@@ -106,7 +112,7 @@
                   <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
               </Group>
               <Component id="repSpinner1" alignment="0" pref="456" max="32767" attributes="0"/>
-              <Component id="repSpinner3" alignment="0" pref="456" max="32767" attributes="0"/>
+              <Component id="repSpinner2" alignment="0" pref="456" max="32767" attributes="0"/>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">
@@ -119,7 +125,7 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="repSpinner1" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="repSpinner3" min="-2" max="-2" attributes="0"/>
+                  <Component id="repSpinner2" min="-2" max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -136,9 +142,9 @@
             <Property name="name" type="java.lang.String" value="repSpinner1" noResource="true"/>
           </Properties>
         </Component>
-        <Component class="edu.simplie.ui.reps.RepSpinner" name="repSpinner3">
+        <Component class="edu.simplie.ui.reps.RepSpinner" name="repSpinner2">
           <Properties>
-            <Property name="name" type="java.lang.String" value="repSpinner3" noResource="true"/>
+            <Property name="name" type="java.lang.String" value="repSpinner2" noResource="true"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel2">

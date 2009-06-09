@@ -64,7 +64,7 @@ public class RepSpinner extends javax.swing.JPanel
 	private void repChanged()
 	{
 		int[] labels = HWspinner.getValues();
-		if(algebra != null && algebra.rank > 0 && labels.length == algebra.rank)
+		if(algebra != null && algebra.rank > 0 && algebra.finite && labels.length == algebra.rank)
 		{
 			HWrep = new HighestWeightRep(algebra,labels);
 			Long dim = new Long(HWrep.dim);

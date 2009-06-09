@@ -26,6 +26,9 @@ package edu.simplie.ui.reps;
 import edu.simplie.dynkindiagram.*;
 import edu.simplie.algebra.*;
 import edu.simplie.*;
+import java.util.Iterator;
+import javax.swing.table.DefaultTableModel;
+import org.jdesktop.application.Action;
 
 /**
  *
@@ -34,17 +37,18 @@ import edu.simplie.*;
  */
 public class TensorProducts extends javax.swing.JPanel implements DiagramListener
 {
-	private Algebra algebra;
 	private AlgebraComposite algebras;
 	private HighestWeightRep HWrep1, HWrep2;
+	private TensorProduct product;
+	private DefaultTableModel tableModel;
 
     /** Creates new form TensorProducts */
     public TensorProducts()
 	{
         initComponents();
-		algebra = null;
 		HWrep1 = null;
 		HWrep2 = null;
+		tableModel = (DefaultTableModel) resultTable.getModel();
     }
 
 
@@ -56,9 +60,45 @@ public class TensorProducts extends javax.swing.JPanel implements DiagramListene
 
 	public void diagramChanged()
 	{
-		this.algebra = algebras.algebra;
-		if(algebra == null)
+		repSpinner1.setAlgebra(algebras.algebra);
+		repSpinner2.setAlgebra(algebras.algebra);
+	}
+
+	@Action
+	public void calculate()
+	{
+		HWrep1 = repSpinner1.getRepresentation();
+		HWrep2 = repSpinner2.getRepresentation();
+
+		if(HWrep1 == null || HWrep2 == null)
+		{
 			return;
+		}
+
+		product = new TensorProduct(HWrep1, HWrep2);
+
+
+		// Clear and fill the table.
+		tableModel.setRowCount(0);
+
+		Iterator<HighestWeightRep> iterator = product.iterator();
+		while(iterator.hasNext())
+		{
+			HighestWeightRep rep = iterator.next();
+			Object[] rowData = new Object[3];
+			rowData[0] = Helper.intArrayToString(rep.highestWeight.dynkinLabels);
+			rowData[1] = rep.dim;
+			rowData[2] = rep.getOuterMult();
+			tableModel.addRow(rowData);
+		}
+	}
+
+	@Action
+	public void reset()
+	{
+		tableModel.setRowCount(0);
+		repSpinner1.reset();
+		repSpinner2.reset();
 	}
 
     /** This method is called from within the constructor to
@@ -77,7 +117,7 @@ public class TensorProducts extends javax.swing.JPanel implements DiagramListene
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         repSpinner1 = new edu.simplie.ui.reps.RepSpinner();
-        repSpinner3 = new edu.simplie.ui.reps.RepSpinner();
+        repSpinner2 = new edu.simplie.ui.reps.RepSpinner();
         jLabel2 = new javax.swing.JLabel();
 
         setName("Form"); // NOI18N
@@ -110,10 +150,13 @@ public class TensorProducts extends javax.swing.JPanel implements DiagramListene
         resultTable.setName("resultTable"); // NOI18N
         jScrollPane1.setViewportView(resultTable);
 
+        javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance(edu.simplie.SimpLieApp.class).getContext().getActionMap(TensorProducts.class, this);
+        bCalculate.setAction(actionMap.get("calculate")); // NOI18N
         org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(edu.simplie.SimpLieApp.class).getContext().getResourceMap(TensorProducts.class);
         bCalculate.setText(resourceMap.getString("generic.calculate")); // NOI18N
         bCalculate.setName("bCalculate"); // NOI18N
 
+        bReset.setAction(actionMap.get("reset")); // NOI18N
         bReset.setText(resourceMap.getString("generic.reset")); // NOI18N
         bReset.setName("bReset"); // NOI18N
 
@@ -124,7 +167,7 @@ public class TensorProducts extends javax.swing.JPanel implements DiagramListene
 
         repSpinner1.setName("repSpinner1"); // NOI18N
 
-        repSpinner3.setName("repSpinner3"); // NOI18N
+        repSpinner2.setName("repSpinner2"); // NOI18N
 
         jLabel2.setText(resourceMap.getString("generic.dims")); // NOI18N
         jLabel2.setName("jLabel2"); // NOI18N
@@ -138,7 +181,7 @@ public class TensorProducts extends javax.swing.JPanel implements DiagramListene
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 327, Short.MAX_VALUE)
                 .add(jLabel2))
             .add(repSpinner1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 456, Short.MAX_VALUE)
-            .add(repSpinner3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 456, Short.MAX_VALUE)
+            .add(repSpinner2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 456, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -149,7 +192,7 @@ public class TensorProducts extends javax.swing.JPanel implements DiagramListene
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(repSpinner1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(repSpinner3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .add(repSpinner2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
         );
 
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
@@ -172,10 +215,10 @@ public class TensorProducts extends javax.swing.JPanel implements DiagramListene
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
                         .add(bCalculate)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(bReset))
                     .add(jPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
@@ -193,7 +236,7 @@ public class TensorProducts extends javax.swing.JPanel implements DiagramListene
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private edu.simplie.ui.reps.RepSpinner repSpinner1;
-    private edu.simplie.ui.reps.RepSpinner repSpinner3;
+    private edu.simplie.ui.reps.RepSpinner repSpinner2;
     private edu.simplie.ui.reusable.UIPrintableColorTable resultTable;
     // End of variables declaration//GEN-END:variables
 

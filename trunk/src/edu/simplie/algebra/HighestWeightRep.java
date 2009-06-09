@@ -45,15 +45,17 @@ public class HighestWeightRep
 	public final fraction	highestHeight;
 	/** The dimension of this representation. */
 	public final long		dim;
+	/** The outer multiplicity of this representation in a reducible representation. Defaults to 1 */
+	private long			outerMult;
 	/** The algebra of which this is a weight system. */
-	private final Algebra	algebra;
+	public final Algebra	algebra;
 	/** The rank of the algebra of which this is a weight system. */
 	private final int		rank;
 	/** The heighest weight of the representation. */
-	private final Weight	highestWeight;
+	public final Weight		highestWeight;
 	/** A constant used in the Freudenthal formula. */
 	private final fraction	highestWeightFactor;
-	
+
 	/** The internal table containing the weights. */
 	private ArrayList<HashSet<Weight>> weightSystem;
 	/** Integer specifying how deep we constructed the weight system. */
@@ -83,7 +85,9 @@ public class HighestWeightRep
 		
 		// Get the dimension of this rep.
 		dim = algebra.dimOfRep(highestWeightLabels);
-		
+
+		outerMult = 1;
+
 		// Add the highest weight (construct to depth 0)
 		weightSystem	= new ArrayList<HashSet<Weight>>();
 		highestWeight	= new Weight(highestWeightLabels);
@@ -99,6 +103,16 @@ public class HighestWeightRep
 		
 		// Calculate the height of the highest weight
 		highestHeight = algebra.weightHeight(highestWeightLabels);
+	}
+
+	public long getOuterMult()
+	{
+		return outerMult;
+	}
+
+	public void setOuterMult(long outerMult)
+	{
+		this.outerMult = outerMult;
 	}
 	
 	/** Cancels the construction of the weight system. */
@@ -181,22 +195,16 @@ public class HighestWeightRep
 	 */
 	public int[] makeDominant(int[] weightLabels)
 	{
-		makeItSo:
-			while(true)
+		int[] reflected = weightLabels.clone();
+		for (int i = 0; i < reflected.length; i++)
+		{
+			if(reflected[i] < 0)
 			{
-				for (int i = 0; i < weightLabels.length; i++)
-				{
-					if(weightLabels[i] < 0)
-					{
-						weightLabels = algebra.simpWeylReflWeight(weightLabels, i);
-						break;
-					}
-					if(i == weightLabels.length - 1)
-						break makeItSo;
-				}
+				reflected = algebra.simpWeylReflWeight(reflected, i);
+				i = -1;
 			}
-		
-		return weightLabels;
+		}	
+		return reflected;
 	}
 	
 	
@@ -346,5 +354,31 @@ public class HighestWeightRep
 		}
 		return mult.asLong();
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		final HighestWeightRep other = (HighestWeightRep) obj;
+		if (this.algebra != other.algebra && (this.algebra == null || !this.algebra.equals(other.algebra))) {
+			return false;
+		}
+		if (this.highestWeight != other.highestWeight && (this.highestWeight == null || !this.highestWeight.equals(other.highestWeight))) {
+			return false;
+		}
+		return true;
+	}
+
+	@Override
+	public int hashCode() {
+		int hash = 3;
+		hash = 59 * hash + (this.highestWeight != null ? this.highestWeight.hashCode() : 0);
+		return hash;
+	}
+
 	
 }
