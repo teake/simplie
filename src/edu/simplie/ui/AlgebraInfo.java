@@ -163,6 +163,7 @@ public class AlgebraInfo extends javax.swing.JPanel implements DiagramListener
         tabbedPane.setMinimumSize(new java.awt.Dimension(0, 0));
 
         tfMatrix.setColumns(20);
+        tfMatrix.setFont(new java.awt.Font("Monospaced", 0, 13)); // NOI18N
         tfMatrix.setRows(5);
         jScrollPane1.setViewportView(tfMatrix);
 
@@ -172,14 +173,14 @@ public class AlgebraInfo extends javax.swing.JPanel implements DiagramListener
             matricesContainerLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(matricesContainerLayout.createSequentialGroup()
                 .addContainerGap()
-                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 595, Short.MAX_VALUE)
+                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 621, Short.MAX_VALUE)
                 .addContainerGap())
         );
         matricesContainerLayout.setVerticalGroup(
             matricesContainerLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(org.jdesktop.layout.GroupLayout.TRAILING, matricesContainerLayout.createSequentialGroup()
                 .addContainerGap()
-                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 188, Short.MAX_VALUE)
+                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 149, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -223,14 +224,14 @@ public class AlgebraInfo extends javax.swing.JPanel implements DiagramListener
             tableContainerLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(tableContainerLayout.createSequentialGroup()
                 .addContainerGap()
-                .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 595, Short.MAX_VALUE)
+                .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 621, Short.MAX_VALUE)
                 .addContainerGap())
         );
         tableContainerLayout.setVerticalGroup(
             tableContainerLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(org.jdesktop.layout.GroupLayout.TRAILING, tableContainerLayout.createSequentialGroup()
                 .addContainerGap()
-                .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 188, Short.MAX_VALUE)
+                .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 149, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -273,7 +274,7 @@ public class AlgebraInfo extends javax.swing.JPanel implements DiagramListener
                 .add(10, 10, 10)
                 .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(matrixBox, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                    .add(algebrasBox, 0, 156, Short.MAX_VALUE))
+                    .add(algebrasBox, 0, 222, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -297,7 +298,7 @@ public class AlgebraInfo extends javax.swing.JPanel implements DiagramListener
             .add(layout.createSequentialGroup()
                 .addContainerGap()
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(tabbedPane, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 620, Short.MAX_VALUE)
+                    .add(tabbedPane, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 682, Short.MAX_VALUE)
                     .add(layout.createSequentialGroup()
                         .add(uIAlgebraInfo, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
