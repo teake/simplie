@@ -13,20 +13,25 @@ import javax.swing.Icon;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
-
 /**
  * The application's main frame.
  */
 public class SimpLieView extends FrameView {
 
 	private final AlgebraComposite algebras;
+	
+    private JDialog aboutBox;
 	private JDialog exportDialog;
 	private JDialog outputDialog;
+	private JDialog algebraInfoDialog;
+	private JDialog repDialog;
+	private JDialog levelDecompDialog;
+	private JDialog visDialog;
 	
 	private final File workDir;
 	private final File ddDir;
 	private final File rsDir;
-	
+
 	/** This class is used in the diagram preset UI */
 	class ddListener implements java.awt.event.ActionListener
 	{
@@ -102,9 +107,9 @@ public class SimpLieView extends FrameView {
         });
 		
 		this.getFrame().setIconImage(resourceMap.getImageIcon("icon16").getImage());
-				
+		
 		algebras = new AlgebraComposite();
-		algebraSetup.setAlgebraComposite(algebras);
+		mainPane.setAlgebraComposite(algebras);
 		algebraInfo.setAlgebraComposite(algebras);
 		repContainer.setAlgebraComposite(algebras);
 		levelDecomposition.setAlgebraComposite(algebras);
@@ -120,7 +125,9 @@ public class SimpLieView extends FrameView {
 			workDir = new File(appData, ".simplie");
 		}
 		else
+		{
 			workDir = new File(userDir, ".simplie");
+		}
 		ddDir = new File(workDir, "diagrams");
 		rsDir = new File(workDir, "roots");
 		
@@ -132,16 +139,6 @@ public class SimpLieView extends FrameView {
 		
 		// Fill the preset menu.
 		reloadPresets();
-    }
-
-    @Action
-    public void showAboutBox() {
-        if (aboutBox == null) {
-            JFrame mainFrame = SimpLieApp.getApplication().getMainFrame();
-            aboutBox = new SimpLieAboutBox(mainFrame);
-            aboutBox.setLocationRelativeTo(mainFrame);
-        }
-        SimpLieApp.getApplication().show(aboutBox);
     }
 
     /** This method is called from within the constructor to
@@ -168,6 +165,11 @@ public class SimpLieView extends FrameView {
         exportToTexItem = new javax.swing.JMenuItem();
         exporRootsItem = new javax.swing.JMenuItem();
         outputItem = new javax.swing.JMenuItem();
+        windowMenu = new javax.swing.JMenu();
+        algebraItem = new javax.swing.JMenuItem();
+        repItem = new javax.swing.JMenuItem();
+        levelDecompItem = new javax.swing.JMenuItem();
+        visItem = new javax.swing.JMenuItem();
         javax.swing.JMenu helpMenu = new javax.swing.JMenu();
         javax.swing.JMenuItem aboutMenuItem = new javax.swing.JMenuItem();
         exportToTex = new edu.simplie.ui.ExportToTex();
@@ -177,15 +179,15 @@ public class SimpLieView extends FrameView {
         statusMessageLabel = new javax.swing.JLabel();
         statusAnimationLabel = new javax.swing.JLabel();
         progressBar = new javax.swing.JProgressBar();
-        mainPane = new javax.swing.JTabbedPane();
-        algebraSetup = new edu.simplie.ui.AlgebraSetup();
-        algebraInfo = new edu.simplie.ui.AlgebraInfo();
         repContainer = new edu.simplie.ui.reps.RepContainer();
-        levelDecomposition = new edu.simplie.ui.LevelDecomposition();
         projector = new edu.simplie.ui.Projector();
+        algebraInfo = new edu.simplie.ui.AlgebraInfo();
+        levelDecomposition = new edu.simplie.ui.LevelDecomposition();
+        mainPane = new edu.simplie.ui.DynkinDiagramPanel();
 
         menuBar.setName("menuBar"); // NOI18N
 
+        fileMenu.setMnemonic('f');
         org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(edu.simplie.SimpLieApp.class).getContext().getResourceMap(SimpLieView.class);
         fileMenu.setText(resourceMap.getString("fileMenu.text")); // NOI18N
         fileMenu.setName("fileMenu"); // NOI18N
@@ -219,6 +221,7 @@ public class SimpLieView extends FrameView {
 
         menuBar.add(fileMenu);
 
+        presetMenu.setMnemonic('p');
         presetMenu.setText(resourceMap.getString("presetMenu.text")); // NOI18N
         presetMenu.setName("presetMenu"); // NOI18N
 
@@ -232,6 +235,7 @@ public class SimpLieView extends FrameView {
 
         menuBar.add(presetMenu);
 
+        toolsMenu.setMnemonic('t');
         toolsMenu.setText(resourceMap.getString("toolsMenu.text")); // NOI18N
         toolsMenu.setName("toolsMenu"); // NOI18N
 
@@ -250,6 +254,33 @@ public class SimpLieView extends FrameView {
 
         menuBar.add(toolsMenu);
 
+        windowMenu.setMnemonic('w');
+        windowMenu.setText(resourceMap.getString("windowMenu.text")); // NOI18N
+        windowMenu.setName("windowMenu"); // NOI18N
+
+        algebraItem.setAction(actionMap.get("showAlgebraInfo")); // NOI18N
+        algebraItem.setText(resourceMap.getString("algebraInfo")); // NOI18N
+        algebraItem.setName("algebraItem"); // NOI18N
+        windowMenu.add(algebraItem);
+
+        repItem.setAction(actionMap.get("showReps")); // NOI18N
+        repItem.setText(resourceMap.getString("reps")); // NOI18N
+        repItem.setName("repItem"); // NOI18N
+        windowMenu.add(repItem);
+
+        levelDecompItem.setAction(actionMap.get("showLevelDecomp")); // NOI18N
+        levelDecompItem.setText(resourceMap.getString("levelDecomp")); // NOI18N
+        levelDecompItem.setName("levelDecompItem"); // NOI18N
+        windowMenu.add(levelDecompItem);
+
+        visItem.setAction(actionMap.get("showVis")); // NOI18N
+        visItem.setText(resourceMap.getString("projector")); // NOI18N
+        visItem.setName("visItem"); // NOI18N
+        windowMenu.add(visItem);
+
+        menuBar.add(windowMenu);
+
+        helpMenu.setMnemonic('h');
         helpMenu.setText(resourceMap.getString("helpMenu.text")); // NOI18N
         helpMenu.setName("helpMenu"); // NOI18N
 
@@ -282,7 +313,7 @@ public class SimpLieView extends FrameView {
             .add(statusPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .add(statusMessageLabel)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 659, Short.MAX_VALUE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 681, Short.MAX_VALUE)
                 .add(progressBar, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(statusAnimationLabel)
@@ -300,60 +331,20 @@ public class SimpLieView extends FrameView {
                 .add(3, 3, 3))
         );
 
-        mainPane.setMinimumSize(new java.awt.Dimension(700, 600));
-        mainPane.setName("mainPane"); // NOI18N
-        mainPane.setPreferredSize(new java.awt.Dimension(700, 600));
-
-        algebraSetup.setName("algebraSetup"); // NOI18N
-        mainPane.addTab(resourceMap.getString("algebraSetup.TabConstraints.tabTitle"), algebraSetup); // NOI18N
-
-        algebraInfo.setName("algebraInfo"); // NOI18N
-        mainPane.addTab(resourceMap.getString("algebraInfo.TabConstraints.tabTitle"), algebraInfo); // NOI18N
-
         repContainer.setName("repContainer"); // NOI18N
-        mainPane.addTab(resourceMap.getString("repContainer.TabConstraints.tabTitle"), repContainer); // NOI18N
-
-        levelDecomposition.setName("levelDecomposition"); // NOI18N
-        mainPane.addTab(resourceMap.getString("levelDecomposition.TabConstraints.tabTitle"), levelDecomposition); // NOI18N
 
         projector.setName("projector"); // NOI18N
-        mainPane.addTab(resourceMap.getString("projector.TabConstraints.tabTitle"), projector); // NOI18N
+
+        algebraInfo.setName("algebraInfo"); // NOI18N
+
+        levelDecomposition.setName("levelDecomposition"); // NOI18N
+
+        mainPane.setName("mainPane"); // NOI18N
 
         setComponent(mainPane);
         setMenuBar(menuBar);
     }// </editor-fold>//GEN-END:initComponents
 
-	@Action
-	public void showExportTexDialog()
-	{
-		if (exportDialog == null)
-		{
-			JFrame mainFrame = SimpLieApp.getApplication().getMainFrame();
-			exportDialog = new JDialog(mainFrame);
-			exportDialog.add(exportToTex);
-			exportToTex.setup(exportDialog,levelDecomposition.getRepTable(),algebras);
-            exportDialog.setLocationRelativeTo(mainFrame);
-			exportDialog.setTitle("Export to TeX");
-			exportDialog.setResizable(false);
-        }
-        SimpLieApp.getApplication().show(exportDialog);
-	}
-
-	@Action
-	public void showOutput()
-	{
-		if (outputDialog == null)
-		{
-            JFrame mainFrame = SimpLieApp.getApplication().getMainFrame();
-            outputDialog = new JDialog(mainFrame);
-			outputDialog.add(systemOutTextArea);
-            outputDialog.setLocationRelativeTo(mainFrame);
-			outputDialog.setTitle("SimpLie Output");
-        }
-        SimpLieApp.getApplication().show(outputDialog);
-		SimpLieApp.getApplication().show(this);
-	}
-	
 	@Action
 	public void clearDiagram()
 	{
@@ -476,11 +467,113 @@ public class SimpLieView extends FrameView {
 		}
 	}
 
+	/**
+	 * Actions for showing JDialogs
+	 * TODO: cleanup duplicate code.
+	 */
+
+    @Action
+    public void showAboutBox()
+	{
+        if (aboutBox == null)
+		{
+            JFrame mainFrame = SimpLieApp.getApplication().getMainFrame();
+            aboutBox = new SimpLieAboutBox(mainFrame);
+            aboutBox.setLocationRelativeTo(mainFrame);
+        }
+        SimpLieApp.getApplication().show(aboutBox);
+    }
+	
+	@Action
+	public void showExportTexDialog()
+	{
+		if (exportDialog == null)
+		{
+			JFrame mainFrame = SimpLieApp.getApplication().getMainFrame();
+			exportDialog = new JDialog(mainFrame);
+			exportDialog.add(exportToTex);
+			exportToTex.setup(exportDialog,levelDecomposition.getRepTable(),algebras);
+            exportDialog.setLocationRelativeTo(mainFrame);
+			exportDialog.setTitle("Export to TeX");
+			exportDialog.setResizable(false);
+        }
+        SimpLieApp.getApplication().show(exportDialog);
+	}
+
+	@Action
+	public void showOutput()
+	{
+		if (outputDialog == null)
+		{
+            JFrame mainFrame = SimpLieApp.getApplication().getMainFrame();
+            outputDialog = new JDialog(mainFrame);
+			outputDialog.add(systemOutTextArea);
+            outputDialog.setLocationRelativeTo(mainFrame);
+			outputDialog.setTitle("SimpLie Output");
+        }
+        SimpLieApp.getApplication().show(outputDialog);
+	}
+
+	@Action
+	public void showAlgebraInfo()
+	{
+		if(algebraInfoDialog == null)
+		{
+			JFrame mainFrame = SimpLieApp.getApplication().getMainFrame();
+			algebraInfoDialog = new JDialog(mainFrame);
+			algebraInfoDialog.add(algebraInfo);
+            algebraInfoDialog.setLocationRelativeTo(mainFrame);
+			algebraInfoDialog.setTitle(getResourceMap().getString("algebraInfo"));
+        }
+		SimpLieApp.getApplication().show(algebraInfoDialog);
+	}
+
+	@Action
+	public void showReps()
+	{
+		if(repDialog == null)
+		{
+			JFrame mainFrame = SimpLieApp.getApplication().getMainFrame();
+			repDialog = new JDialog(mainFrame);
+			repDialog.add(repContainer);
+            repDialog.setLocationRelativeTo(mainFrame);
+			repDialog.setTitle(getResourceMap().getString("reps"));
+        }
+		SimpLieApp.getApplication().show(repDialog);
+	}
+
+	@Action
+	public void showLevelDecomp()
+	{
+		if(levelDecompDialog == null)
+		{
+			JFrame mainFrame = SimpLieApp.getApplication().getMainFrame();
+			levelDecompDialog = new JDialog(mainFrame);
+			levelDecompDialog.add(levelDecomposition);
+            levelDecompDialog.setLocationRelativeTo(mainFrame);
+			levelDecompDialog.setTitle(getResourceMap().getString("levelDecomp"));
+        }
+		SimpLieApp.getApplication().show(levelDecompDialog);
+	}
+
+	@Action
+	public void showVis()
+	{
+		if(visDialog == null)
+		{
+			JFrame mainFrame = SimpLieApp.getApplication().getMainFrame();
+			visDialog = new JDialog(mainFrame);
+			visDialog.add(projector);
+            visDialog.setLocationRelativeTo(mainFrame);
+			visDialog.setTitle(getResourceMap().getString("projector"));
+        }
+		SimpLieApp.getApplication().show(visDialog);
+	}
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private edu.simplie.ui.AlgebraInfo algebraInfo;
-    private edu.simplie.ui.AlgebraSetup algebraSetup;
+    private javax.swing.JMenuItem algebraItem;
     private javax.swing.JMenuItem clearItem;
     private javax.swing.JMenuItem exporRootsItem;
     private edu.simplie.ui.ExportToTex exportToTex;
@@ -488,16 +581,18 @@ public class SimpLieView extends FrameView {
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
+    private javax.swing.JMenuItem levelDecompItem;
     private edu.simplie.ui.LevelDecomposition levelDecomposition;
     private javax.swing.JMenuItem loadDiagramItem;
     private javax.swing.JMenuItem loadRootsItem;
-    private javax.swing.JTabbedPane mainPane;
+    private edu.simplie.ui.DynkinDiagramPanel mainPane;
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JMenuItem outputItem;
     private javax.swing.JMenu presetMenu;
     private javax.swing.JProgressBar progressBar;
     private edu.simplie.ui.Projector projector;
     private edu.simplie.ui.reps.RepContainer repContainer;
+    private javax.swing.JMenuItem repItem;
     private javax.swing.JMenuItem saveDiagramItem;
     private javax.swing.JMenuItem saveRootsItem;
     private javax.swing.JLabel statusAnimationLabel;
@@ -505,6 +600,8 @@ public class SimpLieView extends FrameView {
     private javax.swing.JPanel statusPanel;
     private edu.simplie.ui.SystemOutTextArea systemOutTextArea;
     private javax.swing.JMenu toolsMenu;
+    private javax.swing.JMenuItem visItem;
+    private javax.swing.JMenu windowMenu;
     // End of variables declaration//GEN-END:variables
 
     private final Timer messageTimer;
@@ -512,6 +609,4 @@ public class SimpLieView extends FrameView {
     private final Icon idleIcon;
     private final Icon[] busyIcons = new Icon[15];
     private int busyIconIndex = 0;
-
-    private JDialog aboutBox;
 }
