@@ -85,6 +85,18 @@ public class TensorProduct implements Set<HighestWeightRep>
 				processWeight(iterator.next());
 			}
 		}
+		
+		// Remove all representations with zero outer multiplicity.
+		HashSet<HighestWeightRep> zeroReps = new HashSet<HighestWeightRep>();
+		for(HighestWeightRep rep : product)
+		{
+			if(rep.getOuterMult() == 0)
+				zeroReps.add(rep);
+		}
+		for(HighestWeightRep rep: zeroReps)
+		{
+			product.remove(rep);
+		}
 	}
 
 	private void processWeight(Weight weight)
@@ -117,6 +129,7 @@ public class TensorProduct implements Set<HighestWeightRep>
 		{
 			mu[j] -= 1;
 		}
+		// Set the outer multiplicity
 		HighestWeightRep newRep = new HighestWeightRep(algebra, mu);
 		newRep.setOuterMult(0);
 		if(!product.add(newRep))

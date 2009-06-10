@@ -147,7 +147,7 @@ public class AlgebraInfo extends javax.swing.JPanel implements DiagramListener
     private void initComponents() {
 
         tabbedPane = new javax.swing.JTabbedPane();
-        jPanel1 = new javax.swing.JPanel();
+        matricesContainer = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tfMatrix = new javax.swing.JTextArea();
         tableContainer = new javax.swing.JPanel();
@@ -166,24 +166,24 @@ public class AlgebraInfo extends javax.swing.JPanel implements DiagramListener
         tfMatrix.setRows(5);
         jScrollPane1.setViewportView(tfMatrix);
 
-        org.jdesktop.layout.GroupLayout jPanel1Layout = new org.jdesktop.layout.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jPanel1Layout.createSequentialGroup()
+        org.jdesktop.layout.GroupLayout matricesContainerLayout = new org.jdesktop.layout.GroupLayout(matricesContainer);
+        matricesContainer.setLayout(matricesContainerLayout);
+        matricesContainerLayout.setHorizontalGroup(
+            matricesContainerLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(matricesContainerLayout.createSequentialGroup()
                 .addContainerGap()
                 .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 595, Short.MAX_VALUE)
                 .addContainerGap())
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel1Layout.createSequentialGroup()
+        matricesContainerLayout.setVerticalGroup(
+            matricesContainerLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, matricesContainerLayout.createSequentialGroup()
                 .addContainerGap()
                 .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 188, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
-        tabbedPane.addTab("Matrices", jPanel1);
+        tabbedPane.addTab("Matrices", matricesContainer);
 
         tableContainer.addComponentListener(new java.awt.event.ComponentAdapter() {
             public void componentShown(java.awt.event.ComponentEvent evt) {
@@ -325,6 +325,7 @@ public class AlgebraInfo extends javax.swing.JPanel implements DiagramListener
 	private void matrixBoxActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_matrixBoxActionPerformed
 	{//GEN-HEADEREND:event_matrixBoxActionPerformed
 		diagramChanged();
+		tabbedPane.setSelectedIndex(0);
 	}//GEN-LAST:event_matrixBoxActionPerformed
 
 	private void tableContainerComponentShown(java.awt.event.ComponentEvent evt)//GEN-FIRST:event_tableContainerComponentShown
@@ -337,10 +338,10 @@ public class AlgebraInfo extends javax.swing.JPanel implements DiagramListener
     private javax.swing.JComboBox algebrasBox;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JPanel matricesContainer;
     private javax.swing.JComboBox matrixBox;
     private edu.simplie.ui.reusable.UIPrintableColorTable rootTable;
     private javax.swing.JTabbedPane tabbedPane;
