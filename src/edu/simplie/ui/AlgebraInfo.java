@@ -81,9 +81,8 @@ public class AlgebraInfo extends javax.swing.JPanel implements DiagramListener
 		
 		if(algebra == null)
 			return;
-		
-		constructedHeight.setText(Helper.intToString(algebra.rs.constructedHeight()));
-		numPosRoots.setText(Helper.intToString((int) algebra.rs.numPosRoots()));
+
+		uIAlgebraInfo.update(algebra);
 
 		String matrix;
 		switch(matrixBox.getSelectedIndex())
@@ -107,6 +106,36 @@ public class AlgebraInfo extends javax.swing.JPanel implements DiagramListener
 				matrix = "";
 		}
 		tfMatrix.setText(matrix);
+
+		if(tableContainer.isVisible())
+			fillRootTable();
+	}
+
+	private void fillRootTable()
+	{
+		if(algebra == null)
+			return;
+
+		// Clear and fill the table.
+		tableModelRoots.setRowCount(0);
+
+		for (int i = 1; i < algebra.rs.size(); i++)
+		{
+			Collection roots	= algebra.rs.get(i);
+			Iterator iterator	= roots.iterator();
+			while (iterator.hasNext())
+			{
+				Root root = (Root) iterator.next();
+				Object[] rowData = new Object[6];
+				rowData[0] = Helper.intArrayToString(root.vector);
+				rowData[1] = Helper.intArrayToString(algebra.rootToWeight(root.vector));
+				rowData[2] = root.norm;
+				rowData[3] = root.mult;
+				rowData[4] = root.coMult;
+				rowData[5] = root.height();
+				tableModelRoots.addRow(rowData);
+			}
+		}
 	}
 	
 	/** This method is called from within the constructor to
@@ -119,32 +148,19 @@ public class AlgebraInfo extends javax.swing.JPanel implements DiagramListener
 
         tabbedPane = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
-        matrixBox = new javax.swing.JComboBox();
-        jLabel4 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tfMatrix = new javax.swing.JTextArea();
-        jPanel9 = new javax.swing.JPanel();
+        tableContainer = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         rootTable = new edu.simplie.ui.reusable.UIPrintableColorTable();
+        uIAlgebraInfo = new edu.simplie.ui.reusable.UIAlgebraInfo();
         jPanel2 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        numPosRoots = new javax.swing.JLabel();
-        constructedHeight = new javax.swing.JLabel();
-        fillRootTable = new javax.swing.JButton();
         algebrasBox = new javax.swing.JComboBox();
         jLabel3 = new javax.swing.JLabel();
+        matrixBox = new javax.swing.JComboBox();
+        jLabel4 = new javax.swing.JLabel();
 
         tabbedPane.setMinimumSize(new java.awt.Dimension(0, 0));
-
-        matrixBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Cartan matrix", "Symmetrized Cartan matrix", "Root space metric", "Inverse of Cartan matrix", "Quadratic form matrix" }));
-        matrixBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                matrixBoxActionPerformed(evt);
-            }
-        });
-
-        jLabel4.setText("Select matrix:");
 
         tfMatrix.setColumns(20);
         tfMatrix.setRows(5);
@@ -156,27 +172,24 @@ public class AlgebraInfo extends javax.swing.JPanel implements DiagramListener
             jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 679, Short.MAX_VALUE)
-                    .add(jPanel1Layout.createSequentialGroup()
-                        .add(jLabel4)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(matrixBox, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
+                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 595, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jPanel1Layout.createSequentialGroup()
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(jLabel4)
-                    .add(matrixBox, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 404, Short.MAX_VALUE)
+                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 188, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
         tabbedPane.addTab("Matrices", jPanel1);
+
+        tableContainer.addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentShown(java.awt.event.ComponentEvent evt) {
+                tableContainerComponentShown(evt);
+            }
+        });
 
         rootTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -204,78 +217,28 @@ public class AlgebraInfo extends javax.swing.JPanel implements DiagramListener
         rootTable.setColumnSelectionAllowed(true);
         jScrollPane2.setViewportView(rootTable);
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Roots info", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12))); // NOI18N
-
-        jLabel1.setText("Constructed height:"); // NOI18N
-
-        jLabel2.setText("Number positive roots:"); // NOI18N
-
-        numPosRoots.setText("    "); // NOI18N
-
-        constructedHeight.setText("    "); // NOI18N
-
-        org.jdesktop.layout.GroupLayout jPanel2Layout = new org.jdesktop.layout.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jPanel2Layout.createSequentialGroup()
+        org.jdesktop.layout.GroupLayout tableContainerLayout = new org.jdesktop.layout.GroupLayout(tableContainer);
+        tableContainer.setLayout(tableContainerLayout);
+        tableContainerLayout.setHorizontalGroup(
+            tableContainerLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(tableContainerLayout.createSequentialGroup()
                 .addContainerGap()
-                .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jLabel1)
-                    .add(jLabel2))
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(constructedHeight)
-                    .add(numPosRoots))
-                .addContainerGap(69, Short.MAX_VALUE))
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jPanel2Layout.createSequentialGroup()
-                .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(jLabel1)
-                    .add(constructedHeight))
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(jLabel2)
-                    .add(numPosRoots))
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
-        fillRootTable.setText("Fill root table"); // NOI18N
-        fillRootTable.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                fillRootTableActionPerformed(evt);
-            }
-        });
-
-        org.jdesktop.layout.GroupLayout jPanel9Layout = new org.jdesktop.layout.GroupLayout(jPanel9);
-        jPanel9.setLayout(jPanel9Layout);
-        jPanel9Layout.setHorizontalGroup(
-            jPanel9Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jPanel9Layout.createSequentialGroup()
-                .addContainerGap()
-                .add(jPanel9Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 679, Short.MAX_VALUE)
-                    .add(jPanel9Layout.createSequentialGroup()
-                        .add(jPanel2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(fillRootTable)))
+                .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 595, Short.MAX_VALUE)
                 .addContainerGap())
         );
-        jPanel9Layout.setVerticalGroup(
-            jPanel9Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jPanel9Layout.createSequentialGroup()
+        tableContainerLayout.setVerticalGroup(
+            tableContainerLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, tableContainerLayout.createSequentialGroup()
                 .addContainerGap()
-                .add(jPanel9Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
-                    .add(jPanel2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                    .add(fillRootTable))
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 354, Short.MAX_VALUE)
+                .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 188, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
-        tabbedPane.addTab("Roots", jPanel9);
+        tabbedPane.addTab("Positive roots", tableContainer);
+
+        uIAlgebraInfo.setTitle(""); // NOI18N
+
+        jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         algebrasBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Full algebra", "Regular subalgebra", "Internal algebra" }));
         org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(edu.simplie.SimpLieApp.class).getContext().getResourceMap(AlgebraInfo.class);
@@ -289,6 +252,44 @@ public class AlgebraInfo extends javax.swing.JPanel implements DiagramListener
         jLabel3.setText("Select algebra:"); // NOI18N
         jLabel3.setToolTipText(resourceMap.getString("algebraInfo.selectTooltip")); // NOI18N
 
+        matrixBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Cartan matrix", "Symmetrized Cartan matrix", "Root space metric", "Inverse of Cartan matrix", "Quadratic form matrix" }));
+        matrixBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                matrixBoxActionPerformed(evt);
+            }
+        });
+
+        jLabel4.setText("Select matrix:");
+
+        org.jdesktop.layout.GroupLayout jPanel2Layout = new org.jdesktop.layout.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(jLabel3)
+                    .add(jLabel4))
+                .add(10, 10, 10)
+                .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(matrixBox, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(algebrasBox, 0, 156, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(algebrasBox, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(jLabel3))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(matrixBox, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(jLabel4))
+                .addContainerGap())
+        );
+
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -296,22 +297,22 @@ public class AlgebraInfo extends javax.swing.JPanel implements DiagramListener
             .add(layout.createSequentialGroup()
                 .addContainerGap()
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(tabbedPane, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 620, Short.MAX_VALUE)
                     .add(layout.createSequentialGroup()
-                        .add(jLabel3)
+                        .add(uIAlgebraInfo, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(algebrasBox, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                    .add(tabbedPane, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 704, Short.MAX_VALUE))
+                        .add(jPanel2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(layout.createSequentialGroup()
                 .addContainerGap()
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(jLabel3)
-                    .add(algebrasBox, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
+                    .add(uIAlgebraInfo, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(jPanel2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(tabbedPane, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 479, Short.MAX_VALUE)
+                .add(tabbedPane, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 235, Short.MAX_VALUE)
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -321,60 +322,31 @@ public class AlgebraInfo extends javax.swing.JPanel implements DiagramListener
 		diagramChanged();
 }//GEN-LAST:event_algebrasBoxActionPerformed
 	
-	private void fillRootTableActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_fillRootTableActionPerformed
-	{//GEN-HEADEREND:event_fillRootTableActionPerformed
-		// Set the focus to the root table.
-		tabbedPane.setSelectedIndex(1);
-		
-		if(algebra == null)
-			return;
-		
-		// Clear and fill the table.
-		tableModelRoots.setRowCount(0);
-		
-		for (int i = 0; i < algebra.rs.size(); i++)
-		{
-			Collection roots	= algebra.rs.get(i);
-			Iterator iterator	= roots.iterator();
-			while (iterator.hasNext())
-			{
-				Root root = (Root) iterator.next();
-				Object[] rowData = new Object[6];
-				rowData[0] = Helper.intArrayToString(root.vector);
-				rowData[1] = Helper.intArrayToString(algebra.rootToWeight(root.vector));
-				rowData[2] = root.norm;
-				rowData[3] = root.mult;
-				rowData[4] = root.coMult;
-				rowData[5] = root.height();
-				tableModelRoots.addRow(rowData);
-			}
-		}
-	}//GEN-LAST:event_fillRootTableActionPerformed
-
 	private void matrixBoxActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_matrixBoxActionPerformed
 	{//GEN-HEADEREND:event_matrixBoxActionPerformed
 		diagramChanged();
 	}//GEN-LAST:event_matrixBoxActionPerformed
+
+	private void tableContainerComponentShown(java.awt.event.ComponentEvent evt)//GEN-FIRST:event_tableContainerComponentShown
+	{//GEN-HEADEREND:event_tableContainerComponentShown
+		fillRootTable();
+}//GEN-LAST:event_tableContainerComponentShown
 	
 	
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox algebrasBox;
-    private javax.swing.JLabel constructedHeight;
-    private javax.swing.JButton fillRootTable;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JComboBox matrixBox;
-    private javax.swing.JLabel numPosRoots;
     private edu.simplie.ui.reusable.UIPrintableColorTable rootTable;
     private javax.swing.JTabbedPane tabbedPane;
+    private javax.swing.JPanel tableContainer;
     private javax.swing.JTextArea tfMatrix;
+    private edu.simplie.ui.reusable.UIAlgebraInfo uIAlgebraInfo;
     // End of variables declaration//GEN-END:variables
 	
 	}

@@ -316,7 +316,7 @@ public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramLis
 	 */
 	public void setTitle(String text)
 	{
-		this.setBorder(javax.swing.BorderFactory.createTitledBorder(null, text, javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12)));
+		diagramContainer.setBorder(javax.swing.BorderFactory.createTitledBorder(null, text, javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12)));
 	}
 
 	private void setStatus(int new_status)
@@ -474,13 +474,6 @@ public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramLis
         stateButtonGroup = new javax.swing.ButtonGroup();
         nodeLabelGroup = new javax.swing.ButtonGroup();
         orderGroup = new javax.swing.ButtonGroup();
-        diagram = new javax.swing.JPanel() {
-            public void paintComponent(Graphics g) {
-                super.paintComponent(g);
-                drawDiagram(g);
-            }
-        };
-        tf_status = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         rbCoxeterLabels = new javax.swing.JRadioButton();
         rbNodeOrder = new javax.swing.JRadioButton();
@@ -490,6 +483,14 @@ public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramLis
         jLabel2 = new javax.swing.JLabel();
         rbBottomTop = new javax.swing.JRadioButton();
         rbTopBottom = new javax.swing.JRadioButton();
+        diagramContainer = new javax.swing.JPanel();
+        diagram = new javax.swing.JPanel() {
+            public void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                drawDiagram(g);
+            }
+        };
+        tf_status = new javax.swing.JLabel();
 
         menuAddConnection.setText("Add connection");
 
@@ -618,43 +619,6 @@ public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramLis
         });
         contextMenu.add(menuRemoveNode);
 
-        setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Dynkin diagram", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12))); // NOI18N
-
-        diagram.setBackground(new java.awt.Color(255, 255, 255));
-        diagram.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-        diagram.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
-            public void mouseMoved(java.awt.event.MouseEvent evt) {
-                diagramMouseMoved(evt);
-            }
-        });
-        diagram.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseReleased(java.awt.event.MouseEvent evt) {
-                diagramMouseReleased(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                diagramMouseExited(evt);
-            }
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                diagramMouseEntered(evt);
-            }
-        });
-
-        tf_status.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        tf_status.setText("(Right) click to add a node to the diagram.");
-
-        org.jdesktop.layout.GroupLayout diagramLayout = new org.jdesktop.layout.GroupLayout(diagram);
-        diagram.setLayout(diagramLayout);
-        diagramLayout.setHorizontalGroup(
-            diagramLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(org.jdesktop.layout.GroupLayout.TRAILING, tf_status, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 307, Short.MAX_VALUE)
-        );
-        diagramLayout.setVerticalGroup(
-            diagramLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(diagramLayout.createSequentialGroup()
-                .addContainerGap(298, Short.MAX_VALUE)
-                .add(tf_status))
-        );
-
         nodeLabelGroup.add(rbCoxeterLabels);
         rbCoxeterLabels.setText("Coxeter labels");
 
@@ -682,11 +646,11 @@ public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramLis
         rbBottomTop.setAction(actionMap.get("changeOrder")); // NOI18N
         orderGroup.add(rbBottomTop);
         rbBottomTop.setSelected(true);
-        rbBottomTop.setText("Bottom to top");
+        rbBottomTop.setText(resourceMap.getString("diagram.bottomTop")); // NOI18N
 
         rbTopBottom.setAction(actionMap.get("changeOrder")); // NOI18N
         orderGroup.add(rbTopBottom);
-        rbTopBottom.setText("Top to bottom");
+        rbTopBottom.setText(resourceMap.getString("diagram.topBottom")); // NOI18N
 
         org.jdesktop.layout.GroupLayout jPanel1Layout = new org.jdesktop.layout.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -726,7 +690,54 @@ public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramLis
                 .add(rbBottomTop)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(rbTopBottom)
-                .addContainerGap(94, Short.MAX_VALUE))
+                .addContainerGap(62, Short.MAX_VALUE))
+        );
+
+        diagramContainer.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+
+        diagram.setBackground(new java.awt.Color(255, 255, 255));
+        diagram.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseMoved(java.awt.event.MouseEvent evt) {
+                diagramMouseMoved(evt);
+            }
+        });
+        diagram.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                diagramMouseReleased(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                diagramMouseExited(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                diagramMouseEntered(evt);
+            }
+        });
+
+        tf_status.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        tf_status.setText("(Right) click to add a node to the diagram.");
+
+        org.jdesktop.layout.GroupLayout diagramLayout = new org.jdesktop.layout.GroupLayout(diagram);
+        diagram.setLayout(diagramLayout);
+        diagramLayout.setHorizontalGroup(
+            diagramLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, tf_status, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE)
+        );
+        diagramLayout.setVerticalGroup(
+            diagramLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(diagramLayout.createSequentialGroup()
+                .addContainerGap(266, Short.MAX_VALUE)
+                .add(tf_status))
+        );
+
+        org.jdesktop.layout.GroupLayout diagramContainerLayout = new org.jdesktop.layout.GroupLayout(diagramContainer);
+        diagramContainer.setLayout(diagramContainerLayout);
+        diagramContainerLayout.setHorizontalGroup(
+            diagramContainerLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(diagram, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        diagramContainerLayout.setVerticalGroup(
+            diagramContainerLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(diagram, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
@@ -735,18 +746,18 @@ public class DynkinDiagramPanel extends javax.swing.JPanel implements DiagramLis
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .add(diagram, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                .add(diagramContainer, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
+            .add(layout.createSequentialGroup()
                 .addContainerGap()
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
-                    .add(org.jdesktop.layout.GroupLayout.LEADING, diagram, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .add(org.jdesktop.layout.GroupLayout.LEADING, jPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(jPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .add(diagramContainer, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -918,6 +929,7 @@ private void diagramMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:ev
     private javax.swing.JButton bToEPS;
     private javax.swing.JPopupMenu contextMenu;
     private javax.swing.JPanel diagram;
+    private javax.swing.JPanel diagramContainer;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
