@@ -45,6 +45,8 @@ public class HighestWeightRep
 	public final fraction	highestHeight;
 	/** The dimension of this representation. */
 	public final long		dim;
+	/** A string representation of the dimension. */
+	public final String		dimension;
 	/** The outer multiplicity of this representation in a reducible representation. Defaults to 1 */
 	private long			outerMult;
 	/** The algebra of which this is a weight system. */
@@ -69,28 +71,36 @@ public class HighestWeightRep
 	 * @param	algebra						The algebra of which this is a representation.
 	 * @param	highestWeightLabels			The dynkin labels of the highest weight state.
 	 * @throws	IllegalArgumentException	When the rank of the algebra and the number of 
-	 *										weight labels do not coincide or when the underlying algebra is infinite.
+	 *										weight labels do not coincide.
 	 */
 	public HighestWeightRep(Algebra algebra, int[] highestWeightLabels)
 	{
 		HashSet<Weight> zeroDepthWeight;
 		
-		this.algebra= algebra;
-		this.rank	= algebra.rank;
-		
+		this.algebra		= algebra;
+		this.rank			= algebra.rank;
+		this.highestWeight	= new Weight(highestWeightLabels);
 		if(rank != highestWeightLabels.length)
-			throw new IllegalArgumentException("Rank and number of weight labels do no match");
-		if(!algebra.finite)
-			throw new IllegalArgumentException("Highest weight rep of infinite algebra.");
-		
+			throw new IllegalArgumentException("Rank and number of weight labels do no match.");
+		if(!highestWeight.isDominant)
+			throw new IllegalArgumentException("Highest weight not dominant.");
+
 		// Get the dimension of this rep.
-		dim = algebra.dimOfRep(highestWeightLabels);
+		if(algebra.finite)
+		{
+			dim			= algebra.dimOfRep(highestWeightLabels);
+			dimension	= (new Long(dim)).toString();
+		}
+		else
+		{
+			dim = 0;
+			dimension	= "Infinite";
+		}
 
 		outerMult = 1;
 
 		// Add the highest weight (construct to depth 0)
 		weightSystem	= new ArrayList<HashSet<Weight>>();
-		highestWeight	= new Weight(highestWeightLabels);
 		zeroDepthWeight = new HashSet<Weight>();
 		zeroDepthWeight.add(highestWeight);
 		
@@ -211,6 +221,10 @@ public class HighestWeightRep
 	/** Construct the weight system down to the given depth */
 	public void construct(int maxDepth)
 	{
+		// Don't construct fully for infinite algebras.
+		if(maxDepth == 0 && !algebra.finite)
+			return;
+		
 		HashSet<Weight> prevDepthWeights;
 		HashSet<Weight> newWeights;
 		int		nextDepth;
@@ -317,8 +331,16 @@ public class HighestWeightRep
 		// First calculate the denominator.
 		denominator = highestWeightFactor.minus(algebra.innerProduct(weight,weight));
 		denominator.subtract(algebra.innerProduct(weight,algebra.rho).times(2));
-		
-		maxHeight = Math.min(weight.getDepth(), algebra.rs.size()-1);
+
+		if(algebra.finite)
+		{
+			maxHeight = Math.min(weight.getDepth(), algebra.rs.size()-1);
+		}
+		else
+		{
+			maxHeight = weight.getDepth();
+			algebra.rs.construct(maxHeight);
+		}
 		
 		// Now sum over all positive roots.
 		for (int height = 1; height <= maxHeight; height++)
@@ -341,7 +363,7 @@ public class HighestWeightRep
 							summedLabels[i] += k * algebra.A[j][i] * root.vector[j];
 						}
 					}
-					numerator += getWeightMult(summedLabels) * (k*root.norm + rootDotWeight);
+					numerator += getWeightMult(summedLabels) * (k*root.norm + rootDotWeight) * root.mult;
 				}
 			}
 		}
