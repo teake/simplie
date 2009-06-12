@@ -119,7 +119,10 @@ public class AlgebraInfo extends javax.swing.JPanel implements DiagramListener
 		// Clear and fill the table.
 		tableModelRoots.setRowCount(0);
 
-		for (int i = 1; i < algebra.rs.size(); i++)
+		int maxHeight = heightSpinner.getValue();
+		algebra.rs.construct(maxHeight);
+		maxHeight = (maxHeight == 0) ? algebra.rs.size() : Math.min(algebra.rs.size(),maxHeight+1);
+		for (int i = 1; i < maxHeight; i++)
 		{
 			Collection roots	= algebra.rs.get(i);
 			Iterator iterator	= roots.iterator();
@@ -153,6 +156,8 @@ public class AlgebraInfo extends javax.swing.JPanel implements DiagramListener
         tableContainer = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         rootTable = new edu.simplie.ui.reusable.UIPrintableColorTable();
+        jLabel1 = new javax.swing.JLabel();
+        heightSpinner = new edu.simplie.ui.reusable.UISpinner();
         uIAlgebraInfo = new edu.simplie.ui.reusable.UIAlgebraInfo();
         jPanel2 = new javax.swing.JPanel();
         algebrasBox = new javax.swing.JComboBox();
@@ -163,7 +168,6 @@ public class AlgebraInfo extends javax.swing.JPanel implements DiagramListener
         tabbedPane.setMinimumSize(new java.awt.Dimension(0, 0));
 
         tfMatrix.setColumns(20);
-        tfMatrix.setFont(new java.awt.Font("Monospaced", 0, 13)); // NOI18N
         tfMatrix.setRows(5);
         jScrollPane1.setViewportView(tfMatrix);
 
@@ -173,14 +177,14 @@ public class AlgebraInfo extends javax.swing.JPanel implements DiagramListener
             matricesContainerLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(matricesContainerLayout.createSequentialGroup()
                 .addContainerGap()
-                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 621, Short.MAX_VALUE)
+                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 657, Short.MAX_VALUE)
                 .addContainerGap())
         );
         matricesContainerLayout.setVerticalGroup(
             matricesContainerLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(org.jdesktop.layout.GroupLayout.TRAILING, matricesContainerLayout.createSequentialGroup()
                 .addContainerGap()
-                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 149, Short.MAX_VALUE)
+                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 188, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -218,20 +222,39 @@ public class AlgebraInfo extends javax.swing.JPanel implements DiagramListener
         rootTable.setColumnSelectionAllowed(true);
         jScrollPane2.setViewportView(rootTable);
 
+        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(edu.simplie.SimpLieApp.class).getContext().getResourceMap(AlgebraInfo.class);
+        jLabel1.setText(resourceMap.getString("algebraInfo.maxHeight")); // NOI18N
+
+        heightSpinner.setMinValue(0);
+        heightSpinner.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                heightSpinnerStateChanged(evt);
+            }
+        });
+
         org.jdesktop.layout.GroupLayout tableContainerLayout = new org.jdesktop.layout.GroupLayout(tableContainer);
         tableContainer.setLayout(tableContainerLayout);
         tableContainerLayout.setHorizontalGroup(
             tableContainerLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(tableContainerLayout.createSequentialGroup()
                 .addContainerGap()
-                .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 621, Short.MAX_VALUE)
+                .add(tableContainerLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 657, Short.MAX_VALUE)
+                    .add(tableContainerLayout.createSequentialGroup()
+                        .add(jLabel1)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                        .add(heightSpinner, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 56, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         tableContainerLayout.setVerticalGroup(
             tableContainerLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(org.jdesktop.layout.GroupLayout.TRAILING, tableContainerLayout.createSequentialGroup()
+            .add(tableContainerLayout.createSequentialGroup()
                 .addContainerGap()
-                .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 149, Short.MAX_VALUE)
+                .add(tableContainerLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(jLabel1)
+                    .add(heightSpinner, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 164, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -242,7 +265,6 @@ public class AlgebraInfo extends javax.swing.JPanel implements DiagramListener
         jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         algebrasBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Full algebra", "Regular subalgebra", "Internal algebra" }));
-        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(edu.simplie.SimpLieApp.class).getContext().getResourceMap(AlgebraInfo.class);
         algebrasBox.setToolTipText(resourceMap.getString("algebraInfo.selectTooltip")); // NOI18N
         algebrasBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -333,10 +355,17 @@ public class AlgebraInfo extends javax.swing.JPanel implements DiagramListener
 	{//GEN-HEADEREND:event_tableContainerComponentShown
 		fillRootTable();
 }//GEN-LAST:event_tableContainerComponentShown
+
+	private void heightSpinnerStateChanged(javax.swing.event.ChangeEvent evt)//GEN-FIRST:event_heightSpinnerStateChanged
+	{//GEN-HEADEREND:event_heightSpinnerStateChanged
+		fillRootTable();
+	}//GEN-LAST:event_heightSpinnerStateChanged
 	
 	
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox algebrasBox;
+    private edu.simplie.ui.reusable.UISpinner heightSpinner;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel2;

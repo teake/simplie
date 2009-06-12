@@ -356,7 +356,7 @@ public class Algebra
 		
 		// Preliminary checks.
 		if(!finite)
-			throw new IllegalArgumentException("No representations of infinite algebras.");
+			return 0;
 
 		if(highestWeightLabels.length != rank)
 			throw new IllegalArgumentException("Number of weight labels does not match rank.");
