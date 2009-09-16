@@ -267,12 +267,11 @@
         <Component class="javax.swing.JComboBox" name="matrixBox">
           <Properties>
             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-              <StringArray count="5">
+              <StringArray count="4">
                 <StringItem index="0" value="Cartan matrix"/>
-                <StringItem index="1" value="Symmetrized Cartan matrix"/>
-                <StringItem index="2" value="Root space metric"/>
-                <StringItem index="3" value="Inverse of Cartan matrix"/>
-                <StringItem index="4" value="Quadratic form matrix"/>
+                <StringItem index="1" value="Root space metric"/>
+                <StringItem index="2" value="Inverse of Cartan matrix"/>
+                <StringItem index="3" value="Quadratic form matrix"/>
               </StringArray>
             </Property>
           </Properties>

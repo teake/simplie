@@ -49,21 +49,19 @@ public class Algebra
 	
 	/** The Cartan matrix of the algebra. */
 	public final int[][] A;
-	/** The symmetrized Cartan matrix (the inverse of the quadratic form matrix) */
-	public final fraction[][] symA;
+	/**
+	 * The symmetrized Cartan matrix (the inverse of the quadratic form matrix).
+	 * Note that it is not the same as the one in Fuchs & Schweigert,
+	 * because they use the normalization a^2 = 2 for the <i>longest</i> root,
+	 * and here it is used for the <i>shortest</i> root.
+	 */
+
 	/** The inverse of the cartan matrix. */
 	public final fraction[][] invA;
 	/** The metric on the root space. */
 	public final int[][] B;
 	/** The quadratic form matrix, which acts as a metric on the weight space. */
-	public final fraction[][] G;
-	
-	/**
-	 * Note that the the symmetrized Cartan matrix is not the same as
-	 * the one in Fuchs & Schweigert, because they use the normalization
-	 * a^2 = 2 for the *longest* root, and I use it for the *shortest* root.
-	 */
-	
+	public final fraction[][] G;	
 	/** The determinant of the Cartan Matrix. */
 	public final int	det;
 	/** The rank of the Cartan matrix */
@@ -88,15 +86,16 @@ public class Algebra
 	public final String typeHTML;
 	/** The same as "type", but now in TeX markup */
 	public final String typeTeX;
-	/** Boolean indicating whethet the algebra is finite or not. */
+	/** Boolean indicating whether the algebra is finite or not. */
 	public final boolean finite;
+	/** Boolean indicating whether the algebra is affine or not. */
+	public final boolean affine;
 	/** The root system */
 	public final RootSystem rs;
 	/** The Weyl vector of the algebra */
 	public final Weight rho;
-	
-	/** Vector containing the norm of the simple roots divided by two. */
-	public final int[] halfNorms;
+	/** Entries of a diagonal matrix that symmetrizes the Cartan matrix. */
+	public final int[] d;
 	/** List of matrices into which the Cartan matrix factorizes */
 	private final ArrayList<CartanMatrix> directProductFactors;
 		
@@ -112,6 +111,9 @@ public class Algebra
 	 */
 	public Algebra(int[][] A)
 	{
+		int[] tempCoxeterLabels = new int[0];
+		int[] tempDualCoxeterLabels = new int[0];
+
 		// Convert the Cartan matrix to a matrix object.
 		Matrix cartanMatrix = Helper.intArrayToMatrix(A);
 		// Do some preliminary checks.
@@ -121,22 +123,60 @@ public class Algebra
 			rank	= 0;
 			rankA	= 0;
 			det		= 0;
+			affine	= false;
 		}
 		else
 		{
+			// If det = 0, the Cartan matrix is affine.
+			// We need to enlarge it s.t. it is no longer degenerate.
+			if(Math.round(cartanMatrix.det()) != 0)
+			{
+				affine = false;
+				tempCoxeterLabels = new int[A.length];
+				tempDualCoxeterLabels = new int[A.length];
+			}
+			else
+			{
+				affine = true;
+				// First, find the first minimum Coxeter label,
+				// which is always normalized to 1.
+				tempCoxeterLabels		= Helper.nullEigenVector(cartanMatrix.transpose());
+				tempDualCoxeterLabels	= Helper.nullEigenVector(cartanMatrix);
+				int index;
+				for(index = 0; index < tempCoxeterLabels.length; index++)
+				{
+					if(tempCoxeterLabels[index] == 1)
+						break;
+				}
+				// Create a new, bigger (and way better) Cartan matrix.
+				int[][] newA = new int[A.length + 1][A.length + 1];
+				for (int i = 0; i < newA.length; i++)
+				{
+					for (int j = 0; j < newA.length; j++)
+					{
+						if(i == A.length || j == A.length)
+							newA[i][j] = (i == index || j == index) ? -1 : 0;
+						else
+							newA[i][j] = A[i][j];
+					}
+				}
+				// And, lastly, copy it onto the old one.
+				A = newA;
+				cartanMatrix = Helper.intArrayToMatrix(newA);
+			}
+
 			rank	= A.length;
 			rankA	= cartanMatrix.rank();
 			det		= (int) Math.round(cartanMatrix.det());
 		}
-		
+
 		this.A		= Helper.cloneMatrix(A);
 		this.B		= new int[rank][rank];
-		this.symA	= new fraction[rank][rank];
 		this.invA	= new fraction[rank][rank];
 		this.G		= new fraction[rank][rank];
 		this.directProductFactors = new ArrayList<CartanMatrix>();
 		
-		this.halfNorms = new int[rank];
+		this.d = new int[rank];
 		ArrayList<ArrayList<Integer>> indecomposables = new ArrayList<ArrayList<Integer>>();
 		HashMap<Integer,Float> norms = new HashMap<Integer,Float>();
 				
@@ -212,7 +252,7 @@ public class Algebra
 				for(Integer j : indecomposable)
 				{
 					float norm = norms.get(j) * coefficient;
-					halfNorms[j] = Math.round(norm);
+					d[j] = Math.round(norm);
 					if(norm % 1 != 0)
 						normsOK = false;
 				}
@@ -265,32 +305,25 @@ public class Algebra
 		
 
 		// Now that the simple roots have been created,
-		// we can set the symmetrized Cartan matrix
-		// and the metric on the root space.
-		Matrix symAm	= new Matrix(rank,rank);
-		Matrix Bm		= new Matrix(rank,rank);
+		// we can set the metric on the root space.
 		for (int i = 0; i < rank; i++)
 		{
 			for (int j = 0; j < rank; j++)
 			{
-				this.symA[i][j] = new fraction(this.A[i][j], halfNorms[i]);
-				this.B[i][j]	= this.A[i][j] * halfNorms[j];
-				symAm.set(i,j,this.symA[i][j].asDouble());
-				Bm.set(i,j,this.B[i][j]);
+				this.B[i][j] = this.A[i][j] * d[j];
 			}
 		}
 		
 		// Set the inverse of the Cartan matrix and the quadratic form matrix if possible.
 		if(rank != 0 && rankA == rank)
 		{
-			Matrix invAm	= cartanMatrix.inverse();
-			Matrix Gm		= symAm.inverse();
+			Matrix invAm = cartanMatrix.inverse();
 			for (int i = 0; i < rank; i++)
 			{
 				for (int j = 0; j < rank; j++)
 				{
 					this.invA[i][j]	= new fraction(invAm.get(i,j));
-					this.G[i][j]	= new fraction(Gm.get(i,j));
+					this.G[i][j]	= invA[i][j].times(d[j]);
 				}
 			}
 		}
@@ -299,39 +332,32 @@ public class Algebra
 		rs = new RootSystem(this);
 
 		// Determine the dimension and the Coxeter number
-		int[] tempCoxeterLabels		= new int[rank];
-		int[] tempDualCoxeterLabels	= new int[rank];
 		int tempCox		= 0;
 		int tempDualCox = 0;
 		if(finite)
 		{
 			dim				= 2 * (int) rs.numPosGenerators() + rank;
 			dimension		= Helper.intToString(dim);
-			tempCox = tempDualCox = 1;
 			Root highestRoot = rs.get(rs.size()-1).iterator().next();
 			for(int i = 0; i < rank; i++)
 			{
 				tempCoxeterLabels[i]		= highestRoot.vector[i];
-				tempDualCoxeterLabels[i]	= 2 * halfNorms[i] * highestRoot.vector[i] / highestRoot.norm;
-				tempCox		+= tempCoxeterLabels[i];
-				tempDualCox += tempDualCoxeterLabels[i];
+				tempDualCoxeterLabels[i]	= B[i][i] * highestRoot.vector[i] / highestRoot.norm;
 			}
 		}
 		else
 		{
 			dim			= 0;
 			dimension	= "Infinite";
-			if(det == 0)
-			{
-				tempCoxeterLabels		= Helper.nullEigenVector(cartanMatrix.transpose());
-				tempDualCoxeterLabels	= Helper.nullEigenVector(cartanMatrix);
-				for(int i = 0; i < rank; i++)
-				{
-					tempCox		+= tempCoxeterLabels[i];
-					tempDualCox += tempDualCoxeterLabels[i];
-				}
-			}
 		}
+
+		tempCox = tempDualCox = 1;
+		for (int i = 0; i < tempCoxeterLabels.length; i++)
+		{
+			tempCox		+= tempCoxeterLabels[i];
+			tempDualCox += tempDualCoxeterLabels[i];
+		}
+
 		coxeterLabels		= tempCoxeterLabels;
 		dualCoxeterLabels	= tempDualCoxeterLabels;
 		coxeterNumber		= tempCox;
@@ -444,7 +470,7 @@ public class Algebra
 		int result = 0;
 		for (int i = 0; i < rank; i++)
 		{
-			result += weight.dynkinLabels[i] * root.vector[i] * halfNorms[i];
+			result += weight.dynkinLabels[i] * root.vector[i] * d[i];
 		}
 		return result;
 	}
@@ -460,7 +486,7 @@ public class Algebra
 		int result = 0;
 		for (int i = 0; i < rank; i++)
 		{
-			result += root.vector[i] * halfNorms[i];
+			result += root.vector[i] * d[i];
 		}
 		return result;
 	}
@@ -494,6 +520,10 @@ public class Algebra
 	 */
 	public int[] simpWeylReflWeight(int[] weightLabels, int i)
 	{
+		// Do not reflect for imaginary simple roots.
+		if(A[i][i] <= 0)
+			return weightLabels;
+
 		int[] output = new int[weightLabels.length];
 		for (int j = 0; j < output.length; j++)
 		{
@@ -511,6 +541,10 @@ public class Algebra
 	 */
 	public int[] simpWeylReflRoot(int[] rootVector, int i)
 	{
+		// Do not reflect for imaginary simple roots.
+		if(A[i][i] <= 0)
+			return rootVector;
+
 		int[] output		= rootVector.clone();		
 		int[] dynkinLabels	= rootToWeight(rootVector);
 		
