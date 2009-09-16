@@ -91,15 +91,12 @@ public class AlgebraInfo extends javax.swing.JPanel implements DiagramListener
 				matrix = Helper.matrixToString(algebra.A);
 				break;
 			case 1:
-				matrix = Helper.matrixToString(algebra.symA);
-				break;
-			case 2:
 				matrix = Helper.matrixToString(algebra.B);
 				break;
-			case 3:
+			case 2:
 				matrix = Helper.matrixToString(algebra.invA);
 				break;
-			case 4:
+			case 3:
 				matrix = Helper.matrixToString(algebra.G);
 				break;
 			default:
@@ -275,7 +272,7 @@ public class AlgebraInfo extends javax.swing.JPanel implements DiagramListener
         jLabel3.setText("Select algebra:"); // NOI18N
         jLabel3.setToolTipText(resourceMap.getString("algebraInfo.selectTooltip")); // NOI18N
 
-        matrixBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Cartan matrix", "Symmetrized Cartan matrix", "Root space metric", "Inverse of Cartan matrix", "Quadratic form matrix" }));
+        matrixBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Cartan matrix", "Root space metric", "Inverse of Cartan matrix", "Quadratic form matrix" }));
         matrixBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 matrixBoxActionPerformed(evt);

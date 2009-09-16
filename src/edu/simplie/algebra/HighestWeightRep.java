@@ -253,6 +253,10 @@ public class HighestWeightRep
 				// See if the we can subtract a simple root from this weight.
 				for (int i = 0; i < rank; i++)
 				{
+					// Don't do this for imaginary simple roots
+					if(algebra.A[i][i] <= 0)
+						continue;
+
 					if(oldWeight.dynkinLabels[i] <= 0)
 						continue;
 					

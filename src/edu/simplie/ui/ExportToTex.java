@@ -150,7 +150,7 @@ public class ExportToTex extends javax.swing.JPanel
 
         comboAlgebras.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Full algebra", "Regular subalgebra", "Internal subalgebra" }));
 
-        comboMatrix.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Cartan matrix", "Symmetrized Cartan matrix", "Inverse of Cartan matrix", "Root space metric", "Quadratic form matrix" }));
+        comboMatrix.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Cartan matrix", "Inverse of Cartan matrix", "Root space metric", "Quadratic form matrix" }));
 
         tfColumns.setText("extra columns");
 
@@ -227,14 +227,14 @@ public class ExportToTex extends javax.swing.JPanel
             jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 133, Short.MAX_VALUE)
+                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 144, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 293, Short.MAX_VALUE)
+                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 311, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -307,17 +307,14 @@ public class ExportToTex extends javax.swing.JPanel
 			}
 			switch(comboMatrix.getSelectedIndex())
 			{
-				case 4:
+				case 3:
 					output += Helper.matrixToTex(algebra.G);
 					break;
-				case 3:
+				case 2:
 					output += Helper.matrixToTex(algebra.B);
 					break;
-				case 2:
-					output += Helper.matrixToTex(algebra.invA);
-					break;
 				case 1:
-					output += Helper.matrixToTex(algebra.symA);
+					output += Helper.matrixToTex(algebra.invA);
 					break;
 				case 0:
 				case -1:

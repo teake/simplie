@@ -103,15 +103,17 @@ public class RootSystem
 		minNorm = Integer.MAX_VALUE;
 		for (int i = 0; i < rank; i++)
 		{
+			if(algebra.A[i][i] <= 0)
+				continue;
 			int[] rootVector = new int[rank];
 			for (int j = 0; j < rank; j++)
 			{
-				rootVector[j] = ( i == j) ? 1 : 0;
+				rootVector[j] = ( i == j ) ? 1 : 0;
 			}
 			Root simpleRoot	= new Root(rootVector);
 			simpleRoot.mult		= 1;
 			simpleRoot.coMult	= new fraction(1);
-			simpleRoot.norm		= (short) (2 * algebra.halfNorms[i]);
+			simpleRoot.norm		= (short) (algebra.d[i] * algebra.A[i][i]);
 			simpleRoots.add(simpleRoot);
 			maxNorm = Math.max(simpleRoot.norm, maxNorm);
 			minNorm = Math.min(simpleRoot.norm, minNorm);
@@ -410,6 +412,10 @@ public class RootSystem
 				dynkinLabels = algebra.rootToWeight(root.vector);
 				for (int i = 0; i < rank; i++)
 				{
+					// Only do this for real simple roots.
+					if(algebra.A[i][i] <= 0)
+						continue;
+					
 					// For every negative Dynkin label we can add 
 					// a (partial) root string to the root table.
 					if(dynkinLabels[i] >= 0)
