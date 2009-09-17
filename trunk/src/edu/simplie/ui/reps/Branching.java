@@ -25,23 +25,29 @@ import javax.swing.table.DefaultTableModel;
 import edu.simplie.dynkindiagram.*;
 import edu.simplie.algebra.*;
 import edu.simplie.*;
+import edu.simplie.math.fraction;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Map;
 import org.jdesktop.application.Action;
+
+// TODO: make this work for non-simply laced and affine algebras.
 
 /**
  *
  * @author Teake Nutma
- * @version $Revision$, $Date$
+ * @version $Revision: 434 $, $Date: 2009-09-16 16:19:33 +0200 (wo, 16 sep 2009) $
  */
-public class RepInfo extends javax.swing.JPanel implements DiagramListener
+public class Branching extends javax.swing.JPanel implements DiagramListener
 {
 	private DefaultTableModel tableModelWeights;
 	private AlgebraComposite algebras;
 	private HighestWeightRep HWrep;
 
     /** Creates new form RepInfo */
-    public RepInfo()
+    public Branching()
 	{
         initComponents();
 		tableModelWeights = (DefaultTableModel) weightTable.getModel();
@@ -62,6 +68,12 @@ public class RepInfo extends javax.swing.JPanel implements DiagramListener
 	@Action
 	public void showWeights()
 	{
+		HighestWeightRep subRep;
+		HighestWeightRep intRep;
+		HighestWeightRep coRep;
+		// Map of subalgebra reps, with the levels converted to a string as key.
+		Map<String,Collection<HighestWeightRep>> coReps = new HashMap<String,Collection<HighestWeightRep>>();
+
 		HWrep = repSpinner.getRepresentation();
 		if(HWrep == null)
 			return;
@@ -78,15 +90,77 @@ public class RepInfo extends javax.swing.JPanel implements DiagramListener
 		{
 			Collection<Weight> weights = HWrep.get(i);
 			Iterator iterator	= weights.iterator();
+
+			weightLoop:
 			while (iterator.hasNext())
 			{
 				Weight weight = (Weight) iterator.next();
-				if(cbDominant.isSelected() && !weight.isDominant)
+				int[] labels = weight.dynkinLabels;
+				// Split the int and sub parts.
+				// Check for dominant parts at the same time.
+				int[] intLabels = new int[algebras.intAlgebra.rank];
+				int[] subLabels = new int[algebras.subAlgebra.rank];
+				int[] coLabels = new int[algebras.coAlgebra.rank];
+				for (int j = 0; j < algebras.intAlgebra.rank; j++)
+				{
+					intLabels[j] = labels[algebras.dd.translateInt(j)];
+					if(intLabels[j] < 0)
+						continue weightLoop;
+				}
+				for (int j = 0; j < algebras.subAlgebra.rank; j++)
+				{
+					subLabels[j] = labels[algebras.dd.translateSub(j)];
+					if(subLabels[j] < 0)
+						continue weightLoop;
+				}
+				for (int j = 0; j < algebras.coAlgebra.rank; j++)
+				{
+					coLabels[j] = labels[algebras.dd.translateCo(j)];
+				}
+				// If we got this far we have a valid subrep branching.
+				subRep = new HighestWeightRep(algebras.subAlgebra, subLabels);
+				intRep = new HighestWeightRep(algebras.intAlgebra, intLabels);
+				coRep = new HighestWeightRep(algebras.coAlgebra, coLabels);
+
+				// Calculate the levels for this weight
+				fraction[] levels = new fraction[algebras.algebra.rank - algebras.coAlgebra.rank];
+				fraction[] weightVector = algebras.algebra.weightToRoot(labels);
+				for (int j = 0; j < levels.length; j++)
+				{
+					levels[j] = weightVector[algebras.dd.translateLevel(j)];
+				}
+				
+				// Fetch representations previously processed at this level.
+				Collection<HighestWeightRep> oldReps = coReps.get(Helper.arrayToString(levels));
+				if(oldReps == null)
+				{
+					oldReps = new HashSet<HighestWeightRep>();
+					coReps.put(Helper.arrayToString(levels), oldReps);
+				}
+
+				// Check the outer multiplicity
+				long outerMult = weight.getMult();
+				Iterator repIt = oldReps.iterator();
+				while(repIt.hasNext())
+				{
+					HighestWeightRep oldCoRep = (HighestWeightRep) repIt.next();
+					outerMult = outerMult - ( oldCoRep.getWeightMult(coLabels) * oldCoRep.getOuterMult() );
+				}
+				// Don't add this rep if its outer multiplicity is zero.
+				if(outerMult == 0)
 					continue;
-				Object[] rowData = new Object[3];
-				rowData[0] = Helper.arrayToString(weight.dynkinLabels);
-				rowData[1] = weight.getMult();
-				rowData[2] = weight.getDepth();
+
+				coRep.setOuterMult(outerMult);
+				oldReps.add(coRep);
+
+				Object[] rowData = new Object[7];
+				rowData[0] = Helper.arrayToString(levels);
+				rowData[1] = i;
+				rowData[2] = Helper.arrayToString(intLabels);
+				rowData[3] = Helper.arrayToString(subLabels);
+				rowData[4] = intRep.dim;
+				rowData[5] = subRep.dim;
+				rowData[6] = outerMult;
 				tableModelWeights.addRow(rowData);
 			}
 		}
@@ -113,7 +187,6 @@ public class RepInfo extends javax.swing.JPanel implements DiagramListener
         jPanel2 = new javax.swing.JPanel();
         tfDepth = new javax.swing.JLabel();
         depthSpinner = new edu.simplie.ui.reusable.UISpinner();
-        cbDominant = new javax.swing.JCheckBox();
 
         setName("Form"); // NOI18N
 
@@ -124,14 +197,14 @@ public class RepInfo extends javax.swing.JPanel implements DiagramListener
 
             },
             new String [] {
-                "Dynkin labels", "Multiplicity", "Depth"
+                "Levels", "Depth", "Dynkin labels int", "Dynkin label sub", "Dimension int", "Dimension sub", "Multiplicity"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.Long.class, java.lang.Integer.class
+                java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.Long.class, java.lang.Long.class, java.lang.Long.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false
+                false, false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -145,10 +218,10 @@ public class RepInfo extends javax.swing.JPanel implements DiagramListener
         weightTable.setName("weightTable"); // NOI18N
         jScrollPane1.setViewportView(weightTable);
 
-        javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance(edu.simplie.SimpLieApp.class).getContext().getActionMap(RepInfo.class, this);
+        javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance(edu.simplie.SimpLieApp.class).getContext().getActionMap(Branching.class, this);
         bShowWeights.setAction(actionMap.get("showWeights")); // NOI18N
-        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(edu.simplie.SimpLieApp.class).getContext().getResourceMap(RepInfo.class);
-        bShowWeights.setText(resourceMap.getString("reps.showweights")); // NOI18N
+        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(edu.simplie.SimpLieApp.class).getContext().getResourceMap(Branching.class);
+        bShowWeights.setText(resourceMap.getString("reps.branch")); // NOI18N
         bShowWeights.setName("bShowWeights"); // NOI18N
 
         jButton1.setAction(actionMap.get("reset")); // NOI18N
@@ -175,9 +248,9 @@ public class RepInfo extends javax.swing.JPanel implements DiagramListener
                 .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(jPanel1Layout.createSequentialGroup()
                         .add(jLabel1)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 236, Short.MAX_VALUE)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 270, Short.MAX_VALUE)
                         .add(jLabel2))
-                    .add(repSpinner, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 355, Short.MAX_VALUE))
+                    .add(repSpinner, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 389, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -206,22 +279,16 @@ public class RepInfo extends javax.swing.JPanel implements DiagramListener
             }
         });
 
-        cbDominant.setText(resourceMap.getString("reps.dominant")); // NOI18N
-        cbDominant.setName("cbDominant"); // NOI18N
-
         org.jdesktop.layout.GroupLayout jPanel2Layout = new org.jdesktop.layout.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jPanel2Layout.createSequentialGroup()
-                        .add(tfDepth)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
-                        .add(depthSpinner, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 61, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                    .add(cbDominant))
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .add(tfDepth)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                .add(depthSpinner, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 61, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(15, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -230,9 +297,7 @@ public class RepInfo extends javax.swing.JPanel implements DiagramListener
                 .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(tfDepth)
                     .add(depthSpinner, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 5, Short.MAX_VALUE)
-                .add(cbDominant)
-                .addContainerGap())
+                .addContainerGap(35, Short.MAX_VALUE))
         );
 
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
@@ -288,7 +353,6 @@ public class RepInfo extends javax.swing.JPanel implements DiagramListener
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton bShowWeights;
-    private javax.swing.JCheckBox cbDominant;
     private edu.simplie.ui.reusable.UISpinner depthSpinner;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;

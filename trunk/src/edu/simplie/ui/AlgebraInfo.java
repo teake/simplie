@@ -127,8 +127,8 @@ public class AlgebraInfo extends javax.swing.JPanel implements DiagramListener
 			{
 				Root root = (Root) iterator.next();
 				Object[] rowData = new Object[6];
-				rowData[0] = Helper.intArrayToString(root.vector);
-				rowData[1] = Helper.intArrayToString(algebra.rootToWeight(root.vector));
+				rowData[0] = Helper.arrayToString(root.vector);
+				rowData[1] = Helper.arrayToString(algebra.rootToWeight(root.vector));
 				rowData[2] = root.norm;
 				rowData[3] = root.mult;
 				rowData[4] = root.coMult;

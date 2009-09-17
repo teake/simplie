@@ -110,18 +110,37 @@ public class Helper
 	}
 	
 	/**
-	 * Converts an array of integers integer into a single string.
+	 * Converts an array of integers into a single string.
 	 * The string will be delimited with spaces.
 	 *
 	 * @param	array	The array of integers to convert to a string.
 	 * @return			A string representing the array of integers.
 	 */
-	public static String intArrayToString(int[] array)
+	public static String arrayToString(int[] array)
 	{
 		String output = new String();
 		for (int i = 0; i < array.length; i++)
 		{
 			output += intToString(array[i]);
+			if(i != array.length - 1)
+				output += " ";
+		}
+		return output;
+	}
+
+	/**
+	 * Converts an array of objects into a single string.
+	 * The string will be delimited with spaces.
+	 *
+	 * @param	array	The array of objects to convert to a string.
+	 * @return			A string representing the array of objects.
+	 */
+	public static String arrayToString(Object[] array)
+	{
+		String output = new String();
+		for (int i = 0; i < array.length; i++)
+		{
+			output += array[i].toString();
 			if(i != array.length - 1)
 				output += " ";
 		}

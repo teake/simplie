@@ -97,9 +97,9 @@ public class LevelDecomposition extends javax.swing.JPanel
 					continue;
 				int[] root = algebras.rootVector(levels, weight.dynkinLabels);
 				Object[] rowData = new Object[4];
-				rowData[0] = Helper.intArrayToString(root);
-				rowData[1] = Helper.intArrayToString(algebras.subDynkinLabels(root));
-				rowData[2] = Helper.intArrayToString(algebras.intDynkinLabels(root));
+				rowData[0] = Helper.arrayToString(root);
+				rowData[1] = Helper.arrayToString(algebras.subDynkinLabels(root));
+				rowData[2] = Helper.arrayToString(algebras.intDynkinLabels(root));
 				rowData[3] = weight.getMult();
 				tableModelWeights.addRow(rowData);
 			}
