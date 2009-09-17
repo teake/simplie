@@ -602,6 +602,28 @@ public class Algebra
 		return dynkinLabels;
 	}
 
+	/**
+	 * Returns the components of a weight on the root lattice.
+	 * This is the inverse of rootToWeight.
+	 *
+	 * @param dynkinLabels	 The Dynkin labels of the weight to convert.
+	 * @return				 The components of the weight in the root lattice.
+	 * @see rootToWeight
+	 */
+	public fraction[] weightToRoot(int[] dynkinLabels)
+	{
+		fraction[] result = new fraction[rank];
+		for (int i = 0; i < rank; i++)
+		{
+			result[i] = new fraction(0);
+			for (int j = 0; j < rank; j++)
+			{
+				result[i].add( invA[i][j].times(dynkinLabels[j]) );
+			}
+		}
+		return result;
+	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (obj == null) {

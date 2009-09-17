@@ -184,7 +184,7 @@ public class Root implements Serializable
 	public String toString()
 	{
 		String output = "height: " + height() +
-				", vector: " + Helper.intArrayToString(vector) +
+				", vector: " + Helper.arrayToString(vector) +
 				", norm: " + norm +
 				", mult: " + mult;
 		

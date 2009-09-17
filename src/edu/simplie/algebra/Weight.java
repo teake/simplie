@@ -146,7 +146,7 @@ public class Weight
 	public String toString()
 	{
 		return "depth: " + getDepth() + 
-				", labels: " + Helper.intArrayToString(dynkinLabels) + 
+				", labels: " + Helper.arrayToString(dynkinLabels) +
 				", mult: " + getMult();
 	}
 }

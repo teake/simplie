@@ -114,7 +114,7 @@ public class AutoLevelScanner extends SwingWorker<Void,Object[]>
 			for (int i = 0; i < num; i++)
 			{
 				Level level = new Level(Helper.numberToVector(i,base,levelRank,minLevel), algebras);
-				System.out.println("Scanning levels " + Helper.intArrayToString(level.levelVector));
+				System.out.println("Scanning levels " + Helper.arrayToString(level.levelVector));
 				Scan(level);
 				levels.add(level);
 				System.out.println("... max height: " + level.heighest() + ", number of reps: " + level.size());
@@ -294,10 +294,10 @@ public class AutoLevelScanner extends SwingWorker<Void,Object[]>
 			
 			// Add the data to the table.
 			Object[] rowData = new Object[12];
-			rowData[0] = Helper.intArrayToString(rep.levels);
-			rowData[1] = Helper.intArrayToString(rep.subDynkinLabels);
-			rowData[2] = Helper.intArrayToString(rep.intDynkinLabels);
-			rowData[3] = Helper.intArrayToString(rep.rootVector);
+			rowData[0] = Helper.arrayToString(rep.levels);
+			rowData[1] = Helper.arrayToString(rep.subDynkinLabels);
+			rowData[2] = Helper.arrayToString(rep.intDynkinLabels);
+			rowData[3] = Helper.arrayToString(rep.rootVector);
 			rowData[4] = rep.length;
 			rowData[5] = (long) algebras.subAlgebra.dimOfRep(rep.subDynkinLabels);
 			rowData[6] = (long) algebras.intAlgebra.dimOfRep(rep.intDynkinLabels);

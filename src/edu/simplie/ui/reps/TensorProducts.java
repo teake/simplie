@@ -86,7 +86,7 @@ public class TensorProducts extends javax.swing.JPanel implements DiagramListene
 		{
 			HighestWeightRep rep = iterator.next();
 			Object[] rowData = new Object[3];
-			rowData[0] = Helper.intArrayToString(rep.highestWeight.dynkinLabels);
+			rowData[0] = Helper.arrayToString(rep.highestWeight.dynkinLabels);
 			rowData[1] = rep.dim;
 			rowData[2] = rep.getOuterMult();
 			tableModel.addRow(rowData);

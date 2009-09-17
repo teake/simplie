@@ -45,6 +45,7 @@ public class RepContainer extends javax.swing.JPanel
 	{
 		repInfo.setAlgebraComposite(algebras);
 		tensorProducts.setAlgebraComposite(algebras);
+		branching.setAlgebraComposite(algebras);
 	}
 
     /** This method is called from within the constructor to
@@ -59,6 +60,7 @@ public class RepContainer extends javax.swing.JPanel
         jTabbedPane1 = new javax.swing.JTabbedPane();
         repInfo = new edu.simplie.ui.reps.RepInfo();
         tensorProducts = new edu.simplie.ui.reps.TensorProducts();
+        branching = new edu.simplie.ui.reps.Branching();
 
         setName("Form"); // NOI18N
 
@@ -70,6 +72,9 @@ public class RepContainer extends javax.swing.JPanel
 
         tensorProducts.setName("tensorProducts"); // NOI18N
         jTabbedPane1.addTab(resourceMap.getString("reps.products"), tensorProducts); // NOI18N
+
+        branching.setName("branching"); // NOI18N
+        jTabbedPane1.addTab(resourceMap.getString("reps.branching"), branching); // NOI18N
 
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
         this.setLayout(layout);
@@ -85,6 +90,7 @@ public class RepContainer extends javax.swing.JPanel
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private edu.simplie.ui.reps.Branching branching;
     private javax.swing.JTabbedPane jTabbedPane1;
     private edu.simplie.ui.reps.RepInfo repInfo;
     private edu.simplie.ui.reps.TensorProducts tensorProducts;
