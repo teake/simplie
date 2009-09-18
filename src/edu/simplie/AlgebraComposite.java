@@ -198,10 +198,26 @@ public class AlgebraComposite implements DiagramListener
 	 */
 	public int[] levels(int[] rootVector)
 	{
-		int[] levels = new int[algebra.rank - coAlgebra.rank];
+		int[] levels = new int[dd.getNumLevels()];
 		for (int i = 0; i < levels.length; i++)
 		{
 			levels[i] = rootVector[dd.translateLevel(i)];
+		}
+		return levels;
+	}
+
+	/**
+	 * Returns the level-part of a root vector
+	 *
+	 * @param   vector	The root vector of which the level part is to be returned.
+	 * @return		The level part of the root vector.
+	 */
+	public fraction[] levels(fraction[] vector)
+	{
+		fraction[] levels = new fraction[dd.getNumLevels()];
+		for (int i = 0; i < levels.length; i++)
+		{
+			levels[i] = vector[dd.translateLevel(i)];
 		}
 		return levels;
 	}
