@@ -63,6 +63,9 @@ public class Branching extends javax.swing.JPanel implements DiagramListener
 	public void diagramChanged()
 	{
 		repSpinner.setAlgebra(algebras.algebra);
+		boolean enable = (algebras.dd.getNumLevels() > 0);
+		depthSpinner.setEnabled(enable);
+		bBranch.setEnabled(enable);
 	}
 
 	@Action
@@ -123,12 +126,7 @@ public class Branching extends javax.swing.JPanel implements DiagramListener
 				coRep = new HighestWeightRep(algebras.coAlgebra, coLabels);
 
 				// Calculate the levels for this weight
-				fraction[] levels = new fraction[algebras.algebra.rank - algebras.coAlgebra.rank];
-				fraction[] weightVector = algebras.algebra.weightToRoot(labels);
-				for (int j = 0; j < levels.length; j++)
-				{
-					levels[j] = weightVector[algebras.dd.translateLevel(j)];
-				}
+				fraction[] levels = algebras.levels(algebras.algebra.weightToRoot(labels));
 				
 				// Fetch representations previously processed at this level.
 				Collection<HighestWeightRep> oldReps = coReps.get(Helper.arrayToString(levels));
@@ -178,7 +176,7 @@ public class Branching extends javax.swing.JPanel implements DiagramListener
 
         jScrollPane1 = new javax.swing.JScrollPane();
         weightTable = new edu.simplie.ui.reusable.UIPrintableColorTable();
-        bShowWeights = new javax.swing.JButton();
+        bBranch = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         repSpinner = new edu.simplie.ui.reps.RepSpinner();
@@ -219,10 +217,10 @@ public class Branching extends javax.swing.JPanel implements DiagramListener
         jScrollPane1.setViewportView(weightTable);
 
         javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance(edu.simplie.SimpLieApp.class).getContext().getActionMap(Branching.class, this);
-        bShowWeights.setAction(actionMap.get("showWeights")); // NOI18N
+        bBranch.setAction(actionMap.get("showWeights")); // NOI18N
         org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(edu.simplie.SimpLieApp.class).getContext().getResourceMap(Branching.class);
-        bShowWeights.setText(resourceMap.getString("reps.branch")); // NOI18N
-        bShowWeights.setName("bShowWeights"); // NOI18N
+        bBranch.setText(resourceMap.getString("reps.branch")); // NOI18N
+        bBranch.setName("bBranch"); // NOI18N
 
         jButton1.setAction(actionMap.get("reset")); // NOI18N
         jButton1.setText(resourceMap.getString("generic.reset")); // NOI18N
@@ -248,9 +246,9 @@ public class Branching extends javax.swing.JPanel implements DiagramListener
                 .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(jPanel1Layout.createSequentialGroup()
                         .add(jLabel1)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 270, Short.MAX_VALUE)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 194, Short.MAX_VALUE)
                         .add(jLabel2))
-                    .add(repSpinner, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 389, Short.MAX_VALUE))
+                    .add(repSpinner, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 313, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -285,19 +283,19 @@ public class Branching extends javax.swing.JPanel implements DiagramListener
             jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .add(tfDepth)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
-                .add(depthSpinner, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 61, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(15, Short.MAX_VALUE))
+                .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(tfDepth)
+                    .add(depthSpinner, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 61, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(tfDepth)
-                    .add(depthSpinner, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(35, Short.MAX_VALUE))
+                .add(tfDepth)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(depthSpinner, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(15, Short.MAX_VALUE))
         );
 
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
@@ -307,15 +305,15 @@ public class Branching extends javax.swing.JPanel implements DiagramListener
             .add(layout.createSequentialGroup()
                 .addContainerGap()
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(org.jdesktop.layout.GroupLayout.TRAILING, jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 651, Short.MAX_VALUE)
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 501, Short.MAX_VALUE)
                     .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
                         .add(jPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(jPanel2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING, false)
                             .add(jButton1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .add(bShowWeights, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                            .add(bBranch, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -324,7 +322,7 @@ public class Branching extends javax.swing.JPanel implements DiagramListener
                 .addContainerGap()
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
                     .add(layout.createSequentialGroup()
-                        .add(bShowWeights)
+                        .add(bBranch)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(jButton1))
                     .add(jPanel2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
@@ -352,7 +350,7 @@ public class Branching extends javax.swing.JPanel implements DiagramListener
 	}
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton bShowWeights;
+    private javax.swing.JButton bBranch;
     private edu.simplie.ui.reusable.UISpinner depthSpinner;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;

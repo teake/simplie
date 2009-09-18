@@ -249,6 +249,19 @@ public class DynkinDiagram implements Comparator<DynkinNode>
 		}
 		return -1; // not found
 	}
+
+	/** Returns the number of level nodes */
+	public int getNumLevels()
+	{
+		int numLevels = 0;
+		for(int i = 0; i < rank(); i++)
+		{
+			DynkinNode node = nodes.get(i);
+			if(node.isLevel())
+				numLevels++;
+		}
+		return numLevels;
+	}
 	
 	/** Returns the Cartan matrix of the whole algebra. */
 	public int[][] cartanMatrix()
