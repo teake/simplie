@@ -183,6 +183,21 @@ public class EmptyProjector implements Projector2D
 
 	public boolean addNode(Number key, Node2D node)
 	{
+		// first check if there are nodes at the same position.
+		// if so, delete them.
+		ArrayList<Number> keys = new ArrayList<Number>(nodes.keySet());
+		for(int i = 0; i < keys.size(); i++)
+		{
+			Number loopKey = keys.get(i);
+			if(loopKey.intValue() > key.intValue())
+				nodes.get(loopKey).remove(node);
+			else
+			{
+				if(nodes.get(loopKey).contains(node))
+					return false;
+			}
+		}
+
 		Set<Node2D> nodeset = nodes.get(key);
 		if(nodeset == null)
 		{
