@@ -62,6 +62,8 @@ public class EmptyProjector implements Projector2D
 	public boolean drawNodes = true;
 	public boolean drawConnections = true;
 	private int maxHeight = 0;
+	private int[] levels;
+	private boolean restrictLevel = false;
 
 	public EmptyProjector()
 	{
@@ -171,9 +173,20 @@ public class EmptyProjector implements Projector2D
 		for(int i = 1; i < max + 1 && i < algebras.algebra.rs.size(); i++)
 		{
 			Collection<Root> roots = algebras.algebra.rs.get(i);
+			rootLoop:
 			for(Iterator it = roots.iterator(); it.hasNext();)
 			{
-				projectRoot((Root) it.next());
+				Root root = (Root) it.next();
+				if(restrictLevel)
+				{
+					int[] rootLevels = algebras.levels(root.vector);
+					for (int j = 0; j < rootLevels.length; j++)
+					{
+						if(levels[j] != rootLevels[j])
+							continue rootLoop;
+					}
+				}
+				projectRoot(root);
 			}
 		}
 
@@ -259,5 +272,13 @@ public class EmptyProjector implements Projector2D
 	public void setMaxHeight(int maxHeight)
 	{
 		this.maxHeight = maxHeight;
+	}
+
+	public void setLevels(int[] values) {
+		this.levels = values;
+	}
+
+	public void setLimitLevels(boolean limitlevels) {
+		this.restrictLevel = limitlevels;
 	}
 }

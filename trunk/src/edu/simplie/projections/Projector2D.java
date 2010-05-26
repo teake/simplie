@@ -29,6 +29,9 @@ import java.awt.Graphics2D;
  */
 public interface Projector2D
 {
+
+	public void setLevels(int[] values);
+	public void setLimitLevels(boolean limitlevels);
 	/**
 	 * Sets the algebra composite whose root system is to be projected.
 	 *
