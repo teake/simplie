@@ -91,6 +91,8 @@ public class Projector extends javax.swing.JPanel implements DiagramListener
         tfDraw = new javax.swing.JLabel();
         cbNodes = new javax.swing.JCheckBox();
         cbConnections = new javax.swing.JCheckBox();
+        spinnerLevels = new edu.simplie.ui.reusable.UIMultiSpinner();
+        cbLevels = new javax.swing.JCheckBox();
 
         setName("Form"); // NOI18N
 
@@ -102,11 +104,11 @@ public class Projector extends javax.swing.JPanel implements DiagramListener
         canvas.setLayout(canvasLayout);
         canvasLayout.setHorizontalGroup(
             canvasLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 320, Short.MAX_VALUE)
+            .add(0, 339, Short.MAX_VALUE)
         );
         canvasLayout.setVerticalGroup(
             canvasLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 361, Short.MAX_VALUE)
+            .add(0, 395, Short.MAX_VALUE)
         );
 
         optionPanel.setName("optionPanel"); // NOI18N
@@ -159,17 +161,19 @@ public class Projector extends javax.swing.JPanel implements DiagramListener
         optionPanelLayout.setHorizontalGroup(
             optionPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(tfMaxHeight)
-            .add(tfProjectionMode)
-            .add(cbNodes)
-            .add(cbConnections)
-            .add(rbHasse)
-            .add(tfDraw)
-            .add(optionPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING, false)
-                .add(org.jdesktop.layout.GroupLayout.LEADING, spinnerMaxHeight, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .add(org.jdesktop.layout.GroupLayout.LEADING, drawButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .add(org.jdesktop.layout.GroupLayout.LEADING, clearButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .add(org.jdesktop.layout.GroupLayout.LEADING, epsButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .add(org.jdesktop.layout.GroupLayout.LEADING, rbCoxeter, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .add(spinnerMaxHeight, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 101, Short.MAX_VALUE)
+            .add(epsButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 101, Short.MAX_VALUE)
+            .add(clearButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 101, Short.MAX_VALUE)
+            .add(drawButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 101, Short.MAX_VALUE)
+            .add(optionPanelLayout.createSequentialGroup()
+                .add(optionPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(tfProjectionMode)
+                    .add(cbNodes)
+                    .add(cbConnections)
+                    .add(rbHasse)
+                    .add(tfDraw)
+                    .add(rbCoxeter, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 95, Short.MAX_VALUE))
+                .addContainerGap())
         );
         optionPanelLayout.setVerticalGroup(
             optionPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -195,18 +199,30 @@ public class Projector extends javax.swing.JPanel implements DiagramListener
                 .add(cbNodes)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(cbConnections)
-                .addContainerGap(63, Short.MAX_VALUE))
+                .addContainerGap(97, Short.MAX_VALUE))
         );
+
+        spinnerLevels.setMinValue(0);
+        spinnerLevels.setName("spinnerLevels"); // NOI18N
+
+        cbLevels.setText(resourceMap.getString("projector.limitLevels")); // NOI18N
+        cbLevels.setName("cbLevels"); // NOI18N
 
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
+            .add(layout.createSequentialGroup()
                 .addContainerGap()
-                .add(canvas, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
-                .add(optionPanel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(layout.createSequentialGroup()
+                        .add(cbLevels)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                        .add(spinnerLevels, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 192, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
+                        .add(canvas, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(optionPanel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -214,8 +230,12 @@ public class Projector extends javax.swing.JPanel implements DiagramListener
             .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
-                    .add(org.jdesktop.layout.GroupLayout.LEADING, canvas, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .add(org.jdesktop.layout.GroupLayout.LEADING, optionPanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, optionPanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, canvas, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(spinnerLevels, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(cbLevels))
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -249,6 +269,7 @@ public class Projector extends javax.swing.JPanel implements DiagramListener
     private javax.swing.ButtonGroup bgMode;
     private javax.swing.JPanel canvas;
     private javax.swing.JCheckBox cbConnections;
+    private javax.swing.JCheckBox cbLevels;
     private javax.swing.JCheckBox cbNodes;
     private javax.swing.JButton clearButton;
     private javax.swing.JButton drawButton;
@@ -256,6 +277,7 @@ public class Projector extends javax.swing.JPanel implements DiagramListener
     private javax.swing.JPanel optionPanel;
     private javax.swing.JRadioButton rbCoxeter;
     private javax.swing.JRadioButton rbHasse;
+    private edu.simplie.ui.reusable.UIMultiSpinner spinnerLevels;
     private edu.simplie.ui.reusable.UISpinner spinnerMaxHeight;
     private javax.swing.JLabel tfDraw;
     private javax.swing.JLabel tfMaxHeight;
@@ -269,6 +291,7 @@ public class Projector extends javax.swing.JPanel implements DiagramListener
 			rbHasse.setSelected(true);
 		}
 		rbCoxeter.setEnabled(algebras.subAlgebra.finite);
+		spinnerLevels.setNumSpinners(algebras.algebra.rank - algebras.coAlgebra.rank);
 	}
 
 	@Action
@@ -296,6 +319,8 @@ public class Projector extends javax.swing.JPanel implements DiagramListener
 	{
 		projector2D = ( rbCoxeter.isSelected() ) ? coxeterProjector : hasseProjector;
 		projector2D.setMaxHeight(spinnerMaxHeight.getValue());
+		projector2D.setLevels(spinnerLevels.getValues());
+		projector2D.setLimitLevels(cbLevels.isSelected());
 		projector2D.setDrawNodes(cbNodes.isSelected());
 		projector2D.setDrawConnections(cbConnections.isSelected());
 	}
