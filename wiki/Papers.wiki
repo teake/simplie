@@ -15,3 +15,5 @@ Papers in which SimpLie has been used for calculations:
     * [http://arxiv.org/abs/0812.4140 Infinite Sequence of Poincare Group Extensions: Structure and Dynamics] by Sotirios Bonanos and Joaquim Gomis.
 
     * [http://arxiv.org/abs/0905.4651 Finite and infinite-dimensional symmetries of pure N=2 supergravity in D=4] by Laurent Houart, Axel Kleinschmidt, Josef Lindman Hörnlund, Daniel Persson, and Nassiba Tabti.
+
+    * [http://arxiv.org/abs/arXiv:1203.5585 Half-maximal supergravity in three dimensions: supergeometry, differential forms and algebraic structure] by J. Greitz and P. S. Howe.
