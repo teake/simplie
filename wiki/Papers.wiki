@@ -22,3 +22,5 @@ Papers in which SimpLie has been used for calculations:
     * [http://arxiv.org/abs/arXiv:0910.1444 Kac-Moody algebraic structures in supergravity theories] by Nassiba Tabti.
 
     * [http://arxiv.org/abs/arXiv:1203.5585 Half-maximal supergravity in three dimensions: supergeometry, differential forms and algebraic structure] by J. Greitz and P. S. Howe.
+
+    * [http://arxiv.org/abs/1208.3397 Generalised BPS conditions] by Peter West.
