@@ -2,25 +2,20 @@
 
 Papers in which SimpLie has been used for calculations:
 
-    * [http://arxiv.org/abs/0705.1304 E(11) and the Embedding Tensor] by E. Bergshoeff, I. De Baetselier, and T. Nutma.
-
-    * [http://arxiv.org/abs/0706.3659 Duality Symmetries and G+++ Theories] by Fabio Riccioni, Duncan Steele, and Peter West.
-
-    * [http://arxiv.org/abs/0711.2035 Kac-Moody Spectrum of (Half-)Maximal Supergravities] by Eric Bergshoeff, Joaquim Gomis, Teake Nutma and Diederik Roest.
-
-    * [http://arxiv.org/abs/0805.2573 Extended Symmetries in Supergravity: the Semi-simple Case] by Axel Kleinschmidt and Diederik Roest.
-
-    * [http://arxiv.org/abs/arXiv:0806.4780 The emergence of fermions and the E11 content] by Francois Englert by Laurent Houart.
-
-    * [http://arxiv.org/abs/0810.5767 E10 and Gauged Maximal Supergravity] by Eric A. Bergshoeff, Olaf Hohm, Axel Kleinschmidt, Hermann Nicolai, Teake A. Nutma, and Jakob Palmkvist.
-
-    * [http://arxiv.org/abs/0812.4140 Infinite Sequence of Poincare Group Extensions: Structure and Dynamics] by Sotirios Bonanos and Joaquim Gomis.
-
-    * [http://arxiv.org/abs/0905.4651 Finite and infinite-dimensional symmetries of pure N=2 supergravity in D=4] by Laurent Houart, Axel Kleinschmidt, Josef Lindman Hörnlund, Daniel Persson, and Nassiba Tabti.
-
-
-    * [http://arxiv.org/abs/arXiv:0910.1444 Kac-Moody algebraic structures in supergravity theories] by Nassiba Tabti.
-
-    * [http://arxiv.org/abs/arXiv:1203.5585 Half-maximal supergravity in three dimensions: supergeometry, differential forms and algebraic structure] by J. Greitz and P. S. Howe.
-
-    * [http://arxiv.org/abs/1208.3397 Generalised BPS conditions] by Peter West.
+    # E. Bergshoeff, I. De Baetselier, and T. Nutma, _E(11) and the Embedding Tensor_,  [http://arxiv.org/abs/0705.1304 arXiv:0705.1304]
+    # Fabio Riccioni, Duncan Steele, and Peter West, _Duality Symmetries and G+++ Theories_, [http://arxiv.org/abs/0706.3659 arXiv:0706.3659].
+    # Eric Bergshoeff, Joaquim Gomis, Teake Nutma and Diederik Roest, _Kac-Moody Spectrum of (Half-)Maximal Supergravities_, [http://arxiv.org/abs/0711.2035 arXiv:0711.2035].
+    # Alexei J. Nurmagambetov, _Hidden Symmetries of M-Theory and Its Dynamical Realization_, [http://arxiv.org/abs/0802.2638 arXiv:0802.2638].
+    # Axel Kleinschmidt and Diederik Roest, _Extended Symmetries in Supergravity: the Semi-simple Case_, [http://arxiv.org/abs/0805.2573 arXiv:0805.2573].
+    # Francois Englert by Laurent Houart, _The emergence of fermions and the E11 content_ [http://arxiv.org/abs/arXiv:0806.4780 arXiv:0806.4780].
+    # Eric A. Bergshoeff, Olaf Hohm, Axel Kleinschmidt, Hermann Nicolai, Teake A. Nutma, and Jakob Palmkvist, _E10 and Gauged Maximal Supergravity_ [http://arxiv.org/abs/0810.5767 arXiv:0810.5767].
+    # Sotirios Bonanos and Joaquim Gomis, _Infinite Sequence of Poincare Group Extensions: Structure and Dynamics_, [http://arxiv.org/abs/0812.4140 arXiv:0812.4140].
+    # Laurent Houart, Axel Kleinschmidt, Josef Lindman Hörnlund, Daniel Persson, and Nassiba Tabti, _Finite and infinite-dimensional symmetries of pure N=2 supergravity in D=4_, [http://arxiv.org/abs/0905.4651 arXiv:0905.4651].
+    # Nassiba Tabti, _Kac-Moody algebraic structures in supergravity theories_, [http://arxiv.org/abs/arXiv:0910.1444 arXiv:0910.1444].
+    # Axel Kleinschmidt, _Counting supersymmetric branes_, [http://arxiv.org/abs/arXiv:1109.2025 arXiv:1109.2025].
+    # Paul P. Cook, _Bound States of String Theory and Beyond_, [http://arxiv.org/abs/1109.6595 arXiv:1109.6595].
+    # J. Greitz and P. S. Howe, _Half-maximal supergravity in three dimensions: supergeometry, differential forms and algebraic structure_, [http://arxiv.org/abs/arXiv:1203.5585 arXiv:1203.5585].
+    # Peter West, _Generalised BPS conditions_, [http://arxiv.org/abs/1208.3397 arXiv:1208.3397].
+    # Eric A. Bergshoeff, Alessio Marrani, Fabio Riccioni, _Brane orbits_, [http://arxiv.org/abs/arXiv:1201.5819 arXiv:1201.5819].
+    # Eric A. Bergshoeff, Fabio Riccioni, _Heterotic wrapping rules_, [http://arxiv.org/abs/1210.1422 arXiv:1210.1422].
+    # Paul P. Cook, Michael Fleming, _Gravitational Coset Models_, [http://arxiv.org/abs/1309.0757 arXiv:1309.0757].
