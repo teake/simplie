@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.1" encoding="UTF-8" ?>
 
 <Form version="1.5" maxVersion="1.7" type="org.netbeans.modules.form.forminfo.JPanelFormInfo">
   <NonVisualComponents>
@@ -14,7 +14,7 @@
     <AuxValue name="FormSettings_generateFQN" type="java.lang.Boolean" value="true"/>
     <AuxValue name="FormSettings_generateMnemonicsCode" type="java.lang.Boolean" value="false"/>
     <AuxValue name="FormSettings_i18nAutoMode" type="java.lang.Boolean" value="false"/>
-    <AuxValue name="FormSettings_layoutCodeTarget" type="java.lang.Integer" value="2"/>
+    <AuxValue name="FormSettings_layoutCodeTarget" type="java.lang.Integer" value="1"/>
     <AuxValue name="FormSettings_listenerGenerationStyle" type="java.lang.Integer" value="0"/>
     <AuxValue name="FormSettings_variablesLocal" type="java.lang.Boolean" value="false"/>
     <AuxValue name="FormSettings_variablesModifier" type="java.lang.Integer" value="2"/>
@@ -84,7 +84,7 @@
         </DimensionLayout>
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
-              <EmptySpace min="0" pref="395" max="32767" attributes="0"/>
+              <EmptySpace min="0" pref="422" max="32767" attributes="0"/>
           </Group>
         </DimensionLayout>
       </Layout>
@@ -98,10 +98,10 @@
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
               <Component id="tfMaxHeight" alignment="0" min="-2" max="-2" attributes="0"/>
-              <Component id="spinnerMaxHeight" alignment="0" pref="101" max="32767" attributes="1"/>
-              <Component id="epsButton" alignment="0" pref="101" max="32767" attributes="1"/>
-              <Component id="clearButton" alignment="0" pref="101" max="32767" attributes="1"/>
-              <Component id="drawButton" alignment="0" pref="101" max="32767" attributes="1"/>
+              <Component id="spinnerMaxHeight" alignment="0" pref="141" max="32767" attributes="1"/>
+              <Component id="epsButton" alignment="0" pref="141" max="32767" attributes="1"/>
+              <Component id="clearButton" alignment="0" pref="141" max="32767" attributes="1"/>
+              <Component id="drawButton" alignment="0" pref="141" max="32767" attributes="1"/>
               <Group type="102" alignment="0" attributes="0">
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Component id="tfProjectionMode" alignment="0" min="-2" max="-2" attributes="0"/>
@@ -109,7 +109,7 @@
                       <Component id="cbConnections" alignment="0" min="-2" max="-2" attributes="0"/>
                       <Component id="rbHasse" alignment="0" min="-2" max="-2" attributes="0"/>
                       <Component id="tfDraw" alignment="0" min="-2" max="-2" attributes="0"/>
-                      <Component id="rbCoxeter" alignment="0" pref="95" max="32767" attributes="1"/>
+                      <Component id="rbCoxeter" alignment="0" pref="125" max="32767" attributes="1"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>

@@ -29,7 +29,7 @@ import javax.swing.table.DefaultTableModel;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Collections;
-import org.jdesktop.swingworker.SwingWorker;
+import javax.swing.SwingWorker;
 
 
 /**
