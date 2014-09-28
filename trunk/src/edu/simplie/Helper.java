@@ -463,34 +463,45 @@ public class Helper
 	 *						 with the first entry for the real part and the second for the imaginary.
 	 *						 Both are zero vectors if no eigenvalue can be found.
 	 */
-	public static double[][] complexEigenvector(double[][] matrix, double eigenvalRe, double eigenvalIm)
+	public static double[][] complexEigenvector(double[][] mat, double eigenvalRe, double eigenvalIm)
 	{
-		int size = matrix.length;
+		Matrix matrix = new Matrix(mat);
+		int size = matrix.getRowDimension();
 		double[][] complexEigenvector = new double[2][size];
 
-		Jampack.Zmat m = new Jampack.Zmat(matrix);
-		try
+		// JAMA doesn't do imaginary eigenvectors ... sigh.
+		Matrix A = matrix.minus(Matrix.identity(size, size).times(eigenvalRe));
+		Matrix B = new Matrix(2 * size, 2 * size, 0.0);
+		B.setMatrix(0, size - 1, size, (2 * size) - 1, A);
+		B.setMatrix(size, (2 * size) - 1, 0, size - 1, A.times(-1.0));
+
+		EigenvalueDecomposition eig = new EigenvalueDecomposition(B);
+		Matrix eigenvalues = eig.getD();
+		Matrix eigenvectors = eig.getV();
+		
+		for (int i = 0; i < 2 * size; i++) 
 		{
-			Jampack.Eig eig		= new Jampack.Eig(m);
-			for(int i = 0; i < size; i++)
+			// Jama returns complex eigenvalues in 2-by-2 blocks.
+			// We only want real eigenvalues, so the off-diagonal values
+			// in these two-by-two block should be zero.
+			if(eigenvalues.get(i, i + (int) Math.pow(-1,i % 2)) != 0.0d)
 			{
-				double re = eig.D.get0(i).re;
-				double im = eig.D.get0(i).im;
-				if((im < eigenvalIm + 0.0001)
-						&& (im > eigenvalIm - 0.0001)
-						&& (re < eigenvalRe + 0.0001)
-						&& (re > eigenvalRe - 0.0001))
+				continue;
+			}
+			
+			double imEigval = eigenvalues.get(i, i);
+			if ((imEigval < eigenvalIm + 0.0001) && (imEigval > eigenvalIm - 0.0001)) 
+			{
+				// Found the complex part of the right eigenvalue.
+				// Set the eigenvectors.
+				for (int j = 0; j < size; j++) 
 				{
-					for(int j = 0; j < size; j++)
-					{
-						complexEigenvector[0][j] = eig.X.get0(j,i).re;
-						complexEigenvector[1][j] = eig.X.get0(j,i).im;
-					}
-					break;
+					complexEigenvector[0][j] = eigenvectors.get(j, i);
+					complexEigenvector[1][j] = eigenvectors.get(j + size, i);
 				}
+				break;
 			}
 		}
-		catch(Exception ex){}
 
 		return complexEigenvector;
 	}
