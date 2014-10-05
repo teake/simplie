@@ -1,0 +1,32 @@
+apply plugin: 'java'
+apply plugin: 'application'
+
+mainClassName = "edu.simplie.SimpLieApp"
+
+sourceSets {
+    main {
+        java {
+            srcDir 'src'
+        }
+    }
+}
+
+task copyResources(type: Copy) {
+    from 'src/edu/simplie/resources'
+    into "$buildDir/classes/main/edu/simplie/resources"
+ }
+
+run.dependsOn(copyResources)
+jar.dependsOn(copyResources)
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile(
+        [group: 'org.jdesktop.bsaf', name: 'bsaf', version: '1.9.2'],
+        [group: 'gov.nist.math', name: 'jama', version: '1.0.3'],
+        [group: 'net.sf.epsgraphics', name: 'epsgraphics', version: '1.2']
+    )
+}
