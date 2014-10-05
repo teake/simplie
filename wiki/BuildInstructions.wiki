@@ -1,0 +1,26 @@
+#summary Instruction on how to build SimpLie from scratch.
+
+= Build instructions =
+
+== Gradle ==
+
+If you have [http://www.gradle.org/ Gradle], building and running SimpLie amounts to just checking out the source and running the `run` Gradle task:
+
+{{{
+svn checkout http://simplie.googlecode.com/svn/trunk/ simplie-read-only
+
+cd simplie-read-only
+
+gradle run
+}}}
+
+
+== Netbeans ==
+
+SimpLie can also be build with [https://netbeans.org/ NetBeans]. If you want to edit the GUI panels you'll need to get NetBeans 7, as older version have dropped support for the Swing Application Framework which SimpLie uses.
+
+You will also need to create three libraries upon which SimpLie relies, namely:
+
+  * [https://kenai.com/projects/bsaf/ BSAF]
+  * [http://math.nist.gov/javanumerics/jama/ Jama]
+  * [http://math.nist.gov/javanumerics/jama/ EPSgraphics]
