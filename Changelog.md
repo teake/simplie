@@ -1,0 +1,50 @@
+## Changelog ##
+
+27-04-2009: Version 1.3.0
+
+  * **math** Added Coxeter plane projections (still crashes on some algebras though).
+  * **math** Added (dual) Coxeter labels and numbers for affine and finite algebras.
+  * **ui** Added option to sort Dynkin diagram nodes from bottom to top, or the other way around.
+  * **ui** Switched from 3D Hasse diagram to 2D Hasse diagrams.
+  * **ui** Added EPS export capability of root system projections and Dynkin diagrams (the LaTeX export has been removed).
+  * **misc** Various bug-fixes and improvements.
+
+28-05-2008: Version 1.2.0
+
+  * **ui** Added TeX export capability of various matrices.
+  * **ui** Some interface options get disabled when appropriate.
+  * **misc** Added a Windows installer for easier installation.
+
+13-05-2008: Version 1.1
+
+  * **math** Faster root system construction, by not calculating multiplicities of roots on the same orbit (with thanks to Axel Kleinschmidt, who pointed this out to me).
+  * **math** All simple roots now have even integer norms.
+  * **math** Take into account that weight heights can be fractional too.
+  * **math** Sort levels according to their height.
+  * **ui** Remember window positions and sizes.
+  * **ui** Brand-new root system visualization tab.
+  * **ui** Extended help.
+  * **ui** Adding a node connection has a preview.
+  * **ui** Show Dynkin diagram and Cartan matrix on same tab.
+  * **code** Moved from Java 6 to Java 5.
+  * **code** Renamed packages and some classes.
+  * **misc** Numerous bug-fixes and interface improvements.
+
+18-10-2007: Version 1.0
+
+  * **math** SimpLie can now handle non-simply laced algebras.
+  * **math** Automatic detection of the type of diagram, including direct products.
+  * **math** Sort levels prior to scanning according to their sum squared.
+  * **ui** Algebra presets are now customizable by the user.
+  * **ui** Added a context menu to the Dynkin diagram interaction panel.
+  * **ui** Added a preview node to the dynkin diagram.
+  * **ui** Added status-feedback in the diagram panel.
+  * **ui** Added big algebra-info tab.
+  * **ui** Added extra column to rep table: h'. It contains the height of the root associated to the highest weight state.
+  * **ui** Added 'show exotic fields' option. Useful for truncating results that have more indices than the number of space time dimensions.
+  * **misc** Increased perfomance by > 50%.
+  * **misc** Lock the diagram and disable sign convention buttons when scanning.
+  * **misc** Released under the GPL v3 license.
+
+
+09-05-2007: Unnumbered, first version.

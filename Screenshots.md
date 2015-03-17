@@ -1,0 +1,45 @@
+See also http://picasaweb.google.com/teake.nutma/SimpLie?feat=directlink
+
+
+
+# Coxeter plane projections #
+
+
+## E10 ##
+
+### E10 up to height 120 projected on its E8 Coxeter plane ###
+[![](http://lh3.ggpht.com/_E-ytpBQG0R8/Sg8UOVbSkUI/AAAAAAAAAh0/S2KlKdwDsqw/s400/e10_as_e8_coxeter_120.png)](http://picasaweb.google.com/teake.nutma/SimpLie?feat=directlink#5336506319959658818)
+
+### E10 up to height 120 projected onto an A8 Coxeter plane ###
+
+[![](http://lh3.ggpht.com/_E-ytpBQG0R8/SfbnSlbqRXI/AAAAAAAAAbg/p_SXSIyKdYY/s400/E10aA8-coxeter.png)](http://picasaweb.google.com/lh/photo/fa6Kk_Mm7l9dHfcsSsXUAw?feat=embedwebsite)
+
+## A4++ up to height 21 projected onto an A4 Coxeter plane ##
+
+[![](http://lh5.ggpht.com/_E-ytpBQG0R8/SfbMmgcYojI/AAAAAAAAAaw/IwOiPwxmZUI/s400/A4%2B%2BasA4-coxeter.png)](http://picasaweb.google.com/lh/photo/MoCZdaW-4IdADryIdkJyMw?feat=embedwebsite)
+
+## E8 ##
+
+[![](http://lh3.ggpht.com/_E-ytpBQG0R8/SfbHpmdq7uI/AAAAAAAAAaY/kzXfeT8WVWM/s400/E8-coxeter.png)](http://picasaweb.google.com/lh/photo/uSn2cOFqNIy-u3WyJx81hQ?feat=embedwebsite)
+
+## D8 ##
+[![](http://lh5.ggpht.com/_E-ytpBQG0R8/Sfbi6cApNLI/AAAAAAAAAbQ/ke6UCJtzqc8/s400/D8-coxeter.png)](http://picasaweb.google.com/lh/photo/7cMsnNXUGxVWphizIppSDw?feat=embedwebsite)
+
+
+
+# Hasse diagrams #
+
+
+## E8 ##
+
+[![](http://lh4.ggpht.com/_E-ytpBQG0R8/SfbIc11-PyI/AAAAAAAAAak/ViNxirXyn0Q/s400/E8-hasse.png)](http://picasaweb.google.com/lh/photo/EtHMg4S6JKqntZTvCHbssA?feat=embedwebsite)
+
+# Screenshots #
+
+## Windows ##
+
+[![](http://lh3.ggpht.com/_E-ytpBQG0R8/Sfa9hIhYnMI/AAAAAAAAAZo/xDu7YD44PKY/s800/SetupScreenWin.png)](http://picasaweb.google.com/lh/photo/xJMcU12BAPDami0Ui5Qo1g?feat=embedwebsite)
+
+## OS X ##
+
+[![](http://lh4.ggpht.com/_E-ytpBQG0R8/Sfa9hFfxv1I/AAAAAAAAAZw/sicKkXSlne0/s800/SetupScreenOSX.png)](http://picasaweb.google.com/lh/photo/gyzb3mcso9Kv2tN6cLZr9Q?feat=embedwebsite)
