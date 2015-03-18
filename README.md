@@ -3,11 +3,11 @@
 SimpLie is an easy-to-use program for Lie algebra. It has been specifically written for level decompositions of infinite-dimensional Lie algebras, but it is not limited to that task. Its current features are:
 
 *  Calculation of Lie algebra properties based on Dynkin diagrams:
-   # Type
-   # Dimension
-   # Rank
-   # (Dual) Coxeter labels and numbers.
-   # Roots
+   * Type
+   * Dimension
+   * Rank
+   * (Dual) Coxeter labels and numbers.
+   * Roots
 * Calculation of highest weight representations.
 * Level decompositions.
 * Visualization of root systems by means of [Screenshots Coxeter projections and Hasse diagrams].
@@ -22,6 +22,10 @@ On the user end, it has the following benefits:
 See https://github.com/teake/simplie/blob/wiki/Papers.md for a list of papers that have used SimpLie.
 
 # Build instructions #
+
+## Pre-compiled binaries ##
+
+There are pre-compiled binaries for OS X and Windows for the [latest release](https://github.com/teake/simplie/releases/latest).
 
 ## Gradle ##
 
