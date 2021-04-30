@@ -24,7 +24,7 @@ repositories {
 }
 
 dependencies {
-    compile(
+    implementation(
         [group: 'org.jdesktop.bsaf', name: 'bsaf', version: '1.9.2'],
         [group: 'gov.nist.math', name: 'jama', version: '1.0.3'],
         [group: 'net.sf.epsgraphics', name: 'epsgraphics', version: '1.2']
